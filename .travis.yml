@@ -1,0 +1,7 @@
+language: ruby
+rvm:
+  - 2.2.0
+script: 'bundle exec rake spec'
+bundler_args: '--without=debug'
+services:
+  - cassandra
