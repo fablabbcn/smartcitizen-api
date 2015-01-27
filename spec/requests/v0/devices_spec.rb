@@ -80,6 +80,22 @@ describe V0::DevicesController do
       expect(response.status).to eq(422)
     end
 
+    it "does not create a device with invalid access_token" do
+      api_post "devices", { device: { name: 'test' }, access_token: '123' }
+      expect(response.status).to eq(401)
+    end
+
+    it "does not create a device with missing access_token" do
+      api_post "devices", { device: { name: 'test' }, access_token: nil }
+      expect(response.status).to eq(401)
+    end
+
+    it "does not create a device with empty parameters access_token" do
+      api_post "devices", { device: { name: nil }, access_token: token.token }
+      expect(response.status).to eq(422)
+    end
+
+
   end
 
 end
