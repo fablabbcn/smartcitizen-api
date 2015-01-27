@@ -8,3 +8,6 @@ services:
 addons:
   code_climate:
     repo_token: bfdefd53a4b61a5cf7890945006981d65f4166fe2d6c667968a4a560b9b0034b
+before_script:
+  - cp config/database.travis.yml config/database.yml
+  - psql -c 'create database travis_ci_test;' -U postgres
