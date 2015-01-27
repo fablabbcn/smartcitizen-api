@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   api_version(module: "V0", path: {value: "v0"}) do
     resources :users
+    resources :devices
   end
 
 end

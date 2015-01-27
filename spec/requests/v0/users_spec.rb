@@ -2,11 +2,6 @@ require 'rails_helper'
 
 describe V0::UsersController do
 
-  let(:token) { double :acceptable? => true }
-  before do
-    allow(controller).to receive(:doorkeeper_token) { token }
-  end
-
   describe "GET /users" do
     it "returns all the users" do
       first = create(:user)
