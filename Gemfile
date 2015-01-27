@@ -8,10 +8,10 @@ gem 'active_model_serializers', github: 'rails-api/active_model_serializers', br
 gem 'oauth2', require: false
 gem 'doorkeeper'
 gem 'versionist'
+gem 'pg'
 
 group :production do
   gem 'rails_12factor'
-  gem 'pg'
 end
 
 group :test do
@@ -30,7 +30,6 @@ end
 group :development, :test do
   gem 'cassandra-driver', require: false
   gem 'cequel', github: 'cequel/cequel'
-  gem 'sqlite3'
   gem 'ffaker'
   gem 'figaro'
   gem 'spring'
@@ -39,10 +38,11 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'shoulda-matchers', require: false
   gem 'guard-rspec'
-  # gem 'byebug'
-  # gem 'web-console', '~> 2.0'
 end
 
+
+# gem 'byebug'
+# gem 'web-console', '~> 2.0'
 
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'

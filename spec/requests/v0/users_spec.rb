@@ -16,10 +16,10 @@ describe V0::UsersController do
     end
   end
 
-  describe "GET /users/1" do
+  describe "GET /users/:id" do
     it "returns a user" do
-      create(:user)
-      api_get 'users/1'
+      user = create(:user)
+      api_get "users/#{user.id}"
       expect(response.status).to eq(200)
     end
 
@@ -29,7 +29,7 @@ describe V0::UsersController do
     end
   end
 
-  describe "PUT /users/1" do
+  describe "PUT /users/:id" do
 
     let(:application) { create :application }
     let(:user) { create :user }
