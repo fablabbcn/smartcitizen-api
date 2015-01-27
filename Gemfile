@@ -9,6 +9,8 @@ gem 'oauth2', require: false
 gem 'doorkeeper'
 gem 'versionist'
 gem 'pg'
+gem 'cassandra-driver', require: false
+gem 'cequel', github: 'cequel/cequel'
 
 group :production do
   gem 'rails_12factor'
@@ -28,8 +30,6 @@ group :development do
 end
 
 group :development, :test do
-  gem 'cassandra-driver', require: false
-  gem 'cequel', github: 'cequel/cequel'
   gem 'ffaker'
   gem 'figaro'
   gem 'spring'
