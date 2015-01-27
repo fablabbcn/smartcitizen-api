@@ -13,8 +13,9 @@ RSpec.describe Device, :type => :model do
     expect( build_stubbed(:device, mac_address: 123) ).to be_invalid
   end
 
-  it "has readings" do
+  skip "has readings, in latest first order" do
     reading1 = Reading.create(device_id: device.id, value: 20)
+    sleep(0.001) # needed for cassandra timeuuid
     reading2 = Reading.create(device_id: device.id, value: 30)
     expect(device.readings).to eq([reading1, reading2])
   end
