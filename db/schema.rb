@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150126155743) do
+ActiveRecord::Schema.define(version: 20150128122757) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "api_tokens", force: :cascade do |t|
+    t.integer  "owner_id",   null: false
+    t.string   "token",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "api_tokens", ["owner_id", "token"], name: "index_api_tokens_on_owner_id_and_token", unique: true, using: :btree
+  add_index "api_tokens", ["owner_id"], name: "index_api_tokens_on_owner_id", using: :btree
 
   create_table "devices", force: :cascade do |t|
     t.integer  "owner_id"
@@ -79,5 +89,6 @@ ActiveRecord::Schema.define(version: 20150126155743) do
     t.datetime "updated_at",      null: false
   end
 
+  add_foreign_key "api_tokens", "users", column: "owner_id"
   add_foreign_key "devices", "users", column: "owner_id"
 end

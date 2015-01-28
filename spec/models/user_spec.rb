@@ -8,8 +8,17 @@ RSpec.describe User, :type => :model do
   it { is_expected.to validate_presence_of(:username) }
   it { is_expected.to validate_uniqueness_of(:email) }
   it { is_expected.to validate_uniqueness_of(:username) }
+  it { is_expected.to have_many(:api_tokens) }
 
   it { is_expected.to have_many(:devices) }
+
+  let(:user) { create(:user) }
+
+  it "has api_token" do
+    old_token = create(:api_token, owner: user)
+    new_token = create(:api_token, owner: user)
+    expect(user.api_token).to eq(new_token)
+  end
 
   it "has name" do
     user = build_stubbed(:user, first_name: 'Homer', last_name: 'Simpson')

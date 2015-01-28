@@ -16,7 +16,7 @@ module ApiMacros
   end
 
   def api_put action, params={}, version="0"
-    put "/v#{version}/#{action}", params
+    patch "/v#{version}/#{action}", params
     JSON.parse(response.body) rescue {}
   end
 

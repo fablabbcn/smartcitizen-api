@@ -11,6 +11,7 @@ gem 'versionist'
 gem 'pg'
 gem 'cassandra-driver', require: false
 gem 'cequel', github: 'cequel/cequel'
+gem 'rack-attack' # API Rate Limiting
 
 group :production do
   gem 'rails_12factor'

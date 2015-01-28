@@ -1,7 +1,7 @@
 module V0
   class UsersController < ApplicationController
 
-    skip_before_action :doorkeeper_authorize!, only: [:index, :show, :create]
+    before_action :authorize!, only: [:update]
 
     def index
       @users = User.all

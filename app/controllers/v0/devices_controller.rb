@@ -1,7 +1,7 @@
 module V0
   class DevicesController < ApplicationController
 
-    skip_before_action :doorkeeper_authorize!, only: [:index, :show]
+    before_action :authorize!, only: [:create, :update]
 
     def index
       @devices = Device.all
