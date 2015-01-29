@@ -12,6 +12,7 @@ gem 'versionist'
 gem 'cassandra-driver', require: false
 gem 'cequel', github: 'cequel/cequel'
 gem 'rack-attack' # API Rate Limiting
+gem 'friendly_id', '~> 5.1.0'
 
 group :production do
   gem 'rails_12factor'

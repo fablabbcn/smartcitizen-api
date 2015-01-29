@@ -1,20 +1,17 @@
 module V0
-  class UsersController < ApplicationController
+  class MeController < ApplicationController
+
+    before_action :authorize!
 
     def index
-      @users = User.all
-      render json: @users
-    end
-
-    def show
-      @user = User.friendly.find(params[:id])
+      @user = current_user
       render json: @user
     end
 
-    def create
-      @user = User.new(user_params)
-      if @user.save
-        render json: @user, status: :created
+    def update
+      @user = current_user
+      if @user.update_attributes(user_params)
+        head :no_content, status: :ok
       else
         render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
       end

@@ -6,7 +6,10 @@ Rails.application.routes.draw do
   get "/500" => "errors#exception"
 
   api_version(module: "V0", path: {value: "v0"}, default: true) do
-    resources :users
+    resources :me, only: [:index] do
+      patch '/' => 'me#update', on: :collection
+    end
+    resources :users, only: [:index, :show, :create]
     resources :devices
     root to: 'static#home'
   end
