@@ -3,12 +3,12 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.2.0'
 gem 'rails-api'
+gem 'pg'
 gem 'bcrypt', '~> 3.1.7'
 gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-9-stable'
 gem 'oauth2', require: false
 gem 'doorkeeper'
 gem 'versionist'
-gem 'pg'
 gem 'cassandra-driver', require: false
 gem 'cequel', github: 'cequel/cequel'
 gem 'rack-attack' # API Rate Limiting

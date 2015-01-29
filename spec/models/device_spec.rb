@@ -6,6 +6,7 @@ RSpec.describe Device, :type => :model do
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_presence_of(:owner) }
   it { is_expected.to validate_presence_of(:mac_address) }
+  skip { is_expected.to validate_uniqueness_of(:mac_address) }
 
   let(:device) { create(:device) }
 
