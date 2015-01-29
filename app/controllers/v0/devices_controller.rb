@@ -3,6 +3,11 @@ module V0
 
     before_action :authorize!, only: [:create, :update]
 
+    def world_map
+      @devices = Device.all
+      render json: @devices, each_serializer: WorldMapDevicesSerializer
+    end
+
     def index
       @devices = Device.all
       render json: @devices

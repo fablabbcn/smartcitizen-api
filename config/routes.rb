@@ -10,7 +10,9 @@ Rails.application.routes.draw do
       patch '/' => 'me#update', on: :collection
     end
     resources :users, only: [:index, :show, :create]
-    resources :devices
+    resources :devices do
+      get 'world_map', on: :collection
+    end
     root to: 'static#home'
   end
   root to: 'v0/static#home'
