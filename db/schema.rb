@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150129141454) do
+ActiveRecord::Schema.define(version: 20150129170854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,17 @@ ActiveRecord::Schema.define(version: 20150129141454) do
   add_index "api_tokens", ["owner_id", "token"], name: "index_api_tokens_on_owner_id_and_token", unique: true, using: :btree
   add_index "api_tokens", ["owner_id"], name: "index_api_tokens_on_owner_id", using: :btree
 
+  create_table "components", force: :cascade do |t|
+    t.integer  "board_id"
+    t.string   "board_type"
+    t.integer  "sensor_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "components", ["board_type", "board_id"], name: "index_components_on_board_type_and_board_id", using: :btree
+  add_index "components", ["sensor_id"], name: "index_components_on_sensor_id", using: :btree
+
   create_table "devices", force: :cascade do |t|
     t.integer  "owner_id"
     t.string   "name"
@@ -35,8 +46,10 @@ ActiveRecord::Schema.define(version: 20150129141454) do
     t.float    "longitude"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "kit_id"
   end
 
+  add_index "devices", ["kit_id"], name: "index_devices_on_kit_id", using: :btree
   add_index "devices", ["owner_id"], name: "index_devices_on_owner_id", using: :btree
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -51,6 +64,13 @@ ActiveRecord::Schema.define(version: 20150129141454) do
   add_index "friendly_id_slugs", ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", using: :btree
   add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
+
+  create_table "kits", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", null: false
@@ -92,6 +112,17 @@ ActiveRecord::Schema.define(version: 20150129141454) do
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
+  create_table "sensors", force: :cascade do |t|
+    t.string   "ancestry"
+    t.string   "name"
+    t.text     "description"
+    t.string   "unit"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "sensors", ["ancestry"], name: "index_sensors_on_ancestry", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
@@ -103,5 +134,7 @@ ActiveRecord::Schema.define(version: 20150129141454) do
   end
 
   add_foreign_key "api_tokens", "users", column: "owner_id"
+  add_foreign_key "components", "sensors"
+  add_foreign_key "devices", "kits"
   add_foreign_key "devices", "users", column: "owner_id"
 end

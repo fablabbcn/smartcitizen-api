@@ -14,21 +14,19 @@ describe V0::UsersController do
   describe "POST /users" do
 
     it "creates a user" do
-      api_post 'users', { user: {
-          first_name: 'Homer',
-          last_name: 'Simpson',
-          username: 'homer',
-          email: 'homer@springfieldnuclear.com',
-          password: 'donuts'
-        }
+      api_post 'users', {
+        first_name: 'Homer',
+        last_name: 'Simpson',
+        username: 'homer',
+        email: 'homer@springfieldnuclear.com',
+        password: 'donuts'
       }
       expect(response.status).to eq(201)
     end
 
     it "does not create a user with missing parameters" do
-      api_post 'users', { user: {
-          first_name: 'Homer'
-        }
+      api_post 'users', {
+        first_name: 'Homer'
       }
       expect(response.status).to eq(422)
     end

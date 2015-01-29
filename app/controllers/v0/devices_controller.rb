@@ -5,7 +5,7 @@ module V0
 
     def world_map
       @devices = Device.all
-      render json: @devices, each_serializer: WorldMapDevicesSerializer
+      render text: @devices.to_json.to_msgpack
     end
 
     def index
@@ -39,7 +39,7 @@ module V0
 private
 
     def device_params
-      params.require(:device).permit(
+      params.permit(
         :name,
         :description,
         :mac_address,

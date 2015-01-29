@@ -2,6 +2,7 @@ require 'bouncer'
 
 class ApplicationController < ActionController::API
 
+  include Pundit
   include ActionController::Serialization
   include ActionController::HttpAuthentication::Basic::ControllerMethods
   include ActionController::HttpAuthentication::Token::ControllerMethods

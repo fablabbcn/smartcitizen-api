@@ -33,22 +33,22 @@ describe V0::DevicesController do
     let!(:device) { create :device, owner: user }
 
     it "updates a device" do
-      api_put "devices/#{device.id}", { device: { name: 'new name' }, access_token: token.token }
+      api_put "devices/#{device.id}", { name: 'new name', access_token: token.token }
       expect(response.status).to eq(204)
     end
 
     it "does not update a device with invalid access_token" do
-      api_put "devices/#{device.id}", { device: { name: 'new name' }, access_token: '123' }
+      api_put "devices/#{device.id}", { name: 'new name', access_token: '123' }
       expect(response.status).to eq(401)
     end
 
     it "does not update a device with missing access_token" do
-      api_put "devices/#{device.id}", { device: { name: 'new name' }, access_token: nil }
+      api_put "devices/#{device.id}", { name: 'new name', access_token: nil }
       expect(response.status).to eq(401)
     end
 
     it "does not update a device with empty parameters access_token" do
-      api_put "devices/#{device.id}", { device: { name: nil }, access_token: token.token }
+      api_put "devices/#{device.id}", { name: nil, access_token: token.token }
       expect(response.status).to eq(422)
     end
 
@@ -59,13 +59,11 @@ describe V0::DevicesController do
     it "creates a device" do
       api_post 'devices', {
         access_token: token.token,
-        device: {
-          name: 'my device',
-          description: 'for checking stuff',
-          mac_address: 'BD-B1-DE-13-67-31',
-          latitude: 34.7890869,
-          longitude: 91.2252749
-        }
+        name: 'my device',
+        description: 'for checking stuff',
+        mac_address: 'BD-B1-DE-13-67-31',
+        latitude: 34.7890869,
+        longitude: 91.2252749
       }
       expect(response.status).to eq(201)
     end
@@ -73,9 +71,7 @@ describe V0::DevicesController do
     it "does not create a device with missing parameters" do
       api_post 'devices', {
         access_token: token.token,
-        device: {
-          first_name: 'Homer'
-        }
+        name: 'a device'
       }
       expect(response.status).to eq(422)
     end

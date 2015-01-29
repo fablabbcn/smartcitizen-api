@@ -10,6 +10,9 @@ Rails.application.routes.draw do
       patch '/' => 'me#update', on: :collection
     end
     resources :users, only: [:index, :show, :create]
+    resources :sensors
+    resources :components
+    resources :kits
     resources :devices do
       resources :readings
       get 'world_map', on: :collection

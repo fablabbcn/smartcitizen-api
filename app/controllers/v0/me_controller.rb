@@ -20,7 +20,7 @@ module V0
 private
 
     def user_params
-      params.require(:user).permit(
+      params.permit(
         :first_name,
         :last_name,
         :email,

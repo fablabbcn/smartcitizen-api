@@ -21,22 +21,22 @@ describe V0::MeController do
   describe "PUT /me" do
 
     it "updates current_user" do
-      api_put "me", { user: { first_name: 'Bart' }, access_token: token.token }
+      api_put "me", { first_name: 'Bart', access_token: token.token }
       expect(response.status).to eq(204)
     end
 
     it "does not update a user with invalid access_token" do
-      api_put "me", { user: { first_name: 'Bart' }, access_token: '123' }
+      api_put "me", { first_name: 'Bart', access_token: '123' }
       expect(response.status).to eq(401)
     end
 
     it "does not update a user with missing access_token" do
-      api_put "me", { user: { first_name: 'Bart' }, access_token: nil }
+      api_put "me", { first_name: 'Bart', access_token: nil }
       expect(response.status).to eq(401)
     end
 
     it "does not update a user with empty parameters access_token" do
-      api_put "me", { user: { first_name: nil }, access_token: token.token }
+      api_put "me", { first_name: nil, access_token: token.token }
       expect(response.status).to eq(422)
     end
 
