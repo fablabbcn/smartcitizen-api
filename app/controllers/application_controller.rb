@@ -6,7 +6,7 @@ class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Basic::ControllerMethods
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
-  force_ssl if: :ssl_configured?
+  # force_ssl if: :ssl_configured?
 
   rescue_from Smartcitizen::NotAuthorized do |exception|
     render json: exception, status: 401
