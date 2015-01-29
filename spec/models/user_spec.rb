@@ -20,7 +20,7 @@ RSpec.describe User, :type => :model do
     expect(user.api_token).to eq(new_token)
   end
 
-  it "has name" do
+  it "has name and to_s" do
     user = build_stubbed(:user, first_name: 'Homer', last_name: 'Simpson')
     expect(user.name).to eq('Homer Simpson')
     expect(user.to_s).to eq('Homer Simpson')

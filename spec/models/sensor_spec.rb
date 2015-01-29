@@ -6,6 +6,12 @@ RSpec.describe Sensor, :type => :model do
   it { is_expected.to validate_presence_of(:description) }
   it { is_expected.to validate_presence_of(:unit) }
 
+  it { is_expected.to have_many(:components) }
+  skip { is_expected.to have_many(:boards) }
+  skip { is_expected.to have_many(:kits) }
+
+  it "has ancestry"
+
   pending "has a min and max expectation"
 
 end
