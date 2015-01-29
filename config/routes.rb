@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     end
     resources :users, only: [:index, :show, :create]
     resources :devices do
+      resources :readings
       get 'world_map', on: :collection
     end
     root to: 'static#home'
