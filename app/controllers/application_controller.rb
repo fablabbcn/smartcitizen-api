@@ -6,7 +6,7 @@ class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Basic::ControllerMethods
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
-  # force_ssl if: :ssl_configured?
+  force_ssl if: :ssl_configured?
 
   rescue_from Smartcitizen::NotAuthorized do |exception|
     render json: exception, status: 401
@@ -52,7 +52,8 @@ private
   end
 
   def ssl_configured?
-    Rails.env.production?
+    # Rails.env.production?
+    false
   end
 
 end
