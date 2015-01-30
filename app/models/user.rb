@@ -23,6 +23,10 @@ class User < ActiveRecord::Base
     name
   end
 
+  def to_email_s
+    "#{name} <#{email}>"
+  end
+
   # meta
   #   city
   #   country

@@ -17,6 +17,7 @@ gem 'msgpack'
 gem 'ancestry'
 gem 'pundit'
 gem 'kaminari'
+gem 'mailgun_rails'
 gem 'api-pagination'
 
 group :production do

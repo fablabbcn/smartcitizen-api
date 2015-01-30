@@ -13,7 +13,7 @@ describe V0::UsersController do
 
   describe "POST /users" do
 
-    it "creates a user" do
+    it "creates a user and sends welcome email" do
       api_post 'users', {
         first_name: 'Homer',
         last_name: 'Simpson',
@@ -22,6 +22,8 @@ describe V0::UsersController do
         password: 'donuts'
       }
       expect(response.status).to eq(201)
+      expect(last_email.to).to eq(["homer@springfieldnuclear.com"])
+      expect(last_email.subject).to eq("Welcome to SmartCitizen")
     end
 
     it "does not create a user with missing parameters" do
