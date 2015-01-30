@@ -7,14 +7,18 @@ RSpec.describe Device, :type => :model do
   it { is_expected.to validate_presence_of(:owner) }
   it { is_expected.to validate_presence_of(:mac_address) }
 
-  skip { is_expected.to validate_uniqueness_of(:mac_address) }
-
   let(:device) { create(:device) }
 
   skip "sensor_ids test"
 
-  it "validates mac address" do
-    expect( build_stubbed(:device, mac_address: 123) ).to be_invalid
+  it "validates format of mac address" do
+    expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to_not raise_error
+    expect{ create(:device, mac_address: 123) }.to raise_error
+  end
+
+  it "validates uniqueness of mac address" do
+    create(:device, mac_address: '10:9A:DD:63:C0:10')
+    expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to raise_error
   end
 
   skip "has readings, in latest first order" do

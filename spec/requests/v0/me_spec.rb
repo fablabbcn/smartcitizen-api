@@ -22,7 +22,7 @@ describe V0::MeController do
 
     it "updates current_user" do
       api_put "me", { first_name: 'Bart', access_token: token.token }
-      expect(response.status).to eq(204)
+      expect(response.status).to eq(200)
     end
 
     it "does not update a user with invalid access_token" do

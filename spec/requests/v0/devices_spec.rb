@@ -34,7 +34,7 @@ describe V0::DevicesController do
 
     it "updates a device" do
       api_put "devices/#{device.id}", { name: 'new name', access_token: token.token }
-      expect(response.status).to eq(204)
+      expect(response.status).to eq(200)
     end
 
     it "does not update a device with invalid access_token" do

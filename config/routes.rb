@@ -6,14 +6,14 @@ Rails.application.routes.draw do
   get "/500" => "errors#exception"
 
   api_version(module: "V0", path: {value: "v0"}, default: true) do
-    resources :me, only: [:index] do
-      patch '/' => 'me#update', on: :collection
-    end
     resources :readings, only: :create
     resources :users, only: [:index, :show, :create]
     resources :sensors
     resources :components
     resources :kits
+    resources :me, only: [:index] do
+      patch '/' => 'me#update', on: :collection
+    end
     resources :devices do
       resources :readings, only: :index
       get 'world_map', on: :collection

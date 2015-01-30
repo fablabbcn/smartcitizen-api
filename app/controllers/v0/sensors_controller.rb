@@ -6,6 +6,11 @@ module V0
       paginate json: @sensors
     end
 
+    def show
+      @sensor = Sensor.find(params[:id])
+      render json: @sensor
+    end
+
     def create
       @sensor = Sensor.new(sensor_params)
       if @sensor.save

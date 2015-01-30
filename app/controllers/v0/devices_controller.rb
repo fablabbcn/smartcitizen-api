@@ -21,7 +21,7 @@ module V0
     def update
       @device = current_user.devices.find(params[:id])
       if @device.update_attributes(device_params)
-        head :no_content, status: :ok
+        render json: @device, status: :ok
       else
         render json: { errors: @device.errors.full_messages }, status: :unprocessable_entity
       end

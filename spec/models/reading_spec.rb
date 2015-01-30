@@ -6,6 +6,15 @@ RSpec.describe Reading, :type => :model do
 
   it "needs more specs"
 
+  skip "should use hsgubert/cassandra_migrations" do
+    # # http://planetcassandra.org/blog/getting-started-with-time-series-data-modeling/
+    # key - ("device_id:recorded_month","recorded_at")
+    # 1:201501
+    # values:
+    #   0: 120381301398 - maybe use for created_at?
+    #   1: 120
+  end
+
   it "id should be device_id:recorded_at:created_at"
 
   it "should belong_to device" do

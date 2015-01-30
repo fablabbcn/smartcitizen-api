@@ -11,7 +11,8 @@ module V0
     def update
       @user = current_user
       if @user.update_attributes(user_params)
-        head :no_content, status: :ok
+        # head :no_content, status: :ok
+        render json: @user, status: :ok
       else
         render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
       end
