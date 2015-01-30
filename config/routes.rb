@@ -9,12 +9,13 @@ Rails.application.routes.draw do
     resources :me, only: [:index] do
       patch '/' => 'me#update', on: :collection
     end
+    resources :readings, only: :create
     resources :users, only: [:index, :show, :create]
     resources :sensors
     resources :components
     resources :kits
     resources :devices do
-      resources :readings
+      resources :readings, only: :index
       get 'world_map', on: :collection
     end
     root to: 'static#home'

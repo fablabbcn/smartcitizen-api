@@ -16,6 +16,8 @@ gem 'friendly_id', '~> 5.1.0'
 gem 'msgpack'
 gem 'ancestry'
 gem 'pundit'
+gem 'kaminari'
+gem 'api-pagination'
 
 group :production do
   gem 'rails_12factor'
@@ -41,7 +43,7 @@ group :development, :test do
   gem 'brakeman', github: 'presidentbeef/brakeman', require: false
   gem 'rspec-rails'
   gem 'factory_girl_rails'
-  gem 'shoulda-matchers', require: false
+  gem 'shoulda-matchers', require: false, github: 'thoughtbot/shoulda-matchers'
   gem 'guard-rspec'
 end
 

@@ -3,7 +3,7 @@ module V0
 
     def index
       @sensors = Sensor.all
-      render json: @sensors
+      paginate json: @sensors
     end
 
     def create

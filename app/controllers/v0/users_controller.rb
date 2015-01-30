@@ -3,7 +3,7 @@ module V0
 
     def index
       @users = User.all
-      render json: @users
+      paginate json: @users
     end
 
     def show

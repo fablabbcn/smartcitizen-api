@@ -10,7 +10,7 @@ module V0
 
     def index
       @devices = Device.all
-      render json: @devices
+      paginate json: @devices
     end
 
     def show

@@ -3,7 +3,7 @@ module V0
 
     def index
       @kits = Kit.all
-      render json: @kits
+      paginate json: @kits
     end
 
     def show

@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150129170854) do
+ActiveRecord::Schema.define(version: 20150130104735) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "api_tokens", force: :cascade do |t|
     t.integer  "owner_id",   null: false
@@ -47,6 +48,7 @@ ActiveRecord::Schema.define(version: 20150129170854) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "kit_id"
+    t.hstore   "latest_data"
   end
 
   add_index "devices", ["kit_id"], name: "index_devices_on_kit_id", using: :btree
