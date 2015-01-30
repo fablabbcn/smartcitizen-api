@@ -1,6 +1,7 @@
 class ApiToken < ActiveRecord::Base
   belongs_to :owner, class_name: 'User'
   validates_presence_of :owner
+  validates_uniqueness_of :token
 
   before_create :generate_token
 
@@ -15,9 +16,11 @@ class ApiToken < ActiveRecord::Base
 private
 
   def generate_token
-    begin
-      self.token = SecureRandom.uuid
-    end while ApiToken.exists?(token: self.token)
+    unless token
+      begin
+        self.token = SecureRandom.uuid
+      end while ApiToken.exists?(token: self.token)
+    end
   end
 
 end
