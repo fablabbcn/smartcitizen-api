@@ -16,7 +16,7 @@ test:
 
 production:
   host: ENV['cassandra_host_ip']
-  port: ENV['cassandra_host_port']
+  port: ENV['cassandra_host_port'].to_i
   keyspace: ENV['cassandra_keyspace']
   max_retries: 3
   retry_delay: 0.5
