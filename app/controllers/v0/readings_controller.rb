@@ -8,8 +8,8 @@ module V0
     end
 
     def create
-      @device = Device.find_by_mac_address!(params[:mac_address])
-      @reading = Reading.create(device: @device, values: params[:values])
+      @device = Device.find_by_mac_address(params[:mac_address])
+      @reading = Reading.create(device_id: @device.id, values: reading_params)
       if @reading.save
         render json: @reading, status: :created
       else
