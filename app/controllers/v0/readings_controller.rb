@@ -9,7 +9,7 @@ module V0
 
     def create
       @device = Device.find_by_mac_address(params[:mac_address])
-      @reading = Reading.create(device_id: @device.id, values: reading_params)
+      @reading = Reading.create(device_id: @device.id, values: params[:values])
       if @reading.save
         render json: @reading, status: :created
       else
@@ -17,13 +17,13 @@ module V0
       end
     end
 
-private
+# private
 
-    def reading_params
-      params.permit(
-        :values
-      )
-    end
+#     def reading_params
+#       params.permit(
+#         :values
+#       )
+#     end
 
   end
 end
