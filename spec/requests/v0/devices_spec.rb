@@ -22,8 +22,8 @@ describe V0::DevicesController do
       expect(response.status).to eq(200)
     end
 
-    pending "returns 404 if device not found" do
-      api_get 'devices/1'
+    it "returns 404 if device not found" do
+      api_get 'devices/100'
       expect(response.status).to eq(404)
     end
   end

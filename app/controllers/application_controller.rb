@@ -9,6 +9,10 @@ class ApplicationController < ActionController::API
 
   force_ssl if: :ssl_configured?
 
+  rescue_from ActiveRecord::RecordNotFound do |exception|
+    render json: {message: exception.message}, status: 404
+  end
+
   rescue_from Smartcitizen::NotAuthorized do |exception|
     render json: exception, status: 401
   end

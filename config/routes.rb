@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'password_resets/new'
+
   use_doorkeeper
 
   get "/404" => "errors#not_found"
@@ -11,6 +13,7 @@ Rails.application.routes.draw do
     resources :sensors
     resources :components
     resources :kits
+    resources :password_resets, only: [:create, :update]
     resources :me, only: [:index] do
       patch '/' => 'me#update', on: :collection
     end

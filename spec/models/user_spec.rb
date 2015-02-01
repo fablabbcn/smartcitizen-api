@@ -16,6 +16,7 @@ RSpec.describe User, :type => :model do
   it { is_expected.to have_many(:devices) }
 
   let(:user) { create(:user) }
+  let(:homer) { build_stubbed(:user, first_name: "Homer", last_name: 'Simpson', email: 'homer@springfieldnuclear.com') }
 
   it "has api_token" do
     old_token = create(:api_token, owner: user)
@@ -24,9 +25,20 @@ RSpec.describe User, :type => :model do
   end
 
   it "has name and to_s" do
-    user = build_stubbed(:user, first_name: 'Homer', last_name: 'Simpson')
-    expect(user.name).to eq('Homer Simpson')
-    expect(user.to_s).to eq('Homer Simpson')
+    expect(homer.name).to eq('Homer Simpson')
+    expect(homer.to_s).to eq('Homer Simpson')
+  end
+
+  it "has to_email_s" do
+    expect(homer.to_email_s).to eq("Homer Simpson <homer@springfieldnuclear.com>")
+  end
+
+  it "can send_password_reset" do
+    expect(user.password_reset_token).to be_blank
+    expect(last_email).to be_nil
+    user.send_password_reset
+    expect(user.password_reset_token).to be_present
+    expect(last_email.to).to eq([user.email])
   end
 
 end

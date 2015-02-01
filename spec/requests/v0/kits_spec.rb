@@ -18,8 +18,8 @@ describe V0::KitsController do
       expect(response.status).to eq(200)
     end
 
-    pending "returns 404 if kit not found" do
-      api_get 'kits/1'
+    it "returns 404 if kit not found" do
+      api_get 'kits/100'
       expect(response.status).to eq(404)
     end
   end
