@@ -7,8 +7,12 @@ module V0
     end
 
     def show
-      @user = User.friendly.find(params[:id])
-      render json: @user
+      begin
+        @user = User.includes(:sensors).friendly.find(params[:id])
+        render json: @user
+      rescue ActiveRecord::RecordNotFound
+        render json: {message: "No user found with username or id '#{params[:id]}'"}, status: :not_found
+      end
     end
 
     def create

@@ -23,6 +23,10 @@ gem 'geocoder'
 gem 'ransack'
 gem 'c_geohash', require: false
 
+gem 'fast_blank'
+gem 'oj'
+gem 'oj_mimic_json'
+
 group :production do
   gem 'rails_12factor'
 end
