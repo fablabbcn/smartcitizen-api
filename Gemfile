@@ -45,6 +45,7 @@ group :development do
 end
 
 group :development, :test do
+  gem 'rspec_api_blueprint', require: false
   gem 'ffaker'
   gem 'figaro'
   gem 'spring'
