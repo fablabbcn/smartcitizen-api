@@ -10,9 +10,9 @@ module V0
 
     def index
       if params[:latlng]
-        @devices = Device.near(params[:latlng], (params[:distance] || 1000))
+        @devices = Device.includes(:sensors, :owner).near(params[:latlng], (params[:distance] || 1000))
       else
-        @devices = Device.all
+        @devices = Device.includes(:sensors, :owner).all
       end
       paginate json: @devices
     end

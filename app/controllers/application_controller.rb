@@ -35,7 +35,7 @@ private
         end
       elsif ActionController::HttpAuthentication::Basic.has_basic_credentials?(request) # username and password
         authenticate_with_http_basic do |username, password|
-          if user = User.find_by(username: username) and user.authenticate(password)
+          if user = User.find_by(username: username) and user.authenticate_with_legacy_support(password)
             @current_user = user
           else
             self.headers["WWW-Authenticate"] = %(Basic realm="Application", Token realm="Application")

@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   friendly_id :username
 
   has_secure_password
-  validates_presence_of :first_name, :last_name, :email, :username
+  validates_presence_of :email, :username, :first_name, :last_name
   validates_uniqueness_of :email, :username
   validates_length_of :username, in: 3..30, allow_nil: false, allow_blank: false
 
@@ -31,6 +31,19 @@ class User < ActiveRecord::Base
     generate_token(:password_reset_token)
     save!
     UserMailer.password_reset(self).deliver_now
+  end
+
+  def authenticate_with_legacy_support raw_password
+    begin
+      return authenticate(raw_password)
+    rescue BCrypt::Errors::InvalidHash
+      if old_password == Digest::SHA1.hexdigest([ENV['old_salt'], raw_password].join)
+        self.password = raw_password
+        save
+        return true
+      end
+      return false
+    end
   end
 
 private

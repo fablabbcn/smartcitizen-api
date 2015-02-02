@@ -35,7 +35,25 @@ private
   def calculate_geohash
     # include ActiveModel::Dirty
     # if latitude.changed? or longitude.changed?
-    self.geohash = GeoHash.encode(latitude, longitude)
+    if latitude.is_a?(Float) and longitude.is_a?(Float)
+      self.geohash = GeoHash.encode(latitude, longitude)
+    end
   end
 
 end
+
+
+# REDIS
+# online_kits = [12,13,4,546,45,4564,46,75,68,97] - TTL 15 minutes? // last_recorded_at
+# online? - online_kits.include?(id)
+# offline? - !online_kits.include?(id)
+
+# exposure - indoor / outdoor
+# search by name, city & description
+# date range - granulation hour/day/week/month/year/lifetime
+# filter by:
+#   online
+#   offline
+#   kit type
+#   firmware version
+#   ...

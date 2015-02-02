@@ -18,6 +18,9 @@ RSpec.describe User, :type => :model do
   let(:user) { create(:user) }
   let(:homer) { build_stubbed(:user, first_name: "Homer", last_name: 'Simpson', email: 'homer@springfieldnuclear.com') }
 
+  it "has an avatar"
+  it "has a location"
+
   it "has api_token" do
     old_token = create(:api_token, owner: user)
     new_token = create(:api_token, owner: user)
