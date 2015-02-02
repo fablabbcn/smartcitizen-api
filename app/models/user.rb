@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
     rescue BCrypt::Errors::InvalidHash
       if old_password == Digest::SHA1.hexdigest([ENV['old_salt'], raw_password].join)
         self.password = raw_password
-        save
+        save(validate: false)
         return true
       end
       return false

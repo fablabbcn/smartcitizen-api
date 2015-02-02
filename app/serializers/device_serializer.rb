@@ -1,5 +1,5 @@
 class DeviceSerializer < ActiveModel::Serializer
-  attributes :id, :name, :description, :latitude, :longitude, :latest_data, :owner, :mac_address, :geohash
+  attributes :id, :name, :description, :latitude, :longitude, :geohash, :latest_data, :owner, :mac_address
   has_one :kit
   has_many :sensors
 
