@@ -38,4 +38,19 @@ RSpec.describe Device, :type => :model do
     it "has its own components"
   end
 
+  it "can sort by distance" do
+    barcelona = create(:device, latitude: 41.39479, longitude: 2.1487679)
+    paris = create(:device, latitude: 48.8588589, longitude: 2.3470599)
+    manchester = create(:device, latitude: 53.4722454, longitude: -2.2235922)
+
+    london_coordiantes = [51.5286416,-0.1015987]
+
+    expect(Device.near(london_coordiantes, 1000)).to eq([manchester, paris, barcelona])
+  end
+
+  it "calculates geohash on save" do
+    berlin = create(:device, latitude: '52.5075419', longitude: '13.4251364')
+    expect(berlin.geohash).to match('u33d9qxy')
+  end
+
 end

@@ -81,6 +81,7 @@ GEM
     arel (6.0.0)
     bcrypt (3.1.10)
     builder (3.2.2)
+    c_geohash (1.1.2)
     cassandra-driver (2.0.0)
       ione (~> 1.2)
     celluloid (0.16.0)
@@ -111,6 +112,7 @@ GEM
     formatador (0.2.5)
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
+    geocoder (1.2.7)
     globalid (0.3.0)
       activesupport (>= 4.1.0)
     guard (2.11.1)
@@ -177,6 +179,8 @@ GEM
       multi_xml (~> 0.5)
       rack (~> 1.2)
     pg (0.18.1)
+    polyamorous (1.1.0)
+      activerecord (>= 3.0)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -223,6 +227,12 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
+    ransack (1.6.3)
+      actionpack (>= 3.0)
+      activerecord (>= 3.0)
+      activesupport (>= 3.0)
+      i18n
+      polyamorous (~> 1.1)
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
@@ -299,6 +309,7 @@ DEPENDENCIES
   api-pagination
   bcrypt (~> 3.1.7)
   brakeman!
+  c_geohash
   cassandra-driver
   cequel!
   codeclimate-test-reporter
@@ -308,6 +319,7 @@ DEPENDENCIES
   ffaker
   figaro
   friendly_id (~> 5.1.0)
+  geocoder
   guard-rspec
   kaminari
   letter_opener
@@ -321,6 +333,7 @@ DEPENDENCIES
   rails (= 4.2.0)
   rails-api
   rails_12factor
+  ransack
   rspec-rails
   shoulda-matchers!
   simplecov

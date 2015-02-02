@@ -9,7 +9,11 @@ module V0
     end
 
     def index
-      @devices = Device.all
+      if params[:latlng]
+        @devices = Device.near(params[:latlng], (params[:distance] || 1000))
+      else
+        @devices = Device.all
+      end
       paginate json: @devices
     end
 

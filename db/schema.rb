@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150201170035) do
+ActiveRecord::Schema.define(version: 20150202140127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,8 +49,10 @@ ActiveRecord::Schema.define(version: 20150201170035) do
     t.datetime "updated_at",  null: false
     t.integer  "kit_id"
     t.hstore   "latest_data"
+    t.string   "geohash"
   end
 
+  add_index "devices", ["geohash"], name: "index_devices_on_geohash", using: :btree
   add_index "devices", ["kit_id"], name: "index_devices_on_kit_id", using: :btree
   add_index "devices", ["owner_id"], name: "index_devices_on_owner_id", using: :btree
 

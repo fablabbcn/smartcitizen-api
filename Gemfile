@@ -19,6 +19,9 @@ gem 'pundit'
 gem 'kaminari'
 gem 'mailgun_rails'
 gem 'api-pagination'
+gem 'geocoder'
+gem 'ransack'
+gem 'c_geohash', require: false
 
 group :production do
   gem 'rails_12factor'
