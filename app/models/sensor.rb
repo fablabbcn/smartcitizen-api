@@ -5,7 +5,7 @@ class Sensor < ActiveRecord::Base
   has_many :kits, through: :components
 
   has_ancestry
-  validates_presence_of :name, :description, :unit
+  validates_presence_of :name, :description#, :unit
 
 end
 

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get "/500" => "errors#exception"
 
   api_version(module: "V0", path: {value: "v0"}, default: true) do
+    get "add" => "readings#add"
     resources :readings, only: :create
     resources :users, only: [:index, :show, :create]
     resources :sensors

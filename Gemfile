@@ -36,6 +36,7 @@ group :test do
   gem 'simplecov', require: false
   gem 'zonebie'
   gem "codeclimate-test-reporter", require: nil
+  gem "timecop"
 end
 
 group :development do

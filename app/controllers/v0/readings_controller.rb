@@ -17,6 +17,10 @@ module V0
       end
     end
 
+    def add
+      render json: Time.now.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S#")
+    end
+
 # private
 
 #     def reading_params
