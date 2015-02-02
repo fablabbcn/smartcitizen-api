@@ -5,7 +5,7 @@ gem 'rails', '4.2.0'
 gem 'rails-api'
 gem 'pg'
 gem 'bcrypt', '~> 3.1.7'
-gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-9-stable'
+gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-8-stable'
 gem 'oauth2', require: false
 gem 'doorkeeper'
 gem 'versionist'
@@ -22,6 +22,7 @@ gem 'api-pagination'
 gem 'geocoder'
 gem 'ransack'
 gem 'c_geohash', require: false
+gem 'redis-rails'
 
 gem 'fast_blank'
 gem 'oj'

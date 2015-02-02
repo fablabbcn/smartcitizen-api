@@ -45,7 +45,7 @@ RSpec.describe Device, :type => :model do
 
     london_coordiantes = [51.5286416,-0.1015987]
 
-    expect(Device.near(london_coordiantes, 1000)).to eq([manchester, paris, barcelona])
+    expect(Device.near(london_coordiantes, 5000)).to eq([manchester, paris, barcelona])
   end
 
   it "calculates geohash on save" do

@@ -7,4 +7,9 @@ class DeviceSerializer < ActiveModel::Serializer
     object.owner.username
   end
 
+  def cache_key
+    time = Time.new
+    time-time.sec-time.min%6*60
+  end
+
 end

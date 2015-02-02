@@ -11,6 +11,18 @@ class Device < ActiveRecord::Base
   validates_uniqueness_of :mac_address
 
   reverse_geocoded_by :latitude, :longitude
+  # reverse_geocoded_by :latitude, :longitude do |obj, results|
+  #   if geo = results.first
+  #     obj.address = geo.address
+  #     obj.city = geo.city
+  #     obj.postal_code = geo.postal_code
+  #     obj.state = geo.state
+  #     obj.state_code = geo.state_code
+  #     obj.country = geo.country
+  #     obj.country_code = geo.country_code
+  #   end
+  # end
+  # after_validation :reverse_geocode
 
   # these get overridden the device is a kit
   has_many :components, as: :board
