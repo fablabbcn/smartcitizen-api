@@ -27,7 +27,7 @@
       id: 'examples.map-i875mjb7'
     }).addTo(map);
 
-    $.getJSON( "/v0/devices?per_page=1000", function( data ) {
+    $.getJSON( "/v0/devices/world_map", function( data ) {
       for (var i = 0; i < data.length; i++) {
         var item = data[i];
         if ( item.latitude && item.longitude ) {

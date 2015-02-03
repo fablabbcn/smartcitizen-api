@@ -4,8 +4,10 @@ module V0
     before_action :authorize!, only: [:create, :update]
 
     def world_map
-      @devices = Device.all
-      render text: @devices.to_json.to_msgpack
+      render_cached_json("devices:world_map", expires_in: 6.minutes) do
+        @devices = Device.select(:name,:id,:description,:latitude,:longitude)
+      end
+      # render text: @devices.to_json.to_msgpack
     end
 
     def index
@@ -41,6 +43,15 @@ module V0
     end
 
 private
+
+    def render_cached_json(cache_key, opts = {}, &block)
+      opts[:expires_in] ||= 1.day
+      expires_in opts[:expires_in], public: true
+      data = Rails.cache.fetch(cache_key, {raw: true}.merge(opts)) do
+        block.call.to_json
+      end
+      render json: data
+    end
 
     def device_params
       params.permit(
