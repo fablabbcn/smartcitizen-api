@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
       if old_password == Digest::SHA1.hexdigest([ENV['old_salt'], raw_password].join)
         self.password = raw_password
         save(validate: false)
-        return true
+        return self
       end
       return false
     end

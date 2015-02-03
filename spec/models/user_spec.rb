@@ -44,4 +44,38 @@ RSpec.describe User, :type => :model do
     expect(last_email.to).to eq([user.email])
   end
 
+  describe "authenticate_with_legacy_support" do
+
+    let(:user) { build_stubbed(:user, password: 'password') }
+
+    describe "new users" do
+      it "authenticates users" do
+        expect(user.authenticate_with_legacy_support('password')).to eq(user)
+      end
+
+      it "does not authenticate users with invalid passwords" do
+        expect(user.authenticate_with_legacy_support('wrong')).to be_falsey
+      end
+    end
+
+    describe "legacy users" do
+      let(:legacy_user) { create(:user, old_password: Digest::SHA1.hexdigest('123pass'))}
+      before(:each) do
+        set_env_var('old_salt', '123')
+        legacy_user.update_attribute(:password_digest, nil)
+      end
+
+      it "authenticates legacy users" do
+        expect { legacy_user.authenticate('pass') }.to raise_error
+        expect(legacy_user.authenticate_with_legacy_support('pass')).to eq(legacy_user)
+        expect(legacy_user.authenticate('pass')).to eq(legacy_user)
+      end
+
+      it "does not authenticate legacy users with invalid passwords" do
+        expect(legacy_user.authenticate_with_legacy_support('wrong')).to be_falsey
+      end
+    end
+
+  end
+
 end
