@@ -1,48 +1,18 @@
-
-require 'bouncer'
+require 'error_handlers'
+require 'pretty_json'
 
 class ApplicationController < ActionController::API
 
-  include Pundit
-  include ActionController::Serialization
   include ActionController::HttpAuthentication::Basic::ControllerMethods
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
-  # http://stackoverflow.com/a/23018176
-  ActionController::Renderers.add :json do |json, options|
-    unless json.kind_of?(String)
-      json = json.as_json(options) if json.respond_to?(:as_json)
-      json = JSON.pretty_generate(json, options)
-    end
-
-    if options[:callback].present?
-      self.content_type ||= Mime::JS
-      "#{options[:callback]}(#{json})"
-    else
-      self.content_type ||= Mime::JSON
-      json
-    end
-  end
+  include Pundit
+  include PrettyJSON
+  include ErrorHandlers
 
   force_ssl if: :ssl_configured?
 
-  rescue_from ActionController::ParameterMissing do |exception|
-    render json: {message: exception.message}, status: :bad_request
-  end
-
-  rescue_from ActiveRecord::RecordNotFound do |exception|
-    render json: {message: exception.message}, status: :not_found
-  end
-
-  rescue_from Smartcitizen::NotAuthorized do |exception|
-    render json: exception, status: :unauthorized
-  end
-
 private
-
-  def authorize!
-    raise Smartcitizen::NotAuthorized.new("Authorization required") if current_user.nil?
-  end
 
   def current_user
     if @current_user.nil?
@@ -73,13 +43,16 @@ private
     @current_user
   end
 
+  def authorize!
+    raise Smartcitizen::NotAuthorized.new("Authorization required") if current_user.nil?
+  end
+
   def doorkeeper_unauthorized_render_options
-    Bouncer.reject_with("Invalid OAuth2 Token")
+    raise Smartcitizen::NotAuthorized.new("Invalid OAuth Token")
   end
 
   def ssl_configured?
-    # Rails.env.production?
-    false
+    false # Rails.env.production?
   end
 
 end
