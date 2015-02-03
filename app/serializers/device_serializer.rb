@@ -7,8 +7,8 @@ class DeviceSerializer < ActiveModel::Serializer
     object.owner.username
   end
 
-  def cache_key
-    "a"
-  end
+  cached
+  delegate :cache_key, to: :object
+
 
 end
