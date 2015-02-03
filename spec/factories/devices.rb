@@ -3,7 +3,7 @@ FactoryGirl.define do
     association :owner, factory: :user
     sequence("name") { |n| "device#{n}"}
     description "my device"
-    sequence(:mac_address) { |n| "#{n.to_s(16)}1:23:45:67:89:ab" }
+    mac_address { Faker::Internet.mac_address }
     latitude 53.3069303
     longitude -3.7495789
   end

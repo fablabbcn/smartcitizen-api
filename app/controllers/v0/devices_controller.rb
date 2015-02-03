@@ -12,7 +12,11 @@ module V0
 
     def index
       if params[:latlng]
-        @devices = Device.includes(:sensors, :owner).near(params[:latlng], (params[:distance] || 1000))
+        if params[:latlng] =~ /\A(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)\z/
+          @devices = Device.includes(:sensors, :owner).near(params[:latlng], (params[:distance] || 1000))
+        else
+          return render json: "error", status: :bad_request
+        end
       else
         @devices = Device.includes(:sensors, :owner).all
       end

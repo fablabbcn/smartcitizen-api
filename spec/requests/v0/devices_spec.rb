@@ -13,6 +13,32 @@ describe V0::DevicesController do
       api_get 'devices'
       expect(response.status).to eq(200)
     end
+
+    describe "with latlng" do
+
+      let!(:barcelona) { create(:device, latitude: 41.39479, longitude: 2.1487679) }
+      let!(:paris) { create(:device, latitude: 48.8588589, longitude: 2.3470599) }
+      let!(:manchester) { create(:device, latitude: 53.4722454, longitude: -2.2235922) }
+      let!(:london_coordiantes) { "51.5286416,-0.1015987" }
+
+      it "returns devices order with default distance" do
+        json = api_get "devices?latlng=#{london_coordiantes}"
+        expect(response.status).to eq(200)
+        expect(json.map{|j| j['id']}).to eq([manchester, paris].map(&:id))
+      end
+
+      it "returns devices order with custom distance" do
+        json = api_get "devices?latlng=#{london_coordiantes}&distance=100000"
+        expect(response.status).to eq(200)
+        expect(json.map{|j| j['id']}).to eq([manchester, paris, barcelona].map(&:id))
+      end
+
+      it "fails for invalid latlng" do
+        json = api_get "devices?latlng=13"
+        expect(response.status).to eq(400)
+      end
+
+    end
   end
 
   describe "GET /devices/:id" do
