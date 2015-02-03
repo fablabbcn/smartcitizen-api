@@ -5,7 +5,7 @@ module V0
 
     def world_map
       render_cached_json("devices:world_map", expires_in: 6.minutes) do
-        @devices = Device.select(:name,:id,:description,:latitude,:longitude)
+        @devices = Device.select(:id,:name,:description,:latitude,:longitude)
       end
       # render text: @devices.to_json.to_msgpack
     end
@@ -43,15 +43,6 @@ module V0
     end
 
 private
-
-    def render_cached_json(cache_key, opts = {}, &block)
-      opts[:expires_in] ||= 1.day
-      expires_in opts[:expires_in], public: true
-      data = Rails.cache.fetch(cache_key, {raw: true}.merge(opts)) do
-        block.call.to_json
-      end
-      render json: data
-    end
 
     def device_params
       params.permit(

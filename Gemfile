@@ -24,7 +24,7 @@ gem 'ransack'
 gem 'c_geohash', require: false
 
 gem 'redis-rails'
-gem 'redis-rack-cache'
+# gem 'redis-rack-cache'
 
 gem 'fast_blank'
 gem 'oj'
