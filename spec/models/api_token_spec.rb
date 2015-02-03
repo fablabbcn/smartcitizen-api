@@ -14,6 +14,10 @@ RSpec.describe ApiToken, :type => :model do
     expect(build_stubbed(:api_token, token: '123').to_s).to eq('123')
   end
 
+  it "has to_param" do
+    expect(build_stubbed(:api_token, token: '3535').to_param).to eq('3535')
+  end
+
   it "can be initialized with existing token" do
     expect(create(:api_token, token: '1234').token).to eq('1234')
   end

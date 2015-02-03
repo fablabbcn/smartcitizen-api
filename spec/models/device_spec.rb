@@ -22,20 +22,47 @@ RSpec.describe Device, :type => :model do
   end
 
   skip "has readings, in latest first order" do
-    reading1 = Reading.create(device_id: device.id, value: 20)
-    sleep(0.001) # needed for cassandra timeuuid
-    reading2 = Reading.create(device_id: device.id, value: 30)
+    reading1 = Reading.create(device_id: device.id)
+    reading2 = Reading.create(device_id: device.id)
     expect(device.readings).to eq([reading1, reading2])
   end
 
   context "with kit" do
-    it "has the kit's sensors"
-    it "has the kit's components"
+
+    let(:kit) { create(:kit) }
+    let(:sensor) { create(:sensor) }
+    let(:device) { create(:device, kit: kit) }
+
+    before(:each) do
+      kit.sensors << sensor
+    end
+
+    it "has the kit's sensors" do
+      expect(device.sensors).to eq(kit.sensors)
+    end
+
+    it "has the kit's components" do
+      expect(device.components).to eq(kit.components)
+    end
+
   end
 
   context "without kit" do
-    it "has its own sensors"
-    it "has its own components"
+
+    let(:sensor) { create(:sensor) }
+    let(:device) { create(:device) }
+
+    before(:each) do
+      device.sensors << sensor
+    end
+
+    it "has its own sensors" do
+      expect(device.sensors).to eq([sensor])
+    end
+
+    it "has its own components" do
+      expect(device.components).to eq([Component.find_by(board: device, sensor: sensor)])
+    end
   end
 
   it "can sort by distance" do
@@ -49,7 +76,7 @@ RSpec.describe Device, :type => :model do
   end
 
   it "calculates geohash on save" do
-    berlin = create(:device, latitude: '52.5075419', longitude: '13.4251364')
+    berlin = create(:device, latitude: 52.5075419, longitude: 13.4251364)
     expect(berlin.geohash).to match('u33d9qxy')
   end
 

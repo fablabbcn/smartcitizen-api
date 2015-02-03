@@ -5,6 +5,7 @@ script: 'bundle exec rake spec'
 bundler_args: '--without=debug'
 services:
   - cassandra
+  - redis-server
 addons:
   code_climate:
     repo_token: bfdefd53a4b61a5cf7890945006981d65f4166fe2d6c667968a4a560b9b0034b

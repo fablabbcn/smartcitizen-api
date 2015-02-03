@@ -2,6 +2,26 @@ require 'rails_helper'
 
 describe V0::UsersController do
 
+  describe "GET /users/<username||id>" do
+
+    let(:user) { create(:user) }
+
+    it "returns a user by id" do
+      api_get "users/#{user.id}"
+      expect(response.status).to eq(200)
+    end
+
+    it "returns a user by username" do
+      api_get "users/#{user.username}"
+      expect(response.status).to eq(200)
+    end
+
+    it "returns not found if no user exists" do
+      api_get "users/notauser"
+      expect(response.status).to eq(404)
+    end
+  end
+
   describe "GET /users" do
     it "returns all the users" do
       first = create(:user)
