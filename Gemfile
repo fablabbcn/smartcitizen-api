@@ -9,7 +9,7 @@ gem 'active_model_serializers', github: 'rails-api/active_model_serializers', br
 gem 'oauth2', require: false
 gem 'doorkeeper'
 gem 'versionist'
-gem 'cassandra-driver', require: false
+gem 'cassandra-driver'
 gem 'cequel', github: 'cequel/cequel'
 gem 'rack-attack' # API Rate Limiting
 gem 'friendly_id', '~> 5.1.0'
@@ -46,13 +46,13 @@ group :development do
   gem 'quiet_assets'
   gem 'spring-commands-rspec'
   gem 'letter_opener'
+  gem 'spring'
 end
 
 group :development, :test do
   # gem 'rspec_api_blueprint', require: false
   gem 'faker'
   gem 'figaro'
-  gem 'spring'
   gem 'brakeman', github: 'presidentbeef/brakeman', require: false
   gem 'rspec-rails'
   gem 'factory_girl_rails'

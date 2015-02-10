@@ -21,5 +21,6 @@
 
 /coverage
 /csv
+/json
 *.rdb
 

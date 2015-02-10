@@ -1,5 +1,5 @@
 class SensorSerializer < ActiveModel::Serializer
-  attributes :id, :name, :description, :unit, :has_parent
+  attributes :id, :name, :description, :unit
 
   def has_parent
     object.ancestry.present?

@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/cequel/cequel.git
-  revision: 6935b245fef446178ef3c3bba7b5b35d2c37ff62
+  revision: d63acd153b6c45dc216ecd1ef1f426b51eb07037
   specs:
-    cequel (1.5.0)
+    cequel (1.5.1)
       activemodel (>= 3.1, < 5.0)
       cql-rb (>= 1.2, < 3.0)
 

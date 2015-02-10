@@ -1,43 +1,54 @@
+
 require 'csv'
 
 namespace :import do
 
-# id
-# user_id
-# macadress
-# kit_version
-# firm_version
-# title
-# description
+  # id
+  # user_id - includes nil
+  # macadress - includes nil
+  # kit_version - 1 / 1.1
+# firm_version - ["86", nil, "85", "90"]
+  # title
+  # description
 # location
 # city
 # country
-# exposure
-# position
-# elevation
-# geo_lat
-# geo_long
-# wifi_ssid
-# wifi_pwd
+# exposure - ["outdoor", "indoor", ""]
+# position - "fixed"
+# elevation - [-2...986]
+  # geo_lat
+  # geo_long
+# wifi_ssid - empty
+# wifi_pwd - empty
+# last_insert_datetime
+# ro_co - 75000
+# ro_no2 - 10000
+# smart_cal - [nil, "1"]
+# debug_push - ["1", nil]
+# enclosure_type - [nil, "1"]
+
 # created
 # modified
-# last_insert_datetime
-# ro_co
-# ro_no2
-# smart_cal
-# debug_push
-# enclosure_type
+
+# firmware_version
+# ['22/23/2005' => '93', '21/23/2005' => '92']
+
   desc "Imports devices.csv"
   task :devices => :environment do
-    Device.destroy_all
     me = User.find_by!(username: 'john')
 
     CSV.foreach( Rails.root.join("csv/devices.csv").to_s, headers: true, quote_char: "`") do |line|
       if line['macadress'] =~ /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/
-        device = Device.find_or_initialize_by(id: line['id']) do |device|
+        Device.where(id: line['id']).first_or_initialize.tap do |device|
           device.name = line['title'].try(:chomp)
           device.mac_address = line['macadress'].try(:chomp)
           device.description = line['description'].try(:chomp)
+
+          if line['kit_version'] == "1"
+            device.kit_id = 2
+          elsif line['kit_version'] == "1.1"
+            device.kit_id = 3
+          end
           # if line['geo_lat']
           device.latitude = line['geo_lat']
           device.longitude = line['geo_long']
@@ -47,28 +58,29 @@ namespace :import do
           rescue ActiveRecord::RecordNotFound
             device.owner = me
           end
+          device.save(validate: false)
         end
-
-        device.save(validate: false)
       end
     end
   end
 
-# id
-# username
-# password
-# role
+  # id
+  # username - there is nil :(
+  # password
+# role - ["admin", "citizen", "partner", nil]
 # city
-# country
+# country - includes #file_links[C:\\XRdeta...,1,N]
 # website
-# email
-# email_verified
-# time_zone
+  # email
+# email_verified - 0
+# time_zone - ["Pacific/Tahiti", "UTC"]
 # media_id
+# api_key
+# app - [nil, "0", "1"]
+
 # created
 # modified
-# api_key
-# app
+
   desc "Imports users.csv"
   task :users => :environment do
     CSV.foreach( Rails.root.join("csv/users.csv").to_s, headers: true, quote_char: "`") do |line|

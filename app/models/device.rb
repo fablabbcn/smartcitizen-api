@@ -39,7 +39,21 @@ class Device < ActiveRecord::Base
   end
 
   def readings
-    Reading.where(device_id: id)
+    Reading.for_device_id(id)
+  end
+
+  def status
+    if last_recorded_at.present?
+      last_recorded_at > 10.minutes.ago ? 'online' : 'offline'
+    else
+      'new'
+    end
+  end
+
+  def add_reading options = {}
+    recorded_at = Time.parse(options[:recorded_at])
+    Reading.add(id, recorded_at, options[:values])
+    update_attributes(latest_data: options[:values], last_recorded_at: recorded_at)
   end
 
 private

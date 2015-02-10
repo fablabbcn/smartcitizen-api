@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150202154555) do
+ActiveRecord::Schema.define(version: 20150204202307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,15 +45,17 @@ ActiveRecord::Schema.define(version: 20150202154555) do
     t.macaddr  "mac_address"
     t.float    "latitude"
     t.float    "longitude"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
     t.integer  "kit_id"
     t.hstore   "latest_data"
     t.string   "geohash"
+    t.datetime "last_recorded_at"
   end
 
   add_index "devices", ["geohash"], name: "index_devices_on_geohash", using: :btree
   add_index "devices", ["kit_id"], name: "index_devices_on_kit_id", using: :btree
+  add_index "devices", ["last_recorded_at"], name: "index_devices_on_last_recorded_at", using: :btree
   add_index "devices", ["owner_id"], name: "index_devices_on_owner_id", using: :btree
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -74,7 +76,10 @@ ActiveRecord::Schema.define(version: 20150202154555) do
     t.text     "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.string   "slug"
   end
+
+  add_index "kits", ["slug"], name: "index_kits_on_slug", using: :btree
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", null: false

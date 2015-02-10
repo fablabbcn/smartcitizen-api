@@ -7,7 +7,7 @@ module V0
     end
 
     def show
-      @kit = Kit.find(params[:id])
+      @kit = Kit.friendly.find(params[:id])
       render json: @kit
     end
 

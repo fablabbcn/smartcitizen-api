@@ -2,7 +2,12 @@ require 'rails_helper'
 
 describe V0::ReadingsController do
 
-  it "needs tests"
+  pending "GET /readings" do
+    it "returns all readings" do
+      api_get 'readings'
+      expect(response.status).to eq(200)
+    end
+  end
 
   describe "GET /add" do
 

@@ -1,13 +1,10 @@
-class DeviceSerializer < ActiveModel::Serializer
+class DetailedDeviceSerializer < ActiveModel::Serializer
 
   # cached
   # delegate :cache_key, to: :object
 
   attributes :id, :mac_address, :status, :owner, :name, :description, :tags, :kit, :created_at, :updated_at, :latest_reading
-
-  def kit
-    object.kit.slug if object.kit
-  end
+  has_one :kit
 
   def tags
     []
@@ -20,8 +17,7 @@ class DeviceSerializer < ActiveModel::Serializer
       firmware: 'sck:93',
       recorded_at: object.last_recorded_at,
       location: location,
-      data: object.latest_data
-      # sensors: object.sensors.select(:id, :name, :description, :unit)
+      sensors: object.sensors.select(:id, :name, :description, :unit)
     }
   end
 

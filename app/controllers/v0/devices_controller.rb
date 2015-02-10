@@ -18,14 +18,14 @@ module V0
           return render json: "error", status: :bad_request
         end
       else
-        @devices = Device.includes(:sensors, :owner).all
+        @devices = Device.includes(:sensors, :owner).order(:id)
       end
       paginate json: @devices
     end
 
     def show
       @device = Device.find(params[:id])
-      render json: @device
+      render json: @device, serializer: DetailedDeviceSerializer
     end
 
     def update

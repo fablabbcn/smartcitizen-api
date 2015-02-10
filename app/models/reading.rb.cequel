@@ -1,0 +1,67 @@
+# ignore this file
+
+
+class Reading
+
+  # include Cequel::Record
+
+  # compound_partition_key   | clustering_column (primary key)
+  # -------------------------|--------------------------------
+  # device_id:recorded_month | recorded_at
+  # -------------------------|--------------------------------
+  # e.g.    3:201502         | 20150201182022
+
+  key :device_id, :int
+  key :recorded_month, :int
+  key :recorded_at, :timestamp, order: :desc, index: true
+  map :values, :text, :text
+
+  validates_presence_of :device_id, :values
+
+  def device
+    @device ||= Device.find(device_id)
+  end
+
+  def device=(device)
+    self.device_id = device.id
+  end
+
+private
+
+  def update_device
+    device.latest_data = values.to_hash
+    device.save!
+  end
+
+end
+
+
+# # USE smart_citizen_development;
+# # Reading.create(device_id: 3, recorded_month: 201503, recorded_at: (Time.now + 1.month), values: { 'i_am': 'last'})
+# # Reading.create(device_id: 3, recorded_month: 201412, recorded_at: (Time.now - 2.months), values: { 'i_am': 'first'})
+# # Reading.create(device_id: 3, recorded_month: 201502, recorded_at: (Time.now), values: { 'i_am': 'middle'})
+
+
+# # DROP TABLE readings;
+# # TRUNCATE readings;
+# # SELECT * FROM readings;
+
+
+# SELECT * FROM readings WHERE device_id = 3 AND recorded_month IN (201712) LIMIT 1;
+
+# # INSERT INTO readings(device_id, recorded_month, recorded_at, values) VALUES (3, 201502, '2015-02-08', { '2' : 'last' });
+# # INSERT INTO readings(device_id, recorded_month, recorded_at, values) VALUES (3, 201502, '2015-02-01', { '1' : 'first' });
+# # INSERT INTO readings(device_id, recorded_month, recorded_at, values) VALUES (3, 201502, '2015-02-04', { '1' : 'middle' });
+# # INSERT INTO readings(device_id, recorded_month, recorded_at, values) VALUES (3, 201606, '2016-06-20', { '1' : 'first' });
+# # INSERT INTO readings(device_id, recorded_month, recorded_at, values) VALUES (3, 201306, '2013-06-20', { '1' : 'last' });
+
+# # INSERT INTO readings(device_id, recorded_month, recorded_at, values) VALUES (3, 201512, '2015-12-24', { '1' : 'next christmas' });
+# # INSERT INTO readings(device_id, recorded_month, recorded_at, values) VALUES (3, 201312, '2013-12-24', { '1' : 'a' });
+# # INSERT INTO readings(device_id, recorded_month, recorded_at, values) VALUES (3, 201712, '2017-12-24', { '1' : 'b' });
+# # INSERT INTO readings(device_id, recorded_month, recorded_at, values) VALUES (3, 201512, '2015-12-24', { '1' : 'easter' });
+
+# require 'cassandra'
+# cluster = Cassandra.cluster
+# session = cluster.connect('smart_citizen_development')
+# row = session.execute("SELECT * FROM readings").first
+# puts row['device_id']
