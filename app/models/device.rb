@@ -47,6 +47,12 @@ class Device < ActiveRecord::Base
     :debug_push,
     :enclosure_type
 
+  def firmare
+    if firmware_version.present?
+      "sck:#{firmware_version}"
+    end
+  end
+
   def components
     kit ? kit.components : super
   end

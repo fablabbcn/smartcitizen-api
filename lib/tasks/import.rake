@@ -56,34 +56,34 @@ namespace :import do
       if line['macadress'] =~ /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/
         Device.where(id: line['id']).first_or_initialize.tap do |device|
 
-          device.elevation = line['elevation'].try(:chomp)
-          device.exposure = line['exposure'].try(:chomp)
-          device.firmware_version = line['firmware_version'].try(:chomp)
-          device.smart_cal = line['smart_cal'].try(:chomp)
-          device.debug_push = line['debug_push'].try(:chomp)
-          device.enclosure_type = line['enclosure_type'].try(:chomp)
+          # device.elevation = line['elevation'].try(:chomp)
+          # device.exposure = line['exposure'].try(:chomp)
+          device.firmware_version = line['firm_version'].try(:chomp)
+          # device.smart_cal = line['smart_cal'].try(:chomp)
+          # device.debug_push = line['debug_push'].try(:chomp)
+          # device.enclosure_type = line['enclosure_type'].try(:chomp)
 
-          device.city = line['city'].try(:chomp)
-          device.country = line['country'].try(:chomp)
+          # device.city = line['city'].try(:chomp)
+          # device.country = line['country'].try(:chomp)
 
-          device.name = line['title'].try(:chomp)
-          device.mac_address = line['macadress'].try(:chomp)
-          device.description = line['description'].try(:chomp)
+          # device.name = line['title'].try(:chomp)
+          # device.mac_address = line['macadress'].try(:chomp)
+          # device.description = line['description'].try(:chomp)
 
-          if line['kit_version'] == "1"
-            device.kit_id = 2
-          elsif line['kit_version'] == "1.1"
-            device.kit_id = 3
-          end
-          # if line['geo_lat']
-          device.latitude = line['geo_lat']
-          device.longitude = line['geo_long']
+          # if line['kit_version'] == "1"
+          #   device.kit_id = 2
+          # elsif line['kit_version'] == "1.1"
+          #   device.kit_id = 3
           # end
-          begin
-            device.owner = User.find(line['user_id'])
-          rescue ActiveRecord::RecordNotFound
-            device.owner = me
-          end
+          # # if line['geo_lat']
+          # device.latitude = line['geo_lat']
+          # device.longitude = line['geo_long']
+          # # end
+          # begin
+          #   device.owner = User.find(line['user_id'])
+          # rescue ActiveRecord::RecordNotFound
+          #   device.owner = me
+          # end
           device.save(validate: false)
         end
       end

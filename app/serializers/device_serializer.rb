@@ -16,8 +16,8 @@ class DeviceSerializer < ActiveModel::Serializer
   def latest_reading
     {
       ip: nil,
-      exposure: rand() > 0.5 ? 'indoor' : 'outdoor',
-      firmware: 'sck:93',
+      exposure: object.exposure,
+      firmware: object.firmware,
       recorded_at: object.last_recorded_at,
       location: location,
       data: object.latest_data
@@ -26,7 +26,7 @@ class DeviceSerializer < ActiveModel::Serializer
 
   def location
     {
-      elevation: 1332,
+      elevation: object.elevation,
       address: object.address,
       city: object.city,
       country: object.country,
