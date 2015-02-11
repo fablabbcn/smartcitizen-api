@@ -22,6 +22,7 @@ gem 'api-pagination'
 gem 'geocoder'
 gem 'ransack'
 gem 'c_geohash', require: false
+# gem 'actionpack-action_caching', github: 'rails/actionpack-action_caching'
 
 gem 'redis-rails'
 # gem 'redis-rack-cache'

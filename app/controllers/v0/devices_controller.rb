@@ -3,17 +3,20 @@ module V0
 
     before_action :authorize!, only: [:create, :update]
 
+    # caches_action :world_map, expires_in: 2.minutes
+
     def world_map
-      render_cached_json("devices:world_map", expires_in: 6.minutes) do
-        @devices = Device.select(:id,:name,:description,:latitude,:longitude)
-      end
-      # render text: @devices.to_json.to_msgpack
+      render json: Device.includes(:owner,:kit), each_serializer: WorldMapDevicesSerializer
+      # render_cached_json("devices:world_map", expires_in: 6.minutes, serializer: WorldMapDevicesSerializer) do
+      #   @devices = Device.all#select(:id,:name,:description,:latitude,:longitude)
+      # end
+      # # render json: Device.all, each_serializer: WorldMapDevicesSerializer
     end
 
     def index
-      if params[:latlng]
-        if params[:latlng] =~ /\A(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)\z/
-          @devices = Device.includes(:sensors, :owner).near(params[:latlng], (params[:distance] || 1000))
+      if params[:near]
+        if params[:near] =~ /\A(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)\z/
+          @devices = Device.includes(:sensors, :owner).near(params[:near], (params[:distance] || 1000))
         else
           return render json: "error", status: :bad_request
         end

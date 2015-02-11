@@ -1,13 +1,11 @@
-class DetailedDeviceSerializer < ActiveModel::Serializer
+class DetailedDeviceSerializer < DeviceSerializer
 
-  # cached
-  # delegate :cache_key, to: :object
+  def kit
+    KitSerializer.new(object.kit)
+  end
 
-  attributes :id, :mac_address, :status, :owner, :name, :description, :tags, :kit, :created_at, :updated_at, :latest_reading
-  has_one :kit
-
-  def tags
-    []
+  def owner
+    UserSerializer.new(object.owner)
   end
 
   def latest_reading
@@ -19,22 +17,6 @@ class DetailedDeviceSerializer < ActiveModel::Serializer
       location: location,
       sensors: object.sensors.select(:id, :name, :description, :unit)
     }
-  end
-
-  def location
-    {
-      elevation: 1332,
-      city: 'Barcelona',
-      country: 'Spain',
-      country_code: 'ES',
-      latitude: object.latitude,
-      longitude: object.longitude,
-      geohash: object.geohash
-    }
-  end
-
-  def owner
-    object.owner.username
   end
 
 end

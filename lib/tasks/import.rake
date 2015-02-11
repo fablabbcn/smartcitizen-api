@@ -7,15 +7,15 @@ namespace :import do
   # user_id - includes nil
   # macadress - includes nil
   # kit_version - 1 / 1.1
-# firm_version - ["86", nil, "85", "90"]
+    # firm_version - ["86", nil, "85", "90"]
   # title
   # description
-# location
-# city
-# country
-# exposure - ["outdoor", "indoor", ""]
-# position - "fixed"
-# elevation - [-2...986]
+    # location
+    # city
+    # country
+    # exposure - ["outdoor", "indoor", ""]
+    # position - "fixed"
+    # elevation - [-2...986]
   # geo_lat
   # geo_long
 # wifi_ssid - empty
@@ -33,6 +33,21 @@ namespace :import do
 # firmware_version
 # ['22/23/2005' => '93', '21/23/2005' => '92']
 
+
+
+# location
+#   city
+#   country
+
+# meta
+#   elevation
+#   exposure
+#   firmware_version
+#   smart_cal
+#   debug_push
+#   enclosure_type
+
+
   desc "Imports devices.csv"
   task :devices => :environment do
     me = User.find_by!(username: 'john')
@@ -40,6 +55,17 @@ namespace :import do
     CSV.foreach( Rails.root.join("csv/devices.csv").to_s, headers: true, quote_char: "`") do |line|
       if line['macadress'] =~ /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/
         Device.where(id: line['id']).first_or_initialize.tap do |device|
+
+          device.elevation = line['elevation'].try(:chomp)
+          device.exposure = line['exposure'].try(:chomp)
+          device.firmware_version = line['firmware_version'].try(:chomp)
+          device.smart_cal = line['smart_cal'].try(:chomp)
+          device.debug_push = line['debug_push'].try(:chomp)
+          device.enclosure_type = line['enclosure_type'].try(:chomp)
+
+          device.city = line['city'].try(:chomp)
+          device.country = line['country'].try(:chomp)
+
           device.name = line['title'].try(:chomp)
           device.mac_address = line['macadress'].try(:chomp)
           device.description = line['description'].try(:chomp)
@@ -81,6 +107,17 @@ namespace :import do
 # created
 # modified
 
+
+
+# role
+# meta
+#   city
+#   country
+#   website
+#   media_id
+#   api_key
+#   app
+
   desc "Imports users.csv"
   task :users => :environment do
     CSV.foreach( Rails.root.join("csv/users.csv").to_s, headers: true, quote_char: "`") do |line|
@@ -88,6 +125,13 @@ namespace :import do
         user.username = line['username'].try(:chomp)
         user.email = line['email'].try(:chomp).try(:downcase)
         user.old_password = line['password']
+
+        user.role = line['role'].try(:chomp)
+        user.website = line['website'].try(:chomp)
+        user.media_id = line['media_id']
+        user.api_key = line['api_key']
+        user.app = line['app']
+        user.city = line['city']
       end
       user.save(validate: false)
     end

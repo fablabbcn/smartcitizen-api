@@ -1,4 +1,3 @@
 class KitSerializer < ActiveModel::Serializer
-  attributes :slug, :name, :description
-  # has_many :sensors
+  attributes :slug, :name, :description, :created_at, :updated_at
 end

@@ -9,7 +9,7 @@ module V0
     def show
       begin
         @user = User.includes(:sensors).friendly.find(params[:id])
-        render json: @user
+        render json: @user, serializer: DetailedUserSerializer
       rescue ActiveRecord::RecordNotFound
         render json: {message: "No user found with username or id '#{params[:id]}'"}, status: :not_found
       end

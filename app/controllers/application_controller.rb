@@ -55,13 +55,17 @@ private
     false # Rails.env.production?
   end
 
-  def render_cached_json(cache_key, opts = {}, &block)
-    opts[:expires_in] ||= 1.day
-    expires_in opts[:expires_in], public: true
-    data = Rails.cache.fetch(cache_key, {raw: true}.merge(opts)) do
-      block.call.to_json
-    end
-    render json: data
-  end
+  # def render_cached_json(cache_key, opts = {}, &block)
+  #   if true#Rails.env.production?
+  #     opts[:expires_in] ||= 1.day
+  #     expires_in opts[:expires_in], public: true
+  #     return Rails.cache.fetch('e2', {raw: true}.merge(opts)) do
+  #       render json: block.call, each_serializer: opts[:serializer]
+  #     end
+  #     # render json: JSON.parse(data)
+  #   else
+  #     return render json: block.call, each_serializer: opts[:serializer]
+  #   end
+  # end
 
 end

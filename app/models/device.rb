@@ -10,25 +10,42 @@ class Device < ActiveRecord::Base
   validates_format_of :mac_address, with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/
   validates_uniqueness_of :mac_address
 
-  reverse_geocoded_by :latitude, :longitude
-  # reverse_geocoded_by :latitude, :longitude do |obj, results|
-  #   if geo = results.first
-  #     obj.address = geo.address
-  #     obj.city = geo.city
-  #     obj.postal_code = geo.postal_code
-  #     obj.state = geo.state
-  #     obj.state_code = geo.state_code
-  #     obj.country = geo.country
-  #     obj.country_code = geo.country_code
-  #   end
-  # end
-  # after_validation :reverse_geocode
+  # reverse_geocoded_by :latitude, :longitude
+  reverse_geocoded_by :latitude, :longitude do |obj, results|
+    if geo = results.first
+      obj.address = geo.address
+      obj.city = geo.city
+      obj.postal_code = geo.postal_code
+      obj.state = geo.state
+      obj.state_code = geo.state_code
+      obj.country = geo.country
+      obj.country_code = geo.country_code
+    end
+  end
+  after_validation :reverse_geocode
 
   # these get overridden the device is a kit
   has_many :components, as: :board
   has_many :sensors, through: :components
 
   before_save :calculate_geohash
+
+  store_accessor :location,
+    :address,
+    :city,
+    :postal_code,
+    :state,
+    :state_code,
+    :country,
+    :country_code
+
+  store_accessor :meta,
+    :elevation,
+    :exposure,
+    :firmware_version,
+    :smart_cal,
+    :debug_push,
+    :enclosure_type
 
   def components
     kit ? kit.components : super

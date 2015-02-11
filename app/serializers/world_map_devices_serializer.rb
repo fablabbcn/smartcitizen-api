@@ -12,6 +12,14 @@ class WorldMapDevicesSerializer < ActiveModel::Serializer
     :exposure, # indoor / outdoor
     :readings # { sensor_id: value}
 
+  def owner
+    object.owner.username
+  end
+
+  def kit
+    object.kit.slug
+  end
+
   def state
     rand() > 0.5 ? 'online' : 'offline'
   end
