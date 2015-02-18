@@ -22,6 +22,7 @@ gem 'api-pagination'
 gem 'geocoder'
 gem 'ransack'
 gem 'c_geohash', require: false
+gem 'rack-cors', :require => 'rack/cors'
 # gem 'actionpack-action_caching', github: 'rails/actionpack-action_caching'
 
 gem 'redis-rails'
@@ -57,7 +58,7 @@ group :development, :test do
   gem 'brakeman', github: 'presidentbeef/brakeman', require: false
   gem 'rspec-rails'
   gem 'factory_girl_rails'
-  gem 'shoulda-matchers', require: false, github: 'thoughtbot/shoulda-matchers'
+  gem 'shoulda-matchers', require: false
   gem 'guard-rspec'
 end
 

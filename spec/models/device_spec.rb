@@ -9,8 +9,6 @@ RSpec.describe Device, :type => :model do
 
   let(:device) { create(:device) }
 
-  skip "sensor_ids test"
-
   it "validates format of mac address" do
     expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to_not raise_error
     expect{ create(:device, mac_address: 123) }.to raise_error

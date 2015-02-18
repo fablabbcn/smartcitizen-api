@@ -25,4 +25,8 @@ class Reading
       WHERE device_id = #{device_id} AND recorded_month IN (#{months})")
   end
 
+  def self.first
+    OpenStruct.new($cassandra.execute("SELECT * FROM readings LIMIT 1").first)
+  end
+
 end

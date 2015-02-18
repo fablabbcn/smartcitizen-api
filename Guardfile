@@ -75,5 +75,5 @@ guard :rspec, cmd: "RUBYOPT='-W0' bin/rspec" do
   #   Dir[File.join("**/#{m[1]}.feature")][0] || "spec/acceptance"
   # end
 
-  callback(:start_begin) { system("spring stop") }
+  callback(:start_begin) { system("bundle exec spring stop") }
 end
