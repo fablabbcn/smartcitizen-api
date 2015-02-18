@@ -2,8 +2,7 @@ language: ruby
 rvm:
   - 2.2.0
 env:
-  - cassandra_host_ip=127.0.0.1
-  - cassandra_keyspace=smart_citizen_test
+  - cassandra_host_ip=127.0.0.1 cassandra_keyspace=smart_citizen_test
 script: 'bundle exec rake spec'
 bundler_args: '--without=debug'
 services:
