@@ -1,0 +1,32 @@
+ ☐ http sc.dev/v0
+
+Current User:
+ ☐ http -a john:pass sc.dev/v0/me
+
+World Map:
+ ☐ http sc.dev/devices/world_map
+
+Devices:
+ ☐ http sc.dev/v0/devices
+ ☐ http sc.dev/v0/devices/0
+ ☐ http sc.dev/v0/devices/3
+ ☐ http -a john:pass POST sc.dev/v0/devices
+ ☐ http -a john:pass POST sc.dev/v0/devices mac_address=00:0a:95:9d:68:16 name=testdevice
+ ☐ http -a john:pass PUT sc.dev/v0/devices/1813
+ ☐ http -a john:pass PUT sc.dev/v0/devices/1813 name=test
+ ☐ http DELETE sc.dev/v0/devices
+ ☐ http DELETE sc.dev/v0/devices/3
+
+Kits:
+ ☐ http http sc.dev/v0/kits
+ ☐ http sc.dev/v0/kits/2
+ ☐ http sc.dev/v0/kits/0
+
+Sensors:
+ ☐ http sc.dev/v0/sensors
+ ☐ http sc.dev/v0/sensors/14
+
+Users:
+ ☐ http sc.dev/v0/users
+ ☐ http sc.dev/v0/users/100
+ ☐ http sc.dev/v0/users/0

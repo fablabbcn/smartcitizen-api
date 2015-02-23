@@ -17,9 +17,19 @@ module V0
     end
 
     def add
-      if @device = Device.find_by(mac_address: params[:mac_address])
-        @reading = @device.add_reading(recorded_at: params[:recorded_at], values: params[:values])
+      # if @device = Device.find_by(mac_address: params[:mac_address])
+      #   @reading = @device.add_reading(recorded_at: params[:recorded_at], values: params[:values])
+      # end
+
+      begin
+        mac = request.headers['X-SmartCitizenMacADDR']
+        version = request.headers['X-SmartCitizenVersion']
+        data = JSON.parse(request.headers['X-SmartCitizenData'])[0]
+        Reading.compose(mac, version, data)
+      rescue Exception => e
+        Rails.logger.info e
       end
+
       render json: Time.now.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S#")
     end
 

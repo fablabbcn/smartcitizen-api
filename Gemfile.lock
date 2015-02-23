@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/cequel/cequel.git
-  revision: 4083fbe168fffd8f4c0603893e3969a45af0b2f2
+  revision: b5eaa568cccbeb67d571789fc95dc5dd43c3116f
   specs:
     cequel (1.6.0)
       activemodel (>= 3.1, < 5.0)
@@ -108,7 +108,7 @@ GEM
     geocoder (1.2.7)
     globalid (0.3.3)
       activesupport (>= 4.1.0)
-    guard (2.12.1)
+    guard (2.12.3)
       formatador (>= 0.2.4)
       listen (~> 2.7)
       lumberjack (~> 1.0)
@@ -162,7 +162,7 @@ GEM
     netrc (0.10.2)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
-    notiffany (0.0.5)
+    notiffany (0.0.6)
       nenv (~> 0.1)
       shellany (~> 0.0)
     oauth2 (1.0.0)
@@ -249,7 +249,7 @@ GEM
       redis-store (~> 1.1.0)
     redis-store (1.1.4)
       redis (>= 2.2)
-    rest-client (1.7.2)
+    rest-client (1.7.3)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
     rspec (3.2.0)
@@ -305,12 +305,12 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.4)
     tilt (1.4.1)
-    timecop (0.7.1)
+    timecop (0.7.3)
     timers (4.0.1)
       hitimes
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    versionist (1.4.0)
+    versionist (1.4.1)
       activesupport (>= 3)
       railties (>= 3)
       yard (~> 0.7)
