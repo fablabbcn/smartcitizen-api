@@ -17,7 +17,7 @@ class WorldMapDevicesSerializer < ActiveModel::Serializer
   end
 
   def kit
-    object.kit.slug
+    # object.kit.slug
   end
 
   def state

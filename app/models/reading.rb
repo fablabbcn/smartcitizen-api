@@ -44,16 +44,15 @@ private
 
   def calibrate
     return if data.present?
-    hash = SCK.new(raw_data).to_h
-    self.data = hash
-    # h = OpenStruct.new( h.map{ |k, v| [k,Reading.clean_and_cast(v)] }.to_h )
-    # if h.smart_cal == 1 && h.hardware_version >= 11 && h.firmware_version >= 85 && h.firmware_param =~ /[AB]/
-    #   SCK11.format( data )
+    # if raw_data.smart_cal == 1 && h.hardware_version >= 11 && h.firmware_version >= 85 && h.firmware_param =~ /[AB]/
+    #   self.data = SCK11.new( raw_data ).to_h
     # elsif h.hardware_version >= 10 && h.firmware_version >= 85 && h.firmware_param =~ /[AB]/
-    #   SCK1.format( data )
+    #   self.data = SCK1.new( raw_data ).to_h
     # end
+    h = SCK1.new( raw_data ).to_h
+    self.data = h
     save!
-    device.update_attribute(:latest_data, hash)
+    device.update_attribute(:latest_data, h)
   end
 
 end

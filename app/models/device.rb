@@ -62,7 +62,7 @@ class Device < ActiveRecord::Base
   end
 
   def readings
-    Reading.for_device_id(id)
+    Reading.where(device_id: id)
   end
 
   def status
