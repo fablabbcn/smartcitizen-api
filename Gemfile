@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.2.0'
 gem 'rails-api'
+gem 'pusher'
 gem 'pg'
 gem 'bcrypt', '~> 3.1.7'
 gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-8-stable'
@@ -23,6 +24,7 @@ gem 'geocoder'
 gem 'ransack'
 gem 'c_geohash', require: false
 gem 'rack-cors', :require => 'rack/cors'
+gem 'date_validator'
 # gem 'actionpack-action_caching', github: 'rails/actionpack-action_caching'
 
 gem 'redis-rails'
