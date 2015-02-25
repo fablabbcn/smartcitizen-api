@@ -25,7 +25,7 @@ module V0
         mac = request.headers['X-SmartCitizenMacADDR']
         version = request.headers['X-SmartCitizenVersion']
         data = JSON.parse(request.headers['X-SmartCitizenData'])[0]
-        Reading.compose(mac, version, data)
+        Reading.create_from_api(mac, version, data)
       rescue Exception => e
         Rails.logger.info e
       end

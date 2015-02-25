@@ -1,16 +1,52 @@
 class SCK
-  # Validators
-  # recorded_at: required and > 1.year.ago and < 1.day.ahead
-  # mac: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/
-  # return false unless mac =~ /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/
+  include ActiveModel::Validations
 
-  attr_reader :temp, :hum, :noise, :bat, :firmware_version, :hardware_version, :firmware_param, :calibrated_at
+  attr_reader :calibrated_at,
+    :bat,
+    :co,
+    :firmware_param,
+    :firmware_version,
+    :hardware_version,
+    :hum,
+    :light,
+    :mac,
+    :nets,
+    :no2,
+    :noise,
+    :panel,
+    :temp,
+    :debug_push,
+    :smart_cal
+
+  # validates_each :bat, :co, :hum, :light, :nets, :no2, :noise, :panel, :temp do |record, attr, value|
+  #   record.errors.add attr, 'must be > 0' if value and value < 0
+  #   record.errors.add attr, 'must be numeric' unless ( value.is_a? Fixnum or value.is_a? Float )
+  # end
+  # validates_presence_of :firmware_param
+  # validates_numericality_of :bat, maximum: 1000
+  # validates_numericality_of :nets, maximum: 200
+  # validates_numericality_of :hum, :light, :noise, :bat, :nets, minimum: 0
 
   def initialize args = {}
     args.each do |k,v|
       self.send("#{k}=", v) unless v.nil?
     end
     @calibrated_at = Time.now
+  end
+
+  def debug_push=(value)
+
+    _raw_data = @hardware_version ? (@firmware_param == "A" ? "1" : "0") : ($smart_cal["raw_data"] ? $smart_cal["raw_data"] : "0")
+    _data = {
+      device_mac: mac, device_id: device, data: o, device_info: { raw_data: _raw_data, kit_info: (@hardware_version || 'none') }
+    }
+    begin
+      Pusher.trigger('test_channel', 'my_event', _data)
+    rescue Pusher::Error => e
+      # (Pusher::AuthenticationError, Pusher::HTTPError, or Pusher::Error)
+      Rails.logger.info e
+    end
+
   end
 
   def versions=(value)
@@ -22,20 +58,20 @@ class SCK
   end
 
   def temp=(value)
-    @temp = value.to_f.restrict_to(-300, 500)
+    @temp = restrict_value(value, -300, 500)
   end
 
   def hum=(value)
-    @hum = value.to_f.restrict_to(0, 1000)
+    @hum = restrict_value(value, 0, 1000)
   end
 
   def noise=(value, db = nil)
     value = SCK.table_calibration( db, value ) * 100.0
-    @noise = value.to_f.restrict_to(0, 16000)
+    @noise = restrict_value(value, 0, 16000)
   end
 
   def bat=(value)
-    @bat = value.to_f.restrict_to(0, 1000)
+    @bat = restrict_value(value, 0, 1000)
   end
 
   def to_h
@@ -45,6 +81,10 @@ class SCK
   end
 
 private
+
+  def restrict_value(value, min, max)
+    [min, value, max].sort[1]
+  end
 
   def self.table_calibration( arr, raw_value )
     raw_value = raw_value.to_i
