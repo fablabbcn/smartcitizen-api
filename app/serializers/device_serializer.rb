@@ -3,7 +3,7 @@ class DeviceSerializer < ActiveModel::Serializer
   # cached
   # delegate :cache_key, to: :object
 
-  attributes :id, :mac_address, :status, :owner, :name, :description, :tags, :created_at, :updated_at, :latest_reading
+  attributes :id, :mac_address, :status, :owner, :name, :description, :created_at, :updated_at, :latest_reading # :tags,
 
   def kit
     object.kit.slug if object.kit

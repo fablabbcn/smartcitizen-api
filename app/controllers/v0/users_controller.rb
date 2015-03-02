@@ -2,7 +2,7 @@ module V0
   class UsersController < ApplicationController
 
     def index
-      @users = User.all
+      @users = User.includes(:devices).all
       paginate json: @users
     end
 

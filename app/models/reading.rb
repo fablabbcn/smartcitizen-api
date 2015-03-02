@@ -30,7 +30,7 @@ class Reading
     Device.find(device_id)
   end
 
-  def self.create_from_api mac, version, o
+  def self.create_from_api mac, version, o, ip
     @device = Device.select(:id).find_by!(mac_address: mac)
 
     datetime = begin
@@ -42,7 +42,7 @@ class Reading
     Reading.create!({
       device_id: @device.id,
       recorded_at: datetime,
-      raw_data: o.merge({versions: version})
+      raw_data: o.merge({versions: version, ip: ip})
     })
   end
 
