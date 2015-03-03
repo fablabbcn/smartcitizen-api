@@ -52,7 +52,7 @@ private
   end
 
   def ssl_configured?
-    false #Rails.env.production?
+    false
   end
 
   # def render_cached_json(cache_key, opts = {}, &block)
