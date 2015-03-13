@@ -3,6 +3,13 @@ module V0
 
     def index
       @users = User.includes(:devices).all
+      if ['created_at', 'username'].include?(params[:order])
+        if ['asc', 'desc'].include?(params[:direction])
+          @users = @users.order([params[:order],params[:direction]].join(' '))
+        else
+          @users = @users.order(params[:order])
+        end
+      end
       paginate json: @users
     end
 

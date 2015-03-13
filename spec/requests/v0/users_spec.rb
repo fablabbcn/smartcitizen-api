@@ -29,6 +29,8 @@ describe V0::UsersController do
       api_get 'users'
       expect(response.status).to eq(200)
     end
+
+    skip "returns users in order and direction"
   end
 
   describe "POST /users" do
