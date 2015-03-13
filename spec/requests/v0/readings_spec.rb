@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe V0::ReadingsController do
 
-  pending "GET /readings" do
+  pending "GET <device_id>/readings" do
     it "returns all readings" do
       api_get 'readings'
       expect(response.status).to eq(200)

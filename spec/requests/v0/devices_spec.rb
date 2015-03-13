@@ -28,7 +28,7 @@ describe V0::DevicesController do
       end
 
       it "returns devices order with custom distance" do
-        json = api_get "devices?near=#{london_coordiantes}&distance=100000"
+        json = api_get "devices?near=#{london_coordiantes}&within=100000"
         expect(response.status).to eq(200)
         expect(json.map{|j| j['id']}).to eq([manchester, paris, barcelona].map(&:id))
       end
