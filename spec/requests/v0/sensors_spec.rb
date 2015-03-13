@@ -2,6 +2,10 @@ require 'rails_helper'
 
 describe V0::SensorsController do
 
+  let(:application) { create :application }
+  let(:user) { create :user }
+  let(:token) { create :access_token, application: application, resource_owner_id: user.id }
+
   describe "GET /sensor/<id>" do
     it "returns a sensor" do
       sensor = create(:sensor)
@@ -26,14 +30,16 @@ describe V0::SensorsController do
       api_post 'sensors', {
         name: 'new sensor',
         description: 'blah blah blah',
-        unit: 'm'
+        unit: 'm',
+        access_token: token.token
       }
       expect(response.status).to eq(201)
     end
 
     it "does not create a sensor with missing parameters" do
       api_post 'sensors', {
-        name: 'Missing params'
+        name: 'Missing params',
+        access_token: token.token
       }
       expect(response.status).to eq(422)
     end

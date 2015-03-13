@@ -9,7 +9,7 @@ describe V0::ReadingsController do
     end
   end
 
-  describe "GET /add" do
+  skip "GET /add" do
     it "returns time" do
       Timecop.freeze(Time.utc(2015,02,01,20,00,05)) do
         get "/add"

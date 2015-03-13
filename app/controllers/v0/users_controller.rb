@@ -7,16 +7,18 @@ module V0
     end
 
     def show
-      begin
-        @user = User.includes(:sensors).friendly.find(params[:id])
-        render json: @user, serializer: DetailedUserSerializer
-      rescue ActiveRecord::RecordNotFound
-        render json: {message: "No user found with username or id '#{params[:id]}'"}, status: :not_found
-      end
+      # begin
+      @user = User.includes(:sensors).friendly.find(params[:id])
+      authorize @user
+      render json: @user, serializer: DetailedUserSerializer
+      # rescue ActiveRecord::RecordNotFound
+      #   render json: {message: "No user found with username or id '#{params[:id]}'"}, status: :not_found
+      # end
     end
 
     def create
       @user = User.new(user_params)
+      authorize @user
       if @user.save
         UserMailer.welcome(@user).deliver_now
         render json: @user, status: :created

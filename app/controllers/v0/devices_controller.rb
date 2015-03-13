@@ -1,7 +1,7 @@
 module V0
   class DevicesController < ApplicationController
 
-    before_action :authorize!, only: [:create, :update]
+    before_action :check_if_logged_in!, only: [:create, :update]
 
     # caches_action :world_map, expires_in: 2.minutes
 
@@ -28,11 +28,13 @@ module V0
 
     def show
       @device = Device.find(params[:id])
+      authorize @device
       render json: @device, serializer: DetailedDeviceSerializer
     end
 
     def update
       @device = current_user.devices.find(params[:id])
+      authorize @device
       if @device.update_attributes(device_params)
         render json: @device, status: :ok
       else
@@ -42,6 +44,7 @@ module V0
 
     def create
       @device = current_user.devices.build(device_params)
+      authorize @device
       if @device.save
         render json: @device, status: :created
       else

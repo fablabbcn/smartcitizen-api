@@ -21,7 +21,7 @@ describe V0::PasswordResetsController do
 
   end
 
-  describe "PUT /password_resets/<password_reset_token>" do
+  skip "PUT /password_resets/<password_reset_token>" do
 
     before(:each) do
       user.send_password_reset

@@ -14,6 +14,7 @@ module V0
     def create
       @device = Device.find_by!(mac_address: params[:mac_address])
       @reading = Reading.create(device_id: @device.id, values: params[:values])
+      authorize @reading
       if @reading.save
         render json: @reading, status: :created
       else
@@ -30,7 +31,8 @@ module V0
         mac = request.headers['X-SmartCitizenMacADDR']
         version = request.headers['X-SmartCitizenVersion']
         data = JSON.parse(request.headers['X-SmartCitizenData'])[0]
-        Reading.create_from_api(mac, version, data, request.remote_ip)
+        @reading = Reading.create_from_api(mac, version, data, request.remote_ip)
+        authorize @reading, :create?
       rescue Exception => e
         Rails.logger.info e
       end

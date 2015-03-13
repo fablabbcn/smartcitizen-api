@@ -47,6 +47,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def admin?
+    false
+  end
+
 private
 
   def generate_token(column)

@@ -1,7 +1,7 @@
 module V0
   class MeController < ApplicationController
 
-    before_action :authorize!
+    before_action :check_if_logged_in!
 
     def index
       @user = current_user
@@ -10,6 +10,7 @@ module V0
 
     def update
       @user = current_user
+      authorize @user
       if @user.update_attributes(user_params)
         # head :no_content, status: :ok
         render json: @user, status: :ok

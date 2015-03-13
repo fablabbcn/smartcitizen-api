@@ -10,6 +10,9 @@ class ApplicationController < ActionController::API
   include PrettyJSON
   include ErrorHandlers
 
+  after_action :verify_authorized, :except => :index
+  # after_action :verify_policy_scoped, :only => :index
+
   force_ssl if: :ssl_configured?
 
 private
@@ -43,7 +46,7 @@ private
     @current_user
   end
 
-  def authorize!
+  def check_if_logged_in!
     raise Smartcitizen::NotAuthorized.new("Authorization required") if current_user.nil?
   end
 
