@@ -21,7 +21,16 @@ module V0
           return render json: "error", status: :bad_request
         end
       else
-        @devices = Device.includes(:sensors, :owner).order(:id)
+        @devices = Device.includes(:sensors, :owner)
+      end
+      if ['created_at'].include?(params[:order])
+        if ['asc', 'desc'].include?(params[:direction])
+          @devices = @devices.order([params[:order],params[:direction]].join(' '))
+        else
+          @devices = @devices.order(params[:order])
+        end
+      else
+        @devices = @devices.order(:id)
       end
       paginate json: @devices
     end

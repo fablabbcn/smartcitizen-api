@@ -12,6 +12,10 @@ class User < ActiveRecord::Base
   has_many :sensors, through: :devices
   has_many :api_tokens, foreign_key: 'owner_id'
 
+  def joined_at
+    created_at
+  end
+
   def api_token
     api_tokens.last
   end
@@ -49,6 +53,10 @@ class User < ActiveRecord::Base
 
   def admin?
     false
+  end
+
+  def country
+    Country[country_code] if country_code
   end
 
 private

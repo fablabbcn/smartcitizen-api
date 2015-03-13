@@ -21,6 +21,7 @@ gem 'kaminari'
 gem 'mailgun_rails'
 gem 'api-pagination'
 gem 'geocoder'
+gem 'countries'
 gem 'ransack'
 gem 'c_geohash', require: false
 gem 'rack-cors', :require => 'rack/cors'

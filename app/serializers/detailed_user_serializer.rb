@@ -3,7 +3,8 @@ class DetailedUserSerializer < UserSerializer
 
   def attributes
     hash = super
-    hash.delete(:device_ids)
+    hash = hash.merge(updated_at: object.updated_at)
+      .except(:device_ids)
     hash
   end
 end

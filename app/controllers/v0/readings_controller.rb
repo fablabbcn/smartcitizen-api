@@ -8,6 +8,7 @@ module V0
       to = allmonths.index(Time.now.strftime("%Y%m"))
       months = allmonths[0..to]
       @readings = @device.readings.where(recorded_month: months)
+      # "granularity= year / month / week / day / hour
       render json: @readings
     end
 

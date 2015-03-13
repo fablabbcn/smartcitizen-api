@@ -3,7 +3,15 @@ class DeviceSerializer < ActiveModel::Serializer
   # cached
   # delegate :cache_key, to: :object
 
-  attributes :id, :status, :owner, :name, :description, :created_at, :updated_at, :latest_reading # :tags,
+  attributes :id, :status, :owner, :name, :description, :created_at, :updated_at, :latest_reading
+
+  def attributes
+    hash = super
+    if Pundit.policy(current_user, object).update?
+      hash = hash.merge(mac_address: object.mac_address)
+    end
+    hash
+  end
 
   def kit
     object.kit.slug if object.kit
@@ -27,7 +35,7 @@ class DeviceSerializer < ActiveModel::Serializer
   def location
     {
       elevation: object.elevation,
-      address: object.address,
+      # address: object.address,
       city: object.city,
       country: object.country,
       country_code: object.country_code,
