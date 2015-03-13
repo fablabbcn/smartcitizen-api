@@ -16,7 +16,7 @@ module V0
     def index
       if params[:near]
         if params[:near] =~ /\A(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)\z/
-          @devices = Device.includes(:sensors, :owner).near(params[:near], (params[:distance] || 1000))
+          @devices = Device.includes(:sensors, :owner).near(params[:near], (params[:distance] || 500))
         else
           return render json: "error", status: :bad_request
         end
