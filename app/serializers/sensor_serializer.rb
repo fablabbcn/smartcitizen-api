@@ -1,9 +1,9 @@
 class SensorSerializer < ActiveModel::Serializer
   attributes :id, :name, :description, :unit, :created_at, :updated_at
 
-  def has_parent
-    object.ancestry.present?
-  end
+  # def has_parent
+  #   object.ancestry.present?
+  # end
 
   # def tags
   #   if object.id == 1

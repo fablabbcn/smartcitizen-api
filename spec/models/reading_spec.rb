@@ -6,19 +6,18 @@ RSpec.describe Reading, :type => :model do
 
   it "needs more specs"
 
-  skip "id should be device_id:recorded_at:created_at"
-
-  skip "should belong_to device" do
-    reading = Reading.add device.id, Time.now, {'10': '12'}
-    expect( reading.device ).to eq(device)
-    expect( device.readings.first ).to eq(reading)
+  it "has recorded_month" do
+    expect(Reading.new(recorded_at: "05/02/2014 19:30:00").recorded_month).to eq("201402")
   end
 
-  skip "updates latest_data on its device" do
-    data = { '1': '12.10', '2': '33.40' }.stringify_keys
-    Reading.create(device: device, values: data)
-    device.reload
-    expect(device.latest_data).to eq(data)
+  skip "id has device_id:recorded_at:created_at"
+
+  it "belongs to device" do
+    device = create(:device)
+    reading = Reading.new(device_id: device.id)
+    expect(reading.device).to eq(device)
   end
+
+  skip "updates latest_data on its device"
 
 end
