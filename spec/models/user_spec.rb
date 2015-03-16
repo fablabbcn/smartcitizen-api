@@ -19,7 +19,12 @@ RSpec.describe User, :type => :model do
   let(:homer) { build_stubbed(:user, first_name: "Homer", last_name: 'Simpson', email: 'homer@springfieldnuclear.com') }
 
   it "has an avatar"
-  it "has a location"
+
+  it "has a location" do
+    user = create(:user, country_code: 'es', city: 'Barcelona')
+    expect(user.country.to_s).to eq("Spain")
+    expect(user.city).to eq("Barcelona")
+  end
 
   it "has api_token" do
     old_token = create(:api_token, owner: user)

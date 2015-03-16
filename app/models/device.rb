@@ -65,6 +65,14 @@ class Device < ActiveRecord::Base
     Reading.where(device_id: id)
   end
 
+  def all_readings
+    all_months = (created_at.year-1..Time.now.year).map{|y| ('01'..'12').map{|m| "#{y}#{m}" }}.flatten
+    # from = all_months.index((@device.created_at - 1.year).strftime("%Y%m"))
+    to = all_months.index(Time.now.strftime("%Y%m"))
+    months = all_months[0..to]
+    readings.where(recorded_month: months)
+  end
+
   def status
     if last_recorded_at.present?
       last_recorded_at > 10.minutes.ago ? 'online' : 'offline'

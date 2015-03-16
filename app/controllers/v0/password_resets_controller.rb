@@ -10,7 +10,9 @@ module V0
 
     def update
       @user = User.find_by!(password_reset_token: params[:id])
+      @current_user = @user
       authorize @user, :update_password?
+      @current_user = nil
       if @user.update_attributes({ password: params.require(:password) })
         render json: @user, status: :ok
       # else

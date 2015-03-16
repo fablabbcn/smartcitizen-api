@@ -3,11 +3,7 @@ module V0
 
     def index
       @device = Device.find(params[:device_id])
-      allmonths = (@device.created_at.year-1..Time.now.year).map{|y| ('01'..'12').map{|m| "#{y}#{m}" }}.flatten
-      # from = allmonths.index((@device.created_at - 1.year).strftime("%Y%m"))
-      to = allmonths.index(Time.now.strftime("%Y%m"))
-      months = allmonths[0..to]
-      @readings = @device.readings.where(recorded_month: months)
+      @readings = @device.all_readings
       # "granularity= year / month / week / day / hour
       render json: @readings
     end

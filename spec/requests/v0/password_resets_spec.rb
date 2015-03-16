@@ -21,7 +21,7 @@ describe V0::PasswordResetsController do
 
   end
 
-  skip "PUT /password_resets/<password_reset_token>" do
+  describe "PUT /password_resets/<password_reset_token>" do
 
     before(:each) do
       user.send_password_reset
@@ -43,6 +43,7 @@ describe V0::PasswordResetsController do
 
     it "cannot reset password with empty password" do
       api_put "password_resets/#{user.password_reset_token}", { password: nil }
+      puts response.body
       expect(response.status).to eq(400)
     end
 

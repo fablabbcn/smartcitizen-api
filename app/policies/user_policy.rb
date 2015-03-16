@@ -17,6 +17,8 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update_password?
+    Rails.logger.info user
+    Rails.logger.info record
     update?
   end
 
