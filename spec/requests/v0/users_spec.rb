@@ -20,17 +20,29 @@ describe V0::UsersController do
       api_get "users/notauser"
       expect(response.status).to eq(404)
     end
+
   end
 
   describe "GET /users" do
-    it "returns all the users" do
-      first = create(:user)
-      second = create(:user)
-      api_get 'users'
-      expect(response.status).to eq(200)
+
+    let(:first) { create(:user) }
+    let(:second) { create(:user) }
+    before(:each) do
+      first
+      sleep(0.1) # Ewwww.... switch to timecop asap
+      second
     end
 
-    skip "returns users in order and direction"
+    it "returns all the users" do
+      body = api_get 'users'
+      expect(response.status).to eq(200)
+      expect(body.map{|b| b['username']}).to eq([first.username,second.username])
+    end
+
+    it "can be ordered" do
+      body = api_get 'users?order=created_at&direction=desc'
+      expect(body.map{|b| b['username']}).to eq([second.username,first.username])
+    end
   end
 
   describe "POST /users" do

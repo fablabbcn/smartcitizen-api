@@ -25,6 +25,16 @@ RSpec.describe Device, :type => :model do
     expect(device.all_readings.map{|a| a.recorded_at.to_i}).to eq([reading2.recorded_at.to_i, reading1.recorded_at.to_i])
   end
 
+  it "has status" do
+    expect(Device.new.status).to eq('new')
+    expect(create(:device, last_recorded_at: 1.minute.ago).status).to eq('online')
+    expect(create(:device, last_recorded_at: 10.minutes.ago).status).to eq('offline')
+  end
+
+  it "has firmware" do
+    expect(create(:device, firmware_version: 'xyz').firmware).to eq('sck:xyz')
+  end
+
   context "with kit" do
 
     let(:kit) { create(:kit) }
