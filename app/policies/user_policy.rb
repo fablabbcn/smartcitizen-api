@@ -13,7 +13,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def request_password_reset?
-    true
+    create?
   end
 
   def update_password?
