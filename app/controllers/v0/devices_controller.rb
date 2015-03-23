@@ -2,6 +2,7 @@ module V0
   class DevicesController < ApplicationController
 
     before_action :check_if_logged_in!, only: [:create, :update]
+    after_action :verify_authorized, except: [:index, :world_map]
 
     # caches_action :world_map, expires_in: 2.minutes
 
