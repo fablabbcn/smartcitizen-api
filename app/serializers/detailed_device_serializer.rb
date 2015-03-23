@@ -15,7 +15,8 @@ class DetailedDeviceSerializer < DeviceSerializer
       firmware: 'sck:93',
       recorded_at: object.last_recorded_at,
       location: location,
-      sensors: object.sensors.select(:id, :name, :description, :unit)
+      sensors: object.sensors.select(:id, :name, :description, :unit),
+      latest_data: object.latest_data
     }
   end
 

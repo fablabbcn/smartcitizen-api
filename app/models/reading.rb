@@ -75,9 +75,15 @@ private
 
     end
 
+
+
     if _data
       self.data = _data
       device.update_attribute(:latest_data, h.to_h)
+
+      Rails.logger.info("NEWWWW")
+      Rails.logger.info(_data)
+
     else
       Rails.logger.info(h)
       Rails.logger.info(">> NO MATCH")

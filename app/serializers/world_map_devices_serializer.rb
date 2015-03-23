@@ -1,6 +1,7 @@
 class WorldMapDevicesSerializer < ActiveModel::Serializer
 
-  attributes :name,
+  attributes :id,
+    :name,
     :description, # a description of the kit
     :owner, # john
     :latitude, # 41.000

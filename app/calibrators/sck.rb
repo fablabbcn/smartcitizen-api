@@ -58,25 +58,38 @@ class SCK
   end
 
   def temp=(value)
-    @temp = restrict_value(value, -300, 500)
+    @temp = [value,restrict_value(value, -300, 500)]
   end
 
   def hum=(value)
-    @hum = restrict_value(value, 0, 1000)
+    @hum = [value,restrict_value(value, 0, 1000)]
   end
 
   def noise=(value, db = nil)
     value = SCK.table_calibration( db, value ) * 100.0
-    @noise = restrict_value(value, 0, 16000)
+    @noise = [value,restrict_value(value, 0, 16000)]
   end
 
   def bat=(value)
-    @bat = restrict_value(value, 0, 1000)
+    @bat = [value,restrict_value(value, 0, 1000)]
   end
 
   def to_h
     hash = {}
     instance_variables.each {|var| hash[var.to_s.delete("@").to_sym] = instance_variable_get(var) }
+    nh = {
+      noise: 7,
+      light: 14,
+      panel: 18,
+      co: 16,
+      bat: 17,
+      hum: 13,
+      no2: 15,
+      nets: 0,
+      temp: 12
+    }
+    hash.keys.each { |k| hash[nh[k]] = hash[k]; hash.delete(k) }
+    Rails.logger.info hash
     return hash
   end
 
