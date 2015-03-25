@@ -1,5 +1,4 @@
 class SCK
-  include ActiveModel::Validations
 
   attr_accessor :calibrated_at,
     :bat,
@@ -18,6 +17,7 @@ class SCK
     :debug_push,
     :smart_cal
 
+  # include ActiveModel::Validations
   # validates_each :bat, :co, :hum, :light, :nets, :no2, :noise, :panel, :temp do |record, attr, value|
   #   record.errors.add attr, 'must be > 0' if value and value < 0
   #   record.errors.add attr, 'must be numeric' unless ( value.is_a? Fixnum or value.is_a? Float )
@@ -34,40 +34,26 @@ class SCK
     @calibrated_at = Time.now
   end
 
-  def debug_push=(value)
-
-    _raw_data = @hardware_version ? (@firmware_param == "A" ? "1" : "0") : ($smart_cal["raw_data"] ? $smart_cal["raw_data"] : "0")
-    _data = {
-      device_mac: mac, device_id: device, data: o, device_info: { raw_data: _raw_data, kit_info: (@hardware_version || 'none') }
-    }
-    begin
-      Pusher.trigger('test_channel', 'my_event', _data)
-    rescue Pusher::Error => e
-      # (Pusher::AuthenticationError, Pusher::HTTPError, or Pusher::Error)
-      Rails.logger.info e
-    end
-
-  end
-
   def versions=(value)
     # 1.1-0.8.5-A
-    split = value.split('-').map{|a| a.gsub('.','') }
-    @firmware_version = split[0].to_i
-    @hardware_version = split[1].to_i
+    split = value.split('-')#.map{|a| a.gsub('.','') }
+    @firmware_version = split[1]
+    @hardware_version = split[0]
     @firmware_param = split[2]
   end
 
-  def temp=(value)
-    @temp = [value,restrict_value(value, -300, 500)]
+  def temp=(value, calib = nil)
+    @temp = [value,restrict_value(calib || value, -300, 500)]
   end
 
-  def hum=(value)
-    @hum = [value,restrict_value(value, 0, 1000)]
+  def hum=(value, calib = nil)
+    @hum = [value,restrict_value(calib || value, 0, 1000)]
   end
 
   def noise=(value, db = nil)
-    value = SCK.table_calibration( db, value ) * 100.0
-    @noise = [value,restrict_value(value, 0, 16000)]
+    raise "call from a subclass" unless db
+    new_value = SCK.table_calibration( db, value ) * 100
+    @noise = [value,new_value]
   end
 
   def bat=(value)
@@ -115,18 +101,6 @@ private
     slope = ( nextValueOutput - prevValueOutput ) / ( nextValueRef - prevValueRef )
     result = slope * ( valueInput - prevValueRef ) + prevValueOutput
     return result
-  end
-
-  def self.clean_and_cast raw
-    begin
-      if raw =~ /^\d+$/ or raw.is_a? Integer
-        return raw.to_i
-      else
-        return Float(raw)
-      end
-    rescue
-      return raw
-    end
   end
 
 end

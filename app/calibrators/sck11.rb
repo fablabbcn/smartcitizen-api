@@ -6,13 +6,13 @@ class SCK11 < SCK
   end
 
   def temp=(value)
-    @temp = (-53 + 175.72 / 65536.0 * value.to_f).to_f.round_to(1) * 10.0
-    super @temp
+    t = (-53 + 175.72 / 65536.0 * value.to_f).to_f.round_to(1) * 10.0
+    super value, t
   end
 
   def hum=(value)
-    @hum = (7 + 125.0 / 65536.0  * value.to_f).to_f.round_to(1) * 10.0
-    super @hum
+    h = (7 + 125.0 / 65536.0  * value.to_f).to_f.round_to(1) * 10.0
+    super value, h
   end
 
 end

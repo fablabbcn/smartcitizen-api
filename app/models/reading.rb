@@ -70,8 +70,6 @@ private
     h.hardware_version = split[0].to_i
     h.firmware_param = split[2]
 
-    Rails.logger.info("????????????????")
-    Rails.logger.info(h)
 
     if (h.hardware_version && h.hardware_version >= 11) &&
       (h.firmware_version && h.firmware_version >= 85) &&
