@@ -1,6 +1,8 @@
 module V0
   class ReadingsController < ApplicationController
 
+    skip_after_action :verify_authorized, only: [:index, :add]
+
     def index
       @device = Device.find(params[:device_id])
       @readings = @device.all_readings

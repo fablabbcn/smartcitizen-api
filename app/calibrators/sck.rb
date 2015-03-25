@@ -1,7 +1,7 @@
 class SCK
   include ActiveModel::Validations
 
-  attr_reader :calibrated_at,
+  attr_accessor :calibrated_at,
     :bat,
     :co,
     :firmware_param,
