@@ -10,16 +10,16 @@ module V0
       render json: @readings
     end
 
-    def create
-      @device = Device.find_by!(mac_address: params[:mac_address])
-      @reading = Reading.create(device_id: @device.id, values: params[:values])
-      authorize @reading
-      if @reading.save
-        render json: @reading, status: :created
-      else
-        render json: { errors: @reading.errors.full_messages }, status: :unprocessable_entity
-      end
-    end
+    # def create
+    #   @device = Device.find_by!(mac_address: params[:mac_address])
+    #   @reading = Reading.create(device_id: @device.id, values: params[:values])
+    #   authorize @reading
+    #   if @reading.save
+    #     render json: @reading, status: :created
+    #   else
+    #     render json: { errors: @reading.errors.full_messages }, status: :unprocessable_entity
+    #   end
+    # end
 
     def add
       # if @device = Device.find_by(mac_address: params[:mac_address])

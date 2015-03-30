@@ -8,7 +8,7 @@ describe ReadingPolicy do
   skip "for a visitor" do
     let(:user) { nil }
     it { is_expected.to permitz(:show)    }
-    it { is_expected.to_not permitz(:create)  }
+    it { is_expected.to permitz(:create)  }
   end
 
 end

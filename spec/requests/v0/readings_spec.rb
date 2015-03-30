@@ -2,14 +2,15 @@ require 'rails_helper'
 
 describe V0::ReadingsController do
 
-  pending "GET <device_id>/readings" do
+  describe "GET <device_id>/readings" do
     it "returns all readings" do
-      api_get 'readings'
+      device = create(:device)
+      api_get "/devices/#{device.id}/readings"
       expect(response.status).to eq(200)
     end
   end
 
-  skip "GET /add" do
+  describe "GET /add" do
     it "returns time" do
       Timecop.freeze(Time.utc(2015,02,01,20,00,05)) do
         get "/add"

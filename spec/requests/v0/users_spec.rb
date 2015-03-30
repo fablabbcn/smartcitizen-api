@@ -25,8 +25,8 @@ describe V0::UsersController do
 
   describe "GET /users" do
 
-    let(:first) { create(:user) }
-    let(:second) { create(:user) }
+    let(:first) { create(:user, username: "first") }
+    let(:second) { create(:user, username: "second") }
     before(:each) do
       Timecop.freeze do
         first
@@ -44,6 +44,11 @@ describe V0::UsersController do
     it "can be ordered" do
       body = api_get 'users?order=created_at&direction=desc'
       expect(body.map{|b| b['username']}).to eq([second.username,first.username])
+    end
+
+    it "has default asc order" do
+      body = api_get 'users?order=username'
+      expect(body.map{|b| b['username']}).to eq([first.username,second.username])
     end
   end
 
