@@ -6,6 +6,10 @@ class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Basic::ControllerMethods
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
+
+  # skip_before_action :verify_authenticity_token
+  # protect_from_forgery with: :null_session
+
   include Pundit
   include PrettyJSON
   include ErrorHandlers
@@ -21,10 +25,8 @@ private
 
   def current_user
     if @current_user.nil?
-      if params[:access_token] and doorkeeper_token # oauth2
-        unless @current_user = User.find(doorkeeper_token.resource_owner_id)
-          raise Smartcitizen::NotAuthorized.new "Invalid OAuth2 Token"
-        end
+      if doorkeeper_token
+        @current_user = User.find(doorkeeper_token.resource_owner_id)
       elsif ActionController::HttpAuthentication::Basic.has_basic_credentials?(request) # username and password
         authenticate_with_http_basic do |username, password|
           if user = User.find_by(username: username) and user.authenticate_with_legacy_support(password)
@@ -49,7 +51,13 @@ private
   end
 
   def check_if_logged_in!
-    raise Smartcitizen::NotAuthorized.new("Authorization required") if current_user.nil?
+    if current_user.nil?
+      if params[:access_token]
+        raise Smartcitizen::NotAuthorized.new("Invalid OAuth2 Params")
+      else
+        raise Smartcitizen::NotAuthorized.new("Authorization required")
+      end
+    end
   end
 
   def doorkeeper_unauthorized_render_options

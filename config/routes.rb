@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
 
-  get 'password_resets/new'
-
   use_doorkeeper
+  get 'password_resets/new'
 
   get "/404" => "errors#not_found"
   get "/500" => "errors#exception"
