@@ -20,6 +20,12 @@ RSpec.describe User, :type => :model do
 
   it "has an avatar"
 
+  it "has joined_at" do
+    Timecop.freeze do
+      expect(create(:user).joined_at).to eq(Time.now)
+    end
+  end
+
   it "has a location" do
     user = create(:user, country_code: 'es', city: 'Barcelona')
     expect(user.country.to_s).to eq("Spain")

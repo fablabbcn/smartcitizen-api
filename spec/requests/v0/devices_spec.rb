@@ -14,6 +14,18 @@ describe V0::DevicesController do
       expect(response.status).to eq(200)
     end
 
+    describe "world map" do
+      it "returns all devices" do
+        first = create(:device)
+        second = create(:device)
+        json = api_get "devices/world_map"
+        expect(response.status).to eq(200)
+        expect(json.map{|j| j['id']}).to eq([first, second].map(&:id))
+      end
+
+      skip "needs more specs"
+    end
+
     describe "with near" do
 
       let!(:barcelona) { create(:device, latitude: 41.39479, longitude: 2.1487679) }

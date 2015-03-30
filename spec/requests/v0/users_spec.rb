@@ -28,9 +28,11 @@ describe V0::UsersController do
     let(:first) { create(:user) }
     let(:second) { create(:user) }
     before(:each) do
-      first
-      sleep(0.1) # Ewwww.... switch to timecop asap
-      second
+      Timecop.freeze do
+        first
+        Timecop.travel(10.seconds)
+        second
+      end
     end
 
     it "returns all the users" do
