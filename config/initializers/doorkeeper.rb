@@ -9,7 +9,7 @@ Doorkeeper.configure do
     # fail "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
     # Put your resource owner authentication logic here.
     # Example implementation:
-    current_user || redirect_to(new_user_session_url)
+    redirect_to('https://id.smartcitizen.me')
   end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
@@ -92,8 +92,8 @@ Doorkeeper.configure do
   # so that the user skips the authorization step.
   # For example if dealing with trusted a application.
   skip_authorization do |resource_owner, client|
-    # true
-    client.superapp? or resource_owner.admin?
+    true
+    # client.superapp? or resource_owner.admin?
   end
 
   # WWW-Authenticate Realm (default "Doorkeeper").
