@@ -3,19 +3,20 @@ class DeviceSerializer < ActiveModel::Serializer
   # cached
   # delegate :cache_key, to: :object
 
-  attributes :id, :name, :description, :status, :added_at, :updated_at, :owner, :data
+  attributes :id, :name, :description, :kit, :status, :added_at, :updated_at, :owner, :data
 
   def attributes
     hash = super
+    hash = hash.merge(kit: object.kit.slug) if object.kit
     if Pundit.policy(current_user, object).update?
       hash = hash.merge(mac_address: object.mac_address)
     end
     hash
   end
 
-  def kit
-    object.kit.slug if object.kit
-  end
+  # def kit
+  #   object.kit.slug if object.kit
+  # end
 
   def tags
     []
