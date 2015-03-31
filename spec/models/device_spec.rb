@@ -19,9 +19,9 @@ RSpec.describe Device, :type => :model do
     expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to raise_error
   end
 
-  skip "has all_readings, in latest first order" do
-    reading1 = Reading.create!(device_id: device.id, recorded_at: Time.current.utc - 1, raw_data: {a: 'b'})
-    reading2 = Reading.create!(device_id: device.id, recorded_at: Time.current.utc, raw_data: {a: 'b'})
+  it "has all_readings, in latest first order" do
+    reading1 = create(:reading, device_id: device.id, recorded_at: Time.current.utc - 1)
+    reading2 = create(:reading, device_id: device.id, recorded_at: Time.current.utc)
     expect(device.all_readings.map{|a| a.recorded_at.to_i}).to eq([reading2.recorded_at.to_i, reading1.recorded_at.to_i])
   end
 
