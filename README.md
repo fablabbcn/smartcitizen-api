@@ -6,4 +6,5 @@
 
 ### [Documentation (WIP)](http://www.johnre.es/smartcitizen-api-documentation)
 
-(https://new-api.smartcitizen.me/examples/map)[https://new-api.smartcitizen.me/examples/map]
+* Map Example - [https://new-api.smartcitizen.me/examples/map](https://new-api.smartcitizen.me/examples/map)
+
