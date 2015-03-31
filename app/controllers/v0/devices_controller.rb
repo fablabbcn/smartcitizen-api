@@ -7,12 +7,16 @@ module V0
     # caches_action :world_map, expires_in: 2.minutes
 
     def world_map
-      render json: Device.includes(:owner,:kit), each_serializer: WorldMapDevicesSerializer
-      expires_in 1.minute, public: true
+      json = Rails.cache.fetch("devices/world_map", expires_in: 1.minute) do
+        ActiveModel::ArraySerializer.new(
+          Device.includes(:owner,:kit),
+          each_serializer: WorldMapDevicesSerializer
+        )
+      end
+      render json: json
       # render_cached_json("devices:world_map", expires_in: 6.minutes, serializer: WorldMapDevicesSerializer) do
       #   @devices = Device.all#select(:id,:name,:description,:latitude,:longitude)
       # end
-      # # render json: Device.all, each_serializer: WorldMapDevicesSerializer
     end
 
     def index
