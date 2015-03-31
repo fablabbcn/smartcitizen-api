@@ -7,7 +7,7 @@ RSpec.describe Reading, :type => :model do
   it "needs more specs"
 
   it "has recorded_month" do
-    expect(Reading.new(recorded_at: "05/02/2014 19:30:00").recorded_month).to eq("201402")
+    expect(create(:reading, recorded_at: "05/02/2015 19:30:00").recorded_month).to eq(201502)
   end
 
   skip "id has device_id:recorded_at:created_at"

@@ -16,7 +16,7 @@ class Reading
   map :raw_data, :text, :text
   map :data, :text, :text
 
-  validates_presence_of :device_id, :recorded_at, :raw_data
+  validates_presence_of :device_id, :recorded_at#, :raw_data
   validates :recorded_at, date: { after: Proc.new { 1.year.ago }, before: Proc.new { 1.day.from_now } }
 
   before_create :set_recorded_month
@@ -53,7 +53,7 @@ private
   end
 
   def calibrate
-    Calibrator.new(self) unless data.present?
+    Calibrator.new(self) if raw_data.present? and data.blank?
   end
 
 end
