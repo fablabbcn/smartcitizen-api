@@ -9,7 +9,7 @@ class WorldMapDevicesSerializer < ActiveModel::Serializer
     :city, # london / manchester
     :country_code, # gb / es / fr
     :kit, # slug
-    :state, # new / online / offline
+    :status, # new / online / offline
     :exposure, # indoor / outdoor
     :latest_data # { sensor_id: value}
 
@@ -19,14 +19,6 @@ class WorldMapDevicesSerializer < ActiveModel::Serializer
 
   def kit
     # object.kit.slug
-  end
-
-  def state
-    rand() > 0.5 ? 'online' : 'offline'
-  end
-
-  def exposure
-    rand() > 0.5 ? 'indoor' : 'outdoor'
   end
 
 end
