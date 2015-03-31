@@ -5,3 +5,5 @@
 [![Test Coverage](https://codeclimate.com/github/johnrees/smartcitizen/badges/coverage.svg)](https://codeclimate.com/github/johnrees/smartcitizen)
 
 ### [Documentation (WIP)](http://www.johnre.es/smartcitizen-api-documentation)
+
+(https://new-api.smartcitizen.me/examples/map)[https://new-api.smartcitizen.me/examples/map]
