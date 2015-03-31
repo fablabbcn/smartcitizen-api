@@ -28,6 +28,7 @@ gem 'rack-cors', :require => 'rack/cors'
 gem 'date_validator'
 # gem 'actionpack-action_caching', github: 'rails/actionpack-action_caching'
 
+gem 'dalli'
 gem 'redis-rails'
 # gem 'redis-rack-cache'
 
