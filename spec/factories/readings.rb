@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :reading do
     device_id { FactoryGirl.create(:device).id }
-    recorded_month { Time.now.month }
-    recorded_at { Time.now }
+    recorded_month { Time.current.utc.month }
+    recorded_at { Time.current.utc }
   end
 
 end

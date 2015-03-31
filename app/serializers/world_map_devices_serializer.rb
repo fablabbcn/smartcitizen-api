@@ -10,8 +10,8 @@ class WorldMapDevicesSerializer < ActiveModel::Serializer
     :country_code, # gb / es / fr
     :kit, # slug
     :status, # new / online / offline
-    :exposure, # indoor / outdoor
-    :latest_data # { sensor_id: value}
+    :exposure # indoor / outdoor
+    # :data # { sensor_id: value}
 
   def owner
     object.owner.username

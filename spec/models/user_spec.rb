@@ -22,7 +22,7 @@ RSpec.describe User, :type => :model do
 
   it "has joined_at" do
     Timecop.freeze do
-      expect(create(:user).joined_at).to eq(Time.now)
+      expect(create(:user).joined_at).to eq(Time.current.utc)
     end
   end
 

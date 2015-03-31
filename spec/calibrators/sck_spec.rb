@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'SCK', :type => :calibrator do
 
-  it "sets calibrated_at to Time.now" do
-    Timecop.freeze { expect(SCK.new.calibrated_at).to eq(Time.now) }
+  it "sets calibrated_at to Time.current.utc" do
+    Timecop.freeze { expect(SCK.new.calibrated_at).to eq(Time.current.utc) }
   end
 
   it "parses version numbers from string" do

@@ -3,7 +3,7 @@ class DeviceSerializer < ActiveModel::Serializer
   # cached
   # delegate :cache_key, to: :object
 
-  attributes :id, :status, :owner, :name, :description, :created_at, :updated_at, :latest_reading
+  attributes :id, :name, :description, :status, :added_at, :updated_at, :owner, :data
 
   def attributes
     hash = super
@@ -23,8 +23,6 @@ class DeviceSerializer < ActiveModel::Serializer
 
   def latest_reading
     {
-      ip: nil,
-      exposure: object.exposure,
       firmware: object.firmware,
       recorded_at: object.last_recorded_at,
       location: location,
@@ -34,6 +32,8 @@ class DeviceSerializer < ActiveModel::Serializer
 
   def location
     {
+      ip: nil,
+      exposure: object.exposure,
       elevation: object.elevation,
       # address: object.address,
       city: object.city,

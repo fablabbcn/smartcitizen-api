@@ -20,8 +20,8 @@ RSpec.describe Device, :type => :model do
   end
 
   it "has all_readings, in latest first order" do
-    reading1 = Reading.create!(device_id: device.id, recorded_at: Time.now - 1, raw_data: {a: 'b'})
-    reading2 = Reading.create!(device_id: device.id, recorded_at: Time.now, raw_data: {a: 'b'})
+    reading1 = Reading.create!(device_id: device.id, recorded_at: Time.current.utc - 1, raw_data: {a: 'b'})
+    reading2 = Reading.create!(device_id: device.id, recorded_at: Time.current.utc, raw_data: {a: 'b'})
     expect(device.all_readings.map{|a| a.recorded_at.to_i}).to eq([reading2.recorded_at.to_i, reading1.recorded_at.to_i])
   end
 

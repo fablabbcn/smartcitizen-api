@@ -37,9 +37,9 @@ end
 
 
 # # USE smart_citizen_development;
-# # Reading.create(device_id: 3, recorded_month: 201503, recorded_at: (Time.now + 1.month), values: { 'i_am': 'last'})
-# # Reading.create(device_id: 3, recorded_month: 201412, recorded_at: (Time.now - 2.months), values: { 'i_am': 'first'})
-# # Reading.create(device_id: 3, recorded_month: 201502, recorded_at: (Time.now), values: { 'i_am': 'middle'})
+# # Reading.create(device_id: 3, recorded_month: 201503, recorded_at: (Time.current.utc + 1.month), values: { 'i_am': 'last'})
+# # Reading.create(device_id: 3, recorded_month: 201412, recorded_at: (Time.current.utc - 2.months), values: { 'i_am': 'first'})
+# # Reading.create(device_id: 3, recorded_month: 201502, recorded_at: (Time.current.utc), values: { 'i_am': 'middle'})
 
 
 # # DROP TABLE readings;

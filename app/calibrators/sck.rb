@@ -15,7 +15,9 @@ class SCK
     :panel,
     :temp,
     :debug_push,
-    :smart_cal
+    :smart_cal,
+    :timestamp,
+    :ip
 
   # include ActiveModel::Validations
   # validates_each :bat, :co, :hum, :light, :nets, :no2, :noise, :panel, :temp do |record, attr, value|
@@ -29,9 +31,9 @@ class SCK
 
   def initialize args = {}
     args.each do |k,v|
-      self.send("#{k}=", v) unless v.nil?
+      self.send("#{k}=", to_f_or_i_or_s(v)) unless v.nil?
     end
-    @calibrated_at = Time.now
+    @calibrated_at = Time.current.utc
   end
 
   def versions=(value)
@@ -44,20 +46,24 @@ class SCK
 
   def temp=(value, calib = nil)
     @temp = [value,restrict_value(calib || value, -300, 500)]
+    # @temp = restrict_value(calib || value, -300, 500)
   end
 
   def hum=(value, calib = nil)
     @hum = [value,restrict_value(calib || value, 0, 1000)]
+    # @hum = restrict_value(calib || value, 0, 1000)
   end
 
   def noise=(value, db = nil)
     raise "call from a subclass" unless db
     new_value = SCK.table_calibration( db, value ) * 100
-    @noise = [value,new_value]
+    @noise = [value,new_value].uniq
+    # @noise = new_value
   end
 
   def bat=(value)
     @bat = [value,restrict_value(value, 0, 1000)]
+    # @bat = restrict_value(value, 0, 1000)
   end
 
   def to_h
@@ -74,12 +80,23 @@ class SCK
       nets: 0,
       temp: 12
     }
-    hash.keys.each { |k| hash[nh[k]] = hash[k]; hash.delete(k) }
-    Rails.logger.info hash
+    hash.keys.each do |k|
+      if hash[k].is_a?(Array)
+        hash[nh[k]] = hash[k].last
+        hash["#{nh[k]}_raw"] = hash[k].first
+      else
+        hash[nh[k]] = hash[k]
+      end
+      hash.delete(k)
+    end
     return hash
   end
 
 private
+
+  def to_f_or_i_or_s(v)
+    ((float = Float(v)) && (float % 1.0 == 0) ? float.to_i : float) rescue v
+  end
 
   def restrict_value(value, min, max)
     [min, value, max].sort[1]

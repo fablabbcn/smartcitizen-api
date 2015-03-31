@@ -8,16 +8,24 @@ class DetailedDeviceSerializer < DeviceSerializer
     UserSerializer.new(object.owner)
   end
 
-  def latest_reading
-    {
-      ip: nil,
-      exposure: rand() > 0.5 ? 'indoor' : 'outdoor',
-      firmware: 'sck:93',
-      recorded_at: object.last_recorded_at,
-      location: location,
-      sensors: object.sensors.select(:id, :name, :description, :unit),
-      latest_data: object.latest_data
-    }
+  def data
+    s = {}
+
+    s['recorded_at'] = Time.current.utc
+    s['added_at'] = Time.current.utc
+    s['calibrated_at'] = Time.current.utc
+    s['firmware'] = nil
+
+    s['location'] = location
+    s['sensors'] = []
+
+    object.sensors.order(:id).select(:id,:name,:description, :unit).each do |sensor|
+      s['sensors'] << sensor.attributes.merge(
+        value: object.data["#{sensor.id}"],
+        raw_value: object.data["#{sensor.id}_raw"]
+      )
+    end
+    return s
   end
 
 end
