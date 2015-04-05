@@ -2,6 +2,38 @@ require 'rails_helper'
 
 RSpec.describe 'SCK', :type => :calibrator do
 
+  it "has to_h" do
+    Timecop.freeze do
+      sck = SCK1.new(
+        noise: 50,
+        light: 51,
+        panel: 52,
+        co: 53,
+        bat: 54,
+        hum: 55,
+        no2: 56,
+        nets: 57,
+        temp: 58)
+      expect(sck.to_h).to eq({
+        nil => Time.current.utc,
+        14 => 51,
+        18 => 52,
+        16 => 53,
+        17 => 54,
+        13 => 55,
+        15 => 56,
+        0 => 57,
+        12 => 58,
+        # fix this
+        '12_raw' => 58,
+        '13_raw' => 55,
+        '17_raw' => 54,
+        7 => 7000,
+        '7_raw' => 50
+      })
+    end
+  end
+
   it "sets calibrated_at to Time.current.utc" do
     Timecop.freeze { expect(SCK.new.calibrated_at).to eq(Time.current.utc) }
   end
