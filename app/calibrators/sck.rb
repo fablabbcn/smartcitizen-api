@@ -1,5 +1,15 @@
 class SCK
 
+  # include ActiveModel::Validations
+  # validates_each :bat, :co, :hum, :light, :nets, :no2, :noise, :panel, :temp do |record, attr, value|
+  #   record.errors.add attr, 'must be > 0' if value and value < 0
+  #   record.errors.add attr, 'must be numeric' unless ( value.is_a? Fixnum or value.is_a? Float )
+  # end
+  # validates_presence_of :firmware_param
+  # validates_numericality_of :bat, maximum: 1000
+  # validates_numericality_of :nets, maximum: 200
+  # validates_numericality_of :hum, :light, :noise, :bat, :nets, minimum: 0
+
   attr_accessor :calibrated_at,
     :bat,
     :co,
@@ -18,16 +28,6 @@ class SCK
     :smart_cal,
     :timestamp,
     :ip
-
-  # include ActiveModel::Validations
-  # validates_each :bat, :co, :hum, :light, :nets, :no2, :noise, :panel, :temp do |record, attr, value|
-  #   record.errors.add attr, 'must be > 0' if value and value < 0
-  #   record.errors.add attr, 'must be numeric' unless ( value.is_a? Fixnum or value.is_a? Float )
-  # end
-  # validates_presence_of :firmware_param
-  # validates_numericality_of :bat, maximum: 1000
-  # validates_numericality_of :nets, maximum: 200
-  # validates_numericality_of :hum, :light, :noise, :bat, :nets, minimum: 0
 
   def initialize args = {}
     args.each do |k,v|
