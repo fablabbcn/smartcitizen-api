@@ -18,8 +18,7 @@ class ApplicationController < ActionController::API
   after_action :verify_authorized, :except => :index
   # after_action :verify_policy_scoped, :only => :index
 
-  # force_ssl if: :ssl_configured?
-  # config.middleware.use Rack::SslEnforcer, except: '/add'
+  force_ssl if: :ssl_configured?
 
 private
 
@@ -65,7 +64,7 @@ private
   end
 
   def ssl_configured?
-    Rails.env.production?
+    request.host == 'new-api.smartcitizen.me'
   end
 
   # def render_cached_json(cache_key, opts = {}, &block)

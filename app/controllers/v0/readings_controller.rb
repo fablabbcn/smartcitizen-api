@@ -11,9 +11,7 @@ module V0
     end
 
     def add
-      # if @device = Device.find_by(mac_address: params[:mac_address])
-      #   @reading = @device.add_reading(recorded_at: params[:recorded_at], values: params[:values])
-      # end
+      return if request.host == 'httponly.smartcitizen.me'
       begin
         mac = request.headers['X-SmartCitizenMacADDR']
         version = request.headers['X-SmartCitizenVersion']
