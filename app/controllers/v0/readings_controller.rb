@@ -11,7 +11,7 @@ module V0
     end
 
     def add
-      unless request.host == 'httponly.smartcitizen.me'
+      if Rails.env.development?
         begin
           mac = request.headers['X-SmartCitizenMacADDR']
           version = request.headers['X-SmartCitizenVersion']
