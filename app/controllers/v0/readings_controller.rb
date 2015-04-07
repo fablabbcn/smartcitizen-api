@@ -23,7 +23,7 @@ module V0
       rescue Exception => e
         Rails.logger.info e
       end
-      render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S#")
+      render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S# (new)")
     end
 
 private
