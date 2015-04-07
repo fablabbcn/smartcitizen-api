@@ -18,7 +18,8 @@ class ApplicationController < ActionController::API
   after_action :verify_authorized, :except => :index
   # after_action :verify_policy_scoped, :only => :index
 
-  force_ssl if: :ssl_configured?
+  # force_ssl if: :ssl_configured?
+  config.middleware.use Rack::SslEnforcer, except: '/add'
 
 private
 
