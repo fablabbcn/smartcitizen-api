@@ -11,15 +11,16 @@ module V0
     end
 
     def add
-      return if request.host == 'httponly.smartcitizen.me'
-      begin
-        mac = request.headers['X-SmartCitizenMacADDR']
-        version = request.headers['X-SmartCitizenVersion']
-        data = request.headers['X-SmartCitizenData']
-        @reading = Reading.create_from_api(mac, version, data, request.remote_ip)
-        authorize @reading, :create?
-      rescue Exception => e
-        Rails.logger.info e
+      unless request.host == 'httponly.smartcitizen.me'
+        begin
+          mac = request.headers['X-SmartCitizenMacADDR']
+          version = request.headers['X-SmartCitizenVersion']
+          data = request.headers['X-SmartCitizenData']
+          @reading = Reading.create_from_api(mac, version, data, request.remote_ip)
+          authorize @reading, :create?
+        rescue Exception => e
+          Rails.logger.info e
+        end
       end
       render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S# (new)")
     end
