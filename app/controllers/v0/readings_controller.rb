@@ -11,16 +11,17 @@ module V0
     end
 
     def add
-      if Rails.env.development?
-        begin
-          mac = request.headers['X-SmartCitizenMacADDR']
-          version = request.headers['X-SmartCitizenVersion']
-          data = request.headers['X-SmartCitizenData']
-          @reading = Reading.create_from_api(mac, version, data, request.remote_ip)
-          authorize @reading, :create?
-        rescue Exception => e
-          Rails.logger.info e
-        end
+      begin
+        mac = request.headers['X-SmartCitizenMacADDR']
+        version = request.headers['X-SmartCitizenVersion']
+        data = request.headers['X-SmartCitizenData']
+
+        Keen.publish("adds", { :mac => mac, :version => version, :data => data }) if Rails.env.production?
+
+        @reading = Reading.create_from_api(mac, version, data, request.remote_ip)
+        authorize @reading, :create?
+      rescue Exception => e
+        Rails.logger.info e
       end
       render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S#")
     end
