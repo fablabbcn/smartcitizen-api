@@ -22,7 +22,7 @@ module V0
           Rails.logger.info e
         end
       end
-      render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S# (new)")
+      render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S#")
     end
 
 private

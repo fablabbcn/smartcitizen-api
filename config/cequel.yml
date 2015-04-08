@@ -14,7 +14,6 @@ test:
   retry_delay: 0.5
   newrelic: false
 
-
 production:
   host: <%= ENV['cassandra_host_ip'] %>
   port: 9042
