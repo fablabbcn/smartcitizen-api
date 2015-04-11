@@ -52,6 +52,7 @@ RSpec.describe Reading, :type => :model do
 
   describe "calibrate" do
     skip "updates latest_data on its device"
+    skip "ignores bad data"
   end
 
 end
