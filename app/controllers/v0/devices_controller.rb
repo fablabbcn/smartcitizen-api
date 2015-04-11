@@ -1,7 +1,7 @@
 module V0
   class DevicesController < ApplicationController
 
-    before_action :check_if_logged_in!, only: [:create, :update]
+    before_action :check_if_authorized!, only: [:create, :update]
     after_action :verify_authorized, except: [:index, :world_map]
 
     # caches_action :world_map, expires_in: 2.minutes
@@ -20,7 +20,7 @@ module V0
     def index
       if params[:near]
         if params[:near] =~ /\A(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)\z/
-          @devices = Device.includes(:sensors, :owner).near(params[:near], (params[:within] || 1000))
+          @devices = Device.includes(:sensors, :owner).near(params[:near].split(','), (params[:within] || 1000))
         else
           return render json: "error", status: :bad_request
         end

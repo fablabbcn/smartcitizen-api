@@ -2,7 +2,7 @@ module V0
   class MeController < ApplicationController
 
     # skip_after_action :verify_authorized
-    before_action :check_if_logged_in!
+    before_action :check_if_authorized!
     # before_action :doorkeeper_authorize!
 
     def index

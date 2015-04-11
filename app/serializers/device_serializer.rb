@@ -3,7 +3,7 @@ class DeviceSerializer < ActiveModel::Serializer
   # cached
   # delegate :cache_key, to: :object
 
-  attributes :id, :name, :description, :kit, :status, :added_at, :updated_at, :owner, :data
+  attributes :id, :name, :description, :kit, :status, :added_at, :updated_at, :owner, :latitude, :longitude, :data
 
   def attributes
     hash = super

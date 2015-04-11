@@ -16,7 +16,7 @@ module V0
         version = request.headers['X-SmartCitizenVersion']
         data = request.headers['X-SmartCitizenData']
 
-        Keen.publish("adds", { :mac => mac, :version => version, :data => data }) if Rails.env.production?
+        # Keen.publish("adds", { :mac => mac, :version => version, :data => data }) if Rails.env.production?
 
         @reading = Reading.create_from_api(mac, version, data, request.remote_ip)
         authorize @reading, :create?

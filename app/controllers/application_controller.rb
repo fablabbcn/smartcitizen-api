@@ -13,8 +13,6 @@ class ApplicationController < ActionController::API
   include PrettyJSON
   include ErrorHandlers
 
-  # serialization_scope :view_context
-
   after_action :verify_authorized, :except => :index
   # after_action :verify_policy_scoped, :only => :index
 
@@ -49,7 +47,7 @@ private
     @current_user
   end
 
-  def check_if_logged_in!
+  def check_if_authorized!
     if current_user.nil?
       if params[:access_token]
         raise Smartcitizen::NotAuthorized.new("Invalid OAuth2 Params")
@@ -59,9 +57,9 @@ private
     end
   end
 
-  def doorkeeper_unauthorized_render_options
-    raise Smartcitizen::NotAuthorized.new("Invalid OAuth Token")
-  end
+  # def doorkeeper_unauthorized_render_options
+  #   raise Smartcitizen::NotAuthorized.new("Invalid OAuth Token")
+  # end
 
   def ssl_configured?
     request.host == 'new-api.smartcitizen.me'
