@@ -5,10 +5,10 @@ describe ReadingPolicy do
 
   let(:reading) { FactoryGirl.create(:reading) }
 
-  skip "for a visitor" do
+  describe "for a visitor" do
     let(:user) { nil }
-    it { is_expected.to permitz(:show)    }
-    it { is_expected.to permitz(:create)  }
+    it { is_expected.to permitz(:show) }
+    it { is_expected.to permitz(:create) }
   end
 
 end

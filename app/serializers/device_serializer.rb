@@ -18,9 +18,9 @@ class DeviceSerializer < ActiveModel::Serializer
   #   object.kit.slug if object.kit
   # end
 
-  def tags
-    []
-  end
+  # def tags
+  #   []
+  # end
 
   def latest_reading
     {

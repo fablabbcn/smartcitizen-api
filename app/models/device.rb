@@ -65,14 +65,6 @@ class Device < ActiveRecord::Base
     kit ? kit.sensors : super
   end
 
-  # def latest_readings
-  #   h = []
-  #   sensors.each do |s|
-  #     h << {id: s.id, name: s.name, description: s.description, unit: s.unit, value: (latest_data[s.id.to_s] || nil) }
-  #   end
-  #   return h
-  # end
-
   def readings
     Reading.where(device_id: id)
   end
@@ -93,11 +85,11 @@ class Device < ActiveRecord::Base
     end
   end
 
-  def add_reading options = {}
-    recorded_at = Time.parse(options[:recorded_at])
-    Reading.add(id, recorded_at, options[:values])
-    update_attributes(latest_data: options[:values], last_recorded_at: recorded_at)
-  end
+  # def add_reading options = {}
+  #   recorded_at = Time.parse(options[:recorded_at])
+  #   Reading.add(id, recorded_at, options[:values])
+  #   update_attributes(latest_data: options[:values], last_recorded_at: recorded_at)
+  # end
 
 private
 

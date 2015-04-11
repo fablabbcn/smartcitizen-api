@@ -1,3 +1,6 @@
+# Why .permitz? The global namespace is a bit overcrowded.
+# If you can think of a better term then please change it.
+
 RSpec::Matchers.define :permitz do |action|
   match do |policy|
     policy.public_send("#{action}?")

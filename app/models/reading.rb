@@ -27,23 +27,13 @@ class Reading
   end
 
   def self.create_from_api mac, version, o, ip
-
     @device = Device.select(:id).find_by!(mac_address: mac)
-
     o = JSON.parse(o)[0]
-
-    datetime = begin
-      Time.parse(o['timestamp'])
-    rescue
-      Time.at(o['timestamp'])
-    end
-
     Reading.create!({
       device_id: @device.id,
-      recorded_at: datetime,
+      recorded_at: extract_datetime(o['timestamp']),
       raw_data: o.merge({versions: version, ip: ip})
     })
-
   end
 
 private
@@ -54,6 +44,14 @@ private
 
   def calibrate
     Calibrator.new(self) if raw_data.present? and data.blank?
+  end
+
+  def extract_datetime
+    begin
+      Time.parse(o['timestamp'])
+    rescue
+      Time.at(o['timestamp'])
+    end
   end
 
 end

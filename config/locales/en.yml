@@ -21,3 +21,12 @@
 
 en:
   hello: "Hello world"
+
+  activemodel:
+    errors:
+      models:
+        reading:
+          attributes:
+            recorded_at:
+              after: "is too early"
+              before: "is too late"
