@@ -19,12 +19,15 @@ class DetailedDeviceSerializer < DeviceSerializer
     s['location'] = location
     s['sensors'] = []
 
-    # object.sensors.order(:id).select(:id,:name,:description, :unit).each do |sensor|
-    #   s['sensors'] << sensor.attributes.merge(
-    #     value: object.data["#{sensor.id}"],
-    #     raw_value: object.data["#{sensor.id}_raw"]
-    #   )
-    # end
+    object.sensors.order(:id).select(:id,:name,:description, :unit).each do |sensor|
+      if object.data
+        s['sensors'] << sensor.attributes.merge(
+          value: object.data["#{sensor.id}"],
+          raw_value: object.data["#{sensor.id}_raw"]
+        )
+      end
+    end
+
     return s
   end
 

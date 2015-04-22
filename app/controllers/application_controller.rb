@@ -23,6 +23,7 @@ private
   def current_user
     if @current_user.nil?
       if doorkeeper_token
+        # return render text: 'abc'
         @current_user = User.find(doorkeeper_token.resource_owner_id)
       elsif ActionController::HttpAuthentication::Basic.has_basic_credentials?(request) # username and password
         authenticate_with_http_basic do |username, password|
