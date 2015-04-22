@@ -29,7 +29,9 @@ private
         :last_name,
         :email,
         :username,
-        :password
+        :password,
+        :city,
+        :country_code
       )
     end
 

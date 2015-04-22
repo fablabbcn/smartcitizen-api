@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     # kits
     resources :kits, only: [:index, :show]
     # users
-      resources :users, only: [:index, :show, :create]
+      resources :users, only: [:index, :show, :create, :update]
       # password_resets
       resources :password_resets, only: [:create, :update]
       # me

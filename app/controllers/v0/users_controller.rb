@@ -34,6 +34,16 @@ module V0
       end
     end
 
+    def update
+      @user = User.includes(:sensors).friendly.find(params[:id])
+      authorize @user
+      if @user.update_attributes(user_params)
+        render json: @user, status: :ok
+      else
+        render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
 private
 
     def user_params
