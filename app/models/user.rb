@@ -24,6 +24,10 @@ class User < ActiveRecord::Base
     [first_name, last_name].reject(&:blank?).join(' ')
   end
 
+  def url
+    "http://www.google.com"
+  end
+
   def avatar
     "https://i.imgur.com/SZD8ADL.png"
   end
