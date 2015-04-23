@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-describe V0::MeController do
+describe V0::MeController, type: :request do
 
   let(:application) { create :application }
-  let(:user) { create :user }
+  let(:user) { create :user, password: '1234567' }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
 
   describe "current_user" do
@@ -27,8 +27,43 @@ describe V0::MeController do
       end
     end
 
-    skip "username:password"
-    skip "token authentication"
+    describe "username:password" do
+      it "valid credentials" do
+        request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Basic.encode_credentials(user.username, '1234567'))
+        expect(response.status).to eq(200)
+      end
+
+      it "invalid credentials" do
+        request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Basic.encode_credentials(user.username, '123'))
+        expect(response.status).to eq(401)
+        expect(JSON.parse(response.body)["errors"]).to eq("Invalid Username/Password Combination")
+      end
+
+      it "(empty) invalid credentials" do
+        request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: "")
+        expect(response.status).to eq(401)
+        expect(JSON.parse(response.body)["errors"]).to eq("Authorization required")
+      end
+    end
+
+    skip "token auth" do
+      it "valid credentials" do
+        request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Token.encode_credentials(user.api_token))
+        expect(response.status).to eq(200)
+      end
+
+      it "invalid credentials" do
+        request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Token.encode_credentials('1234'))
+        expect(response.status).to eq(401)
+        expect(JSON.parse(response.body)["errors"]).to eq("Invalid API Token")
+      end
+
+      it "(empty) invalid credentials" do
+        request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: "")
+        expect(response.status).to eq(401)
+        expect(JSON.parse(response.body)["errors"]).to eq("Authorization required")
+      end
+    end
 
   end
 

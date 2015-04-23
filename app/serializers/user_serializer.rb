@@ -11,7 +11,7 @@ class UserSerializer < ActiveModel::Serializer
 
   def attributes
     hash = super
-    if Pundit.policy(current_user, object).update?
+    if defined?(current_user) and Pundit.policy(current_user, object).update?
       hash = hash.merge(email: object.email)
       hash = hash.merge(api_key: "da39a3ee5e6b4b0d3255bfef95601890afd80709")
     end
