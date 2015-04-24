@@ -46,7 +46,9 @@ describe V0::MeController, type: :request do
       end
     end
 
-    skip "token auth" do
+    describe "token auth" do
+      before(:each) { create(:api_token, owner: user) }
+
       it "valid credentials" do
         request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Token.encode_credentials(user.api_token))
         expect(response.status).to eq(200)

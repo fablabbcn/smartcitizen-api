@@ -16,7 +16,7 @@ RSpec.describe Reading, :type => :model do
 
     it "is before tomorrow" do
       expect(create(:reading, recorded_at: 23.hours.from_now)).to be_valid
-      expect{create(:reading, recorded_at: 24.hours.from_now)}.to raise_error(Cequel::Record::RecordInvalid)
+      expect{create(:reading, recorded_at: 25.hours.from_now)}.to raise_error(Cequel::Record::RecordInvalid)
     end
 
     it "generates recorded_month on create" do

@@ -39,7 +39,7 @@ private
           if token = ApiToken.find_by(token: token) and token.owner
             @current_user = token.owner
           else
-            self.headers["WWW-Authenticate"] = %(Basic realm="#{realm}", Token realm="#{realm}")
+            self.headers["WWW-Authenticate"] = %(Basic realm="Application", Token realm="Application")
             raise Smartcitizen::NotAuthorized.new "Invalid API Token"
           end
         end
