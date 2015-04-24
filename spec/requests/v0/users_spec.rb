@@ -55,7 +55,7 @@ describe V0::UsersController do
   describe "POST /users" do
 
     it "creates a user and sends welcome email" do
-      api_post 'users', {
+      r = api_post 'users', {
         first_name: 'Homer',
         last_name: 'Simpson',
         username: 'homer',

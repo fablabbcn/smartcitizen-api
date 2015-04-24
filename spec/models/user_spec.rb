@@ -20,6 +20,13 @@ RSpec.describe User, :type => :model do
 
   it "has an avatar"
 
+  it "validates url" do
+    expect(build(:user, url: nil)).to be_valid
+    expect(build(:user, url: 'not a url')).to be_invalid
+    expect(build(:user, url: 'http://google.com')).to be_valid
+    expect(build(:user, url: 'https://www.facebook.com')).to be_valid
+  end
+
   it "has joined_at" do
     Timecop.freeze do
       expect(create(:user).joined_at).to eq(Time.current.utc)

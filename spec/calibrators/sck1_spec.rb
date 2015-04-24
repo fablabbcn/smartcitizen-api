@@ -11,7 +11,7 @@ RSpec.describe SCK1, :type => :calibrator do
 
     it "calculates linear regression for mid-point values" do
       expect( SCK1.new(noise: 7).noise ).to eq([7,4900])
-      expect( SCK1.new(noise: 33).noise ).to eq([33,6700])
+      expect( SCK1.new(noise: 74).noise ).to eq([74,7170.0])
     end
   end
 

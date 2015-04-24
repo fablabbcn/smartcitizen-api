@@ -54,7 +54,8 @@ private
         :username,
         :password,
         :city,
-        :country_code
+        :country_code,
+        :url
       )
     end
 

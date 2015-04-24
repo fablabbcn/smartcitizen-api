@@ -56,7 +56,7 @@ class SCK
 
   def noise=(value, db = nil)
     raise "call from a subclass" unless db
-    new_value = SCK.table_calibration( db, value ) * 100
+    new_value = SCK.table_calibration( db, value ) * 100.0
     @noise = [value,new_value].uniq
     # @noise = new_value
   end
@@ -103,20 +103,20 @@ private
   end
 
   def self.table_calibration( arr, raw_value )
-    raw_value = raw_value.to_i
+    raw_value = raw_value.to_f
     arr = arr.to_a.sort!
     for i in (0..arr.length)
       # Rails.logger.info [raw_value, arr[i], arr[i+1]]
       if raw_value >= arr[i][0] && raw_value < arr[i+1][0]
         low, high = [arr[i], arr[i+1]]
-        return SCK.linear_regression(raw_value, low[1], high[1], arr[i][0], high[0])
+        return SCK.linear_regression(raw_value,low[1],high[1],arr[i][0],high[0])
       end
     end
   end
 
   def self.linear_regression( valueInput, prevValueOutput, nextValueOutput, prevValueRef, nextValueRef )
-    slope = ( nextValueOutput - prevValueOutput ) / ( nextValueRef - prevValueRef )
-    result = slope * ( valueInput - prevValueRef ) + prevValueOutput
+    slope = ( nextValueOutput.to_f - prevValueOutput.to_f ) / ( nextValueRef.to_f - prevValueRef.to_f )
+    result = slope.to_f * ( valueInput.to_f - prevValueRef.to_f ) + prevValueOutput.to_f
     return result
   end
 
