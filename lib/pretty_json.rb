@@ -2,10 +2,13 @@ module PrettyJSON
 
   # http://stackoverflow.com/a/23018176
   ActionController::Renderers.add :json do |json, options|
+
     unless json.kind_of?(String)
-      json = json.as_json(options) if json.respond_to?(:as_json)
       if params[:pretty]
+        json = json.as_json(options) if json.respond_to?(:as_json)
         json = JSON.pretty_generate(json, options)
+      else
+        json = json.to_json(options)
       end
     end
 
