@@ -9,7 +9,7 @@ module V0
     def show
       @kit = Kit.friendly.find(params[:id])
       authorize @kit
-      render json: @kit
+      render json: @kit, serializer: DetailedKitSerializer
     end
 
   end
