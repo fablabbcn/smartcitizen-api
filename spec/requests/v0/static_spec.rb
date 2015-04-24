@@ -13,6 +13,12 @@ describe V0::StaticController do
 
     it "(JSON) returns pretty JSON, with JSON Mimetype" do
       json = api_get '/'
+      expect( response.body.to_s ).to_not eq( JSON.pretty_generate(json) )
+      expect(response.header['Content-Type']).to include('application/json')
+    end
+
+    it "(JSON) returns pretty JSON, with JSON Mimetype if ?pretty=true" do
+      json = api_get '/?pretty=true'
       expect( response.body.to_s ).to eq( JSON.pretty_generate(json) )
       expect(response.header['Content-Type']).to include('application/json')
     end
