@@ -42,7 +42,7 @@ RSpec.describe Reading, :type => :model do
 
   end
 
-  skip "id has device_id:recorded_at:created_at"
+  skip "has device_id:recorded_month:recorded_at as PK"
 
   it "belongs to device" do
     device = create(:device)

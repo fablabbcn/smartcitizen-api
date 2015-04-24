@@ -42,12 +42,14 @@ describe V0::UsersController do
     end
 
     it "can be ordered" do
-      body = api_get 'users?order=created_at&direction=desc'
+      # body = api_get 'users?order=created_at&direction=desc'
+      body = api_get 'users?q[s]=created_at desc'
       expect(body.map{|b| b['username']}).to eq([second.username,first.username])
     end
 
     it "has default asc order" do
-      body = api_get 'users?order=username'
+      # body = api_get 'users?order=username'
+      body = api_get 'users?q[s]=username asc'
       expect(body.map{|b| b['username']}).to eq([first.username,second.username])
     end
   end

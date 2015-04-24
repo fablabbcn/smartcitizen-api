@@ -2,14 +2,9 @@ module V0
   class UsersController < ApplicationController
 
     def index
-      @users = User.includes(:devices).all
-      if ['created_at', 'username'].include?(params[:order])
-        if ['asc', 'desc'].include?(params[:direction])
-          @users = @users.order([params[:order],params[:direction]].join(' '))
-        else
-          @users = @users.order(params[:order])
-        end
-      end
+      @q = User.includes(:devices).ransack(params[:q])
+      @q.sorts = 'id asc' if @q.sorts.empty?
+      @users = @q.result(distinct: true)
       paginate json: @users
     end
 

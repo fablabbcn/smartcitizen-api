@@ -18,24 +18,18 @@ module V0
     end
 
     def index
+
+      @q = Device.includes(:sensors, :owner).ransack(params[:q])
+      @devices = @q.result(distinct: true)
+
       if params[:near]
         if params[:near] =~ /\A(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)\z/
-          @devices = Device.includes(:sensors, :owner).near(params[:near].split(','), (params[:within] || 1000))
+          @devices = @devices.near(params[:near].split(','), (params[:within] || 1000))
         else
           return render json: "error", status: :bad_request
         end
-      else
-        @devices = Device.includes(:sensors, :owner)
       end
-      if ['created_at'].include?(params[:order])
-        if ['asc', 'desc'].include?(params[:direction])
-          @devices = @devices.order([params[:order],params[:direction]].join(' '))
-        else
-          @devices = @devices.order(params[:order])
-        end
-      else
-        @devices = @devices.order(:id)
-      end
+
       paginate json: @devices
     end
 
