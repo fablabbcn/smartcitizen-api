@@ -51,6 +51,10 @@ class Device < ActiveRecord::Base
     created_at
   end
 
+  def last_reading_at
+    Time.current.utc
+  end
+
   def firmware
     if firmware_version.present?
       "sck:#{firmware_version}"

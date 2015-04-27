@@ -3,7 +3,7 @@ class DeviceSerializer < ActiveModel::Serializer
   # cached
   # delegate :cache_key, to: :object
 
-  attributes :id, :name, :description, :kit_id, :status, :added_at, :updated_at, :owner, :latitude, :longitude, :data
+  attributes :id, :name, :description, :kit_id, :status, :added_at, :last_reading_at, :updated_at, :owner, :latitude, :longitude, :data
 
   def attributes
     hash = super
@@ -36,13 +36,12 @@ class DeviceSerializer < ActiveModel::Serializer
       ip: nil,
       exposure: object.exposure,
       elevation: object.elevation,
-      # address: object.address,
-      city: object.city,
-      country: object.country,
-      country_code: object.country_code,
       latitude: object.latitude,
       longitude: object.longitude,
-      geohash: object.geohash
+      geohash: object.geohash,
+      city: object.city,
+      country_code: object.country_code,
+      country: object.country
     }
   end
 

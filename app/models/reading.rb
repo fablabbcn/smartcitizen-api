@@ -46,11 +46,11 @@ private
     Calibrator.new(self) if raw_data.present? and data.blank?
   end
 
-  def self.extract_datetime
+  def self.extract_datetime timestamp
     begin
-      Time.parse(o['timestamp'])
+      Time.parse(timestamp)
     rescue
-      Time.at(o['timestamp'])
+      Time.at(timestamp)
     end
   end
 
