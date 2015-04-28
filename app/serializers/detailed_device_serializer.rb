@@ -11,8 +11,7 @@ class DetailedDeviceSerializer < DeviceSerializer
       hash.delete(:latitude)
       hash.delete(:longitude)
       hash = hash.merge(kit: KitSerializer.new(object.kit))
-      # hash = hash.remove(:kit_id)
-      if !Pundit.policy(current_user, object).update?
+      if Pundit.policy(current_user, object).update?
         hash = hash.merge(mac_address: object.mac_address)
       end
     end
@@ -26,9 +25,9 @@ class DetailedDeviceSerializer < DeviceSerializer
   def data
     s = {}
 
-    s['recorded_at'] = Time.current.utc
-    s['added_at'] = Time.current.utc
-    s['calibrated_at'] = Time.current.utc
+    s['recorded_at'] = object.updated_at - 1.minute
+    s['added_at'] = object.updated_at - 1.second
+    s['calibrated_at'] = object.updated_at
     s['firmware'] = "[IGNORE]"
     s['location'] = location
     s['sensors'] = []
