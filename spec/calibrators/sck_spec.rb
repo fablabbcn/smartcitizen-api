@@ -22,7 +22,7 @@ RSpec.describe 'SCK', :type => :calibrator do
         17 => 5.4,
         13 => 55,
         15 => 56,
-        0 => 57,
+        21 => 57,
         12 => 58,
         # fix this
         '12_raw' => 58,

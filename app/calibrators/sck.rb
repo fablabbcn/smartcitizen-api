@@ -77,7 +77,7 @@ class SCK
       bat: 17,
       hum: 13,
       no2: 15,
-      nets: 0,
+      nets: 21,
       temp: 12
     }
     hash.keys.each do |k|
