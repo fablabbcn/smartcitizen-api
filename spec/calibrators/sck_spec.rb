@@ -19,7 +19,7 @@ RSpec.describe 'SCK', :type => :calibrator do
         14 => 51,
         18 => 52,
         16 => 53,
-        17 => 54,
+        17 => 5.4,
         13 => 55,
         15 => 56,
         0 => 57,
@@ -28,7 +28,7 @@ RSpec.describe 'SCK', :type => :calibrator do
         '12_raw' => 58,
         '13_raw' => 55,
         '17_raw' => 54,
-        7 => 7000,
+        7 => 70.00,
         '7_raw' => 50
       })
     end
@@ -65,8 +65,8 @@ RSpec.describe 'SCK', :type => :calibrator do
 
     it "bat" do
       expect(SCK.new(bat: -500).bat).to eq([-500,0])
-      expect(SCK.new(bat: 1400).bat).to eq([1400,1000])
-      expect(SCK.new(bat: 30.45).bat).to eq([30.45,30.45])
+      expect(SCK.new(bat: 1400).bat).to eq([1400,100.0])
+      expect(SCK.new(bat: 30.45).bat).to eq([30.45,3.045])
     end
 
   end

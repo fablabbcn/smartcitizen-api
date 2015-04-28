@@ -21,6 +21,10 @@ class User < ActiveRecord::Base
     api_tokens.last
   end
 
+  def country_name
+    country ? country.to_s : nil
+  end
+
   def name
     [first_name, last_name].reject(&:blank?).join(' ')
   end

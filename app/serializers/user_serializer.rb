@@ -5,7 +5,8 @@ class UserSerializer < ActiveModel::Serializer
   def location
     {
       city: object.city,
-      country_code: object.country_code
+      country_code: object.country_code,
+      country: object.country_name
     }
   end
 

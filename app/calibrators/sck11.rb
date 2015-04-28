@@ -6,13 +6,25 @@ class SCK11 < SCK
   end
 
   def temp=(value)
-    t = (-53 + 175.72 / 65536.0 * value)# * 10.0
+    t = (-53 + 175.72 / 65536.0 * value)# / 10.0
     super value, t
   end
 
   def hum=(value)
-    h = (7 + 125.0 / 65536.0  * value)# * 10.0
+    h = (7 + 125.0 / 65536.0  * value)# / 10.0
     super value, h
+  end
+
+  def co=(value)
+    @co = [value,value/1000.0]
+  end
+
+  def no2=(value)
+    @no2 = [value,value/1000.0]
+  end
+
+  def light=(value)
+    @light = [value,value/10.0]
   end
 
 end

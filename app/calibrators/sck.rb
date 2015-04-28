@@ -56,13 +56,13 @@ class SCK
 
   def noise=(value, db = nil)
     raise "call from a subclass" unless db
-    new_value = SCK.table_calibration( db, value ) * 100.0
+    new_value = SCK.table_calibration( db, value )# * 100.0
     @noise = [value,new_value].uniq
     # @noise = new_value
   end
 
   def bat=(value)
-    @bat = [value,restrict_value(value, 0, 1000)]
+    @bat = [value,restrict_value(value, 0, 1000)/10.0]
     # @bat = restrict_value(value, 0, 1000)
   end
 
