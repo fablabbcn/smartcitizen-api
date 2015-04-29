@@ -190,6 +190,10 @@ GEM
     oj (2.12.5)
     oj_mimic_json (1.0.1)
     pg (0.18.1)
+    pg_search (1.0.0)
+      activerecord (>= 3.1)
+      activesupport (>= 3.1)
+      arel
     polyamorous (1.2.0)
       activerecord (>= 3.0)
     pry (0.10.1)
@@ -374,6 +378,7 @@ DEPENDENCIES
   oj
   oj_mimic_json
   pg
+  pg_search
   pundit
   pusher
   quiet_assets

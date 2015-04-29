@@ -2,6 +2,9 @@ require 'geohash'
 
 class Device < ActiveRecord::Base
 
+  include PgSearch
+  multisearchable :against => [:name]
+
   belongs_to :owner
   belongs_to :kit
 

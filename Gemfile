@@ -27,6 +27,7 @@ gem 'ransack'
 gem 'c_geohash', require: false
 gem 'rack-cors', :require => 'rack/cors'
 gem 'date_validator'
+gem 'pg_search'
 # gem 'actionpack-action_caching', github: 'rails/actionpack-action_caching'
 
 gem 'dalli'
