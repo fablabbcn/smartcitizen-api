@@ -28,6 +28,8 @@ module Smartcitizen
 
   class Application < Rails::Application
 
+    config.log_tags = [:uuid, :remote_ip]
+
     # config.middleware.use ActionDispatch::Flash
     # config.action_controller.allow_forgery_protection = false
 

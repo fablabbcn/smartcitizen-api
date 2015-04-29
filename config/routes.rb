@@ -31,4 +31,7 @@ Rails.application.routes.draw do
     root to: 'static#home'
   end
 
+  # get '*path', :to => redirect("/v0/%{path}")
+  # root to: redirect('/v0')
+
 end

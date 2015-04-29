@@ -30,7 +30,7 @@ module V0
         end
       end
 
-      paginate json: @devices
+      paginate json: @devices, each_serializer: DetailedDeviceSerializer
     end
 
     def show

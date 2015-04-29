@@ -142,6 +142,7 @@ GEM
     i18n_data (0.6.3)
     ione (1.2.0)
     json (1.8.2)
+    json_schema (0.6.0)
     jwt (1.4.1)
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
@@ -196,6 +197,9 @@ GEM
       arel
     polyamorous (1.2.0)
       activerecord (>= 3.0)
+    prmd (0.7.0)
+      erubis (~> 2.7)
+      json_schema (~> 0.3, >= 0.3.1)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -379,6 +383,7 @@ DEPENDENCIES
   oj_mimic_json
   pg
   pg_search
+  prmd
   pundit
   pusher
   quiet_assets
