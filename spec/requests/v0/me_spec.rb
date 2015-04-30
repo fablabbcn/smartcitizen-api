@@ -99,7 +99,7 @@ describe V0::MeController, type: :request do
     end
 
     it "does not update a user with empty parameters access_token" do
-      api_put "me", { first_name: nil, access_token: token.token }
+      api_put "me", { username: nil, access_token: token.token }
       expect(response.status).to eq(422)
     end
 

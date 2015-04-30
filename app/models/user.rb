@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   friendly_id :username
 
   has_secure_password
-  validates_presence_of :email, :username, :first_name, :last_name
+  validates_presence_of :email, :username#, :first_name, :last_name
   validates_uniqueness_of :email, :username
   validates_length_of :username, in: 3..30, allow_nil: false, allow_blank: false
   validates :url, :avatar, format: URI::regexp(%w(http https)), allow_nil: true, allow_blank: true
