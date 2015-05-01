@@ -10,6 +10,8 @@ class SCK
   # validates_numericality_of :nets, maximum: 200
   # validates_numericality_of :hum, :light, :noise, :bat, :nets, minimum: 0
 
+  # MAP = {}
+
   attr_accessor :calibrated_at,
     :bat,
     :co,
@@ -66,26 +68,31 @@ class SCK
     # @bat = restrict_value(value, 0, 1000)
   end
 
+  def light=(value, calib = nil)
+    @light = [value,restrict_value(calib || value, 0, 100000)]
+  end
+
+  def co=(value, calib = nil)
+    @co = [value,restrict_value(calib || value, 0, 100000)]
+  end
+
+  def no2=(value, calib = nil)
+    @no2 = [value,restrict_value(calib || value, 0, 100000)]
+  end
+
+  def panel=(value, calib = nil)
+    @panel = [value,restrict_value(calib || value, 0, 100000)]
+  end
+
   def to_h
     hash = {}
     instance_variables.each {|var| hash[var.to_s.delete("@").to_sym] = instance_variable_get(var) }
-    nh = {
-      noise: 7,
-      light: 14,
-      panel: 18,
-      co: 16,
-      bat: 17,
-      hum: 13,
-      no2: 15,
-      nets: 21,
-      temp: 12
-    }
     hash.keys.each do |k|
       if hash[k].is_a?(Array)
-        hash[nh[k]] = hash[k].last
-        hash["#{nh[k]}_raw"] = hash[k].first
+        hash[map[k]] = hash[k].last
+        hash["#{map[k]}_raw"] = hash[k].first
       else
-        hash[nh[k]] = hash[k]
+        hash[map[k]] = hash[k]
       end
       hash.delete(k)
     end
