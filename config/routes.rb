@@ -28,6 +28,7 @@ Rails.application.routes.draw do
         patch '/' => 'me#update', on: :collection
       end
     # home
+    get 'search' => 'static#search'
     root to: 'static#home'
   end
 

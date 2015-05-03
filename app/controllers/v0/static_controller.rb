@@ -13,5 +13,10 @@ module V0
         users_url: v0_users_url
       }
     end
+
+    def search
+      paginate json: PgSearch.multisearch(params[:q])
+    end
+
   end
 end

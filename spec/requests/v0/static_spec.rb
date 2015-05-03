@@ -9,6 +9,13 @@ describe V0::StaticController do
     end
   end
 
+  describe "search" do
+    it "returns a list of searched objects" do
+      api_get "/search?q=device"
+      expect(response.status).to eq(200)
+    end
+  end
+
   describe "format" do
 
     it "(JSON) returns pretty JSON, with JSON Mimetype" do
