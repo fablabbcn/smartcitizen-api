@@ -1,6 +1,8 @@
 ruby '2.2.0'
 source 'https://rubygems.org'
 
+gem 'swagger-ui_rails'
+gem 'swagger-docs'
 gem 'prmd'
 gem 'keen'
 gem 'rails', '4.2.1'

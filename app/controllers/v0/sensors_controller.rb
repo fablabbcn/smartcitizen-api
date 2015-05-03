@@ -1,6 +1,16 @@
 module V0
   class SensorsController < ApplicationController
 
+    swagger_controller :sensors, "Sensors"
+    swagger_api :index do
+      summary "Fetches all User items"
+      notes "This lists all the active users"
+      param :query, :page, :integer, :optional, "Page number"
+      response :unauthorized
+      response :not_acceptable
+      response :requested_range_not_satisfiable
+    end
+
     def index
       @sensors = Sensor.all
       paginate json: @sensors
