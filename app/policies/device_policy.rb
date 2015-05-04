@@ -12,4 +12,8 @@ class DevicePolicy < ApplicationPolicy
     user
   end
 
+  def destroy?
+    update?
+  end
+
 end

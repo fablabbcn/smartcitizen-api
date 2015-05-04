@@ -13,6 +13,10 @@ class ApplicationController < ActionController::API
   include PrettyJSON
   include ErrorHandlers
 
+  rescue_from Pundit::NotAuthorizedError do |exception|
+    render json: {message: "You are not authorized to do this"}, status: :unauthorized
+  end
+
   after_action :verify_authorized, :except => :index
   # after_action :verify_policy_scoped, :only => :index
 

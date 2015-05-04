@@ -53,6 +53,10 @@ class Device < ActiveRecord::Base
     :debug_push,
     :enclosure_type
 
+  def to_s
+    name
+  end
+
   def added_at
     created_at
   end

@@ -60,7 +60,7 @@ module V0
     end
 
     def destroy
-      @device = current_user.devices.find(params[:id])
+      @device = Device.find(params[:id])
       authorize @device
       if @device.destroy
         render json: @device, status: :ok
