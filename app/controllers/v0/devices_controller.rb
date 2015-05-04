@@ -59,6 +59,16 @@ module V0
       end
     end
 
+    def destroy
+      @device = current_user.devices.find(params[:id])
+      authorize @device
+      if @device.destroy
+        render json: @device, status: :ok
+      else
+        render json: { errors: @device.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
 private
 
     def device_params
