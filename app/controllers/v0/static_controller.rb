@@ -23,12 +23,13 @@ module V0
         h['type'] = s.searchable_type
         if s.searchable_type == 'Device'
           h['name'] = s.searchable.name
+          h['description'] = s.searchable.description
           h['owner_id'] = s.searchable.owner_id
           h['owner_username'] = s.searchable.owner_username
           h['city'] = s.searchable.city
           h['country_code'] = s.searchable.country_code
         else
-          h['name'] = s.searchable.username
+          h['username'] = s.searchable.username
           h['avatar'] = s.searchable.avatar
           h['city'] = s.searchable.city
           h['country_code'] = s.searchable.country_code
