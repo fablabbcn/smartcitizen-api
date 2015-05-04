@@ -22,7 +22,7 @@ class Calibrator
       # raise Smartcitizen::UnknownDevice.new h.to_s
     end
 
-    # record.update_attributes(data: data.to_h)
+    record.update_attributes(data: data.to_h_exc_raw)
     record.device.update_attribute(:data, data.to_h)
   end
 

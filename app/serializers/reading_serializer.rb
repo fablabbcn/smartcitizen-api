@@ -1,3 +1,3 @@
 class ReadingSerializer < ActiveModel::Serializer
-  attributes :values, :created_at
+  attributes :id#values, :created_at
 end

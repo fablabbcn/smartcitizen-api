@@ -1,6 +1,8 @@
 class UserSerializer < ActiveModel::Serializer
 
-  attributes :id, :username, :first_name, :last_name, :avatar, :url, :location, :device_ids, :joined_at
+  attributes :id, :username, :first_name, :last_name, :avatar, :url, :location, :joined_at#, :device_ids
+
+  has_many :devices
 
   def location
     {

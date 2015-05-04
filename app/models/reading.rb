@@ -27,7 +27,7 @@ class Reading
   end
 
   def self.create_from_api mac, version, o, ip
-    @device = Device.select(:id).find_by!(mac_address: mac)
+    @device = Device.select(:id).where(mac_address: mac).last
     o = JSON.parse(o)[0]
     Reading.create!({
       device_id: @device.id,

@@ -15,7 +15,8 @@ module V0
     end
 
     def search
-      paginate json: PgSearch.multisearch(params[:q])
+      @results = PgSearch.multisearch(params[:q]).includes(:searchable)#.map(&:searchable)
+      paginate json: @results
     end
 
   end

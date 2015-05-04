@@ -4,7 +4,7 @@
 [![Code Climate](https://codeclimate.com/github/johnrees/smartcitizen/badges/gpa.svg)](https://codeclimate.com/github/johnrees/smartcitizen)
 [![Test Coverage](https://codeclimate.com/github/johnrees/smartcitizen/badges/coverage.svg)](https://codeclimate.com/github/johnrees/smartcitizen)
 
-### [Documentation (Work in Progress)](http://www.johnre.es/smartcitizen-api-documentation)
+### [Documentation (Work in Progress)](https://fablabbcn.github.io/smartcitizen-api-docs)
 
 * API - [https://new-api.smartcitizen.me](https://new-api.smartcitizen.me)
 * Map Example - [https://new-api.smartcitizen.me/examples/map](https://new-api.smartcitizen.me/examples/map) ([map](https://github.com/johnrees/smartcitizen/blob/master/public/examples/map.html))

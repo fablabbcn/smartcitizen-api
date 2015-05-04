@@ -99,6 +99,20 @@ class SCK
     return hash
   end
 
+  def to_h_exc_raw
+    hash = {}
+    instance_variables.each {|var| hash[var.to_s.delete("@").to_sym] = instance_variable_get(var) }
+    hash.keys.each do |k|
+      if hash[k].is_a?(Array)
+        hash[map[k]] = hash[k].last
+      else
+        hash[map[k]] = hash[k]
+      end
+      hash.delete(k)
+    end
+    return hash
+  end
+
 private
 
   def to_f_or_i_or_s(v)

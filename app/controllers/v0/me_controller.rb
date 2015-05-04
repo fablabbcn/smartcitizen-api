@@ -31,7 +31,9 @@ private
         :username,
         :password,
         :city,
-        :country_code
+        :country_code,
+        :url,
+        :avatar
       )
     end
 

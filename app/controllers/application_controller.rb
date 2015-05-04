@@ -18,6 +18,8 @@ class ApplicationController < ActionController::API
 
   force_ssl if: :ssl_configured?
 
+  serialization_scope :current_user
+
 private
 
   def current_user

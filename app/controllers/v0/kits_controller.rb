@@ -3,7 +3,7 @@ module V0
 
     def index
       @kits = Kit.all
-      paginate json: @kits
+      paginate json: @kits, each_serializer: DetailedKitSerializer
     end
 
     def show

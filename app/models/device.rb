@@ -2,9 +2,6 @@ require 'geohash'
 
 class Device < ActiveRecord::Base
 
-  include PgSearch
-  multisearchable :against => [:name]
-
   belongs_to :owner
   belongs_to :kit
 
@@ -12,6 +9,12 @@ class Device < ActiveRecord::Base
   validates_presence_of :owner, :mac_address, :name
   validates_format_of :mac_address, with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/
   validates_uniqueness_of :mac_address
+
+  delegate :username, :to => :owner, :prefix => true
+  include PgSearch
+  multisearchable :against => [:name, :owner_username]#, associated_against: { owner: { first_name, :username }
+
+
 
   # reverse_geocoded_by :latitude, :longitude
   reverse_geocoded_by :latitude, :longitude do |obj, results|
