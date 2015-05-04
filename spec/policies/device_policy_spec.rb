@@ -21,7 +21,7 @@ describe DevicePolicy do
     it { is_expected.to permitz(:show)    }
     it { is_expected.to permitz(:create)  }
     it { is_expected.to permitz(:update)  }
-    it { is_expected.to_not permitz(:destroy) }
+    it { is_expected.to permitz(:destroy) }
   end
 
   skip "for an admin" do
