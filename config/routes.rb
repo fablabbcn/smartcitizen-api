@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     # users
       resources :users, only: [:index, :show, :create, :update]
       # password_resets
-      resources :password_resets, only: [:create, :update]
+      resources :password_resets, only: [:show, :create, :update]
       # me
       resources :me, only: [:index] do
         patch '/' => 'me#update', on: :collection
