@@ -18,7 +18,7 @@ module ErrorHandlers
     end
 
     rescue_from Smartcitizen::UnprocessableEntity do |exception|
-      render json: { id: "unprocessable_entity", message: exception.message }, status: :unprocessable_entity
+      render json: { id: "unprocessable_entity", message: "Unprocessable Entity", errors: exception.message, url: nil }, status: :unprocessable_entity
     end
 
     rescue_from ActionController::RoutingError do |exception|

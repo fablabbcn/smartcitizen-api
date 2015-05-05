@@ -45,8 +45,8 @@ module V0
       if @device.update_attributes(device_params)
         render json: @device, status: :ok
       else
-        raise Smartcitizen::UnprocessableEntity.new @device.errors.full_messages
-        # render json: { errors: @device.errors.full_messages }, status: :unprocessable_entity
+        raise Smartcitizen::UnprocessableEntity.new @device.errors
+        # render json: { errors: @device.errors }, status: :unprocessable_entity
       end
     end
 
@@ -56,8 +56,8 @@ module V0
       if @device.save
         render json: @device, status: :created
       else
-        raise Smartcitizen::UnprocessableEntity.new @device.errors.full_messages
-        # render json: { errors: @device.errors.full_messages }, status: :unprocessable_entity
+        raise Smartcitizen::UnprocessableEntity.new @device.errors#.full_messages
+        # render json: { errors: @device.errors }, status: :unprocessable_entity
       end
     end
 
@@ -67,8 +67,8 @@ module V0
       if @device.destroy
         render json: @device, status: :ok
       else
-        raise Smartcitizen::UnprocessableEntity.new @device.errors.full_messages
-        # render json: { errors: @device.errors.full_messages }, status: :unprocessable_entity
+        raise Smartcitizen::UnprocessableEntity.new @device.errors
+        # render json: { errors: @device.errors }, status: :unprocessable_entity
       end
     end
 

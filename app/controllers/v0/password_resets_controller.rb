@@ -15,7 +15,8 @@ module V0
       @current_user = nil
       if @user.update_attributes({ password: params.require(:password) })
         render json: @user, status: :ok
-      # else
+      else
+        raise Smartcitizen::UnprocessableEntity.new @user.errors
       #   render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
       end
     end

@@ -18,7 +18,7 @@ module V0
       if @sensor.save
         render json: @sensor, status: :created
       else
-        render json: { errors: @sensor.errors.full_messages }, status: :unprocessable_entity
+        raise Smartcitizen::UnprocessableEntity.new @sensor.errors
       end
     end
 

@@ -17,7 +17,7 @@ module V0
         # head :no_content, status: :ok
         render json: @user, status: :ok
       else
-        render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+        raise Smartcitizen::UnprocessableEntity.new @user.errors
       end
     end
 

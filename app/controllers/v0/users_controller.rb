@@ -25,7 +25,7 @@ module V0
         UserMailer.welcome(@user).deliver_now
         render json: @user, status: :created
       else
-        render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+        raise Smartcitizen::UnprocessableEntity.new @user.errors
       end
     end
 
@@ -35,7 +35,7 @@ module V0
       if @user.update_attributes(user_params)
         render json: @user, status: :ok
       else
-        render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+        raise Smartcitizen::UnprocessableEntity.new @user.errors
       end
     end
 
