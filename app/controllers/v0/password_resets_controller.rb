@@ -20,7 +20,7 @@ module V0
       @current_user = @user
       authorize @user, :update_password?
       @current_user = nil
-      if @user.update_attributes({ password: params.require(:password) })
+      if @user.update_attributes({ password: params.require(:password), password_reset_token: nil })
         render json: @user, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @user.errors
