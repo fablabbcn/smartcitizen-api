@@ -17,13 +17,13 @@ describe V0::MeController, type: :request do
       it "invalid credentials" do
         r = api_get 'me', { access_token: 'moo' }
         expect(response.status).to eq(401)
-        expect(r["errors"]).to eq("Invalid OAuth2 Params")
+        expect(r["message"]).to eq("Invalid OAuth2 Params")
       end
 
       it "(empty) invalid credentials" do
         r = api_get 'me'
         expect(response.status).to eq(401)
-        expect(r["errors"]).to eq("Authorization required")
+        expect(r["message"]).to eq("Authorization required")
       end
     end
 
@@ -36,13 +36,13 @@ describe V0::MeController, type: :request do
       it "invalid credentials" do
         request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Basic.encode_credentials(user.username, '123'))
         expect(response.status).to eq(401)
-        expect(JSON.parse(response.body)["errors"]).to eq("Invalid Username/Password Combination")
+        expect(JSON.parse(response.body)["message"]).to eq("Invalid Username/Password Combination")
       end
 
       it "(empty) invalid credentials" do
         request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: "")
         expect(response.status).to eq(401)
-        expect(JSON.parse(response.body)["errors"]).to eq("Authorization required")
+        expect(JSON.parse(response.body)["message"]).to eq("Authorization required")
       end
     end
 
@@ -57,13 +57,13 @@ describe V0::MeController, type: :request do
       it "invalid credentials" do
         request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Token.encode_credentials('1234'))
         expect(response.status).to eq(401)
-        expect(JSON.parse(response.body)["errors"]).to eq("Invalid API Token")
+        expect(JSON.parse(response.body)["message"]).to eq("Invalid API Token")
       end
 
       it "(empty) invalid credentials" do
         request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: "")
         expect(response.status).to eq(401)
-        expect(JSON.parse(response.body)["errors"]).to eq("Authorization required")
+        expect(JSON.parse(response.body)["message"]).to eq("Authorization required")
       end
     end
 

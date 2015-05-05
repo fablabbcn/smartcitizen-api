@@ -1,21 +1,6 @@
 module V0
   class UsersController < ApplicationController
 
-    swagger_controller :users, "Users"
-    swagger_api :index do
-      summary "Fetches all User items"
-      notes "This lists all the active users"
-
-      param :query, :page, :integer, :required, "Page number"
-      param :query, :per_page, :integer, :optional, "Per Page", { defaultValue: 1 }
-
-
-      response :unauthorized
-      response :not_acceptable
-      response :requested_range_not_satisfiable
-    end
-
-
     def index
       @q = User.includes(:devices).ransack(params[:q])
       @q.sorts = 'id asc' if @q.sorts.empty?

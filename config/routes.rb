@@ -1,9 +1,5 @@
 Rails.application.routes.draw do
 
-  # use_doorkeeper
-  get "/404" => "errors#not_found"
-  get "/500" => "errors#exception"
-
   api_version(module: "V0", path: {value: "v0"}, default: true) do
     # devices
     resources :devices do
@@ -31,6 +27,11 @@ Rails.application.routes.draw do
     get 'search' => 'static#search'
     root to: 'static#home'
   end
+
+  # use_doorkeeper
+  get "/404" => "errors#catch_404"
+  get "/500" => "errors#exception"
+  match "*path", to: "errors#catch_404", via: :all
 
   # get '*path', :to => redirect("/v0/%{path}")
   # root to: redirect('/v0')

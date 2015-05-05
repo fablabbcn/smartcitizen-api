@@ -1,11 +1,17 @@
 class ErrorsController < ActionController::API
 
   def not_found
-    render :json => {:error => "not found"}.to_json, :status => 404
+    render json: { id: "not_found", "message": 'Endpoint not found', "url": "" }, status: :not_found
   end
 
   def exception
-    render :json => {:error => "internal server error"}.to_json, :status => 500
+    # render :json => {:id => "internal_server_error", :message => 'Internal Server Error'}.to_json, :status => 500
+    render json: { id: "internal_server_error", "message": 'Internal Server Error', "url": "" }, status: 500
+  end
+
+  def catch_404
+    # raise ActionController::RoutingError.new(params[:path])
+    render json: { id: "not_found", "message": 'Endpoint not found', "url": "" }, status: :not_found
   end
 
 end
