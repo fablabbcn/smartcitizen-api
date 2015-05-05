@@ -14,7 +14,7 @@ class ApplicationController < ActionController::API
   include ErrorHandlers
 
   rescue_from Pundit::NotAuthorizedError do |exception|
-    render json: { id: "forbidden", "message": exception.message, "url": "" }, status: :forbidden
+    render json: { id: "forbidden", message: exception.message, url: nil, errors: nil }, status: :forbidden
     # render json: {message: "You are not authorized to do this"}, status: :unauthorized
   end
 

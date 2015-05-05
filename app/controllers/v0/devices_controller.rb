@@ -26,7 +26,7 @@ module V0
         if params[:near] =~ /\A(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)\z/
           @devices = @devices.near(params[:near].split(','), (params[:within] || 1000))
         else
-          return render json: "error", status: :bad_request
+          return render json: { id: "bad_request", message: "Malformed near parameter", url: 'https://fablabbcn.github.io/smartcitizen-api-docs/#get-all-devices', errors: nil }, status: :bad_request
         end
       end
 
