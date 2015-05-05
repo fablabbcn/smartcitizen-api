@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  api_version(module: "V0", path: {value: "v0"}, default: true) do
+  api_version(module: "V0", path: {value: "v0"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0"}, default: true) do
     # devices
     resources :devices do
       resources :readings, only: :index

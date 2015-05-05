@@ -215,6 +215,8 @@ GEM
     rack (1.6.0)
     rack-attack (4.2.0)
       rack
+    rack-contrib (1.2.0)
+      rack (>= 0.9.1)
     rack-cors (0.4.0)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -392,6 +394,7 @@ DEPENDENCIES
   pusher
   quiet_assets
   rack-attack
+  rack-contrib
   rack-cors
   railroady
   rails (= 4.2.1)
