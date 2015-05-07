@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     resources :sensors, only: [:index, :show, :create]
     # components
     resources :components, only: :index
+    resources :sessions
     # kits
     resources :kits, only: [:index, :show]
     # users

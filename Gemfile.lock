@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/cequel/cequel.git
-  revision: a327d29ca33f48ee108b71faba217976d132b960
+  revision: 6fc13c5df0ab8cf47d1211fe44a8b3347a792192
   specs:
     cequel (1.6.1)
       activemodel (>= 3.1, < 5.0)
@@ -158,7 +158,7 @@ GEM
       celluloid (~> 0.16.0)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
-    loofah (2.0.1)
+    loofah (2.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.9)
     mail (2.6.3)
@@ -188,7 +188,7 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (~> 1.2)
-    oj (2.12.5)
+    oj (2.12.6)
     oj_mimic_json (1.0.1)
     pg (0.18.1)
     pg_search (1.0.2)
@@ -212,7 +212,7 @@ GEM
       signature (~> 0.1.8)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
-    rack (1.6.0)
+    rack (1.6.1)
     rack-attack (4.2.0)
       rack
     rack-contrib (1.2.0)

@@ -16,6 +16,17 @@ class User < ActiveRecord::Base
   has_many :sensors, through: :devices
   has_many :api_tokens, foreign_key: 'owner_id'
 
+  def access_token
+    Doorkeeper::AccessToken.find_or_initialize_by(
+          application_id: 4, resource_owner_id: id)
+  end
+
+  def access_token!
+    access_token.expires_in = 2.days.from_now
+    access_token.save
+    access_token
+  end
+
   def joined_at
     created_at
   end
