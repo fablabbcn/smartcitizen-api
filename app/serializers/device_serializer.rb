@@ -4,7 +4,7 @@ class DeviceSerializer < ActiveModel::Serializer
   # delegate :cache_key, to: :object
 
   # delegate :current_user, :to => :scope
-  attributes :id, :name, :description, :kit_id, :status, :added_at, :last_reading_at, :updated_at, :owner, :latitude, :longitude, :data
+  attributes :id, :name, :description, :kit_id, :status, :added_at, :last_reading_at, :updated_at, :owner, :latitude, :longitude#, :data
 
   def attributes
     hash = super

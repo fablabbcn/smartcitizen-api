@@ -4,6 +4,8 @@ class DetailedDeviceSerializer < DeviceSerializer
   #   KitSerializer.new(object.kit)
   # end
 
+  attributes :id, :name, :description, :kit_id, :status, :added_at, :last_reading_at, :updated_at, :owner, :latitude, :longitude, :data
+
   def attributes
     hash = super
     if object.kit
