@@ -34,14 +34,13 @@ class DetailedDeviceSerializer < DeviceSerializer
 
     object.sensors.order(:id).select(:id,:name,:description, :unit).each do |sensor|
       sa = sensor.attributes
-      if object.data
+
         sa = sa.merge(
-          value: object.data["#{sensor.id}"],
-          raw_value: object.data["#{sensor.id}_raw"],
-          prev_value: object.old_data["#{sensor.id}"],
-          prev_raw_value: object.old_data["#{sensor.id}_raw"]
+          value: (object.data ? object.data["#{sensor.id}"] : nil),
+          raw_value: (object.data ? object.data["#{sensor.id}_raw"] : nil),
+          prev_value: (object.old_data ? object.old_data["#{sensor.id}"] : nil),
+          prev_raw_value: (object.old_data ? ["#{sensor.id}_raw"] : nil)
         )
-      end
       s['sensors'] << sa
     end
 
