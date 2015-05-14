@@ -1,7 +1,7 @@
 development:
-  host: '127.0.0.1'
+  host: <%= ENV['cassandra_host_ip'] %>
   port: 9042
-  keyspace: smartcitizen_development
+  keyspace: <%= ENV['cassandra_keyspace'] %>
   max_retries: 3
   retry_delay: 0.5
   newrelic: false

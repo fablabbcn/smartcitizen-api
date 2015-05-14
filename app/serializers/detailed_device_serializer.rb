@@ -37,7 +37,9 @@ class DetailedDeviceSerializer < DeviceSerializer
       if object.data
         sa = sa.merge(
           value: object.data["#{sensor.id}"],
-          raw_value: object.data["#{sensor.id}_raw"]
+          raw_value: object.data["#{sensor.id}_raw"],
+          prev_value: object.old_data["#{sensor.id}"],
+          prev_raw_value: object.old_data["#{sensor.id}_raw"]
         )
       end
       s['sensors'] << sa
