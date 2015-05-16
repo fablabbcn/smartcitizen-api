@@ -1,4 +1,4 @@
-ruby '2.2.0'
+ruby '2.2.2'
 source 'https://rubygems.org'
 
 gem 'swagger-ui_rails'
@@ -84,7 +84,7 @@ end
 # gem 'unicorn'
 
 # Deploy with Capistrano
-# gem 'capistrano', :group => :development
+gem 'capistrano-rails', :group => :development
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
