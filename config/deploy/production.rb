@@ -1,9 +1,17 @@
+set :stage, :production
+set :branch, "master"
+set :server_name, "linode-api.smartcitizen.me"
+
+set :rails_env, :production
+set :unicorn_worker_count, 5
+set :enable_ssl, false
+
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-# server 'example.com', user: 'deploy', roles: %w{app db web}, my_property: :my_value
+server '', user: 'deployer', roles: %w{app db web}
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
@@ -30,8 +38,6 @@
 # For available Capistrano configuration variables see the documentation page.
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
-
-
 
 # Custom SSH Options
 # ==================

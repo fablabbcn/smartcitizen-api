@@ -1,0 +1,11 @@
+<%= fetch(:rails_env) %>:
+  adapter: postgresql
+  timeout: 5000
+  encoding: utf8
+  reconnect: false
+  pool: 5
+  host:
+  port: 5432
+  database: <%= ENV['production_database_name'] %>
+  username: <%= ENV['production_database_username'] %>
+  password: <%= ENV['production_database_password'] %>
