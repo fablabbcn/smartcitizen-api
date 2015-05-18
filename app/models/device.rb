@@ -84,11 +84,8 @@ class Device < ActiveRecord::Base
   end
 
   def all_readings
-    all_months = (created_at.year-1..Time.current.utc.year).map{|y| ('01'..'12').map{|m| "#{y}#{m}" }}.flatten
-    # from = all_months.index((@device.created_at - 1.year).strftime("%Y%m"))
-    to = all_months.index(Time.current.utc.strftime("%Y%m"))
-    months = all_months[0..to]
-    readings.where(recorded_month: months)
+    months = (created_at.to_date..updated_at.to_date).map{|d| "#{d.year}#{'%02i' % d.month.to_i}" }.uniq
+    return readings.where(recorded_month: months)#.limit(100)
   end
 
   def status

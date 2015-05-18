@@ -36,6 +36,15 @@ class Reading
     })
   end
 
+  def as_json(options={})
+    {
+      recorded_month: recorded_month,
+      recorded_at: recorded_at,
+      raw_data: raw_data,
+      data: data
+    }
+  end
+
 private
 
   def set_recorded_month

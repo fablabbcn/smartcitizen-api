@@ -5,9 +5,8 @@ module V0
 
     def index
       @device = Device.find(params[:device_id])
-      @readings = @device.all_readings
-      # "granularity= year / month / week / day / hour
-      render json: @readings#, each_serializer: ReadingSerializer
+      @readings = @device.all_readings.limit(200)
+      render json: @readings
     end
 
     def add
