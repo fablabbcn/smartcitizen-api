@@ -5,7 +5,7 @@ module V0
 
     def index
       @device = Device.find(params[:device_id])
-      @readings = @device.all_readings.limit(200)
+      @readings = @device.all_readings.limit(200)#.offset(200)
       render json: @readings
     end
 
