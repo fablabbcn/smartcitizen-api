@@ -8,7 +8,7 @@ class Device < ActiveRecord::Base
   belongs_to :owner, class_name: 'User'
   validates_presence_of :owner, :mac_address, :name
   validates_format_of :mac_address, with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/
-  validates_uniqueness_of :mac_address
+  validates_uniqueness_of :mac_address, on: :create
 
   delegate :username, :to => :owner, :prefix => true
   include PgSearch
@@ -62,7 +62,7 @@ class Device < ActiveRecord::Base
   end
 
   def last_reading_at
-    Time.current.utc
+    last_recorded_at
   end
 
   def firmware
