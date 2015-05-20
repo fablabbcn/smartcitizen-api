@@ -7,7 +7,6 @@ class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
   include ActionController::ImplicitRender
-  # include ActionController::MimeResponds
 
   # skip_before_action :verify_authenticity_token
   # protect_from_forgery with: :null_session
@@ -23,12 +22,9 @@ class ApplicationController < ActionController::API
     # render json: {message: "You are not authorized to do this"}, status: :unauthorized
   end
 
-  after_action :verify_authorized, :except => :index
-  # after_action :verify_policy_scoped, :only => :index
+  after_action :verify_authorized, except: :index
 
   force_ssl if: :ssl_configured?
-
-  # serialization_scope :current_user
 
 private
 
