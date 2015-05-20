@@ -3,20 +3,19 @@ module V0
 
     def index
       @sensors = Sensor.all
-      paginate json: @sensors
+      @sensors = paginate @sensors
     end
 
     def show
       @sensor = Sensor.find(params[:id])
       authorize @sensor
-      render json: @sensor
     end
 
     def create
       @sensor = Sensor.new(sensor_params)
       authorize @sensor
       if @sensor.save
-        render json: @sensor, status: :created
+        render :show, status: :created
       else
         raise Smartcitizen::UnprocessableEntity.new @sensor.errors
       end

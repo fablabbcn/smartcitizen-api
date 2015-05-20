@@ -7,21 +7,39 @@ module V0
     # caches_action :world_map, expires_in: 2.minutes
 
     def world_map
-      render json: ActiveModel::ArraySerializer.new(
-          Device.includes(:owner,:kit),
-          each_serializer: WorldMapDevicesSerializer
-        )
-      # json = Rails.cache.fetch("devices/world_map/1", expires_in: 5.seconds) do end
-      # render_cached_json("devices:world_map", expires_in: 6.minutes, serializer: WorldMapDevicesSerializer) do
-      #   @devices = Device.all#select(:id,:name,:description,:latitude,:longitude)
-      # end
+      @devices = Device.includes(:owner).map do |device|
+        {
+          id: device.id,
+          name: device.name,
+          description: (device.description.present? ? device.description : nil),
+          owner_id: device.owner_id,
+          owner_username: device.owner_username,
+          latitude: device.latitude,
+          longitude: device.longitude,
+          city: device.city,
+          country_code: device.country_code,
+          kit_id: device.kit_id,
+          status: device.status,
+          exposure: device.exposure,
+          data: device.data,
+          added_at: device.added_at
+        }
+      end
+      render json: @devices
+      # render json: ActiveModel::ArraySerializer.new(
+      #   Device.includes(:owner,:kit),
+      #   each_serializer: WorldMapDevicesSerializer
+      # )
+      # # json = Rails.cache.fetch("devices/world_map/1", expires_in: 5.seconds) do end
+      # # render_cached_json("devices:world_map", expires_in: 6.minutes, serializer: WorldMapDevicesSerializer) do
+      # #   @devices = Device.all#select(:id,:name,:description,:latitude,:longitude)
+      # # end
     end
 
     def index
 
       @q = Device.includes(:owner).ransack(params[:q])
       @devices = @q.result(distinct: true)
-      @devices = paginate(@devices, skip_render: true)
 
       if params[:near]
         if params[:near] =~ /\A(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)\z/
@@ -31,6 +49,8 @@ module V0
         end
       end
 
+      @devices = paginate(@devices)
+
       # json:
       #, each_serializer: DetailedDeviceSerializer
     end
@@ -38,7 +58,7 @@ module V0
     def show
       @device = Device.includes(:kit, :owner, :sensors).find(params[:id])
       authorize @device
-      @device#, serializer: DetailedDeviceSerializer
+      @device
     end
 
     def update

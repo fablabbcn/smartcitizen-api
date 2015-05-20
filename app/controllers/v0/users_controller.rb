@@ -5,17 +5,12 @@ module V0
       @q = User.includes(:devices).ransack(params[:q])
       @q.sorts = 'id asc' if @q.sorts.empty?
       @users = @q.result(distinct: true)
-      paginate json: @users
+      @users = paginate(@users)
     end
 
     def show
-      # begin
       @user = User.includes(:sensors).friendly.find(params[:id])
       authorize @user
-      render json: @user, serializer: DetailedUserSerializer
-      # rescue ActiveRecord::RecordNotFound
-      #   render json: {message: "No user found with username or id '#{params[:id]}'"}, status: :not_found
-      # end
     end
 
     def create
@@ -23,7 +18,7 @@ module V0
       authorize @user
       if @user.save
         UserMailer.welcome(@user).deliver_now
-        render json: @user, status: :created
+        render :show, status: :created
       else
         raise Smartcitizen::UnprocessableEntity.new @user.errors
       end
@@ -33,7 +28,7 @@ module V0
       @user = User.includes(:sensors).friendly.find(params[:id])
       authorize @user
       if @user.update_attributes(user_params)
-        render json: @user, status: :ok
+        render :show, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @user.errors
       end

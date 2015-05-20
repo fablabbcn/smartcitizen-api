@@ -3,13 +3,12 @@ module V0
 
     def index
       @kits = Kit.all
-      paginate json: @kits, each_serializer: DetailedKitSerializer
+      @kits = paginate(@kits)
     end
 
     def show
       @kit = Kit.friendly.find(params[:id])
       authorize @kit
-      render json: @kit, serializer: DetailedKitSerializer
     end
 
   end
