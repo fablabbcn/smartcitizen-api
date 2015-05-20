@@ -2,6 +2,7 @@ ruby '2.2.2'
 source 'https://rubygems.org'
 
 gem 'jbuilder'
+gem 'responders'
 gem 'swagger-ui_rails'
 gem 'swagger-docs'
 gem 'prmd'

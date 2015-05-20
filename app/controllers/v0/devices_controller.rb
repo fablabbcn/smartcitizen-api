@@ -19,8 +19,9 @@ module V0
 
     def index
 
-      @q = Device.includes(:sensors, :owner).ransack(params[:q])
+      @q = Device.includes(:owner).ransack(params[:q])
       @devices = @q.result(distinct: true)
+      @devices = paginate(@devices, skip_render: true)
 
       if params[:near]
         if params[:near] =~ /\A(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)\z/
@@ -30,7 +31,8 @@ module V0
         end
       end
 
-      paginate json: @devices, each_serializer: DetailedDeviceSerializer
+      # json:
+      #, each_serializer: DetailedDeviceSerializer
     end
 
     def show
