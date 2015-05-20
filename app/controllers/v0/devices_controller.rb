@@ -34,9 +34,9 @@ module V0
     end
 
     def show
-      @device = Device.find(params[:id])
+      @device = Device.includes(:kit, :owner, :sensors).find(params[:id])
       authorize @device
-      render json: @device, serializer: DetailedDeviceSerializer
+      @device#, serializer: DetailedDeviceSerializer
     end
 
     def update

@@ -102,6 +102,40 @@ class Device < ActiveRecord::Base
   #   update_attributes(latest_data: options[:values], last_recorded_at: recorded_at)
   # end
 
+  def formatted_data
+    s = {
+      recorded_at: updated_at - 1.minute,
+      added_at: updated_at - 1.second,
+      calibrated_at: updated_at,
+      firmware: "[IGNORE]",
+      location: {
+        ip: nil,
+        exposure: exposure,
+        elevation: elevation,
+        latitude: latitude,
+        longitude: longitude,
+        geohash: geohash,
+        city: city,
+        country_code: country_code,
+        country: country
+      },
+      sensors: []
+    }
+
+    sensors.select(:id,:name,:description, :unit).each do |sensor|
+      sa = sensor.attributes
+      sa = sa.merge(
+        value: (data ? data["#{sensor.id}"] : nil),
+        raw_value: (data ? data["#{sensor.id}_raw"] : nil),
+        prev_value: (old_data ? old_data["#{sensor.id}"] : nil),
+        prev_raw_value: (old_data ? old_data["#{sensor.id}_raw"] : nil)
+      )
+      s[:sensors] << sa
+    end
+
+    return s
+  end
+
 private
 
   def calculate_geohash

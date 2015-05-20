@@ -78,6 +78,14 @@ class User < ActiveRecord::Base
     Country[country_code] if country_code
   end
 
+  def location
+    {
+      city: city,
+      country: country,
+      country_code: country_code
+    }
+  end
+
 private
 
   def generate_token(column)

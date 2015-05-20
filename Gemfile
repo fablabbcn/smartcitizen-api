@@ -1,6 +1,7 @@
 ruby '2.2.2'
 source 'https://rubygems.org'
 
+gem 'jbuilder'
 gem 'swagger-ui_rails'
 gem 'swagger-docs'
 gem 'prmd'
@@ -10,7 +11,7 @@ gem 'rails-api'
 gem 'pusher'
 gem 'pg'
 gem 'bcrypt', '~> 3.1.7'
-gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-8-stable'
+# gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-8-stable'
 gem 'oauth2', require: false
 gem 'doorkeeper'
 gem 'versionist'
@@ -41,6 +42,7 @@ gem 'redis-rails'
 gem 'fast_blank'
 gem 'oj'
 gem 'oj_mimic_json'
+gem 'multi_json'
 
 group :production do
   gem 'rails_12factor'

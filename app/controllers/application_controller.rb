@@ -6,6 +6,8 @@ class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Basic::ControllerMethods
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
+  include ActionController::ImplicitRender
+
   # skip_before_action :verify_authenticity_token
   # protect_from_forgery with: :null_session
 
@@ -23,7 +25,7 @@ class ApplicationController < ActionController::API
 
   force_ssl if: :ssl_configured?
 
-  serialization_scope :current_user
+  # serialization_scope :current_user
 
 private
 
