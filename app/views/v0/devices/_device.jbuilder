@@ -8,7 +8,7 @@ json.(device,
   :updated_at
 )
 
-json.owner device.owner, :id, :username, :first_name, :last_name, :avatar, :url, :joined_at, :location#, :devices
+json.owner device.owner, :id, :username, :first_name, :last_name, :avatar, :url, :joined_at, :location, :device_ids
 
 json.data device.formatted_data
 
