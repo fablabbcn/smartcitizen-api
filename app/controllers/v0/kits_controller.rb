@@ -9,6 +9,7 @@ module V0
     def show
       @kit = Kit.friendly.find(params[:id])
       authorize @kit
+      @kit
     end
 
     def update
