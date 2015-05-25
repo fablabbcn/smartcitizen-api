@@ -21,6 +21,16 @@ module V0
       end
     end
 
+    def update
+      @sensor = Sensor.find(params[:id])
+      authorize @sensor
+      if @sensor.update_attributes(sensor_params)
+        render json: @sensor, status: :ok
+      else
+        raise Smartcitizen::UnprocessableEntity.new @sensor.errors
+      end
+    end
+
 private
 
     def sensor_params

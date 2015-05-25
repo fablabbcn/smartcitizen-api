@@ -8,4 +8,8 @@ class SensorPolicy < ApplicationPolicy
     user#.try(:admin?)
   end
 
+  def update?
+    create?
+  end
+
 end

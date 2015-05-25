@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     resources :readings, only: [:create]
     match "add" => "readings#add", via: [:get, :post, :patch, :put]
     # sensors
-    resources :sensors, only: [:index, :show, :create]
+    resources :sensors, except: [:destroy]
     # components
     resources :components, only: :index
     resources :sessions
