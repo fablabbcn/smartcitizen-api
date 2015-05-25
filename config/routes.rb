@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     resources :components, only: :index
     resources :sessions
     # kits
-    resources :kits, only: [:index, :show]
+    resources :kits, except: [:create, :destroy]
     # users
       resources :users, only: [:index, :show, :create, :update]
       # password_resets

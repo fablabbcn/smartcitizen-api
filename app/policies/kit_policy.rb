@@ -4,4 +4,8 @@ class KitPolicy < ApplicationPolicy
     true
   end
 
+  def update?
+    user
+  end
+
 end
