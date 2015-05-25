@@ -111,7 +111,7 @@ class Device < ActiveRecord::Base
       location: {
         ip: nil,
         exposure: exposure,
-        elevation: elevation,
+        elevation: elevation.try(:to_i) ,
         latitude: latitude,
         longitude: longitude,
         geohash: geohash,
