@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 
 gem 'jbuilder'
 gem 'responders'
+gem 'newrelic_rpm'
 # gem 'swagger-ui_rails'
 # gem 'swagger-docs'
 # gem 'prmd'
