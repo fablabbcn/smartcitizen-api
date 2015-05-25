@@ -5,7 +5,7 @@ json.(user,
   :last_name,
   :avatar,
   :url,
-  # location
+  :location,
   :joined_at,
   :updated_at
 )
