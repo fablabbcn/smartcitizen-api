@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
 
   validates :username, :email, presence: true
   validates :username, uniqueness: true, if: :username?
-  validates :email, uniqueness: true, if: :email?
+  validates :email, format: { with: /@/ }, uniqueness: true, if: :email?
 
   validates :username, length: { in: 3..30 }, allow_nil: true
 
