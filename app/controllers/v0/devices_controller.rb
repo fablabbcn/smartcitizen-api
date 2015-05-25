@@ -38,7 +38,7 @@ module V0
 
     def index
 
-      @q = Device.includes(:owner).ransack(params[:q])
+      @q = Device.includes(:owner, :kit, :sensors, :components).ransack(params[:q])
       @devices = @q.result(distinct: true)
 
       if params[:near]
