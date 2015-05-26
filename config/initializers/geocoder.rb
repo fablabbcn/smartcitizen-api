@@ -1,4 +1,4 @@
-if Rails.env.production?
+if false#Rails.env.production?
   Geocoder.configure(
     # geocoding options
       :timeout      => 3,           # geocoding service timeout (secs)
