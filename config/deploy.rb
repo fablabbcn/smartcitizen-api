@@ -1,9 +1,9 @@
 # config valid only for current version of Capistrano
 lock '3.4.0'
 
-set :application, 'smartcitizen'
-set :deploy_user, 'deployer'
-set :repo_url, "git@github.com:johnrees/#{fetch(:application)}.git"
+set :application, 'APP_NAME'
+set :deploy_user, 'DEPLOY_USER'
+set :repo_url, "git@github.com:GITHUB_USER/#{fetch(:application)}.git"
 
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
 set :deploy_to, "/home/#{fetch(:deploy_user)}/apps/#{fetch(:full_app_name)}"

@@ -1,6 +1,6 @@
 set :stage, :production
 set :branch, "master"
-set :server_name, "linode-api.smartcitizen.me"
+set :server_name, "WEBSITE_DOMAIN"
 
 set :rails_env, :production
 set :unicorn_worker_count, 5
@@ -11,7 +11,7 @@ set :enable_ssl, false
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server '', user: 'deployer', roles: %w{app db web}
+server 'SERVER_IP', user: 'deployer', roles: %w{app db web}
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
