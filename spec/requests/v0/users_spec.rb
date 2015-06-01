@@ -2,6 +2,10 @@ require 'rails_helper'
 
 describe V0::UsersController do
 
+  let(:application) { create :application }
+  let(:user) { create :user }
+  let(:token) { create :access_token, application: application, resource_owner_id: user.id }
+
   describe "GET /users/<username||id>" do
 
     let(:user) { create(:user) }
@@ -73,6 +77,32 @@ describe V0::UsersController do
       api_post 'users', {
         first_name: 'Homer'
       }
+      expect(response.status).to eq(422)
+    end
+
+  end
+
+  describe "PUT /users/<username>|<id>" do
+
+    let(:user) { create(:user, first_name: 'Lisa') }
+
+    it "updates user" do
+      api_put "users/#{[user.username,user.id].sample}", { first_name: 'Bart', access_token: token.token }
+      expect(response.status).to eq(200)
+    end
+
+    it "does not update a user with invalid access_token" do
+      api_put "users/#{[user.username,user.id].sample}", { first_name: 'Bart', access_token: '123' }
+      expect(response.status).to eq(403)
+    end
+
+    it "does not update a user with missing access_token" do
+      api_put "users/#{[user.username,user.id].sample}", { first_name: 'Bart', access_token: nil }
+      expect(response.status).to eq(403)
+    end
+
+    it "does not update a user with empty parameters access_token" do
+      api_put "users/#{[user.username,user.id].sample}", { username: nil, access_token: token.token }
       expect(response.status).to eq(422)
     end
 

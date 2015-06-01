@@ -21,6 +21,20 @@ describe V0::PasswordResetsController do
 
   end
 
+  describe "GET /password_resets/<password_reset_token>" do
+    before(:each) do
+      user.send_password_reset
+      user.reload
+    end
+
+    it "finds user by token" do
+      api_get "password_resets/#{user.password_reset_token}"
+      expect(response.status).to eq(200)
+      expect(JSON.parse(response.body)["username"]).to eq(user.username)
+    end
+
+  end
+
   describe "PUT /password_resets/<password_reset_token>" do
 
     before(:each) do
