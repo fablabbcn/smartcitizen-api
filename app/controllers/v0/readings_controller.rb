@@ -16,7 +16,7 @@ module V0
         data = request.headers['X-SmartCitizenData']
         # Keen.publish("adds", { :mac => mac, :version => version, :data => data }) if Rails.env.production?
         @reading = Reading.create_from_api(mac, version, data, request.remote_ip)
-        authorize @reading, :create?
+        skip_authorization
       rescue Exception => e
         Rails.logger.info e
       end
@@ -25,13 +25,13 @@ module V0
 
 private
 
-    def reading_params
-      params.permit(
-        :mac_address,
-        :recorded_at,
-        values: []
-      )
-    end
+    # def reading_params
+    #   params.permit(
+    #     :mac_address,
+    #     :recorded_at,
+    #     values: []
+    #   )
+    # end
 
   end
 end

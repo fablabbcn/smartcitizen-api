@@ -135,7 +135,26 @@ describe V0::DevicesController do
       api_post "devices", { device: { name: nil }, access_token: token.token }
       expect(response.status).to eq(422)
     end
+  end
 
+  describe "DELETE /devices/:id" do
+
+    let!(:device) { create :device, owner: user }
+
+    it "deletes a device" do
+      api_delete "devices/#{device.id}", { access_token: token.token }
+      expect(response.status).to eq(200)
+    end
+
+    it "does not delete a device with invalid access_token" do
+      api_delete "devices/#{device.id}"
+      expect(response.status).to eq(403), { access_token: '123' }
+    end
+
+    it "does not delete a device with missing access_token" do
+      api_delete "devices/#{device.id}"
+      expect(response.status).to eq(403)
+    end
 
   end
 

@@ -46,4 +46,30 @@ describe V0::SensorsController do
 
   end
 
+  describe "PUT /sensors/:id" do
+
+    let!(:sensor) { create :sensor }
+
+    it "updates a sensor" do
+      api_put "sensors/#{sensor.id}", { name: 'new name', access_token: token.token }
+      expect(response.status).to eq(200)
+    end
+
+    it "does not update a sensor with invalid access_token" do
+      api_put "sensors/#{sensor.id}", { name: 'new name', access_token: '123' }
+      expect(response.status).to eq(403)
+    end
+
+    it "does not update a sensor with missing access_token" do
+      api_put "sensors/#{sensor.id}", { name: 'new name', access_token: nil }
+      expect(response.status).to eq(403)
+    end
+
+    it "does not update a sensor with empty parameters access_token" do
+      api_put "sensors/#{sensor.id}", { name: nil, access_token: token.token }
+      expect(response.status).to eq(422)
+    end
+
+  end
+
 end

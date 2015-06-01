@@ -55,4 +55,9 @@ RSpec.describe Reading, :type => :model do
     skip "ignores bad data"
   end
 
+  it "can extract datetime" do
+    expect( Reading.extract_datetime("2015-06-01 16:34:36 +0100") ).to eq("2015-06-01 16:34:36 +0100")
+    expect( Reading.extract_datetime(1433172956) ).to eq("2015-06-01 16:35:56 +0100")
+  end
+
 end
