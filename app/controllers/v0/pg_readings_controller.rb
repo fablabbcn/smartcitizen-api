@@ -17,10 +17,10 @@ module V0
 
       select = "SELECT date_trunc('day', recorded_at)::date AS day"
       rollup = '1d'
-      if params[:hour]
+      if params[:rollup] == '1h'
         select = "SELECT date_trunc('hour', recorded_at) AS day"
         rollup = '1h'
-      elsif params[:minute]
+      elsif params[:rollup] == '1m'
         select = "SELECT date_trunc('minute', recorded_at) AS day"
         rollup = '1m'
       end
@@ -40,7 +40,7 @@ module V0
       @pg_readings.each do |reading|
         ob['readings'] ||= []
         ob['readings'] << {
-          recorded_at: reading['day'],
+          timestamp: Time.parse(reading['day']).utc,
           data: reading.select { |key, value| key.to_s.match(/^sensor_\d+/) }.map{|k,v| [k.gsub('sensor_',''), to_f_or_i_or_s(v)] }.to_h
         }
       end
