@@ -25,6 +25,8 @@ class Calibrator
     record.update_attributes(data: data.to_h_exc_raw)
 
     record.device.update_attributes(data: data.to_h, last_recorded_at: Time.now.utc)
+
+    device.pg_readings.create(data: data.to_h, recorded_at: Time.now.utc)
   end
 
 private

@@ -14,7 +14,7 @@ class Device < ActiveRecord::Base
   include PgSearch
   multisearchable :against => [:name, :owner_username, :description, :city]#, associated_against: { owner: { first_name, :username }
 
-
+  has_many :pg_readings
 
   # reverse_geocoded_by :latitude, :longitude
   reverse_geocoded_by :latitude, :longitude do |obj, results|
