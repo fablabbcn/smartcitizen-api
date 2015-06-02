@@ -15,8 +15,18 @@ module V0
 
       PgReading.select("date_trunc('day', recorded_at) AS day, #{sensors}").group("1").order("1")
 
+      select = "SELECT date_trunc('day', recorded_at)::date AS day"
+      rollup = '1d'
+      if params[:hour]
+        select = "SELECT date_trunc('hour', recorded_at) AS day"
+        rollup = '1h'
+      elsif params[:minute]
+        select = "SELECT date_trunc('minute', recorded_at) AS day"
+        rollup = '1m'
+      end
+
       sql = %{
-        SELECT date_trunc('day', recorded_at)::date AS day,
+        #{select},
         #{sensors}
         FROM pg_readings
         GROUP BY 1
@@ -25,7 +35,7 @@ module V0
 
       @pg_readings = ActiveRecord::Base.connection.execute(sql)
 
-      ob = { rollup: '1d', function: 'average', readings: [nil] }
+      ob = { rollup: rollup, function: 'average', readings: [nil] }
 
       @pg_readings.each do |reading|
         ob['readings'] ||= []
