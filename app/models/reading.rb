@@ -11,7 +11,7 @@ class Reading
 
   include Cequel::Record
   key :device_id, :int
-  key :recorded_month, :int, partition: true
+  key :recorded_month, :int, partition: true, order: :desc
   key :recorded_at, :timestamp, order: :desc, index: true
   map :raw_data, :text, :text
   map :data, :text, :text
