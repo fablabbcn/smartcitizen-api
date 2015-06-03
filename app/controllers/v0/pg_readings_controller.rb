@@ -9,8 +9,6 @@ module V0
 
     def index
       @device = Device.find(params[:device_id])
-
-      @device = Device.find(1616)
       sensors = @device.sensors.order('sensors.id ASC').pluck(:id).map{ |id| "avg((data->>'#{id}')::numeric) AS sensor_#{id}" }.join(', ')
 
       PgReading.select("date_trunc('day', recorded_at) AS day, #{sensors}").group("1").order("1")
