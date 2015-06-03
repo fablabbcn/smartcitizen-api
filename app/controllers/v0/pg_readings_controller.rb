@@ -15,15 +15,19 @@ module V0
 
       select = "SELECT date_trunc('day', recorded_at)::date AS day"
       rollup = '1d'
+      from = params[:from] ? Time.parse(params[:from]) : 1.month.ago
+
       if params[:rollup] == '1h'
         select = "SELECT date_trunc('hour', recorded_at) AS day"
         rollup = '1h'
+        from = params[:from] ? Time.parse(params[:from]) : 1.week.ago
       elsif params[:rollup] == '1m'
         select = "SELECT date_trunc('minute', recorded_at) AS day"
         rollup = '1m'
+        from = params[:from] ? Time.parse(params[:from]) : 1.hour.ago
       end
 
-      from = params[:from] ? Time.parse(params[:from]) : 1.week.ago
+
       to = params[:to] ? Time.parse(params[:to]) : Time.now
 
       sql = %{
