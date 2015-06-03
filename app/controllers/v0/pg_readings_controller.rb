@@ -25,17 +25,22 @@ module V0
         rollup = '1m'
       end
 
+      from = params[:from] ? Time.parse(params[:from]) : 1.week.ago
+      to = params[:to] ? Time.parse(params[:to]) : Time.now
+
       sql = %{
         #{select},
         #{sensors}
         FROM pg_readings
+        WHERE device_id = '#{@device.id}'
+        AND recorded_at BETWEEN '#{from.utc.to_s(:iso8601)}' AND '#{to.utc.to_s(:iso8601)}'
         GROUP BY 1
         ORDER BY 1 DESC;
       }
 
       @pg_readings = ActiveRecord::Base.connection.execute(sql)
 
-      ob = { rollup: rollup, function: 'average', readings: [nil] }
+      ob = { rollup: rollup, function: 'average', from: from, to: to, readings: [nil] }
 
       @pg_readings.each do |reading|
         ob['readings'] ||= []
