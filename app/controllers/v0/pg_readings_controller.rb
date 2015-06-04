@@ -43,11 +43,11 @@ module V0
 
       @pg_readings = ActiveRecord::Base.connection.execute(sql)
 
-      ob = { rollup: rollup, function: 'average', from: from.utc.iso8601, to: to.utc.iso8601, readings: [nil] }
+      ob = { rollup: rollup, function: 'average', from: from, to: to, readings: [nil] }
       @pg_readings.each do |reading|
         ob['readings'] ||= []
         ob['readings'] << {
-          timestamp: Time.parse(reading['day'] + " UTC").iso8601,
+          timestamp: Time.parse(reading['day'] + " UTC"),
           data: reading.select { |key, value| key.to_s.match(/^sensor_\d+/) }.map{|k,v| [k.gsub('sensor_',''), to_f_or_i_or_s(v)] }.to_h
         }
       end
