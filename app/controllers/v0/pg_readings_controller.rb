@@ -13,41 +13,41 @@ module V0
 
       PgReading.select("date_trunc('day', recorded_at) AS day, #{sensors}").group("1").order("1")
 
-      select = "SELECT date_trunc('day', recorded_at)::date AS day"
+      select = "SELECT date_trunc('day', recorded_at)::timestamp without time zone AS day"
       rollup = '1d'
       from = params[:from] ? Time.parse(params[:from]) : 1.month.ago
 
       if params[:rollup] == '1h'
-        select = "SELECT date_trunc('hour', recorded_at) AS day"
+        select = "SELECT date_trunc('hour', recorded_at)::timestamp without time zone AS day"
         rollup = '1h'
         from = params[:from] ? Time.parse(params[:from]) : 1.week.ago
       elsif params[:rollup] == '1m'
-        select = "SELECT date_trunc('minute', recorded_at) AS day"
+        select = "SELECT date_trunc('minute', recorded_at)::timestamp without time zone AS day"
         rollup = '1m'
         from = params[:from] ? Time.parse(params[:from]) : 1.hour.ago
       end
 
 
-      to = params[:to] ? Time.parse(params[:to]) : Time.now
+      to = params[:to] ? Time.parse(params[:to] + " UTC") : Time.now
 
       sql = %{
+        SET TIME ZONE 'UTC';
         #{select},
         #{sensors}
         FROM pg_readings
         WHERE device_id = '#{@device.id}'
-        AND recorded_at BETWEEN '#{from.utc.to_s(:iso8601)}' AND '#{to.utc.to_s(:iso8601)}'
+        AND recorded_at BETWEEN '#{from.utc.to_s}' AND '#{to.utc.to_s}'
         GROUP BY 1
         ORDER BY 1 DESC;
       }
 
       @pg_readings = ActiveRecord::Base.connection.execute(sql)
 
-      ob = { rollup: rollup, function: 'average', from: from.utc.to_s(:iso8601), to: to.utc.to_s(:iso8601), readings: [nil] }
-
+      ob = { rollup: rollup, function: 'average', from: from.utc.iso8601, to: to.utc.iso8601, readings: [nil] }
       @pg_readings.each do |reading|
         ob['readings'] ||= []
         ob['readings'] << {
-          timestamp: Time.parse(reading['day']).utc.to_s(:iso8601),
+          timestamp: Time.parse(reading['day'] + " UTC").iso8601,
           data: reading.select { |key, value| key.to_s.match(/^sensor_\d+/) }.map{|k,v| [k.gsub('sensor_',''), to_f_or_i_or_s(v)] }.to_h
         }
       end
