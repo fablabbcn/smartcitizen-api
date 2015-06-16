@@ -65,7 +65,8 @@ module V0
       @device = current_user.devices.find(params[:id])
       authorize @device
       if @device.update_attributes(device_params)
-        render json: @device, status: :ok
+        # render json: @device, status: :ok
+        render :show, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @device.errors
         # render json: { errors: @device.errors }, status: :unprocessable_entity
@@ -76,7 +77,8 @@ module V0
       @device = current_user.devices.build(device_params)
       authorize @device
       if @device.save
-        render json: @device, status: :created
+        # render json: @device, status: :created
+        render :show, status: :created
       else
         raise Smartcitizen::UnprocessableEntity.new @device.errors#.full_messages
         # render json: { errors: @device.errors }, status: :unprocessable_entity
@@ -87,7 +89,8 @@ module V0
       @device = Device.find(params[:id])
       authorize @device
       if @device.destroy
-        render json: @device, status: :ok
+        # render json: @device, status: :ok
+        render :show, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @device.errors
         # render json: { errors: @device.errors }, status: :unprocessable_entity

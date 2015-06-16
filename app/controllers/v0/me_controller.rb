@@ -7,7 +7,7 @@ module V0
 
     def index
       @user = current_user
-      render json: @user
+      render 'users/show'
     end
 
     def update
@@ -15,7 +15,7 @@ module V0
       authorize @user
       if @user.update_attributes(user_params)
         # head :no_content, status: :ok
-        render json: @user, status: :ok
+        render 'users/show', status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @user.errors
       end

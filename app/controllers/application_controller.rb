@@ -26,7 +26,13 @@ class ApplicationController < ActionController::API
 
   force_ssl if: :ssl_configured?
 
+  before_filter :prepend_view_paths
+
 private
+
+  def prepend_view_paths
+    prepend_view_path "app/views/v0"
+  end
 
   def current_user
     if @current_user.nil?

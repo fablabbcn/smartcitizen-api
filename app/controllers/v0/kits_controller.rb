@@ -16,7 +16,7 @@ module V0
       @kit = Kit.find(params[:id])
       authorize @kit
       if @kit.update_attributes(kit_params)
-        render json: @kit, status: :ok
+        render :show, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @kit.errors
       end

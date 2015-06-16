@@ -12,7 +12,7 @@ module V0
       @user = User.find_by!(password_reset_token: params[:id])
       @current_user = @user
       authorize @user, :update_password?
-      render json: @user, status: :ok
+      render 'users/show', status: :ok
     end
 
     def update
@@ -20,7 +20,7 @@ module V0
       @current_user = @user
       authorize @user, :update_password?
       if @user.update_attributes({ password: params.require(:password), password_reset_token: nil })
-        render json: @user, status: :ok
+        render 'users/show', status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @user.errors
       end
