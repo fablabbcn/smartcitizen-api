@@ -90,7 +90,7 @@ module V0
       authorize @device
       if @device.destroy
         # render json: @device, status: :ok
-        render :show, status: :ok
+        render nothing: true, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @device.errors
         # render json: { errors: @device.errors }, status: :unprocessable_entity
