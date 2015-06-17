@@ -1,23 +1,34 @@
-json.(device,
-  :id,
-  :name,
-  :description,
-  :status,
-  :last_reading_at,
-  :added_at,
-  :updated_at
-)
+# json.(device,
+#   :id,
+#   :name,
+#   :description,
+#   :status,
+#   :last_reading_at,
+#   :added_at,
+#   :updated_at
+# )
 
-# json . device do
-#   json.id device.id
-#   json.name device.name
-#   json.description device.description
-#   json.status device.status
-#   json.last_reading_at device.last_reading_at
-#   json.added_at device.added_at.utc.iso8601
-#   json.updated_at device.updated_at.utc.iso8601
+
+# if current_user == device.owner
+
+# else
+
 # end
 
+json . device do
+  json.id device.id
+  json.name device.name
+  json.description device.description
+  json.status device.status
+  json.last_reading_at device.last_reading_at
+  json.added_at device.added_at.utc.iso8601
+  json.updated_at device.updated_at.utc.iso8601
+  if current_user and device.owner_id and current_user.id == device.owner_id
+    json.mac_address device.mac_address
+  else
+    json.mac_address '[FILTERED]'
+  end
+end
 
 json.owner(
   device.owner, :id, :username, :first_name, :last_name, :avatar, :url, :joined_at, :location, :device_ids

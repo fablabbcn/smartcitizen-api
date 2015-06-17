@@ -5,6 +5,8 @@ class ApplicationController < ActionController::API
 
   include ActionController::HttpAuthentication::Basic::ControllerMethods
   include ActionController::HttpAuthentication::Token::ControllerMethods
+  # include AbstractController::Helpers::ClassMethods
+  include ActionController::Helpers
 
   include ActionController::ImplicitRender
 
@@ -61,6 +63,7 @@ private
     end
     @current_user
   end
+  helper_method :current_user
 
   def check_if_authorized!
     if current_user.nil?
