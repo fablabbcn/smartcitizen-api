@@ -24,7 +24,7 @@ Rails.application.routes.draw do
       # me
       resources :me, only: [:index] do
         patch '/' => 'me#update', on: :collection
-        post '/' => 'me#update', on: :collection
+        put '/' => 'me#update', on: :collection
       end
     # home
     get 'search' => 'static#search'
