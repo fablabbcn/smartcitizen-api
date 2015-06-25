@@ -10,9 +10,14 @@ json.(user,
   :updated_at
 )
 
-# json. user do
+# json.array! user do
 #   json.id user.id
 #   json.username user.username
+#   if current_user and user == current_user
+#     json.email user.email
+#   else
+#     json.email '[FILTERED]'
+#   end
 #   json.first_name user.first_name
 #   json.last_name user.last_name
 #   json.avatar user.avatar

@@ -15,7 +15,7 @@
 
 # end
 
-json . device do
+json. device do
   json.id device.id
   json.name device.name
   json.description device.description
