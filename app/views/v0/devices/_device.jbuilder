@@ -1,21 +1,21 @@
-# json.(device,
-#   :id,
-#   :name,
-#   :description,
-#   :status,
-#   :last_reading_at,
-#   :added_at,
-#   :updated_at
-# )
+json.(device,
+  :id,
+  :name,
+  :description,
+  :status,
+  :last_reading_at,
+  :added_at,
+  :updated_at
+)
+if current_user and device.owner_id and current_user.id == device.owner_id
+  json.merge! mac_address: device.mac_address
+else
+  json.merge! mac_address: '[FILTERED]'
+end
 
-
-# if current_user == device.owner
-
-# else
-
-# end
-
+# TO REMOVE
 json. device do
+  json.notice ">>> THIS OBJECT WILL BE DEPRECATED, USE THE ROOT PARAMETERS <<<"
   json.id device.id
   json.name device.name
   json.description device.description
