@@ -13,6 +13,7 @@ gem 'rails-api'
 gem 'pusher'
 gem 'pg'
 gem 'bcrypt', '~> 3.1.7'
+gem 'rack-timeout'
 # gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-8-stable'
 gem 'oauth2', require: false
 gem 'doorkeeper'
