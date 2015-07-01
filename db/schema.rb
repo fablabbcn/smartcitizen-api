@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150602182642) do
+ActiveRecord::Schema.define(version: 20150701142607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,6 +86,14 @@ ActiveRecord::Schema.define(version: 20150602182642) do
 
   add_index "kits", ["slug"], name: "index_kits_on_slug", using: :btree
 
+  create_table "measurements", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "unit"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", null: false
     t.integer  "application_id",    null: false
@@ -152,11 +160,13 @@ ActiveRecord::Schema.define(version: 20150602182642) do
     t.string   "name"
     t.text     "description"
     t.string   "unit"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "measurement_id"
   end
 
   add_index "sensors", ["ancestry"], name: "index_sensors_on_ancestry", using: :btree
+  add_index "sensors", ["measurement_id"], name: "index_sensors_on_measurement_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name"
@@ -181,4 +191,5 @@ ActiveRecord::Schema.define(version: 20150602182642) do
   add_foreign_key "devices", "kits"
   add_foreign_key "devices", "users", column: "owner_id"
   add_foreign_key "pg_readings", "devices"
+  add_foreign_key "sensors", "measurements"
 end

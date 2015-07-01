@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     # components
     resources :components, only: :index
     resources :sessions
+
+    resources :measurements
     # kits
     resources :kits, except: [:create, :destroy]
     # users
