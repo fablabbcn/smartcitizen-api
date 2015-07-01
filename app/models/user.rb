@@ -55,6 +55,10 @@ class User < ActiveRecord::Base
     "#{name} <#{email}>"
   end
 
+  def role
+    role_mask < 5 ? 'citizen' : 'admin'
+  end
+
   def send_password_reset
     generate_token(:password_reset_token)
     save!

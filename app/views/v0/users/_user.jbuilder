@@ -1,5 +1,6 @@
 json.(user,
   :id,
+  :role,
   :username,
   :first_name,
   :last_name,
