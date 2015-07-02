@@ -30,6 +30,19 @@ module V0
             }
           end
         end
+      # elsif params[:rollup] == '30m'
+      #   select = "SELECT date_trunc('hour', recorded_at)::timestamp without time zone AS hour_stamp, (extract(minute FROM recorded_at)::int / 30) AS day"
+      #   rollup = '30m'
+      #   from = params[:from] ? Time.parse(params[:from]) : 1.week.ago
+      #   if params[:all_intervals]
+      #     time_iterate(from.beginning_of_hour, to.end_of_hour, 1.hour) do |t|
+      #       readings << {
+      #         timestamp: t,
+      #         data: data
+      #       }
+      #     end
+      #   end
+
       elsif params[:rollup] == '1m'
         select = "SELECT date_trunc('minute', recorded_at)::timestamp without time zone AS day"
         rollup = '1m'
