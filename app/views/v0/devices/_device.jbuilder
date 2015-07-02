@@ -1,5 +1,6 @@
 json.(device,
   :id,
+  :uuid,
   :name,
   :description,
   :status,

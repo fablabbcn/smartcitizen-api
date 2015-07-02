@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150701190639) do
+ActiveRecord::Schema.define(version: 20150702152315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "uuid-ossp"
 
   create_table "api_tokens", force: :cascade do |t|
     t.integer  "owner_id",   null: false
@@ -31,8 +32,9 @@ ActiveRecord::Schema.define(version: 20150701190639) do
     t.integer  "board_id"
     t.string   "board_type"
     t.integer  "sensor_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.uuid     "uuid",       default: "uuid_generate_v4()"
   end
 
   add_index "components", ["board_type", "board_id"], name: "index_components_on_board_type_and_board_id", using: :btree
@@ -45,8 +47,8 @@ ActiveRecord::Schema.define(version: 20150701190639) do
     t.macaddr  "mac_address"
     t.float    "latitude"
     t.float    "longitude"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
     t.integer  "kit_id"
     t.hstore   "latest_data"
     t.string   "geohash"
@@ -56,6 +58,7 @@ ActiveRecord::Schema.define(version: 20150701190639) do
     t.jsonb    "data"
     t.jsonb    "old_data"
     t.string   "owner_username"
+    t.uuid     "uuid",             default: "uuid_generate_v4()"
   end
 
   add_index "devices", ["geohash"], name: "index_devices_on_geohash", using: :btree
@@ -79,9 +82,10 @@ ActiveRecord::Schema.define(version: 20150701190639) do
   create_table "kits", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.string   "slug"
+    t.uuid     "uuid",        default: "uuid_generate_v4()"
   end
 
   add_index "kits", ["slug"], name: "index_kits_on_slug", using: :btree
@@ -90,8 +94,9 @@ ActiveRecord::Schema.define(version: 20150701190639) do
     t.string   "name"
     t.text     "description"
     t.string   "unit"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.uuid     "uuid",        default: "uuid_generate_v4()"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
@@ -160,9 +165,10 @@ ActiveRecord::Schema.define(version: 20150701190639) do
     t.string   "name"
     t.text     "description"
     t.string   "unit"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
     t.integer  "measurement_id"
+    t.uuid     "uuid",           default: "uuid_generate_v4()"
   end
 
   add_index "sensors", ["ancestry"], name: "index_sensors_on_ancestry", using: :btree
@@ -174,8 +180,8 @@ ActiveRecord::Schema.define(version: 20150701190639) do
     t.string   "username"
     t.string   "email"
     t.string   "password_digest"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
     t.string   "password_reset_token"
     t.string   "old_password"
     t.string   "role"
@@ -184,7 +190,8 @@ ActiveRecord::Schema.define(version: 20150701190639) do
     t.string   "country_code"
     t.string   "url"
     t.string   "avatar"
-    t.integer  "role_mask",            default: 0, null: false
+    t.integer  "role_mask",            default: 0,                    null: false
+    t.uuid     "uuid",                 default: "uuid_generate_v4()"
   end
 
   add_foreign_key "api_tokens", "users", column: "owner_id"
