@@ -1,5 +1,5 @@
 json.(kit,
-  :id, :slug, :name, :description, :created_at, :updated_at
+  :id, :uuid, :slug, :name, :description, :created_at, :updated_at
 )
 
 # json . kit do

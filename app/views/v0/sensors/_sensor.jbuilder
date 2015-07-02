@@ -1,5 +1,5 @@
 json.(sensor,
-  :id, :parent_id, :name, :description, :unit, :created_at, :updated_at
+  :id, :uuid, :parent_id, :name, :description, :unit, :created_at, :updated_at
   # :is_childless?,
 )
 
