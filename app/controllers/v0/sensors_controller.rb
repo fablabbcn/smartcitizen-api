@@ -2,12 +2,12 @@ module V0
   class SensorsController < ApplicationController
 
     def index
-      @sensors = Sensor.all
+      @sensors = Sensor.includes(:measurement).all
       @sensors = paginate @sensors
     end
 
     def show
-      @sensor = Sensor.find(params[:id])
+      @sensor = Sensor.includes(:measurement).find(params[:id])
       authorize @sensor
     end
 
