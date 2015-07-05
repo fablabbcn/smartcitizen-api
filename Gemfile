@@ -1,6 +1,7 @@
 ruby '2.2.2'
 source 'https://rubygems.org'
 
+gem 'unirest'
 gem 'jbuilder'
 gem 'responders'
 gem 'newrelic_rpm'
