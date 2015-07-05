@@ -3,6 +3,12 @@ json.(sensor,
   # :is_childless?,
 )
 
+if sensor.measurement
+json.measurement(
+  sensor.measurement, :id, :name, :description
+)
+end
+
 # json . sensor do
 #   json.id sensor.id
 #   json.parent_id sensor.parent_id
