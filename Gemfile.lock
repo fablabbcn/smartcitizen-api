@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/presidentbeef/brakeman.git
-  revision: 0288c4ff4b2a7a7b5d32eed1e0c7d228c14dbe82
+  revision: 0c699b006d664bc7c31d23367c3dcdec9d99835f
   specs:
     brakeman (3.0.5)
       erubis (~> 2.6)
@@ -172,7 +172,7 @@ GEM
     mini_portile (0.6.2)
     minitest (5.7.0)
     msgpack (0.6.1)
-    multi_json (1.11.1)
+    multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     nenv (0.2.0)
