@@ -5,7 +5,7 @@ json.(sensor,
 
 if sensor.measurement
 json.measurement(
-  sensor.measurement, :id, :name, :description
+  sensor.measurement, :id, :uuid, :name, :description
 )
 end
 

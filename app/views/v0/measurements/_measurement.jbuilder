@@ -1,5 +1,5 @@
 json.(measurement,
-  :id, :name, :description, :unit, :created_at, :updated_at
+  :id, :uuid, :name, :description, :unit, :created_at, :updated_at
   # :is_childless?,
 )
 
