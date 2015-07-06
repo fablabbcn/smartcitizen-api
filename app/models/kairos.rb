@@ -64,15 +64,17 @@ class Kairos
 
   end
 
-  def self.ingest data
-    data = [
-    {
-      name: "d000",
-      timestamp: Time.now.to_i * 1000,
-      value: 1000,
-      tags: {"s":99}
-    }]
-    response = self.http_post_to("/datapoints", data)
+  def self.ingest device_id, data, recorded_at
+    _data = []
+    data.each do |k,v|
+      _data.push({
+        name: "d#{device_id}",
+        timestamp: recorded_at.to_i * 1000,
+        value: v,
+        tags: {"s":k}
+      })
+    end
+    response = self.http_post_to("/datapoints", _data)
   end
 
 private

@@ -24,11 +24,13 @@ class Calibrator
 
     record.update_attributes(data: data.to_h_exc_raw)
 
-    record.device.update_attributes(data: data.to_h, last_recorded_at: Time.now.utc)
+    recorded_at = Time.now.utc
 
-    PgReading.create(device: record.device, data: data.to_h, recorded_at: Time.now.utc)
+    record.device.update_attributes(data: data.to_h, last_recorded_at: recorded_at)
 
-    Kairos.ingest(data)
+    PgReading.create(device: record.device, data: data.to_h, recorded_at: recorded_at)
+
+    Kairos.ingest(record.device.id, data, recorded_at)
 
   end
 
