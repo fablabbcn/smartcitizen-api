@@ -11,6 +11,10 @@ module V0
 
     def index
 
+      %w(rollup sensor_id function).each do |param|
+        raise ActionController::ParameterMissing.new("param not found: #{param}") unless params[param]
+      end
+
       rollup_value = params[:rollup].to_i
       rollup_unit = case params[:rollup].gsub(rollup_value.to_s,'')
         when "y" then "years"
@@ -22,6 +26,7 @@ module V0
         when "s" then "seconds"
         when "ms" then "milliseconds"
       end
+
 
       uri = "http://kairos.server.smartcitizen.me:8080/api/v1/datapoints/query"
       p = {
