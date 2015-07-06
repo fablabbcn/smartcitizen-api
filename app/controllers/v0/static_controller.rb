@@ -4,6 +4,7 @@ module V0
     skip_after_action :verify_authorized
 
     def home
+      params[:pretty] = true
       render json: {
         current_user_url: v0_me_index_url,
         # components_url: v0_components_url,
