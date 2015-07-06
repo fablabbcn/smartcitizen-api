@@ -30,7 +30,7 @@ class Calibrator
 
     PgReading.create(device: record.device, data: data.to_h, recorded_at: recorded_at)
 
-    Kairos.ingest(record.device.id, data, recorded_at)
+    Kairos.ingest(record.device.id, data.to_h, recorded_at)
 
   end
 
