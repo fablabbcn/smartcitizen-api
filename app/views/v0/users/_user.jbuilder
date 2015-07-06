@@ -20,6 +20,7 @@ end
 
 json.devices user.devices do |device|
   json.id device.id
+  json.uuid device.uuid
   json.name device.name
   json.description device.description
   json.latitude device.latitude
