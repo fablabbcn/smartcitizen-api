@@ -14,6 +14,7 @@ module V0
       rollup_unit = case params[:rollup].gsub(rollup_value.to_s,'')
         when "y" then "years"
         when "M" then "months"
+        when "w" then "weeks"
         when "d" then "days"
         when "h" then "hours"
         when "m" then "minutes"
