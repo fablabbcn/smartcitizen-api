@@ -10,6 +10,7 @@ module V0
   skip_after_action :verify_authorized
 
     def index
+
       rollup_value = params[:rollup].to_i
       rollup_unit = case params[:rollup].gsub(rollup_value.to_s,'')
         when "y" then "years"
