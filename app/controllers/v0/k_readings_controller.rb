@@ -10,23 +10,34 @@ module V0
   skip_after_action :verify_authorized
 
     def index
+      rollup_value = params[:rollup].to_i
+      rollup_unit = case params[:rollup].gsub(rollup_value.to_s,'')
+        when "y" then "years"
+        when "M" then "months"
+        when "d" then "days"
+        when "h" then "hours"
+        when "m" then "minutes"
+        when "s" then "seconds"
+        when "ms" then "milliseconds"
+      end
+
       uri = "http://kairos.server.smartcitizen.me:8080/api/v1/datapoints/query"
       p = {
         metrics: [
           {
             tags: {
               s: [
-                "7"
+                params[:sensor_id]
               ]
             },
             name: "d#{params[:device_id]}",
             aggregators: [
               {
-                name: "avg",
+                name: params[:function],
                 align_sampling: true,
                 sampling: {
-                  value: "1",
-                  unit: "days"
+                  value: rollup_value,#"1",
+                  unit: rollup_unit #"days"
                 }
               }
             ]
@@ -34,37 +45,10 @@ module V0
         ],
         cache_time: 0,
         start_relative: {
-          value: "5",
+          value: "6",
           unit: "months"
         }
       }
-
-
-      # response = Unirest.get uri,
-      #   headers: { "Content-Type": "application/json"},
-      #   parameters: params.to_json
-      # # uri.query = URI.encode_www_form( params )
-
-
-  # uri = URI.parse('http://kairos.server.smartcitizen.me/api/v1/datapoints/query')
-  # response = Net::HTTP.post_form(uri, params)
-  # render text: response.body
-
-headers = {
-"Accept" => "application/json",
-"Accept-Encoding" => "gzip, deflate",
-"Connection" => "keep-alive",
-"Content-Length" => "406",
-"Content-Type" => "application/json; charset=utf-8",
-"Host" => "kairos.server.smartcitizen.me:8080",
-"User-Agent" => "HTTPie/0.9.1"
-}
-
-  # response = Unirest.post 'http://kairos.server.smartcitizen.me/api/v1/datapoints/query',
-  #     headers: headers,
-  #     parameters: params
-
-  #     render text: response.to_json
 
     url = "http://kairos.server.smartcitizen.me/api/v1/datapoints/query"
     uri = URI.parse(url)
@@ -73,15 +57,20 @@ headers = {
 
     http = Net::HTTP.new(uri.host,uri.port)
     response = http.post(uri.path,p.to_json,headers)
-    render json: response.body
+    j = JSON.parse(response.body)['queries'][0]
 
-      # render text: response.raw_body
-      # render json: {
-      #   rollup: "1d",
-      #   function: "average",
-      #   from: "2015-06-05T20:29:37Z",
-      #   to: "2015-07-05T20:29:37Z"
-      # }
+    json = {
+      device_id: params[:device_id].to_i,
+      sensor_id: params[:sensor_id].to_i,
+      rollup: params[:rollup],
+      function: params[:function],
+      sample_size: j['sample_size']
+    }
+    readings = j['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, r[1]]}
+    json['readings'] = readings.reverse
+    # response.body
+    render json: json
+
     end
 
   end
