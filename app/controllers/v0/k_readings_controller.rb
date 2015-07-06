@@ -65,7 +65,9 @@ module V0
       sensor_id: params[:sensor_id].to_i,
       rollup: params[:rollup],
       function: params[:function],
-      sample_size: j['sample_size']
+      sample_size: j['sample_size'],
+      from: 6.months.ago,
+      to: Time.now.utc
     }
     readings = j['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, r[1]]}
     json['readings'] = readings.reverse
