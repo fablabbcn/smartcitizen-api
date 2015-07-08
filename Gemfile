@@ -69,6 +69,7 @@ group :development do
   gem 'spring-commands-rspec'
   gem 'letter_opener'
   gem 'spring'
+  gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
 end
 
 group :development, :test do

@@ -13,6 +13,14 @@ GIT
       sass (~> 3.0)
       terminal-table (~> 1.4.5)
 
+GIT
+  remote: git://github.com/seuros/capistrano-sidekiq.git
+  revision: 7bc73100681805c88ef58bb6984ac48b8662241c
+  specs:
+    capistrano-sidekiq (0.5.3)
+      capistrano
+      sidekiq
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -374,6 +382,7 @@ DEPENDENCIES
   brakeman!
   c_geohash
   capistrano-rails
+  capistrano-sidekiq!
   codeclimate-test-reporter
   countries
   dalli
