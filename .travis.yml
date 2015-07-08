@@ -2,12 +2,10 @@ language: ruby
 rvm:
   - 2.2.2
 env:
-  - cassandra_host_ip=127.0.0.1
   # cassandra_keyspace=smart_citizen_test
 script: 'bundle exec rake spec'
 bundler_args: '--without=debug'
 services:
-  - cassandra
   - redis-server
 addons:
   postgresql: "9.4"
@@ -16,5 +14,3 @@ addons:
 before_script:
   - cp config/database.travis.yml config/database.yml
   - psql -c 'create database travis_ci_test;' -U postgres
-  - rake cequel:keyspace:create
-  - rake cequel:migrate
