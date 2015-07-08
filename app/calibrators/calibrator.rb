@@ -31,7 +31,7 @@ class Calibrator
       device.update_attributes(data: data, last_recorded_at: recorded_at)
     end
     PgReading.create(device: device, data: data, recorded_at: recorded_at)
-    Kairos.ingest(device.id, data, recorded_at) # or raw_data?
+    Kairos.ingest(device.id, raw_data, recorded_at) # or raw_data?
   end
 
 private
