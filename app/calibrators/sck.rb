@@ -38,7 +38,7 @@ class SCK
     @calibrated_at = Time.current.utc
   end
 
-  def versions=(value)
+  def version=(value)
     # 1.1-0.8.5-A
     split = value.split('-')#.map{|a| a.gsub('.','') }
     @firmware_version = split[1]

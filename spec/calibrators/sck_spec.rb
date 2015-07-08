@@ -23,7 +23,7 @@ RSpec.describe 'SCK', :type => :calibrator do
   end
 
   it "parses version numbers from string" do
-    s = SCK.new(versions: '1.1-0.8.5-A')
+    s = SCK.new(version: '1.1-0.8.5-A')
     expect(s.firmware_version).to eq('0.8.5')
     expect(s.hardware_version).to eq('1.1')
     expect(s.firmware_param).to eq('A')

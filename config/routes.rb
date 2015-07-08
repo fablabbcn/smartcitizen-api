@@ -3,13 +3,11 @@ Rails.application.routes.draw do
   api_version(module: "V0", path: {value: "v0"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0"}, default: true, defaults: { format: :json }) do
     # devices
     resources :devices do
-      resources :readings, only: :index
       resources :pg_readings, only: :index, on: :member
       resources :k_readings, only: :index, on: :member
       get 'world_map', on: :collection
     end
     # readings
-    resources :readings, only: [:create]
     match "add" => "readings#add", via: [:get, :post, :patch, :put]
     # sensors
     resources :sensors, except: [:destroy]

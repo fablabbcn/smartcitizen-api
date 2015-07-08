@@ -79,14 +79,14 @@ class Device < ActiveRecord::Base
     kit ? kit.sensors : super
   end
 
-  def readings
-    Reading.where(device_id: id)
-  end
+  # def readings
+  #   Reading.where(device_id: id)
+  # end
 
-  def all_readings
-    months = (created_at.to_date..updated_at.to_date).map{|d| "#{d.year}#{'%02i' % d.month.to_i}" }.uniq
-    return readings.where(recorded_month: months)#.limit(100)
-  end
+  # def all_readings
+  #   months = (created_at.to_date..updated_at.to_date).map{|d| "#{d.year}#{'%02i' % d.month.to_i}" }.uniq
+  #   return readings.where(recorded_month: months)#.limit(100)
+  # end
 
   def status
     if last_recorded_at.present?

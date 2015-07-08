@@ -3,35 +3,21 @@ module V0
 
     skip_after_action :verify_authorized
 
-    def index
-      @device = Device.find(params[:device_id])
-      @readings = @device.all_readings.limit(200)#.offset(200)
-      render json: @readings
-    end
-
     def add
       begin
         mac = request.headers['X-SmartCitizenMacADDR']
         version = request.headers['X-SmartCitizenVersion']
-        data = request.headers['X-SmartCitizenData']
-        # Keen.publish("adds", { :mac => mac, :version => version, :data => data }) if Rails.env.production?
-        @reading = Reading.create_from_api(mac, version, data, request.remote_ip)
-        skip_authorization
+        data = JSON.parse(request.headers['X-SmartCitizenData'])[0].merge({
+          'version' => version,
+          'ip' => request.remote_ip
+        })
+        # @reading = Kairos.delay.create_from_api(mac, data)
+        Calibrator.new(mac, data)
       rescue Exception => e
         Rails.logger.info e
       end
-      render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S#")
+      render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S#") # render time for SCK to sync clock
     end
-
-private
-
-    # def reading_params
-    #   params.permit(
-    #     :mac_address,
-    #     :recorded_at,
-    #     values: []
-    #   )
-    # end
 
   end
 end

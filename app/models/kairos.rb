@@ -3,6 +3,11 @@ require 'uri'
 
 class Kairos
 
+  def self.create_from_api mac, data
+    # self.ingest(mac, data.except('timestamp'), extract_datetime(data['timestamp']))
+    Calibrator.new(self) if raw_data.present? and data.blank?
+  end
+
   def self.query params
 
     rollup_value = params[:rollup].to_i
@@ -66,14 +71,17 @@ class Kairos
 
   def self.ingest device_id, data, recorded_at
     _data = []
+    recorded_at = self.extract_datetime(recorded_at).to_i * 1000
     data.each do |k,v|
       _data.push({
         name: "d#{device_id}",
-        timestamp: recorded_at.to_i * 1000,
+        timestamp: recorded_at,
         value: v,
         tags: {"s":k}
       })
     end
+    Rails.logger.info(device_id)
+    Rails.logger.info(_data)
     response = self.http_post_to("/datapoints", _data)
   end
 
@@ -85,6 +93,14 @@ private
     headers = {"Content-Type" => "application/json",'Accept' => "application/json"}
     http = Net::HTTP.new(uri.host,uri.port)
     response = http.post(uri.path,data.to_json,headers)
+  end
+
+  def self.extract_datetime timestamp
+    begin
+      Time.parse(timestamp)
+    rescue
+      Time.at(timestamp)
+    end
   end
 
 end

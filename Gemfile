@@ -1,7 +1,6 @@
 ruby '2.2.2'
 source 'https://rubygems.org'
 
-gem 'unirest'
 gem 'jbuilder'
 gem 'responders'
 gem 'newrelic_rpm'
@@ -9,21 +8,27 @@ gem 'newrelic_rpm'
 # gem 'swagger-docs'
 # gem 'prmd'
 # gem 'keen'
-gem 'rails', '4.2.1'
+gem 'rails', '4.2.3'
 gem 'rails-api'
 gem 'pusher'
 gem 'pg'
 gem 'bcrypt', '~> 3.1.7'
+
 gem 'rack-timeout'
+gem 'rack-attack' # API Rate Limiting
+gem 'rack-cors', :require => 'rack/cors'
+gem 'rack-contrib'
+
+gem 'sidekiq'
 # gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-8-stable'
 gem 'oauth2', require: false
 gem 'doorkeeper'
 gem 'versionist'
-gem 'cassandra-driver'
-gem 'cequel', github: 'cequel/cequel'
-gem 'rack-attack' # API Rate Limiting
+# gem 'cassandra-driver'
+# gem 'cequel', github: 'cequel/cequel'
+
 gem 'friendly_id', '~> 5.1.0'
-gem 'msgpack'
+# gem 'msgpack'
 gem 'ancestry'
 gem 'pundit'
 gem 'kaminari'
@@ -33,10 +38,9 @@ gem 'geocoder'
 gem 'countries'
 gem 'ransack'
 gem 'c_geohash', require: false
-gem 'rack-cors', :require => 'rack/cors'
 gem 'date_validator'
 gem 'pg_search'
-gem 'rack-contrib'
+
 # gem 'actionpack-action_caching', github: 'rails/actionpack-action_caching'
 
 gem 'dalli'

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe V0::ReadingsController do
 
-  describe "GET <device_id>/readings" do
+  skip "GET <device_id>/readings" do
     it "returns all readings" do
       device = create(:device)
       api_get "/devices/#{device.id}/readings"
@@ -10,7 +10,7 @@ describe V0::ReadingsController do
     end
   end
 
-  describe "GET /add" do
+  skip "GET /add" do
     it "returns time" do
       Timecop.freeze(Time.utc(2015,02,01,20,00,05)) do
         get "/add"

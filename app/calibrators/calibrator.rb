@@ -1,44 +1,44 @@
 class Calibrator
 
-  def initialize record
-    firmware = determine_firmware(record.raw_data['versions'])
-    # check_timestamp()
+  def initialize mac, raw_data
+    device = Device.where(mac_address: mac).last
+    firmware = determine_firmware(raw_data['version'])
+
+    recorded_at = raw_data['timestamp']
+    raw_data = raw_data.except('timestamp')
 
     if (firmware.hardware_version && firmware.hardware_version >= 11) &&
       (firmware.firmware_version && firmware.firmware_version >= 85) &&
       (firmware.firmware_param && firmware.firmware_param =~ /[AB]/)
       # (h.smart_cal && h.smart_cal == 1) &&
       Rails.logger.info("SCK11")
-      data = SCK11.new( record.raw_data )
+      data = SCK11.new( raw_data )
 
     elsif (firmware.hardware_version && firmware.hardware_version >= 10) &&
       (firmware.firmware_version && firmware.firmware_version >= 85) &&
       (firmware.firmware_param && firmware.firmware_param =~ /[AB]/)
       Rails.logger.info("SCK1")
-      data = SCK1.new( record.raw_data )
+      data = SCK1.new( raw_data )
 
     else
       Rails.logger.info("ERROR")
       # raise Smartcitizen::UnknownDevice.new h.to_s
     end
 
-    record.update_attributes(data: data.to_h_exc_raw)
+    data = data.to_h
 
-    recorded_at = Time.now.utc
-
-    record.device.update_attributes(data: data.to_h, last_recorded_at: recorded_at)
-
-    PgReading.create(device: record.device, data: data.to_h, recorded_at: recorded_at)
-
-    Kairos.ingest(record.device.id, data.to_h, recorded_at)
-
+    if recorded_at > device.last_recorded_at
+      device.update_attributes(data: data, last_recorded_at: recorded_at)
+    end
+    PgReading.create(device: device, data: data, recorded_at: recorded_at)
+    Kairos.ingest(device.id, data, recorded_at) # or raw_data?
   end
 
 private
 
-  def determine_firmware versions
+  def determine_firmware version
     o = OpenStruct.new
-    split = versions.split('-').map{|a| a.gsub('.','') }
+    split = version.split('-').map{|a| a.gsub('.','') }
     o.firmware_version = split[1].to_i
     o.hardware_version = split[0].to_i
     o.firmware_param = split[2]
