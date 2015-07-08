@@ -72,7 +72,7 @@ class Kairos
   def self.ingest device_id, data, recorded_at
     _data = []
     recorded_at = self.extract_datetime(recorded_at).to_i * 1000
-    data.each do |k,v|
+    data.delete_if{|k,v| k.nil?}.each do |k,v|
       _data.push({
         name: "d#{device_id}",
         timestamp: recorded_at,
