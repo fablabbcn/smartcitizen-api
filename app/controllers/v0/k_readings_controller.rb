@@ -7,7 +7,7 @@ require 'uri'
 module V0
   class KReadingsController < ApplicationController
 
-  skip_after_action :verify_authorized
+    skip_after_action :verify_authorized
 
     def index
       %w(rollup sensor_id function).each do |param|

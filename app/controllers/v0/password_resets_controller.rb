@@ -1,10 +1,28 @@
 module V0
   class PasswordResetsController < ApplicationController
 
+    skip_after_action :verify_authorized, only: :create
+
     def create
-      @user = User.find_by!(username: params.require(:username))
-      authorize @user, :request_password_reset?
-      @user.send_password_reset
+      # u_or_e = params.require(:username_or_email)
+
+      if params[:email].present?
+        @user = User.find_by!(email: params[:email])
+      elsif params[:username].present?
+        @user = User.find_by!(username: params[:username])
+      elsif e_o_u = params[:email_or_username]
+        @user = User.where('username = ? OR email = ?', e_o_u, e_o_u).first!
+      else
+        raise Smartcitizen::UnprocessableEntity.new "Please include parameter email, username or email_or_username"
+      end
+
+      if @user
+        authorize @user, :request_password_reset?
+        @user.send_password_reset
+      else
+        raise Smartcitizen::UnprocessableEntity.new
+      end
+
       render json: {message: 'Password Reset Instructions Delivered'}, status: :ok
     end
 
