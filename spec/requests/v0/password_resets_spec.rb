@@ -2,9 +2,17 @@ require 'rails_helper'
 
 describe V0::PasswordResetsController do
 
-  let!(:user) { create(:user, username: 'homer') }
+  let!(:user) { create(:user, username: 'homer', email: 'homer@simpson.com') }
 
   describe "POST /password_resets" do
+    it "requires params" do
+      api_post 'password_resets'
+      expect(response.status).to eq(422)
+      expect(response.body).to match('Please include parameter email, username or email_or_username')
+    end
+  end
+
+  describe "POST /password_resets/:username" do
 
     it "can request reset password instructions" do
       api_post 'password_resets', { username: 'homer' }
@@ -19,7 +27,50 @@ describe V0::PasswordResetsController do
       expect(last_email).to be_nil
     end
 
+    it "can request reset password instructions (email_or_username)" do
+      api_post 'password_resets', { email_or_username: 'homer' }
+      expect(response.status).to eq(200)
+      expect(last_email.to).to eq([user.email])
+      expect(last_email.subject).to eq('Password Reset Instructions')
+    end
+
+    it "cannot reset password instructions with invalid data (email_or_username)" do
+      api_post 'password_resets', { email_or_username: 'bart' }
+      expect(response.status).to eq(404)
+      expect(last_email).to be_nil
+    end
   end
+
+  describe "POST /password_resets/:email" do
+
+    it "can request reset password instructions" do
+      api_post 'password_resets', { email: 'homer@simpson.com' }
+      expect(response.status).to eq(200)
+      expect(last_email.to).to eq([user.email])
+      expect(last_email.subject).to eq('Password Reset Instructions')
+    end
+
+    it "cannot reset password instructions with invalid data" do
+      api_post 'password_resets', { email: 'bart@simpson.com' }
+      expect(response.status).to eq(404)
+      expect(last_email).to be_nil
+    end
+
+    it "can request reset password instructions (email_or_username)" do
+      api_post 'password_resets', { email_or_username: 'homer@simpson.com' }
+      expect(response.status).to eq(200)
+      expect(last_email.to).to eq([user.email])
+      expect(last_email.subject).to eq('Password Reset Instructions')
+    end
+
+    it "cannot reset password instructions with invalid data (email_or_username)" do
+      api_post 'password_resets', { email_or_username: 'bart@simpson.com' }
+      expect(response.status).to eq(404)
+      expect(last_email).to be_nil
+    end
+
+  end
+
 
   describe "GET /password_resets/<password_reset_token>" do
     before(:each) do
