@@ -28,7 +28,7 @@ module Smartcitizen
     end
   end
   class UnprocessableEntity < SmartCitizenError; end
-  class NotAuthorized < SmartCitizenError; end
+  class Unauthorized < SmartCitizenError; end
   class NotFound < SmartCitizenError; end
   class InternalServerError < SmartCitizenError; end
 

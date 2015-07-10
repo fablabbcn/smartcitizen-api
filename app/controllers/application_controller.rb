@@ -41,7 +41,7 @@ private
             @current_user = user
           else
             self.headers["WWW-Authenticate"] = %(Basic realm="Application", Token realm="Application")
-            raise Smartcitizen::NotAuthorized.new "Invalid Username/Password Combination"
+            raise Smartcitizen::Unauthorized.new "Invalid Username/Password Combination"
           end
         end
       elsif ActionController::HttpAuthentication::Token::token_and_options(request) # http token
@@ -50,7 +50,7 @@ private
             @current_user = token.owner
           else
             self.headers["WWW-Authenticate"] = %(Basic realm="Application", Token realm="Application")
-            raise Smartcitizen::NotAuthorized.new "Invalid API Token"
+            raise Smartcitizen::Unauthorized.new "Invalid API Token"
           end
         end
       end
@@ -62,15 +62,15 @@ private
   def check_if_authorized!
     if current_user.nil?
       if params[:access_token]
-        raise Smartcitizen::NotAuthorized.new("Invalid OAuth2 Params")
+        raise Smartcitizen::Unauthorized.new("Invalid OAuth2 Params")
       else
-        raise Smartcitizen::NotAuthorized.new("Authorization required")
+        raise Smartcitizen::Unauthorized.new("Authorization required")
       end
     end
   end
 
   # def doorkeeper_unauthorized_render_options
-  #   raise Smartcitizen::NotAuthorized.new("Invalid OAuth Token")
+  #   raise Smartcitizen::Unauthorized.new("Invalid OAuth Token")
   # end
 
   def ssl_configured?
