@@ -26,6 +26,16 @@ describe V0::UsersController do
       expect(response.status).to eq(404)
     end
 
+    it "has filtered email address" do
+      j = api_get "users/#{user.id}"
+      expect(j['email']).to eq('[FILTERED]')
+    end
+
+    it "exposes email address for an admin" do
+      j = api_get "users/#{user.id}?access_token=#{token.token}"
+      expect(j['email']).to eq(user.email)
+    end
+
   end
 
   describe "GET /users" do
@@ -57,6 +67,7 @@ describe V0::UsersController do
       body = api_get 'users?q[s]=username asc'
       expect(body.map{|b| b['username']}).to eq([first.username,second.username])
     end
+
   end
 
   describe "POST /users" do

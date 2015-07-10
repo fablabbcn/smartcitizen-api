@@ -5,7 +5,7 @@ describe V0::DevicesController do
   let(:application) { create :application }
   let(:user) { create :user }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
-
+  let(:device) { create(:device) }
   describe "GET /devices" do
     it "returns all the devices" do
       first = create(:device)
@@ -62,7 +62,6 @@ describe V0::DevicesController do
 
   describe "GET /devices/:id" do
     it "returns a device" do
-      device = create(:device)
       api_get "devices/#{device.id}"
       expect(response.status).to eq(200)
     end
@@ -71,6 +70,19 @@ describe V0::DevicesController do
       api_get 'devices/100'
       expect(response.status).to eq(404)
     end
+
+
+    it "has filtered mac address" do
+      j = api_get "devices/#{device.id}"
+      expect(j['mac_address']).to eq('[FILTERED]')
+    end
+
+    it "exposes mac address for an admin" do
+      user.update_attribute(:role_mask, 5)
+      j = api_get "devices/#{device.id}?access_token=#{token.token}"
+      expect(j['mac_address']).to eq(device.mac_address)
+    end
+
   end
 
   describe "PUT /devices/:id" do

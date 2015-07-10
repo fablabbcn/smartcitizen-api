@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/presidentbeef/brakeman.git
-  revision: 0c699b006d664bc7c31d23367c3dcdec9d99835f
+  revision: 2203075168b53e04d304f5c456adc410e57e84ba
   specs:
     brakeman (3.0.5)
       erubis (~> 2.6)
@@ -87,7 +87,7 @@ GEM
     coderay (1.1.0)
     colorize (0.7.7)
     connection_pool (2.2.0)
-    countries (0.11.4)
+    countries (0.11.5)
       currencies (~> 0.4.2)
       i18n_data (~> 0.7.0)
     currencies (0.4.2)
@@ -159,7 +159,7 @@ GEM
       addressable (~> 2.3)
     letter_opener (1.4.1)
       launchy (~> 2.2)
-    listen (3.0.1)
+    listen (3.0.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
     loofah (2.0.2)

@@ -12,7 +12,7 @@ json.(user,
   :updated_at
 )
 
-if current_user and user == current_user
+if current_user and (current_user.is_admin? or current_user == user)
   json.merge! email: user.email
 else
   json.merge! email: '[FILTERED]'
