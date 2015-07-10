@@ -10,10 +10,15 @@ module V0
     skip_after_action :verify_authorized
 
     def index
+      missing_params = []
       %w(rollup sensor_id function).each do |param|
-        raise ActionController::ParameterMissing.new("param not found: #{param}") unless params[param]
+        missing_params << param unless params[param]
       end
-      render json: Kairos.query(params)
+      if missing_params.any?
+        raise ActionController::ParameterMissing.new(missing_params.to_sentence)
+      else
+        render json: Kairos.query(params)
+      end
     end
 
   end
