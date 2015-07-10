@@ -1,6 +1,8 @@
 module V0
   class SensorsController < ApplicationController
 
+    # before_action :check_if_authorized!, only: [:create, :update]
+
     def index
       @sensors = Sensor.includes(:measurement).all
       @sensors = paginate @sensors

@@ -6,6 +6,9 @@ describe V0::SensorsController do
   let(:user) { create :user }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
 
+  let(:admin) { create :user, role_mask: 5 }
+  let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
+
   describe "GET /sensor/<id>" do
     it "returns a sensor" do
       sensor = create(:sensor)
@@ -31,7 +34,7 @@ describe V0::SensorsController do
         name: 'new sensor',
         description: 'blah blah blah',
         unit: 'm',
-        access_token: token.token
+        access_token: admin_token.token
       }
       expect(response.status).to eq(201)
     end
@@ -39,7 +42,7 @@ describe V0::SensorsController do
     it "does not create a sensor with missing parameters" do
       api_post 'sensors', {
         name: 'Missing params',
-        access_token: token.token
+        access_token: admin_token.token
       }
       expect(response.status).to eq(422)
     end
@@ -51,7 +54,7 @@ describe V0::SensorsController do
     let!(:sensor) { create :sensor }
 
     it "updates a sensor" do
-      api_put "sensors/#{sensor.id}", { name: 'new name', access_token: token.token }
+      api_put "sensors/#{sensor.id}", { name: 'new name', access_token: admin_token.token }
       expect(response.status).to eq(200)
     end
 
@@ -66,7 +69,7 @@ describe V0::SensorsController do
     end
 
     it "does not update a sensor with empty parameters access_token" do
-      api_put "sensors/#{sensor.id}", { name: nil, access_token: token.token }
+      api_put "sensors/#{sensor.id}", { name: nil, access_token: admin_token.token }
       expect(response.status).to eq(422)
     end
 

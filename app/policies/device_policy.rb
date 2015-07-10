@@ -5,7 +5,7 @@ class DevicePolicy < ApplicationPolicy
   end
 
   def update?
-    user.try(:admin?) or user == record.owner
+    user.try(:is_admin?) || user == record.owner
   end
 
   def create?

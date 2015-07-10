@@ -5,7 +5,7 @@ class SensorPolicy < ApplicationPolicy
   end
 
   def create?
-    user#.try(:admin?)
+    user.try(:is_admin?)
   end
 
   def update?

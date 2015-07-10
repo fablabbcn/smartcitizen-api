@@ -1,6 +1,8 @@
 module V0
   class MeasurementsController < ApplicationController
 
+    # before_action :check_if_authorized!, only: [:create, :update]
+
     def index
       @measurements = Measurement.all
       @measurements = paginate @measurements

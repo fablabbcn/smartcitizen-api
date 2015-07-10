@@ -1,6 +1,8 @@
 module V0
   class UsersController < ApplicationController
 
+    before_action :check_if_authorized!, only: :update
+
     def index
       @q = User.includes(:devices).ransack(params[:q])
       @q.sorts = 'id asc' if @q.sorts.empty?

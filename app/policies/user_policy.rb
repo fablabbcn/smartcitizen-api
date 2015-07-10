@@ -5,11 +5,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def create?
-    !user
+    !user || user.is_admin?
   end
 
   def update?
-    user == record
+    user.try(:is_admin?) || user == record
   end
 
   def request_password_reset?
@@ -17,8 +17,6 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update_password?
-    Rails.logger.info user
-    Rails.logger.info record
     update?
   end
 

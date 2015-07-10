@@ -1,6 +1,8 @@
 module V0
   class KitsController < ApplicationController
 
+    # before_action :check_if_authorized!, only: :update
+
     def index
       @kits = Kit.all
       @kits = paginate(@kits)

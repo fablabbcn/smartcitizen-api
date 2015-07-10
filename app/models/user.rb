@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
   extend FriendlyId
   friendly_id :username
 
-  has_secure_password
+  has_secure_password validations: false
+  validates :password, presence: { on: :create }, length: { minimum: 5, allow_blank: true }
 
   validates :username, :email, presence: true
   validates :username, uniqueness: true, if: :username?
@@ -78,8 +79,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  def admin?
-    false
+  def is_admin?
+    role == 'admin'
   end
 
   def country

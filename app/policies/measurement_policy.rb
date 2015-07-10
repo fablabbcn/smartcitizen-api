@@ -5,7 +5,7 @@ class MeasurementPolicy < ApplicationPolicy
   end
 
   def create?
-    user#.try(:admin?)
+    user
   end
 
   def update?

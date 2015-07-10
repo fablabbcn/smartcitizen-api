@@ -93,12 +93,12 @@ describe V0::UsersController do
 
     it "does not update a user with invalid access_token" do
       api_put "users/#{[user.username,user.id].sample}", { first_name: 'Bart', access_token: '123' }
-      expect(response.status).to eq(403)
+      expect(response.status).to eq(401)
     end
 
     it "does not update a user with missing access_token" do
       api_put "users/#{[user.username,user.id].sample}", { first_name: 'Bart', access_token: nil }
-      expect(response.status).to eq(403)
+      expect(response.status).to eq(401)
     end
 
     it "does not update a user with empty parameters access_token" do
