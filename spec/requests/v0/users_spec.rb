@@ -3,6 +3,7 @@ require 'rails_helper'
 describe V0::UsersController do
 
   let(:application) { create :application }
+  let(:other_user) { create :user }
   let(:user) { create :user }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
 
@@ -94,6 +95,17 @@ describe V0::UsersController do
     it "does not update a user with invalid access_token" do
       api_put "users/#{[user.username,user.id].sample}", { first_name: 'Bart', access_token: '123' }
       expect(response.status).to eq(401)
+    end
+
+    it "does not update another user" do
+      api_put "users/#{[other_user.username,other_user.id].sample}", { first_name: 'Bart', access_token: token.token }
+      expect(response.status).to eq(403)
+    end
+
+    it "updates another user if admin" do
+      user.update_attribute(:role_mask, 5)
+      api_put "users/#{[other_user.username,other_user.id].sample}", { first_name: 'Bart', access_token: token.token }
+      expect(response.status).to eq(200)
     end
 
     it "does not update a user with missing access_token" do
