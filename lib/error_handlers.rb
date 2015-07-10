@@ -12,12 +12,12 @@ module ErrorHandlers
       render json: { id: "parameter_missing", message: exception.message, url: nil, errors: nil }, status: :bad_request
     end
 
-    rescue_from ActiveRecord::RecordNotFound do |exception=nil|
-      render json: { id: "record_not_found", message: exception.try(:message), url: nil, errors: nil }, status: :not_found
+    rescue_from ActiveRecord::RecordNotFound do |exception|
+      render json: { id: "record_not_found", message: exception.message, url: nil, errors: nil }, status: :not_found
     end
 
     rescue_from Smartcitizen::Unauthorized do |exception|
-      render json: { id: "unauthorized", message: exception.message, url: nil, errors: nil }, status: :unauthorized
+      render json: { id: "unauthorized", message: exception.message, url: "http://new-apidocs.smartcitizen.me/#authentication", errors: nil }, status: :unauthorized
     end
 
     rescue_from Smartcitizen::UnprocessableEntity do |exception|
