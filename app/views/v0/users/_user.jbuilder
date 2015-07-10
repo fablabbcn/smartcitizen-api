@@ -21,6 +21,11 @@ end
 json.devices user.devices do |device|
   json.id device.id
   json.uuid device.uuid
+  if current_user and (current_user.is_admin? or (device.owner_id and current_user.id == device.owner_id))
+    json.mac_address device.mac_address
+  else
+    json.mac_address '[FILTERED]'
+  end
   json.name device.name
   json.description device.description
   json.latitude device.latitude
