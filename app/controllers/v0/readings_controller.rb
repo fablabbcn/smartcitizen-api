@@ -12,7 +12,9 @@ module V0
           'ip' => request.remote_ip
         })
         # @reading = Kairos.delay.create_from_api(mac, data)
-        Calibrator.new(mac, data)
+
+        ENV['redis'] ? Calibrator.delay.new(mac, data) : Calibrator.new(mac, data)
+
       rescue Exception => e
         Rails.logger.info e
       end
