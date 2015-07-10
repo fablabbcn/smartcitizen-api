@@ -1,3 +1,20 @@
+# if Rails.env.test?
+#   Geocoder.configure(:lookup => :test)
+
+#   Geocoder::Lookup::Test.add_stub(
+#     "Craig Wen", [
+#       {
+#         'latitude'     => 53.3069303,
+#         'longitude'    => -3.7495789,
+#         'address'      => 'Craig Wen',
+#         'state'        => 'Rhos on Sea',
+#         'country'      => 'United Kingdom',
+#         'country_code' => 'GB'
+#       }
+#     ]
+#   )
+# end
+
 if false#Rails.env.production?
   Geocoder.configure(
     # geocoding options

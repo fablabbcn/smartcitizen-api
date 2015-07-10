@@ -19,11 +19,6 @@ class ApplicationController < ActionController::API
   include PrettyJSON
   include ErrorHandlers
 
-  rescue_from Pundit::NotAuthorizedError do |exception|
-    render json: { id: "forbidden", message: exception.message, url: nil, errors: nil }, status: :forbidden
-    # render json: {message: "You are not authorized to do this"}, status: :unauthorized
-  end
-
   after_action :verify_authorized, except: :index
 
   force_ssl if: :ssl_configured?

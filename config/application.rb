@@ -18,7 +18,7 @@ Bundler.require(*Rails.groups)
 
 module Smartcitizen
 
-  class UnprocessableEntity < StandardError
+  class SmartCitizenError < StandardError
     def initialize(errors = nil)
       @message = errors
     end
@@ -28,15 +28,9 @@ module Smartcitizen
     end
   end
 
-  class NotAuthorized < StandardError
-    def initialize(errors = nil)
-      @message = errors
-    end
-
-    def message
-      @message
-    end
-  end
+  class Forbidden < SmartCitizenError; end
+  class UnprocessableEntity < SmartCitizenError; end
+  class NotAuthorized < SmartCitizenError; end
 
   class Application < Rails::Application
 

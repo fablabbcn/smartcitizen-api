@@ -4,6 +4,10 @@ module ErrorHandlers
 
   included do
 
+    rescue_from Pundit::NotAuthorizedError do |exception|
+      render json: { id: "forbidden", message: "You do not have the access permissions to do this", url: nil, errors: nil }, status: :forbidden
+    end
+
     rescue_from ActionController::ParameterMissing do |exception|
       render json: { id: "parameter_missing", message: exception.message, url: nil, errors: nil }, status: :bad_request
     end
@@ -15,6 +19,10 @@ module ErrorHandlers
     rescue_from Smartcitizen::NotAuthorized do |exception|
       # render json: exception, status: :unauthorized
       render json: { id: "not_authorized", message: exception.message, url: nil, errors: nil }, status: :unauthorized
+    end
+
+    rescue_from Smartcitizen::Forbidden do |exception|
+      render json: { id: "forbidden", message: exception.message, url: nil, errors: nil }, status: :forbidden
     end
 
     rescue_from Smartcitizen::UnprocessableEntity do |exception|
