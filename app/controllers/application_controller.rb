@@ -7,7 +7,6 @@ class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Token::ControllerMethods
   # include AbstractController::Helpers::ClassMethods
   include ActionController::Helpers
-
   include ActionController::ImplicitRender
 
   # skip_before_action :verify_authenticity_token

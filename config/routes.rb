@@ -33,9 +33,9 @@ Rails.application.routes.draw do
   end
 
   # use_doorkeeper
-  get "/404" => "errors#catch_404"
+  get "/404" => "errors#not_found"
   get "/500" => "errors#exception"
-  match "*path", to: "errors#catch_404", via: :all
+  match "*path", to: "errors#not_found", via: :all
 
   # get '*path', :to => redirect("/v0/%{path}")
   # root to: redirect('/v0')

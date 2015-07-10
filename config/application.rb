@@ -27,10 +27,10 @@ module Smartcitizen
       @message
     end
   end
-
-  class Forbidden < SmartCitizenError; end
   class UnprocessableEntity < SmartCitizenError; end
   class NotAuthorized < SmartCitizenError; end
+  class NotFound < SmartCitizenError; end
+  class InternalServerError < SmartCitizenError; end
 
   class Application < Rails::Application
 
