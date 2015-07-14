@@ -28,7 +28,7 @@ class Device < ActiveRecord::Base
       obj.country_code = geo.country_code
     end
   end
-  after_validation :reverse_geocode
+  # after_validation :reverse_geocode
 
   # these get overridden the device is a kit
   has_many :components, as: :board
@@ -52,6 +52,12 @@ class Device < ActiveRecord::Base
     :smart_cal,
     :debug_push,
     :enclosure_type
+
+  # # after_initialize :init
+
+  # def init
+  #   self.name ||= "My SCK"
+  # end
 
   def to_s
     name

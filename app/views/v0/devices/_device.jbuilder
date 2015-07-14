@@ -31,9 +31,11 @@ json. device do
   end
 end
 
-json.owner(
-  device.owner, :uuid, :id, :username, :first_name, :last_name, :avatar, :url, :joined_at, :location, :device_ids
-)
+if device.owner
+  json.owner(
+    device.owner, :uuid, :id, :username, :first_name, :last_name, :avatar, :url, :joined_at, :location, :device_ids
+  )
+end
 
 json.data device.formatted_data
 

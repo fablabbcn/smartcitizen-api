@@ -67,6 +67,7 @@ end
 
 group :development do
   gem 'quiet_assets'
+  gem 'railroady'
   gem 'spring-commands-rspec'
   gem 'letter_opener'
   gem 'spring'
@@ -77,6 +78,7 @@ end
 
 group :development, :test do
   # gem 'rspec_api_blueprint', require: false
+  gem 'mysql'
   gem 'faker'
   gem 'figaro'
   gem 'brakeman', github: 'presidentbeef/brakeman', require: false

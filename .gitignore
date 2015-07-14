@@ -26,3 +26,4 @@
 /json
 *.rdb
 *.sql*
+/devices
