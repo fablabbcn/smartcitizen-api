@@ -31,7 +31,7 @@ private
       ret = {"expiration" => 5.minutes.from_now.utc.xmlschema,
         "conditions" =>  [
           {"bucket" =>  ENV['s3_bucket']},
-          ["starts-with", "$key", "#{@avatar.id}.jpg"],
+          ["starts-with", "$key", @avatar.id],
           {"acl" => "public-read"},
           {"success_action_status" => "200"},
           ["content-length-range", 0, 1048576]
