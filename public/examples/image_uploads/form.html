@@ -5,10 +5,11 @@
 <title>Example Uploader</title>
 <style type="text/css">
   #progress .progress-bar {
-    background: red;
+    background: green;
     height: 10px;
     display: block;
     width: 0%;
+    border-radius: 2px;
   }
 </style>
 </head>
@@ -42,8 +43,10 @@
 
   $(function() {
     $('#file_upload').fileupload({
-      forceIframeTransport: true,    // VERY IMPORTANT.  you will get 405 Method Not Allowed if you don't add this.
+      // forceIframeTransport: true,    // VERY IMPORTANT.  you will get 405 Method Not Allowed if you don't add this.
+      // maxChunkSize: 1000000, // 1 MB chunks
       autoUpload: true,
+      dataType: 'xml',
       add: function (event, data) {
         $.ajax({
           url: $('#file_upload').data('backend-action'),
