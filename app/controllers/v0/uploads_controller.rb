@@ -34,7 +34,7 @@ private
           ["starts-with", "$key", @avatar.key],
           {"acl" => "public-read"},
           {"success_action_status" => "200"},
-          ["content-length-range", 0, 1048576]
+          ["content-length-range", 0, 1073741824] # 100 MB
         ]
       }
       @policy = Base64.encode64(ret.to_json).gsub(/\n/,'')
