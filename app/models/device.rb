@@ -7,8 +7,8 @@ class Device < ActiveRecord::Base
 
   belongs_to :owner, class_name: 'User'
   validates_presence_of :owner, :mac_address, :name
-  validates_format_of :mac_address, with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/
-  validates_uniqueness_of :mac_address, on: :create
+
+  validates :mac_address, uniqueness: true, format: { with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/ }, unless: Proc.new { |d| d.mac_address == 'unknown' }
 
   delegate :username, :to => :owner, :prefix => true
   include PgSearch

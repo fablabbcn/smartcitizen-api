@@ -1,6 +1,7 @@
 ruby '2.2.2'
 source 'https://rubygems.org'
 
+gem 'mysql'
 gem 'jbuilder'
 gem 'responders'
 gem 'newrelic_rpm'
@@ -79,7 +80,6 @@ end
 
 group :development, :test do
   # gem 'rspec_api_blueprint', require: false
-  gem 'mysql'
   gem 'faker'
   gem 'figaro'
   gem 'brakeman', github: 'presidentbeef/brakeman', require: false
