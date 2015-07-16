@@ -67,7 +67,14 @@
       },
       done: function (event, data) {
         // here you can perform an ajax call to get your uploads to display on the screen.
-        $('#your_uploads').load("https://smartcitizen.s3-eu-west-1.amazonaws.com/1234");
+
+        var img = $('<img />', {
+          id: 'my-avatar',
+          src: "https://images.smartcitizen.me/s200/" + $('#file_upload').find('input[name=key]').val(),
+          alt: 'My Avatar'
+        });
+        img.appendTo($('body'));
+
         console.log("DONE")
 
         // hide the loading spinner that we turned on earlier.
