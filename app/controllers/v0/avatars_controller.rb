@@ -1,2 +1,0 @@
-class AvatarsController < UploadsController
-end
