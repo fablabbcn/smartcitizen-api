@@ -60,7 +60,7 @@ class Kairos
       rollup: params[:rollup],
       function: params[:function],
       sample_size: j['sample_size'],
-      from: 6.months.ago,
+      from: 2.years.ago,
       to: Time.now.utc
     }
     readings = j['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, r[1]]}
