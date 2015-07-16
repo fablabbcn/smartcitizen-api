@@ -27,3 +27,4 @@
 *.rdb
 *.sql*
 /devices
+/doc/*.txt

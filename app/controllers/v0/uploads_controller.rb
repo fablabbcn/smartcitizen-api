@@ -6,12 +6,13 @@ class UploadsController < ApplicationController
     # create the document in rails, then send json back to our javascript to populate the form that will be
     # going to amazon.
     def create
+      @avatar = Avatar.create
       response.headers.except! 'X-Frame-Options'
       render :json => {
         :policy => s3_upload_policy_document,
         :signature => s3_upload_signature,
-        :key => '123',
-        :success_action_redirect => 'http://www.google.com'
+        :key => @avatar.id,
+        :success_action_redirect => uploads_url(@avatar.id)
       }
     end
 
@@ -22,7 +23,7 @@ class UploadsController < ApplicationController
       head :ok
     end
 
-    private
+private
 
     # generate the policy document that amazon is expecting.
     def s3_upload_policy_document
@@ -30,8 +31,8 @@ class UploadsController < ApplicationController
       ret = {"expiration" => 5.minutes.from_now.utc.xmlschema,
         "conditions" =>  [
           {"bucket" =>  ENV['s3_bucket']},
-          ["starts-with", "$key", '123'],
-          {"acl" => "private"},
+          ["starts-with", "$key", @avatar.id],
+          {"acl" => "public-read"},
           {"success_action_status" => "200"},
           ["content-length-range", 0, 1048576]
         ]

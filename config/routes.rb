@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     resources :sessions
 
     resources :uploads
+    resources :avatars
     resources :measurements
     # kits
     resources :kits, except: [:create, :destroy]

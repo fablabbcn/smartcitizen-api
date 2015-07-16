@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150702152315) do
+ActiveRecord::Schema.define(version: 20150716090911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -173,6 +173,16 @@ ActiveRecord::Schema.define(version: 20150702152315) do
 
   add_index "sensors", ["ancestry"], name: "index_sensors_on_ancestry", using: :btree
   add_index "sensors", ["measurement_id"], name: "index_sensors_on_measurement_id", using: :btree
+
+  create_table "uploads", force: :cascade do |t|
+    t.string   "type"
+    t.string   "original_filename"
+    t.jsonb    "metadata"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "uploads", ["type"], name: "index_uploads_on_type", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name"

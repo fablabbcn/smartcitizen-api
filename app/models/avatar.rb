@@ -1,0 +1,2 @@
+class Avatar < Upload
+end

@@ -10,7 +10,7 @@
 <form data-backend-action="https://new-api.smartcitizen.me/v0/uploads" id="file_upload" action="https://smartcitizen.s3-eu-west-1.amazonaws.com" method="post" enctype="multipart/form-data">
   <input name="key" type="hidden" />
   <input name="AWSAccessKeyId" type="hidden" value="AKIAJ753OQI6JPSDCPHA" />
-  <input name="acl" type="hidden" value="private" />
+  <input name="acl" type="hidden" value="public-read" />
   <input name="success_action_status" type="hidden" value="200" />
   <input name="policy" type="hidden" />
   <input name="signature" type="hidden" />
@@ -67,7 +67,7 @@
       },
       done: function (event, data) {
         // here you can perform an ajax call to get your uploads to display on the screen.
-        // $('#your_uploads').load("/documents?for_item=1234");
+        $('#your_uploads').load("https://smartcitizen.s3-eu-west-1.amazonaws.com/1234");
         console.log("DONE")
 
         // hide the loading spinner that we turned on earlier.
