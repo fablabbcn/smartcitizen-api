@@ -11,7 +11,7 @@ class UploadsController < ApplicationController
       render :json => {
         :policy => s3_upload_policy_document,
         :signature => s3_upload_signature,
-        :key => @avatar.id,
+        :key => "#{@avatar.id}.jpg",
         :success_action_redirect => uploads_url(@avatar.id)
       }
     end
@@ -31,7 +31,7 @@ private
       ret = {"expiration" => 5.minutes.from_now.utc.xmlschema,
         "conditions" =>  [
           {"bucket" =>  ENV['s3_bucket']},
-          ["starts-with", "$key", @avatar.id],
+          ["starts-with", "$key", "#{@avatar.id}.jpg"],
           {"acl" => "public-read"},
           {"success_action_status" => "200"},
           ["content-length-range", 0, 1048576]
