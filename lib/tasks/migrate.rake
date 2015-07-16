@@ -43,6 +43,9 @@ end
   }
 end
 
+class Usr < OldUser
+end
+
 class Fd < OldFeed
 
   def serialize
@@ -88,6 +91,28 @@ end
 namespace :migrate do
   desc "Imports old data"
 
+  task :users => :environment do
+    count = 0
+    Usr.order(id: :asc).each do |old_user|
+      user = User.where(id: old_user.id).first_or_initialize.tap do |user|
+        user.username = old_user.username
+        user.email = old_user.email
+        user.password = old_user.password
+        user.old_password = old_user.password
+      end
+
+      begin
+        user.save!
+        count+=1
+      rescue Exception => e
+        puts "#{user.id} >>>>>>> #{e.message}"
+      end
+
+      p count
+
+    end
+  end
+
   task :feeds => :environment do
     Dvice.order(id: :asc).each do |d|
       d.ingest
@@ -102,6 +127,7 @@ namespace :migrate do
   end
 
   task :devices => :environment do
+    count = 0
     OldDevice.all.each do |old_device|
       device = Device.where(id: old_device.id).first_or_initialize.tap do |device|
         device.name = old_device.title
@@ -114,10 +140,14 @@ namespace :migrate do
 
       begin
         device.save!
+        count+=1
+      rescue Exception => e
+        puts "#{device.id}>>>>>>> #{e.message} >> #{device.mac_address}"
       rescue ActiveRecord::RecordInvalid => e
-        puts "#{device.id}: #{e.message} >> #{device.mac_address}"
+        puts "#{device.id}>>>>>>> #{e.message} >> #{device.mac_address}"
         # failure_ids << device.id
       end
+      puts count
     end
 
     # sleep(0.2) # sleep for geocoding rate limits
