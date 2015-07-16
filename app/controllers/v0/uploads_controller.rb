@@ -11,7 +11,7 @@ class UploadsController < ApplicationController
       render :json => {
         :policy => s3_upload_policy_document,
         :signature => s3_upload_signature,
-        :key => @avatar.key
+        :key => @avatar.key,
         :success_action_redirect => uploads_url(@avatar.id)
       }
     end
