@@ -6,12 +6,12 @@ class UploadsController < ApplicationController
     # create the document in rails, then send json back to our javascript to populate the form that will be
     # going to amazon.
     def create
-      @avatar = Avatar.create
+      @avatar = Avatar.create(original_filename: params[:filename])
       response.headers.except! 'X-Frame-Options'
       render :json => {
         :policy => s3_upload_policy_document,
         :signature => s3_upload_signature,
-        :key => "#{@avatar.id}.jpg",
+        :key => @avatar.key
         :success_action_redirect => uploads_url(@avatar.id)
       }
     end
@@ -31,7 +31,7 @@ private
       ret = {"expiration" => 5.minutes.from_now.utc.xmlschema,
         "conditions" =>  [
           {"bucket" =>  ENV['s3_bucket']},
-          ["starts-with", "$key", @avatar.id],
+          ["starts-with", "$key", @avatar.key],
           {"acl" => "public-read"},
           {"success_action_status" => "200"},
           ["content-length-range", 0, 1048576]

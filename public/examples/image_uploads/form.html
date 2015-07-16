@@ -3,7 +3,14 @@
 <head>
 <meta charset="utf-8">
 <title>Example Uploader</title>
-<!-- <link rel="stylesheet" type="text/css" href="https://rawgit.com/blueimp/jQuery-File-Upload/master/css/jquery.fileupload.css"> -->
+<style type="text/css">
+  #progress .progress-bar {
+    background: red;
+    height: 10px;
+    display: block;
+    width: 0%;
+  }
+</style>
 </head>
 <body>
 
@@ -14,8 +21,8 @@
   <input name="success_action_status" type="hidden" value="200" />
   <input name="policy" type="hidden" />
   <input name="signature" type="hidden" />
-  <div class="fileupload-content">
-    <div class="fileupload-progress"></div>
+  <div id="progress" class="progress">
+      <div class="progress-bar progress-bar-success"></div>
   </div>
   <div class="file-upload">
     <label class="fileinput-button">
@@ -23,6 +30,7 @@
       <input name="file" type="file" />
     </label>
   </div>
+  <div id="loading"></div>
 </form>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -41,7 +49,7 @@
           url: $('#file_upload').data('backend-action'),
           type: $('#file_upload').prop('method'),
           dataType: 'json',
-          data: {doc: {title: data.files[0].name}},
+          data: {filename: data.files[0].name},
           async: false,
           success: function(retdata) {
             // after we created our upload in rails, it is going to send back JSON of they key,
@@ -64,6 +72,13 @@
       fail: function(e, data) {
         console.log('fail');
         console.log(data);
+      },
+      progress: function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $('#progress .progress-bar').css(
+          'width',
+          progress + '%'
+        );
       },
       done: function (event, data) {
         // here you can perform an ajax call to get your uploads to display on the screen.
