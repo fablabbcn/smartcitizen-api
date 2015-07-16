@@ -14,6 +14,7 @@ gem 'rails-api'
 gem 'pusher'
 gem 'pg'
 gem 'bcrypt', '~> 3.1.7'
+gem 'aws-sdk'
 
 gem 'rack-timeout'
 gem 'rack-attack' # API Rate Limiting

@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Example Uploader</title>
+<!-- <link rel="stylesheet" type="text/css" href="https://rawgit.com/blueimp/jQuery-File-Upload/master/css/jquery.fileupload.css"> -->
+</head>
+<body>
+
+<form data-backend-action="https://new-api.smartcitizen.me/v0/uploads" id="file_upload" action="https://smartcitizen.s3-eu-west-1.amazonaws.com" method="post" enctype="multipart/form-data">
+  <input name="key" type="hidden" />
+  <input name="AWSAccessKeyId" type="hidden" value="AKIAJ753OQI6JPSDCPHA" />
+  <input name="acl" type="hidden" value="private" />
+  <input name="success_action_status" type="hidden" value="200" />
+  <input name="policy" type="hidden" />
+  <input name="signature" type="hidden" />
+  <div class="fileupload-content">
+    <div class="fileupload-progress"></div>
+  </div>
+  <div class="file-upload">
+    <label class="fileinput-button">
+      <span>Upload Image</span>
+      <input name="file" type="file" />
+    </label>
+  </div>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://rawgit.com/blueimp/jQuery-File-Upload/master/js/vendor/jquery.ui.widget.js"></script>
+<script src="https://rawgit.com/blueimp/jQuery-File-Upload/master/js/jquery.iframe-transport.js"></script>
+<script src="https://rawgit.com/blueimp/jQuery-File-Upload/master/js/jquery.fileupload.js"></script>
+
+<script type="text/javascript">
+
+  $(function() {
+    $('#file_upload').fileupload({
+      forceIframeTransport: true,    // VERY IMPORTANT.  you will get 405 Method Not Allowed if you don't add this.
+      autoUpload: true,
+      add: function (event, data) {
+        $.ajax({
+          url: $('#file_upload').data('backend-action'),
+          type: $('#file_upload').prop('method'),
+          dataType: 'json',
+          data: {doc: {title: data.files[0].name}},
+          async: false,
+          success: function(retdata) {
+            // after we created our upload in rails, it is going to send back JSON of they key,
+            // policy, and signature.  We will put these into our form before it gets submitted to amazon.
+            $('#file_upload').find('input[name=key]').val(retdata.key);
+            $('#file_upload').find('input[name=policy]').val(retdata.policy);
+            $('#file_upload').find('input[name=signature]').val(retdata.signature);
+          }
+
+        });
+
+        data.submit();
+      },
+      send: function(e, data) {
+        // show a loading spinner because now the form will be submitted to amazon,
+        // and the file will be directly uploaded there, via an iframe in the background.
+        $('#loading').show();
+        console.log("SENDING")
+      },
+      fail: function(e, data) {
+        console.log('fail');
+        console.log(data);
+      },
+      done: function (event, data) {
+        // here you can perform an ajax call to get your uploads to display on the screen.
+        // $('#your_uploads').load("/documents?for_item=1234");
+        console.log("DONE")
+
+        // hide the loading spinner that we turned on earlier.
+        $('#loading').hide();
+      },
+    });
+  });
+
+</script>
+
+</body>
+</html>
