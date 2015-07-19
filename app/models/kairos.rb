@@ -23,6 +23,8 @@ class Kairos
 
   def self.query params
 
+    function = params[:function] || "avg"
+
     rollup_value = params[:rollup].to_i
     rollup_unit = Kairos.get_timespan( params[:rollup].gsub(rollup_value.to_s,'') )
 
@@ -37,7 +39,7 @@ class Kairos
           name: "d#{params[:device_id]}",
           aggregators: [
             {
-              name: params[:function],
+              name: function,
               align_sampling: true,
               sampling: {
                 value: rollup_value,#"1",
@@ -54,13 +56,22 @@ class Kairos
       device_id: params[:device_id].to_i,
       sensor_id: params[:sensor_id].to_i,
       rollup: params[:rollup],
-      function: params[:function]
+      function: function
     }
 
     if params[:from]
-      data['start_absolute'] = Time.parse(params[:from]).to_i * 1000
+      begin
+        data['start_absolute'] = Time.parse(params[:from]).to_i * 1000
+      rescue
+        data['start_absolute'] = Time.at(params[:from])
+      end
+
       if params[:to]
-        data['end_absolute'] = Time.parse(params[:to]).to_i * 1000
+        begin
+          data['end_absolute'] = Time.parse(params[:to]).to_i * 1000
+        rescue
+          data['end_absolute'] = Time.at(params[:to])
+        end
       else
         data['end_absolute'] = Time.now.to_i * 1000
       end

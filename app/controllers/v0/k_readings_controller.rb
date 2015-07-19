@@ -11,7 +11,7 @@ module V0
 
     def index
       missing_params = []
-      %w(rollup sensor_id function).each do |param|
+      %w(rollup sensor_id).each do |param|
         missing_params << param unless params[param]
       end
       if missing_params.any?
