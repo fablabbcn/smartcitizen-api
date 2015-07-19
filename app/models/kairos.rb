@@ -3,15 +3,8 @@ require 'uri'
 
 class Kairos
 
-  def self.create_from_api mac, data
-    # self.ingest(mac, data.except('timestamp'), extract_datetime(data['timestamp']))
-    Calibrator.new(self) if raw_data.present? and data.blank?
-  end
-
-  def self.query params
-
-    rollup_value = params[:rollup].to_i
-    rollup_unit = case params[:rollup].gsub(rollup_value.to_s,'')
+  def self.get_timespan q
+    return case q
       when "y" then "years"
       when "M" then "months"
       when "w" then "weeks"
@@ -21,6 +14,17 @@ class Kairos
       when "s" then "seconds"
       when "ms" then "milliseconds"
     end
+  end
+
+  def self.create_from_api mac, data
+    # self.ingest(mac, data.except('timestamp'), extract_datetime(data['timestamp']))
+    Calibrator.new(self) if raw_data.present? and data.blank?
+  end
+
+  def self.query params
+
+    rollup_value = params[:rollup].to_i
+    rollup_unit = Kairos.get_timespan( params[:rollup].gsub(rollup_value.to_s,'') )
 
     data = {
       metrics: [
@@ -43,15 +47,22 @@ class Kairos
           ]
         }
       ],
-      cache_time: 0,
-      start_relative: {
-        value: "6",
-        unit: "months"
-      }
+      cache_time: 0
+    }
+
+    if params[:relative]
+      timespan_value = params[:relative].to_i
+      timespan_unit = Kairos.get_timespan( params[:relative].gsub(timespan_value.to_s,'') )
+    else
+      timespan_value = 2
+      timespan_unit = 'months'
+    end
+    data['start_relative'] = {
+      value: timespan_value,
+      unit: timespan_unit
     }
 
     response = self.http_post_to("/datapoints/query", data)
-
     j = JSON.parse(response.body)['queries'][0]
 
     json = {
@@ -60,7 +71,7 @@ class Kairos
       rollup: params[:rollup],
       function: params[:function],
       sample_size: j['sample_size'],
-      from: 2.years.ago,
+      from: timespan_value.send(timespan_unit).ago,
       to: Time.now.utc
     }
     readings = j['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, r[1]]}
