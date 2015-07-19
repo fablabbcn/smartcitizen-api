@@ -13,7 +13,7 @@ module V0
           name: device.name,
           description: (device.description.present? ? device.description : nil),
           owner_id: device.owner_id,
-          owner_username: device.owner_username,
+          owner_username: device.owner_id ? device.owner_username : nil,
           latitude: device.latitude,
           longitude: device.longitude,
           city: device.city,
