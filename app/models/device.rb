@@ -113,9 +113,9 @@ class Device < ActiveRecord::Base
 
   def formatted_data
     s = {
-      recorded_at: updated_at - 1.minute,
-      added_at: updated_at - 1.second,
-      calibrated_at: updated_at,
+      recorded_at: updated_at,
+      added_at: updated_at,
+      # calibrated_at: updated_at,
       firmware: "[IGNORE]",
       location: {
         ip: nil,

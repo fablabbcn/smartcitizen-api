@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     # devices
     resources :devices do
       resources :pg_readings, only: :index, on: :member
-      resources :k_readings, only: :index, on: :member
+      resources :readings, only: :index, on: :member
       get 'world_map', on: :collection
     end
     # readings
