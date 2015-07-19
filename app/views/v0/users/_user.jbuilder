@@ -26,8 +26,8 @@ json.devices user.devices do |device|
   else
     json.mac_address '[FILTERED]'
   end
-  json.name device.name
-  json.description device.description
+  json.name device.name.present? ? device.name : nil
+  json.description device.description.present? ? device.description : nil
   json.latitude device.latitude
   json.longitude device.longitude
   json.kit_id device.kit_id

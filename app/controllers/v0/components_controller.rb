@@ -3,7 +3,7 @@ module V0
 
     def index
       @components = Component.all
-      paginate json: @components
+      @components = paginate(@components)
     end
 
   end
