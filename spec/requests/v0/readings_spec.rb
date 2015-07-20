@@ -23,12 +23,12 @@ describe V0::ReadingsController do
 
   describe "has legacy push support" do
 
-    `curl –silent -v -X PUT -H 'Host: data.smartcitizen.me' \
+    `curl –silent -v -X PUT -H 'Host: sc.dev' \
     -H 'User-Agent: SmartCitizen' \
     -H 'X-SmartCitizenMacADDR: 00:00:00:00:00:00' \
     -H 'X-SmartCitizenVersion: 1.1-0.8.5-A' \
     -H 'X-SmartCitizenData: [{"temp":"29090.6","hum":"6815.74","light":"30000","bat":"786","panel":"0","co":"112500","no2":"200000","noise":"2","nets":"10","timestamp":"2013-10-28 1:34:26"}]' \
-    data.smartcitizen.me/add >/dev/null 2>/dev/null`
+    sc.dev/add >/dev/null 2>/dev/null`
 
     # reading = Reading.first
     # expect(reading.temp).to eq(29090.6)

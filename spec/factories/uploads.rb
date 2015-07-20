@@ -1,8 +1,7 @@
 FactoryGirl.define do
   factory :upload do
-    type ""
-original_filename "MyString"
-metadata ""
+    type "Avatar"
+    original_filename "testing.jpg"
   end
 
 end

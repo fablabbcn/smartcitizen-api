@@ -1,5 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Upload, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "has key" do
+    Timecop.freeze do
+      upload = create(:upload, original_filename: 'test.jpg')
+      expect(upload.key).to eq("#{Time.now.to_i}-test.jpg")
+    end
+  end
 end
