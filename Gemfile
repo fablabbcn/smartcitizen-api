@@ -87,11 +87,9 @@ group :development, :test do
   gem 'shoulda-matchers', require: false
   gem 'guard-rspec'
   gem 'railroady'
-end
-
-group :staging, :development, :test do
   gem 'mysql'
 end
+
 
 # gem 'byebug'
 # gem 'web-console', '~> 2.0'
