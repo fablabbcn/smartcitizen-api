@@ -1,7 +1,6 @@
 ruby '2.2.2'
 source 'https://rubygems.org'
 
-gem 'mysql'
 gem 'jbuilder'
 gem 'responders'
 gem 'newrelic_rpm'
@@ -88,6 +87,10 @@ group :development, :test do
   gem 'shoulda-matchers', require: false
   gem 'guard-rspec'
   gem 'railroady'
+end
+
+group :staging, :development, :test do
+  gem 'mysql'
 end
 
 # gem 'byebug'
