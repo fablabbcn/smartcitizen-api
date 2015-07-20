@@ -17,7 +17,6 @@ module V0
         # @reading = Kairos.delay.create_from_api(mac, data)
 
         ENV['redis'] ? Calibrator.delay.new(mac, data) : Calibrator.new(mac, data)
-
       rescue Exception => e
         Rails.logger.info e
       end

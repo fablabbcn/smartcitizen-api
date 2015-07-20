@@ -11,4 +11,4 @@ json.(kit,
 #   json.updated_at kit.updated_at.utc.iso8601
 # end
 
-json.sensors kit.sensors
+json.sensors kit.sensors, partial: 'sensors/sensor', as: :sensor

@@ -4,12 +4,12 @@ module V0
     # before_action :check_if_authorized!, only: :update
 
     def index
-      @kits = Kit.all
+      @kits = Kit.includes(:sensors)
       @kits = paginate(@kits)
     end
 
     def show
-      @kit = Kit.friendly.find(params[:id])
+      @kit = Kit.includes(:sensors).friendly.find(params[:id])
       authorize @kit
       @kit
     end
