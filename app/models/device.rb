@@ -63,7 +63,7 @@ class Device < ActiveRecord::Base
   # end
 
   def system_tags
-    [exposure, ('new' if created_at < 1.week.ago) ].compact
+    [exposure, ('new' if created_at > 1.week.ago) ].compact
   end
 
   def to_s
