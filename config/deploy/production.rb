@@ -1,6 +1,6 @@
 set :stage, :production
 set :branch, "master"
-set :server_name, "new-api2.smartcitizen.me"
+set :server_name, "api-staging.smartcitizen.me"
 
 set :rails_env, :production
 set :unicorn_worker_count, 5
