@@ -2,10 +2,14 @@ json.(@user,
   :id,
   :username,
   :city,
-  :country
+  :country,
+  :email
 )
 
+json.merge! website: nil
 json.merge! created: @user.created_at
+
+json.devices @user.devices, partial: 'v001/devices/device', as: :device
 
 # "me": {
 #   "id": "5",
