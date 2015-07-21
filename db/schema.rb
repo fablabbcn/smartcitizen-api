@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150716090911) do
+ActiveRecord::Schema.define(version: 20150721114116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,7 +202,10 @@ ActiveRecord::Schema.define(version: 20150716090911) do
     t.string   "avatar"
     t.integer  "role_mask",            default: 0,                    null: false
     t.uuid     "uuid",                 default: "uuid_generate_v4()"
+    t.string   "legacy_api_key",                                      null: false
   end
+
+  add_index "users", ["legacy_api_key"], name: "index_users_on_legacy_api_key", unique: true, using: :btree
 
   add_foreign_key "api_tokens", "users", column: "owner_id"
   add_foreign_key "components", "sensors"

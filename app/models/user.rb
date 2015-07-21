@@ -21,6 +21,8 @@ class User < ActiveRecord::Base
   has_many :sensors, through: :devices
   has_many :api_tokens, foreign_key: 'owner_id'
 
+  before_create :generate_legacy_api_key
+
   def access_token
     Doorkeeper::AccessToken.find_or_initialize_by(
           application_id: 4, resource_owner_id: id)
@@ -101,6 +103,12 @@ private
     begin
       self[column] = SecureRandom.urlsafe_base64
     end while User.exists?(column => self[column])
+  end
+
+  def generate_legacy_api_key
+    begin
+      self.legacy_api_key = Digest::SHA1.hexdigest(SecureRandom.uuid)
+    end while User.exists?(legacy_api_key: self.legacy_api_key)
   end
 
   # meta

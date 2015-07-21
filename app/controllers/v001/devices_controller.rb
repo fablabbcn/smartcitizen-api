@@ -5,5 +5,9 @@ module V001
       @devices = Device.limit(10)
     end
 
+    def show
+      @devices = current_user.devices
+    end
+
   end
 end

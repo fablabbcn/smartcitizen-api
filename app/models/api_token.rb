@@ -1,4 +1,5 @@
 class ApiToken < ActiveRecord::Base
+
   belongs_to :owner, class_name: 'User'
   validates_presence_of :owner
   validates_uniqueness_of :token

@@ -5,9 +5,13 @@ module V001
 
 private
 
+    def current_user
+      @current_user = User.find_by(legacy_api_key: params[:api_key])
+    end
+    helper_method :current_user
+
     def check_api_key
-      begin User.find(params[:api_key])
-      rescue ActiveRecord::RecordNotFound
+      unless current_user
         render json: {error: "invalid API KEY"}, status: :unauthorized
       end
     end
