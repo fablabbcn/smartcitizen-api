@@ -62,6 +62,10 @@ class Device < ActiveRecord::Base
   #   self.name ||= "My SCK"
   # end
 
+  def system_tags
+    [exposure, ('new' if created_at < 1.week.ago) ].compact
+  end
+
   def to_s
     name
   end

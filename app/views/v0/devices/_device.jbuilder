@@ -5,6 +5,7 @@ json.(device,
   :description,
   :status,
   :state,
+  :system_tags,
   :last_reading_at,
   :added_at,
   :updated_at
