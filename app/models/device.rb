@@ -63,7 +63,11 @@ class Device < ActiveRecord::Base
   # end
 
   def system_tags
-    [exposure, ('new' if created_at > 1.week.ago) ].compact
+    [
+      exposure, # indoor / outdoor
+      ('new' if created_at > 1.week.ago), # new
+      ((last_recorded_at > 10.minutes.ago ? 'online' : 'offline') if last_recorded_at) # state
+    ].compact.sort
   end
 
   def to_s
@@ -107,7 +111,7 @@ class Device < ActiveRecord::Base
 
   def state
     if last_recorded_at.present?
-      last_recorded_at > 10.minutes.ago ? 'online' : 'offline'
+      'has_published'
     elsif mac_address.present?
       'never_published'
     else
