@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
 
+  api_version(module: "V001", path: {value: "v0.0.1"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0.0.1"}, defaults: { format: :json }) do
+    get ':api_key/devices', to: 'devices#index'
+    get ':api_key/lastpost', to: 'devices#show'
+    get ':api_key/post', to: 'readings#show'
+    get ':api_key/me', to: 'users#show'
+    root to: 'devices#index'
+  end
+
   api_version(module: "V0", path: {value: "v0"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0"}, default: true, defaults: { format: :json }) do
     # devices
     resources :devices do
