@@ -2,10 +2,12 @@ module V001
   class DevicesController < ApplicationController
 
     def index
-      @devices = Device.limit(10)
+      # all devices
+      @devices = Device.limit(params[:limit])
     end
 
-    def show
+    def current_user_index
+      # devices for a user
       @devices = current_user.devices
     end
 

@@ -4,6 +4,7 @@ json.(device,
   :name,
   :description,
   :status,
+  :state,
   :last_reading_at,
   :added_at,
   :updated_at

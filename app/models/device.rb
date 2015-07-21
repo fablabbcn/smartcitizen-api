@@ -98,10 +98,16 @@ class Device < ActiveRecord::Base
   # end
 
   def status
+    last_recorded_at.present? ? state : 'new'
+  end
+
+  def state
     if last_recorded_at.present?
       last_recorded_at > 10.minutes.ago ? 'online' : 'offline'
+    elsif mac_address.present?
+      'never_published'
     else
-      'new'
+      'not_configured'
     end
   end
 
