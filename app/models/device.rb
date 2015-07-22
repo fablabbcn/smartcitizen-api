@@ -66,7 +66,7 @@ class Device < ActiveRecord::Base
     [
       exposure, # indoor / outdoor
       ('new' if created_at > 1.week.ago), # new
-      ((last_recorded_at > 10.minutes.ago ? 'online' : 'offline') if last_recorded_at) # state
+      ((last_recorded_at > 10.minutes.ago ? 'online' : 'offline') if data) # state
     ].compact.sort
   end
 
@@ -106,11 +106,11 @@ class Device < ActiveRecord::Base
   # end
 
   def status
-    last_recorded_at.present? ? state : 'new'
+    data.present? ? state : 'new'
   end
 
   def state
-    if last_recorded_at.present?
+    if data.present?
       'has_published'
     elsif mac_address.present?
       'never_published'
