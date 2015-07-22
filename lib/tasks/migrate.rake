@@ -102,21 +102,23 @@ if Gem::Specification::find_all_by_name('mysql').any?
       count = 0
       Usr.order(id: :asc).each do |old_user|
         user = User.where(id: old_user.id).first_or_initialize.tap do |user|
-          user.username = old_user.username
-          user.email = old_user.email
-          user.password = old_user.password
-          user.old_password = old_user.password
+          user.old_data = old_user.to_json
         end
+        user.save
+        #   user.username = old_user.username
+        #   user.email = old_user.email
+        #   user.password = old_user.password
+        #   user.old_password = old_user.password
+        # end
 
-        begin
-          user.save!
-          count+=1
-        rescue Exception => e
-          puts "#{user.id} >>>>>>> #{e.message}"
-        end
+        # begin
+        #   user.save!
+        #   count+=1
+        # rescue Exception => e
+        #   puts "#{user.id} >>>>>>> #{e.message}"
+        # end
 
-        p count
-
+        # p count
       end
     end
 
