@@ -11,8 +11,8 @@ set :enable_ssl, false
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server 'lin2.server.smartcitizen.me', user: 'deployer', roles: %w{app web}
-server 'kairos.server.smartcitizen.me', user: 'deployer', roles: %w{db}
+server 'lin2.server.smartcitizen.me', user: 'deployer', roles: %w{app db web}
+# server 'kairos.server.smartcitizen.me', user: 'deployer', roles: %w{db}
 
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
