@@ -34,7 +34,7 @@ end
 
 if device.owner
   json.owner(
-    device.owner, :uuid, :id, :username, :first_name, :last_name, :avatar, :url, :joined_at, :location, :device_ids
+    device.owner, :uuid, :id, :username, :avatar, :url, :joined_at, :location, :device_ids
   )
 end
 

@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 if Gem::Specification::find_all_by_name('mysql').any?
 
   require 'active_record'
@@ -34,7 +36,7 @@ if Gem::Specification::find_all_by_name('mysql').any?
     )
   end
 
-  %w(User Device Feed).each do |model|
+  %w(User Device Feed Media).each do |model|
     eval %{
       class New#{model} < PostgreSQL
         self.table_name = '#{model.underscore}s'
@@ -98,27 +100,51 @@ if Gem::Specification::find_all_by_name('mysql').any?
       end
     end
 
+    task :avatars => :environment do
+      User.order(id: :asc).each do |user|
+        if OldMedia.where(ref: 'User', ref_id: user.id).exists?
+          avatar = OldMedia.where(ref: 'User', ref_id: user.id).last
+          if avatar.file.present?
+            user.update_attribute(:avatar, avatar.file.split('/').last)
+          end
+        end
+      end
+    end
+
     task :users => :environment do
-      count = 0
       Usr.order(id: :asc).each do |old_user|
         user = User.where(id: old_user.id).first_or_initialize.tap do |user|
           user.old_data = old_user.to_json
+          user.username = old_user.username.present? ? old_user.username.try(:force_encoding,'UTF-8').try(:strip) : nil
+          user.city = old_user.city.present? ? old_user.city.try(:force_encoding,'UTF-8').try(:titleize).try(:strip) : nil
+
+
+          if old_user.country.present? && old_user.country.downcase.match(/catalunya|catalonia/)
+            user.country_code = 'ES'
+          else
+            user.country_code = Country.find_country_by_name(old_user.country.try(:strip).try(:force_encoding,'UTF-8')).try(:alpha2)
+          end
+
+          if old_user.website.try(:strip) =~ URI::DEFAULT_PARSER.regexp[:ABS_URI]
+            user.url = old_user.website.try(:strip).try(:force_encoding,'UTF-8')
+          else
+            user.url = nil
+          end
+
+          user.email = old_user.email.present? ? old_user.email.try(:force_encoding,'UTF-8').try(:downcase).try(:strip) : nil
+          user.created_at = old_user.created
+          user.updated_at = old_user.modified
+
+          if old_user.api_key && !User.where(legacy_api_key: old_user.api_key).exists?
+            user.legacy_api_key = old_user.api_key
+          end
+
         end
-        user.save
-        #   user.username = old_user.username
-        #   user.email = old_user.email
-        #   user.password = old_user.password
-        #   user.old_password = old_user.password
-        # end
-
-        # begin
-        #   user.save!
-        #   count+=1
-        # rescue Exception => e
-        #   puts "#{user.id} >>>>>>> #{e.message}"
-        # end
-
-        # p count
+        begin
+          user.save! validate: false
+        rescue ActiveRecord::RecordInvalid => e
+          puts [user.id, e.message].join(' >> ')
+        end
       end
     end
 

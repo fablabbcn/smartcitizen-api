@@ -15,8 +15,8 @@ describe V0::StaticController do
     end
 
     it "can search by user's first_name" do
-      marge = create(:user, first_name: 'marge')
-      bart = create(:user, first_name: 'bart')
+      marge = create(:user, username: 'marge')
+      bart = create(:user, username: 'bart')
 
       api_get "/search?q=bart"
 

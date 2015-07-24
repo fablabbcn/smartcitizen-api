@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
 
   include PgSearch
-  multisearchable :against => [:first_name, :last_name, :username, :city]
+  multisearchable :against => [:username, :city]
 
   extend FriendlyId
   friendly_id :username
@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
 
   validates :username, length: { in: 3..30 }, allow_nil: true
 
-  validates :url, :avatar, format: URI::regexp(%w(http https)), allow_nil: true, allow_blank: true
+  validates :url, :avatar_url, format: URI::regexp(%w(http https)), allow_nil: true, allow_blank: true
 
   has_many :devices, foreign_key: 'owner_id'
   has_many :sensors, through: :devices
@@ -26,6 +26,14 @@ class User < ActiveRecord::Base
   def access_token
     Doorkeeper::AccessToken.find_or_initialize_by(
           application_id: 4, resource_owner_id: id)
+  end
+
+  def avatar=_avatar
+    self.avatar_url = _avatar
+  end
+
+  def avatar
+    "http://images.smartcitizen.me/s100/avatars/#{avatar_url}" if avatar_url
   end
 
   def access_token!
@@ -46,16 +54,12 @@ class User < ActiveRecord::Base
     country ? country.to_s : nil
   end
 
-  def name
-    [first_name, last_name].reject(&:blank?).join(' ')
-  end
-
   def to_s
-    name
+    username
   end
 
   def to_email_s
-    "#{name} <#{email}>"
+    "#{username} <#{email}>"
   end
 
   def role
@@ -72,7 +76,7 @@ class User < ActiveRecord::Base
     begin
       return authenticate(raw_password)
     rescue BCrypt::Errors::InvalidHash
-      if old_password == Digest::SHA1.hexdigest([ENV['old_salt'], raw_password].join)
+      if old_data && old_data['password'] == Digest::SHA1.hexdigest([ENV['old_salt'], raw_password].join)
         self.password = raw_password
         save(validate: false)
         return self

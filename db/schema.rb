@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150722141027) do
+ActiveRecord::Schema.define(version: 20150723151339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -185,28 +185,21 @@ ActiveRecord::Schema.define(version: 20150722141027) do
   add_index "uploads", ["type"], name: "index_uploads_on_type", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "first_name"
-    t.string   "last_name"
     t.string   "username"
     t.string   "email"
     t.string   "password_digest"
     t.datetime "created_at",                                          null: false
     t.datetime "updated_at",                                          null: false
     t.string   "password_reset_token"
-    t.string   "old_password"
-    t.string   "role"
-    t.hstore   "meta"
     t.string   "city"
     t.string   "country_code"
     t.string   "url"
-    t.string   "avatar"
+    t.string   "avatar_url"
     t.integer  "role_mask",            default: 0,                    null: false
     t.uuid     "uuid",                 default: "uuid_generate_v4()"
-    t.string   "legacy_api_key",                                      null: false
     t.jsonb    "old_data"
+    t.string   "legacy_api_key"
   end
-
-  add_index "users", ["legacy_api_key"], name: "index_users_on_legacy_api_key", unique: true, using: :btree
 
   add_foreign_key "api_tokens", "users", column: "owner_id"
   add_foreign_key "components", "sensors"

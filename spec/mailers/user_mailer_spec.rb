@@ -11,7 +11,7 @@ describe UserMailer do
       expect(mail.to).to eq([user.email])
       expect(mail.from).to eq(["notifications@mailbot.smartcitizen.me"])
       expect(mail.reply_to).to eq(["team@smartcitizen.me"])
-      expect(mail.body.encoded).to match("Welcome #{user.first_name}")
+      expect(mail.body.encoded).to match("Welcome #{user.username}")
     end
   end
 

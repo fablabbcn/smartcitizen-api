@@ -74,8 +74,6 @@ describe V0::UsersController do
 
     it "creates a user and sends welcome email" do
       r = api_post 'users', {
-        first_name: 'Homer',
-        last_name: 'Simpson',
         username: 'homer',
         email: 'homer@springfieldnuclear.com',
         password: 'donuts'
@@ -87,7 +85,7 @@ describe V0::UsersController do
 
     it "does not create a user with missing parameters" do
       api_post 'users', {
-        first_name: 'Homer'
+        username: 'Homer'
       }
       expect(response.status).to eq(422)
     end
@@ -96,31 +94,31 @@ describe V0::UsersController do
 
   describe "PUT /users/<username>|<id>" do
 
-    let(:user) { create(:user, first_name: 'Lisa') }
+    let(:user) { create(:user, username: 'lisasimpson') }
 
     it "updates user" do
-      api_put "users/#{[user.username,user.id].sample}", { first_name: 'Bart', access_token: token.token }
+      api_put "users/#{[user.username,user.id].sample}", { username: 'bart', access_token: token.token }
       expect(response.status).to eq(200)
     end
 
     it "does not update a user with invalid access_token" do
-      api_put "users/#{[user.username,user.id].sample}", { first_name: 'Bart', access_token: '123' }
+      api_put "users/#{[user.username,user.id].sample}", { username: 'bart', access_token: '123' }
       expect(response.status).to eq(401)
     end
 
     it "does not update another user" do
-      api_put "users/#{[other_user.username,other_user.id].sample}", { first_name: 'Bart', access_token: token.token }
+      api_put "users/#{[other_user.username,other_user.id].sample}", { username: 'Bart', access_token: token.token }
       expect(response.status).to eq(403)
     end
 
     it "updates another user if admin" do
       user.update_attribute(:role_mask, 5)
-      api_put "users/#{[other_user.username,other_user.id].sample}", { first_name: 'Bart', access_token: token.token }
+      api_put "users/#{[other_user.username,other_user.id].sample}", { username: 'Bart', access_token: token.token }
       expect(response.status).to eq(200)
     end
 
     it "does not update a user with missing access_token" do
-      api_put "users/#{[user.username,user.id].sample}", { first_name: 'Bart', access_token: nil }
+      api_put "users/#{[user.username,user.id].sample}", { username: 'Bart', access_token: nil }
       expect(response.status).to eq(401)
     end
 

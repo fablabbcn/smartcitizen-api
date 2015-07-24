@@ -16,7 +16,7 @@ RSpec.describe User, :type => :model do
   it { is_expected.to have_many(:devices) }
 
   let(:user) { create(:user) }
-  let(:homer) { build_stubbed(:user, first_name: "Homer", last_name: 'Simpson', email: 'homer@springfieldnuclear.com') }
+  let(:homer) { build_stubbed(:user, username: 'homersimpson', email: 'homer@springfieldnuclear.com') }
 
   it "has an avatar"
 
@@ -52,13 +52,13 @@ RSpec.describe User, :type => :model do
     expect(user.api_token).to eq(new_token)
   end
 
-  it "has name and to_s" do
+  skip "has name and to_s" do
     expect(homer.name).to eq('Homer Simpson')
     expect(homer.to_s).to eq('Homer Simpson')
   end
 
   it "has to_email_s" do
-    expect(homer.to_email_s).to eq("Homer Simpson <homer@springfieldnuclear.com>")
+    expect(homer.to_email_s).to eq("homersimpson <homer@springfieldnuclear.com>")
   end
 
   it "can send_password_reset" do
@@ -84,7 +84,7 @@ RSpec.describe User, :type => :model do
     end
 
     describe "legacy users" do
-      let(:legacy_user) { create(:user, old_password: Digest::SHA1.hexdigest('123pass'))}
+      let(:legacy_user) { create(:user, old_data: { password: Digest::SHA1.hexdigest('123pass') })}
       before(:each) do
         set_env_var('old_salt', '123')
         legacy_user.update_attribute(:password_digest, nil)

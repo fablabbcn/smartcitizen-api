@@ -124,8 +124,6 @@ namespace :import do
       user = User.find_or_initialize_by(id: line['id']) do |user|
         user.username = line['username'].try(:chomp)
         user.email = line['email'].try(:chomp).try(:downcase)
-        user.old_password = line['password']
-
         user.role = line['role'].try(:chomp)
         user.website = line['website'].try(:chomp)
         user.media_id = line['media_id']

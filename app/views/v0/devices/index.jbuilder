@@ -11,5 +11,5 @@ json.array! @devices, partial: 'device', as: :device
 
 #   json.kit_id device.kit_id
 
-#   json.owner device.owner, :id, :username, :first_name, :last_name, :avatar, :url, :joined_at, :location, :device_ids
+#   json.owner device.owner, :id, :username, :avatar, :url, :joined_at, :location, :device_ids
 # end

@@ -15,7 +15,7 @@ class Device < ActiveRecord::Base
 
   delegate :username, :to => :owner, :prefix => true
   include PgSearch
-  multisearchable :against => [:name, :owner_username, :description, :city]#, associated_against: { owner: { first_name, :username }
+  multisearchable :against => [:name, :owner_username, :description, :city]#, associated_against: { owner: { :username }
 
   has_many :pg_readings
 
