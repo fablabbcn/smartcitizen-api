@@ -29,11 +29,11 @@ class User < ActiveRecord::Base
   end
 
   def avatar=_avatar
-    self.avatar_url = _avatar
+    self.avatar_url = "http://images.smartcitizen.me/s100/avatars/#{_avatar}"
   end
 
   def avatar
-    "http://images.smartcitizen.me/s100/avatars/#{avatar_url}" if avatar_url
+    avatar_url
   end
 
   def access_token!
