@@ -68,7 +68,6 @@ end
 
 group :development do
   gem 'quiet_assets'
-  gem 'railroady'
   gem 'spring-commands-rspec'
   gem 'letter_opener'
   gem 'spring'
@@ -87,6 +86,9 @@ group :development, :test do
   gem 'shoulda-matchers', require: false
   gem 'guard-rspec'
   gem 'railroady'
+end
+
+group :development, :test, :linode do
   gem 'mysql'
 end
 
