@@ -37,15 +37,16 @@ Rails.application.routes.draw do
       end
     # home
     get 'search' => 'static#search'
+
+    # use_doorkeeper
     root to: 'static#home'
   end
 
-  # use_doorkeeper
+  # get '*path', :to => redirect("/v0/%{path}")
+  # root to: redirect('/v0')
+
   get "/404" => "errors#not_found"
   get "/500" => "errors#exception"
   match "*path", to: "errors#not_found", via: :all
-
-  # get '*path', :to => redirect("/v0/%{path}")
-  # root to: redirect('/v0')
 
 end
