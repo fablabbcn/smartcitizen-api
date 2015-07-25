@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :component do
-    association :board
+    association :board, factory: :kit
     association :sensor
   end
 

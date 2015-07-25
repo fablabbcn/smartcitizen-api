@@ -6,12 +6,16 @@ describe V0::DevicesController do
   let(:user) { create :user }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
   let(:device) { create(:device) }
+
   describe "GET /devices" do
+
     it "returns all the devices" do
       first = create(:device)
       second = create(:device)
-      api_get 'devices'
+      json = api_get 'devices'
       expect(response.status).to eq(200)
+      expect(json[0]['name']).to eq(first.name)
+      expect(json[1]['name']).to eq(second.name)
     end
 
     describe "world map" do
