@@ -14,6 +14,7 @@ class Device < ActiveRecord::Base
   validates_format_of :mac_address, with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/#, on: :create, allow_blank: true
 
   delegate :username, :to => :owner, :prefix => true
+
   include PgSearch
   multisearchable :against => [:name, :owner_username, :description, :city]#, associated_against: { owner: { :username }
 
@@ -32,6 +33,8 @@ class Device < ActiveRecord::Base
     end
   end
   # after_validation :reverse_geocode
+
+  after_initialize :set_default_name
 
   # these get overridden the device is a kit
   has_many :components, as: :board
@@ -55,12 +58,6 @@ class Device < ActiveRecord::Base
     :smart_cal,
     :debug_push,
     :enclosure_type
-
-  # # after_initialize :init
-
-  # def init
-  #   self.name ||= "My SCK"
-  # end
 
   def system_tags
     [
@@ -96,15 +93,6 @@ class Device < ActiveRecord::Base
     kit ? kit.sensors : super
   end
 
-  # def readings
-  #   Reading.where(device_id: id)
-  # end
-
-  # def all_readings
-  #   months = (created_at.to_date..updated_at.to_date).map{|d| "#{d.year}#{'%02i' % d.month.to_i}" }.uniq
-  #   return readings.where(recorded_month: months)#.limit(100)
-  # end
-
   def status
     data.present? ? state : 'new'
   end
@@ -118,12 +106,6 @@ class Device < ActiveRecord::Base
       'not_configured'
     end
   end
-
-  # def add_reading options = {}
-  #   recorded_at = Time.parse(options[:recorded_at])
-  #   Reading.add(id, recorded_at, options[:values])
-  #   update_attributes(latest_data: options[:values], last_recorded_at: recorded_at)
-  # end
 
   def formatted_data
     s = {
@@ -167,6 +149,10 @@ private
     if latitude.is_a?(Float) and longitude.is_a?(Float)
       self.geohash = GeoHash.encode(latitude, longitude)
     end
+  end
+
+  def set_default_name
+    self.name ||= "My SCK"
   end
 
 end

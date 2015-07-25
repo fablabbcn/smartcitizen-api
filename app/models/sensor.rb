@@ -11,16 +11,3 @@ class Sensor < ActiveRecord::Base
   validates_presence_of :name, :description#, :unit
 
 end
-
-
-# tags -
-
-# light
-# temperature
-# humidity
-# no2
-# co
-# battery
-# power
-# noise
-# lat,lng

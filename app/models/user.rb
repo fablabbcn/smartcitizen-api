@@ -21,11 +21,10 @@ class User < ActiveRecord::Base
   has_many :sensors, through: :devices
   has_many :api_tokens, foreign_key: 'owner_id'
 
-  before_create :generate_legacy_api_key
+  before_create { generate_token(:legacy_api_key, Digest::SHA1.hexdigest(SecureRandom.uuid) ) }
 
   def access_token
-    Doorkeeper::AccessToken.find_or_initialize_by(
-          application_id: 4, resource_owner_id: id)
+    Doorkeeper::AccessToken.find_or_initialize_by(application_id: 4, resource_owner_id: id)
   end
 
   def avatar=_avatar
@@ -62,10 +61,6 @@ class User < ActiveRecord::Base
     "#{username} <#{email}>"
   end
 
-  def role
-    role_mask < 5 ? 'citizen' : 'admin'
-  end
-
   def send_password_reset
     generate_token(:password_reset_token)
     save!
@@ -89,6 +84,10 @@ class User < ActiveRecord::Base
     role == 'admin'
   end
 
+  def role
+    role_mask < 5 ? 'citizen' : 'admin'
+  end
+
   def country
     Country[country_code] if country_code
   end
@@ -103,29 +102,10 @@ class User < ActiveRecord::Base
 
 private
 
-  def generate_token(column)
+  def generate_token(column, token=SecureRandom.urlsafe_base64)
     begin
-      self[column] = SecureRandom.urlsafe_base64
+      self[column] = token
     end while User.exists?(column => self[column])
   end
-
-  def generate_legacy_api_key
-    begin
-      self.legacy_api_key = Digest::SHA1.hexdigest(SecureRandom.uuid)
-    end while User.exists?(legacy_api_key: self.legacy_api_key)
-  end
-
-  # meta
-  #   city
-  #   country
-  #   website
-  #   timezone
-
-  # city
-  # country
-  # website
-  # timezone
-  # media_id
-  # app
 
 end
