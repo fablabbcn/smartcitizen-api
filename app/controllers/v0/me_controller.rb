@@ -1,9 +1,7 @@
 module V0
   class MeController < ApplicationController
 
-    # skip_after_action :verify_authorized
     before_action :check_if_authorized!
-    # before_action :doorkeeper_authorize!
 
     def index
       @user = current_user
@@ -14,7 +12,6 @@ module V0
       @user = current_user
       authorize @user
       if @user.update_attributes(user_params)
-        # head :no_content, status: :ok
         render 'users/show', status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @user.errors
@@ -31,7 +28,7 @@ private
         :city,
         :country_code,
         :url,
-        :avatar
+        :avatar # avatar_url?
       )
     end
 

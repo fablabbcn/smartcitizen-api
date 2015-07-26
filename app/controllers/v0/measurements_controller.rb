@@ -1,16 +1,14 @@
 module V0
   class MeasurementsController < ApplicationController
 
-    # before_action :check_if_authorized!, only: [:create, :update]
+    def show
+      @measurement = Measurement.find(params[:id])
+      authorize @measurement
+    end
 
     def index
       @measurements = Measurement.all
       @measurements = paginate @measurements
-    end
-
-    def show
-      @measurement = Measurement.find(params[:id])
-      authorize @measurement
     end
 
     def create

@@ -1,17 +1,15 @@
 module V0
   class KitsController < ApplicationController
 
-    # before_action :check_if_authorized!, only: :update
-
-    def index
-      @kits = Kit.includes(:sensors)
-      @kits = paginate(@kits)
-    end
-
     def show
       @kit = Kit.includes(:sensors).friendly.find(params[:id])
       authorize @kit
       @kit
+    end
+
+    def index
+      @kits = Kit.includes(:sensors)
+      @kits = paginate(@kits)
     end
 
     def update

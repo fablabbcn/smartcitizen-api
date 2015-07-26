@@ -6,8 +6,8 @@ describe V0::ComponentsController do
 
   describe "GET /" do
     it "returns a list of components" do
-      create(:component)
-      create(:component)
+      2.times { create(:component) }
+
       json = api_get 'components'
       expect(response.status).to eq(200)
       expect(json.length).to eq(2)

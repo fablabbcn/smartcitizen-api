@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       get 'world_map', on: :collection
     end
     # readings
-    match "add" => "readings#add", via: [:get, :post, :patch, :put]
+    match "add" => "readings#create", via: [:get, :post, :patch, :put]
     # sensors
     resources :sensors, except: [:destroy]
     # components

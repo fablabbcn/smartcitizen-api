@@ -23,6 +23,11 @@ class User < ActiveRecord::Base
 
   before_create { generate_token(:legacy_api_key, Digest::SHA1.hexdigest(SecureRandom.uuid) ) }
 
+
+  def to_s
+    username
+  end
+
   def access_token
     Doorkeeper::AccessToken.find_or_initialize_by(application_id: 4, resource_owner_id: id)
   end
@@ -51,10 +56,6 @@ class User < ActiveRecord::Base
 
   def country_name
     country ? country.to_s : nil
-  end
-
-  def to_s
-    username
   end
 
   def to_email_s

@@ -3,16 +3,16 @@ module V0
 
     before_action :check_if_authorized!, only: :update
 
+    def show
+      @user = User.includes(:sensors).friendly.find(params[:id])
+      authorize @user
+    end
+
     def index
       @q = User.includes(:devices).ransack(params[:q])
       @q.sorts = 'id asc' if @q.sorts.empty?
       @users = @q.result(distinct: true)
       @users = paginate(@users)
-    end
-
-    def show
-      @user = User.includes(:sensors).friendly.find(params[:id])
-      authorize @user
     end
 
     def create

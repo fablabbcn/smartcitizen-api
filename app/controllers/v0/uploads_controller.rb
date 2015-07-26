@@ -42,7 +42,12 @@ private
 
     # sign our request by Base64 encoding the policy document.
     def s3_upload_signature
-      signature = Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest::Digest.new('sha1'), ENV['aws_secret_key'], s3_upload_policy_document)).gsub("\n","")
+      signature = Base64.encode64(
+        OpenSSL::HMAC.digest(
+          OpenSSL::Digest::Digest.new('sha1'),
+          ENV['aws_secret_key'], s3_upload_policy_document
+        )
+      ).gsub("\n","")
     end
 
   end

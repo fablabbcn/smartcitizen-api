@@ -1,16 +1,14 @@
 module V0
   class SensorsController < ApplicationController
 
-    # before_action :check_if_authorized!, only: [:create, :update]
+    def show
+      @sensor = Sensor.includes(:measurement).find(params[:id])
+      authorize @sensor
+    end
 
     def index
       @sensors = Sensor.includes(:measurement).all
       @sensors = paginate @sensors
-    end
-
-    def show
-      @sensor = Sensor.includes(:measurement).find(params[:id])
-      authorize @sensor
     end
 
     def create
@@ -39,7 +37,8 @@ private
       params.permit(
         :name,
         :description,
-        :unit
+        :unit,
+        :measurement_id
       )
     end
 
