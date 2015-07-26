@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/presidentbeef/brakeman.git
-  revision: 648821cf2e409def914f0f9839a1ec133486b438
+  revision: 7bce22d4120915a40f311b7cbcefac0e3202266e
   specs:
     brakeman (3.0.5)
       erubis (~> 2.6)
@@ -74,6 +74,8 @@ GEM
     bcrypt (3.1.10)
     builder (3.2.2)
     c_geohash (1.1.2)
+    cane (2.6.2)
+      parallel
     capistrano (3.4.0)
       i18n
       rake (>= 10.0.0)
@@ -207,6 +209,7 @@ GEM
       rack (~> 1.2)
     oj (2.12.10)
     oj_mimic_json (1.0.1)
+    parallel (1.6.1)
     pg (0.18.2)
     pg_search (1.0.4)
       activerecord (>= 3.1)
@@ -401,6 +404,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   brakeman!
   c_geohash
+  cane
   capistrano-rails
   capistrano-rbenv
   capistrano-sidekiq!
