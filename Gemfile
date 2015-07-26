@@ -1,40 +1,36 @@
 ruby '2.2.2'
 source 'https://rubygems.org'
 
-gem 'jbuilder'
-gem 'responders'
-gem 'newrelic_rpm'
-# gem 'upsert'
-# gem 'swagger-ui_rails'
-# gem 'swagger-docs'
-# gem 'prmd'
-# gem 'keen'
 gem 'rails', '4.2.3'
 gem 'rails-api'
-gem 'pusher'
-gem 'pg'
-gem 'bcrypt', '~> 3.1.7'
-gem 'aws-sdk'
 
 gem 'rack-timeout'
 gem 'rack-attack' # API Rate Limiting
 gem 'rack-cors', :require => 'rack/cors'
 gem 'rack-contrib'
 
+gem 'pg'
+# gem 'upsert'
+
+gem 'versionist'
+gem 'jbuilder'
+gem 'responders'
+gem 'newrelic_rpm'
+gem 'pusher'
+
+gem 'bcrypt', '~> 3.1.7'
+gem 'aws-sdk'
+
+gem 'redis-rails'
 gem 'sidekiq'
-# gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-8-stable'
+
 gem 'oauth2', require: false
 gem 'doorkeeper'
-gem 'versionist'
-# gem 'cassandra-driver'
-# gem 'cequel', github: 'cequel/cequel'
 
 gem 'friendly_id', '~> 5.1.0'
-# gem 'msgpack'
 gem 'ancestry'
 gem 'pundit'
 gem 'kaminari'
-gem 'mailgun_rails'
 gem 'api-pagination'
 gem 'geocoder'
 gem 'countries'
@@ -43,11 +39,9 @@ gem 'c_geohash', require: false
 gem 'date_validator'
 gem 'pg_search'
 
-# gem 'actionpack-action_caching', github: 'rails/actionpack-action_caching'
+gem 'mailgun_rails'
 
 gem 'dalli'
-gem 'redis-rails'
-# gem 'redis-rack-cache'
 
 gem 'fast_blank'
 gem 'oj'
@@ -86,19 +80,14 @@ group :development, :test do
   gem 'shoulda-matchers', require: false
   gem 'guard-rspec'
   gem 'railroady'
+  # gem 'byebug'
+  # gem 'web-console', '~> 2.0'
 end
 
 group :development, :test, :linode do
   gem 'mysql'
 end
 
-
-# gem 'byebug'
-# gem 'web-console', '~> 2.0'
-
-# Use unicorn as the app server
+# Deployment
 gem 'unicorn'
-
-# Deploy with Capistrano
 gem 'capistrano-rails', :group => :development
-
