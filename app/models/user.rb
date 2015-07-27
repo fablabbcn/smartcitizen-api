@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
   end
 
   def avatar
-    avatar_url
+    avatar_url || "http://smartcitizen.s3.amazonaws.com/avatars/default.svg"
   end
 
   # def avatar=_avatar

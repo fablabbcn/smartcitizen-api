@@ -4,12 +4,13 @@ class Upload < ActiveRecord::Base
 
   belongs_to :user
 
-  # validates_presence_of :original_filename
+  def new_filename
+    [created_at.to_i.to_s(32), original_filename].join('.')
+  end
 
   def key
-    dir = user.uuid.split('-')[0]
-    # Digest::SHA1.hexdigest [dir,original_filename].join('/')
-    [dir,original_filename].join('/')
+    dir = user.uuid[0..3]
+    ['avatars', dir, new_filename].join('/')
   end
 
   def full_path
