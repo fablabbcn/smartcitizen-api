@@ -22,8 +22,7 @@ class Upload < ActiveRecord::Base
 private
 
   def generate_key
-    dir = user.uuid[0..2]
-    self.key = ['avatars', dir, new_filename].join('/')
+    self.key = ['avatars', user.uuid[0..2], new_filename].join('/')
   end
 
 end

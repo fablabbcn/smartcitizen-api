@@ -1,8 +1,11 @@
 module V0
 class UploadsController < ApplicationController
 
-    before_action :check_if_authorized!
+    # before_action :check_if_authorized!
     # skip_after_action :verify_authorized
+
+    before_action :check_if_authorized!, only: [:create]
+    after_action :verify_authorized, only: [:create]
 
     # create the document in rails, then send json back to our javascript to populate the form that will be
     # going to amazon.
@@ -18,9 +21,10 @@ class UploadsController < ApplicationController
       }
     end
 
-    def post_receive_hook
-      upload = Upload.last
-      upload.user.update_attribute(:avatar, upload.full_path)
+    def uploaded
+      upload = Upload.find_by(key: params[:key])
+      upload.user.update_attribute(:avatar_url, upload.full_path)
+      head :ok
     end
 
     # # just in case you need to do anything after the document gets uploaded to amazon.
