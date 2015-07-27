@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     resources :components, only: :index
     resources :sessions
 
-    resources :uploads
+    resources :uploads, path: 'avatars'
     resources :measurements
     # kits
     resources :kits, except: [:create, :destroy]

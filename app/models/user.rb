@@ -21,6 +21,13 @@ class User < ActiveRecord::Base
   has_many :sensors, through: :devices
   has_many :api_tokens, foreign_key: 'owner_id'
 
+  validate :banned_username
+  def banned_username
+    if username.present? and Smartcitizen::Application.config.banned_words.include?(username.downcase.strip)
+      errors.add(:username, "is reserved")
+    end
+  end
+
   before_create { generate_token(:legacy_api_key, Digest::SHA1.hexdigest(SecureRandom.uuid) ) }
 
 

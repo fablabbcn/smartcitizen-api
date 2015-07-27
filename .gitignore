@@ -28,3 +28,4 @@
 *.sql*
 /devices
 /doc/*.txt
+banned_words.production.yml

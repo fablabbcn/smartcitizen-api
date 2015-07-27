@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150723151339) do
+ActiveRecord::Schema.define(version: 20150727075855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -178,8 +178,9 @@ ActiveRecord::Schema.define(version: 20150723151339) do
     t.string   "type"
     t.string   "original_filename"
     t.jsonb    "metadata"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+    t.uuid     "uuid",              default: "uuid_generate_v4()"
   end
 
   add_index "uploads", ["type"], name: "index_uploads_on_type", using: :btree

@@ -20,6 +20,13 @@ class Device < ActiveRecord::Base
 
   has_many :pg_readings
 
+  validate :banned_name
+  def banned_name
+    if name.present? and Smartcitizen::Application.config.banned_words.include?(name.downcase.strip)
+      errors.add(:name, "is reserved")
+    end
+  end
+
   # reverse_geocoded_by :latitude, :longitude
   reverse_geocoded_by :latitude, :longitude do |obj, results|
     if geo = results.first

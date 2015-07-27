@@ -7,12 +7,13 @@ class UploadsController < ApplicationController
     # going to amazon.
     def create
       @avatar = Avatar.create(original_filename: params[:filename])
+      @avatar.reload
       response.headers.except! 'X-Frame-Options'
       render :json => {
         :policy => s3_upload_policy_document,
         :signature => s3_upload_signature,
-        :key => @avatar.key,
-        :success_action_redirect => uploads_url(@avatar.id)
+        :key => @avatar.key
+        # :success_action_redirect => uploads_url(@avatar.id)
       }
     end
 

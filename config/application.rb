@@ -47,6 +47,8 @@ module Smartcitizen
     # gzip
     config.middleware.use Rack::Deflater
 
+    config.banned_words = YAML.load_file("#{Rails.root}/config/banned_words.yml").map(&:values).flatten
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
