@@ -11,7 +11,7 @@ class Upload < ActiveRecord::Base
   end
 
   def full_path
-    "http://images.smartcitizen.me/s100/#{key}"
+    "https://images.smartcitizen.me/s100/#{key}"
   end
 
   def self.uploaded _key
