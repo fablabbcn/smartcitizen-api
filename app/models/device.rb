@@ -134,7 +134,7 @@ class Device < ActiveRecord::Base
       sensors: []
     }
 
-    sensors.each do |sensor|
+    sensors.sort_by(&:name).each do |sensor|
       sa = sensor.attributes
       sa = sa.merge(
         value: (data ? data["#{sensor.id}"] : nil),
