@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150727075855) do
+ActiveRecord::Schema.define(version: 20150727121643) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -181,9 +181,11 @@ ActiveRecord::Schema.define(version: 20150727075855) do
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
     t.uuid     "uuid",              default: "uuid_generate_v4()"
+    t.integer  "user_id"
   end
 
   add_index "uploads", ["type"], name: "index_uploads_on_type", using: :btree
+  add_index "uploads", ["user_id"], name: "index_uploads_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "username"
@@ -208,4 +210,5 @@ ActiveRecord::Schema.define(version: 20150727075855) do
   add_foreign_key "devices", "users", column: "owner_id"
   add_foreign_key "pg_readings", "devices"
   add_foreign_key "sensors", "measurements"
+  add_foreign_key "uploads", "users"
 end

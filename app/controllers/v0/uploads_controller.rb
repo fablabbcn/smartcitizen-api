@@ -1,28 +1,34 @@
 module V0
 class UploadsController < ApplicationController
 
-    skip_after_action :verify_authorized
+    before_action :check_if_authorized!
+    # skip_after_action :verify_authorized
 
     # create the document in rails, then send json back to our javascript to populate the form that will be
     # going to amazon.
     def create
-      @avatar = Avatar.create(original_filename: params[:filename])
-      @avatar.reload
+      @avatar = current_user.uploads.create(original_filename: params[:filename])
+      authorize current_user, :update?
       response.headers.except! 'X-Frame-Options'
       render :json => {
         :policy => s3_upload_policy_document,
         :signature => s3_upload_signature,
         :key => @avatar.key
-        # :success_action_redirect => uploads_url(@avatar.id)
+        # :success_action_redirect => devices_url
       }
     end
 
-    # just in case you need to do anything after the document gets uploaded to amazon.
-    # but since we are sending our docs via a hidden iframe, we don't need to show the user a
-    # thank-you page.
-    def s3_confirm
-      head :ok
+    def post_receive_hook
+      upload = Upload.last
+      upload.user.update_attribute(:avatar, upload.full_path)
     end
+
+    # # just in case you need to do anything after the document gets uploaded to amazon.
+    # # but since we are sending our docs via a hidden iframe, we don't need to show the user a
+    # # thank-you page.
+    # def s3_confirm
+    #   head :ok
+    # end
 
 private
 

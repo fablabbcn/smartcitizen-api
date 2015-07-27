@@ -32,6 +32,8 @@ Rails.application.routes.draw do
       resources :password_resets, only: [:show, :create, :update]
       # me
       resources :me, only: [:index] do
+        patch 'avatar' => 'uploads#create', on: :collection
+        post 'avatar' => 'uploads#create', on: :collection
         patch '/' => 'me#update', on: :collection
         put '/' => 'me#update', on: :collection
       end

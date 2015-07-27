@@ -15,11 +15,13 @@ class User < ActiveRecord::Base
 
   validates :username, length: { in: 3..30 }, allow_nil: true
 
-  validates :url, :avatar_url, format: URI::regexp(%w(http https)), allow_nil: true, allow_blank: true
+  validates :url, format: URI::regexp(%w(http https)), allow_nil: true, allow_blank: true
 
   has_many :devices, foreign_key: 'owner_id'
   has_many :sensors, through: :devices
   has_many :api_tokens, foreign_key: 'owner_id'
+
+  has_many :uploads
 
   validate :banned_username
   def banned_username
@@ -39,13 +41,17 @@ class User < ActiveRecord::Base
     Doorkeeper::AccessToken.find_or_initialize_by(application_id: 4, resource_owner_id: id)
   end
 
-  def avatar=_avatar
-    self.avatar_url = "http://images.smartcitizen.me/s100/avatars/#{_avatar}"
-  end
-
   def avatar
     avatar_url
   end
+
+  # def avatar=_avatar
+  #   self.avatar_url = "http://images.smartcitizen.me/s100/avatars/#{_avatar}"
+  # end
+
+  # def avatar
+  #   avatar_url
+  # end
 
   def access_token!
     access_token.expires_in = 2.days.from_now
