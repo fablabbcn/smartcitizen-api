@@ -160,9 +160,10 @@ if Gem::Specification::find_all_by_name('mysql').any?
     task :devices => :environment do
       OldDevice.all.each do |old_device|
         device = Device.where(id: old_device.id).first_or_initialize.tap do |device|
-          device.name = old_device.title
-          device.description = old_device.description
-          device.mac_address = old_device.macadress
+          device.old_data = old_device.to_json
+          device.name = old_device.title.try(:strip).try(:utf8ize)
+          device.description = old_device.description.try(:strip).try(:utf8ize)
+          device.mac_address = old_device.macadress if (old_device.macadress && old_device.macadress.match(/\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/))
           device.owner_id = old_device.user_id
           device.latitude = old_device.geo_lat
           device.longitude = old_device.geo_long
