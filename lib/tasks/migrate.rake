@@ -172,8 +172,7 @@ if Gem::Specification::find_all_by_name('mysql').any?
         end
 
         begin
-          device.save!
-          count+=1
+          device.save! validate: false
         rescue Exception => e
           puts "#{device.id}>>>>>>> #{e.message} >> #{device.mac_address}"
         rescue ActiveRecord::RecordInvalid => e
