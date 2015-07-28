@@ -35,7 +35,8 @@ set :linked_files, %w{config/database.yml config/application.yml}
 
 # dirs we want symlinking to shared
 # set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+# removed bin https://stackoverflow.com/questions/3744567/typing-rails-console-doesnt-start
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

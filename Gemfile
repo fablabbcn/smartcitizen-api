@@ -12,6 +12,7 @@ gem 'rack-contrib'
 gem 'pg'
 # gem 'upsert'
 
+gem 'figaro'
 gem 'versionist'
 gem 'jbuilder'
 gem 'responders'
@@ -74,7 +75,6 @@ group :development, :test do
   # gem 'rspec_api_blueprint', require: false
   gem 'cane'
   gem 'faker'
-  gem 'figaro'
   gem 'brakeman', github: 'presidentbeef/brakeman', require: false
   gem 'rspec-rails'
   gem 'factory_girl_rails'
