@@ -12,6 +12,8 @@ gem 'rack-contrib'
 gem 'pg'
 # gem 'upsert'
 
+gem 'lograge'
+
 gem 'figaro'
 gem 'versionist'
 gem 'jbuilder'

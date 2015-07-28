@@ -7,6 +7,9 @@ upstream unicorn {
 
 server {
 
+  access_log <%= current_path %>/log/access_nginx.log;
+  error_log <%= current_path %>/log/errors_nginx.log;
+
   charset utf-8;
 
   server_name <%= fetch(:server_name) %> httponly.smartcitizen.me;

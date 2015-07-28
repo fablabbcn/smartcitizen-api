@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/presidentbeef/brakeman.git
-  revision: 7bce22d4120915a40f311b7cbcefac0e3202266e
+  revision: c839eaeda79667da20d2fe07e70f1b1d0099ec9a
   specs:
     brakeman (3.0.5)
       erubis (~> 2.6)
@@ -132,7 +132,7 @@ GEM
     git-version-bump (0.15.1)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
-    guard (2.12.9)
+    guard (2.13.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, <= 4.0)
       lumberjack (~> 1.0)
@@ -173,6 +173,10 @@ GEM
     listen (3.0.3)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
+    lograge (0.3.4)
+      actionpack (>= 3)
+      activesupport (>= 3)
+      railties (>= 3)
     loofah (2.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.9)
@@ -198,7 +202,7 @@ GEM
     newrelic_rpm (3.12.1.298)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
-    notiffany (0.0.6)
+    notiffany (0.0.7)
       nenv (~> 0.1)
       shellany (~> 0.0)
     oauth2 (1.0.0)
@@ -375,7 +379,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.1)
-    timecop (0.7.4)
+    timecop (0.8.0)
     timers (4.0.1)
       hitimes
     tzinfo (1.2.2)
@@ -424,6 +428,7 @@ DEPENDENCIES
   jbuilder
   kaminari
   letter_opener
+  lograge
   mailgun_rails
   multi_json
   mysql
