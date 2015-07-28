@@ -9,6 +9,7 @@ json.(device,
   :added_at,
   :updated_at
 )
+
 if current_user and (current_user.is_admin? or (device.owner_id and current_user.id == device.owner_id))
   json.merge! mac_address: device.mac_address
 else
@@ -34,7 +35,7 @@ end
 
 if device.owner
   json.owner(
-    device.owner, :uuid, :id, :username, :avatar, :url, :joined_at, :location, :device_ids
+    device.owner, :id, :uuid, :username, :avatar, :url, :joined_at, :location, :device_ids
   )
 end
 
