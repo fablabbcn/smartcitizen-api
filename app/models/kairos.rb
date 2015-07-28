@@ -115,7 +115,7 @@ class Kairos
       _data.push({
         name: "d#{device_id}",
         timestamp: recorded_at,
-        value: Float(v) rescue v,
+        value: (Float(v) rescue v),
         tags: {"s":k}
       })
     end
