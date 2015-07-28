@@ -18,29 +18,29 @@ if Gem::Specification::find_all_by_name('mysql').any?
     self.abstract_class = true
     establish_connection(
       :adapter  => 'mysql',
-      :database => 'smartcitizenDB1',
-      :host     => 'localhost',
-      :username => 'root',
-      :password => nil
+      :database => ENV['mysql_database'],
+      :host     => ENV['mysql_host'],
+      :username => ENV['mysql_username'],
+      :password => ENV['mysql_password']
     )
   end
 
-  class PostgreSQL < ActiveRecord::Base
-    self.abstract_class = true
-    establish_connection(
-      :adapter  => 'postgresql',
-      :database => 'sc_final',
-      :host     => 'localhost',
-      :username => 'john',
-      :password => nil
-    )
-  end
+  # class PostgreSQL < ActiveRecord::Base
+  #   self.abstract_class = true
+  #   establish_connection(
+  #     :adapter  => 'postgresql',
+  #     :database => 'sc_final',
+  #     :host     => 'localhost',
+  #     :username => 'john',
+  #     :password => nil
+  #   )
+  # end
 
   %w(User Device Feed Media).each do |model|
+    # class New#{model} < PostgreSQL
+    #   self.table_name = '#{model.underscore}s'
+    # end
     eval %{
-      class New#{model} < PostgreSQL
-        self.table_name = '#{model.underscore}s'
-      end
       class Old#{model} < MySQL
         self.table_name = '#{model.underscore}s'
       end
@@ -142,6 +142,7 @@ if Gem::Specification::find_all_by_name('mysql').any?
         end
         begin
           user.save! validate: false
+          p user.id
         rescue ActiveRecord::RecordInvalid => e
           puts [user.id, e.message].join(' >> ')
         end
