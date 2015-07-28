@@ -13,7 +13,11 @@ class Device < ActiveRecord::Base
   validates_uniqueness_of :mac_address#, on: :create
   validates_format_of :mac_address, with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/#, on: :create, allow_blank: true
 
-  delegate :username, :to => :owner, :prefix => true
+  # delegate :username, :to => :owner, :prefix => true
+
+  def owner_username
+    owner.username
+  end
 
   include PgSearch
   multisearchable :against => [:name, :description, :city]#, associated_against: { owner: { :username }
