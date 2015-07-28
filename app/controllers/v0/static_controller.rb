@@ -27,7 +27,7 @@ module V0
           h['name'] = s.searchable.name
           h['description'] = s.searchable.description
           h['owner_id'] = s.searchable.owner_id
-          h['owner_username'] = s.searchable.owner_username
+          # h['owner_username'] = s.searchable.owner_username
           h['city'] = s.searchable.city
           h['country_code'] = s.searchable.country_code
         else
