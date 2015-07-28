@@ -112,7 +112,7 @@ if Gem::Specification::find_all_by_name('mysql').any?
         if OldMedia.where(ref: 'User', ref_id: user.id).exists?
           avatar = OldMedia.where(ref: 'User', ref_id: user.id).last
           if avatar.file.present?
-            user.update_attribute(:avatar, avatar.file.split('/').last)
+            user.update_attribute(:avatar_url, "https://images.smartcitizen.me/s100/avatars/#{avatar.file.split('/').last}" )
           end
         end
       end
@@ -151,6 +151,8 @@ if Gem::Specification::find_all_by_name('mysql').any?
           p user.id
         rescue ActiveRecord::RecordInvalid => e
           puts [user.id, e.message].join(' >> ')
+        rescue Exception => e
+          puts e
         end
       end
     end
@@ -165,6 +167,8 @@ if Gem::Specification::find_all_by_name('mysql').any?
           device.owner_id = old_device.user_id
           device.latitude = old_device.geo_lat
           device.longitude = old_device.geo_long
+          device.created_at = old_device.created
+          device.updated_at = old_device.updated
         end
 
         begin
