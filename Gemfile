@@ -48,6 +48,7 @@ gem 'fast_blank'
 gem 'oj'
 gem 'oj_mimic_json'
 gem 'multi_json'
+# gem 'charlock_holmes'
 
 group :production do
   gem 'rails_12factor'

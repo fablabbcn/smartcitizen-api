@@ -12,6 +12,13 @@ if Gem::Specification::find_all_by_name('mysql').any?
       tr("-", "_").
       downcase
     end
+
+    def utf8ize
+      self.encode!( 'UTF-8', invalid: :replace, undef: :replace )
+      # detection = CharlockHolmes::EncodingDetector.detect(self)
+      # puts detection[:encoding]
+      # CharlockHolmes::Converter.convert self, detection[:encoding], 'UTF-8'
+    end
   end
 
   class MySQL < ActiveRecord::Base
@@ -115,23 +122,22 @@ if Gem::Specification::find_all_by_name('mysql').any?
       Usr.order(id: :asc).each do |old_user|
         user = User.where(id: old_user.id).first_or_initialize.tap do |user|
           user.old_data = old_user.to_json
-          user.username = old_user.username.present? ? old_user.username.try(:force_encoding,'UTF-8').try(:strip) : nil
-          user.city = old_user.city.present? ? old_user.city.try(:force_encoding,'UTF-8').try(:titleize).try(:strip) : nil
-
+          user.username = old_user.username.present? ? old_user.username.try(:strip).try(:utf8ize) : nil
+          user.city = old_user.city.present? ? old_user.city.try(:strip).try(:utf8ize).try(:titleize) : nil
 
           if old_user.country.present? && old_user.country.downcase.match(/catalunya|catalonia/)
             user.country_code = 'ES'
           else
-            user.country_code = Country.find_country_by_name(old_user.country.try(:strip).try(:force_encoding,'UTF-8')).try(:alpha2)
+            user.country_code = Country.find_country_by_name(old_user.country.try(:strip).try(:utf8ize)).try(:alpha2)
           end
 
           if old_user.website.try(:strip) =~ URI::DEFAULT_PARSER.regexp[:ABS_URI]
-            user.url = old_user.website.try(:strip).try(:force_encoding,'UTF-8')
+            user.url = old_user.website.try(:strip).try(:utf8ize)
           else
             user.url = nil
           end
 
-          user.email = old_user.email.present? ? old_user.email.try(:force_encoding,'UTF-8').try(:downcase).try(:strip) : nil
+          user.email = old_user.email.present? ? old_user.email.try(:strip).try(:utf8ize).try(:downcase) : nil
           user.created_at = old_user.created
           user.updated_at = old_user.modified
 
