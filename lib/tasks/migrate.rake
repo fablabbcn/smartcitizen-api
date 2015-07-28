@@ -168,7 +168,7 @@ if Gem::Specification::find_all_by_name('mysql').any?
           device.latitude = old_device.geo_lat
           device.longitude = old_device.geo_long
           device.created_at = old_device.created
-          device.updated_at = old_device.updated
+          device.updated_at = old_device.modified
         end
 
         begin
