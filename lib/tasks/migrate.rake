@@ -121,7 +121,7 @@ if Gem::Specification::find_all_by_name('mysql').any?
     task :users => :environment do
       Usr.order(id: :asc).each do |old_user|
         user = User.where(id: old_user.id).first_or_initialize.tap do |user|
-          user.old_data = old_user.to_json
+          # user.old_data = old_user.to_json
           user.username = old_user.username.present? ? old_user.username.try(:strip).try(:utf8ize) : nil
           user.city = old_user.city.present? ? old_user.city.try(:strip).try(:utf8ize).try(:titleize) : nil
 

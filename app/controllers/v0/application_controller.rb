@@ -71,7 +71,7 @@ module V0
     end
 
     def ssl_configured?
-      request.host == 'new-api.smartcitizen.me'
+      request.host.match /smartcitizen\.me/
     end
 
   end
