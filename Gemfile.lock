@@ -436,6 +436,7 @@ DEPENDENCIES
   oauth2
   oj
   oj_mimic_json
+  parallel
   pg
   pg_search
   pundit

@@ -11,6 +11,7 @@ gem 'rack-contrib'
 
 gem 'pg'
 # gem 'upsert'
+gem 'parallel', require: false
 
 gem 'lograge'
 

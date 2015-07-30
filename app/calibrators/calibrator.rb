@@ -21,7 +21,8 @@ class Calibrator
       data = SCK1.new( raw_data )
 
     else
-      Rails.logger.info("ERROR")
+      Rails.logger.info("SCK0")
+      data = SCK0.new( raw_data )
       # raise Smartcitizen::UnknownDevice.new h.to_s
     end
 
