@@ -16,7 +16,7 @@ class Device < ActiveRecord::Base
   # delegate :username, :to => :owner, :prefix => true
 
   def owner_username
-    owner.username
+    owner.username if owner
   end
 
   include PgSearch
