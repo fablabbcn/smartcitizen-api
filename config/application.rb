@@ -12,11 +12,20 @@ require "action_view/railtie"
 # require 'actionpack/action_caching'
 
 
+ActiveSupport::Logger.class_eval do
+  #monkey patching here so there aren't duplicate lines in console/server
+  def self.broadcast(logger)
+    Module.new do
+    end
+  end
+end
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
 module Smartcitizen
+
 
   class SmartCitizenError < StandardError
     def initialize(errors = nil)
@@ -33,6 +42,10 @@ module Smartcitizen
   class InternalServerError < SmartCitizenError; end
 
   class Application < Rails::Application
+
+    # console do
+    #   ActiveRecord::Base.logger = Rails.logger = Logger.new(STDOUT)
+    # end
 
     # config.middleware.use ActionDispatch::Flash
     # config.action_controller.allow_forgery_protection = false
