@@ -84,8 +84,8 @@ class Kairos
         timespan_value = params[:relative].to_i
         timespan_unit = Kairos.get_timespan( params[:relative].gsub(timespan_value.to_s,'') )
       else
-        timespan_value = 2
-        timespan_unit = 'months'
+        timespan_value = 6
+        timespan_unit = 'weeks'
       end
 
       data['start_relative'] = {
@@ -104,7 +104,7 @@ class Kairos
 
     readings = j['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, r[1]]}
 
-    if params[:all_intervals]
+    if rollup_value.send(rollup_unit) >= 10.minutes && params[:all_intervals]
       # json['readings'] = readings
       distance = rollup_value.send(rollup_unit)
       percent = rollup_value.send(rollup_unit) * 0.1
