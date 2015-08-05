@@ -11,15 +11,6 @@ require "action_view/railtie"
 # require "rails/test_unit/railtie"
 # require 'actionpack/action_caching'
 
-
-ActiveSupport::Logger.class_eval do
-  #monkey patching here so there aren't duplicate lines in console/server
-  def self.broadcast(logger)
-    Module.new do
-    end
-  end
-end
-
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)

@@ -100,6 +100,16 @@ if Gem::Specification::find_all_by_name('mysql').any?
   namespace :migrate do
     desc "Imports old data"
 
+    task :dvices => :environment do
+      Dvice.order(id: :asc).each do |d|
+        if d.kit_version.to_s == '1.0'
+          Device.find(d.id).update_attribute(:kit_id, 2)
+        elsif d.kit_version.to_s == '1.1'
+          Device.find(d.id).update_attribute(:kit_id, 3)
+        end
+      end
+    end
+
     task :feeds => :environment do
       Dvice.order(id: :asc).each do |d|
         d.ingest

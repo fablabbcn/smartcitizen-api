@@ -1,3 +1,11 @@
+ActiveSupport::Logger.class_eval do
+  #monkey patching here so there aren't duplicate lines in console/server
+  def self.broadcast(logger)
+    Module.new do
+    end
+  end
+end
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
