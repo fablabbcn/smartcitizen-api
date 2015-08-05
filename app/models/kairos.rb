@@ -103,9 +103,34 @@ class Kairos
     json['sample_size'] = j['sample_size']
 
     readings = j['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, r[1]]}
-    json['readings'] = readings.reverse
-    return json
 
+    if params[:all_intervals]
+      # json['readings'] = readings
+      distance = rollup_value.send(rollup_unit)
+      percent = rollup_value.send(rollup_unit) * 0.1
+      time_iterate(json['from'], json['to'], distance ) do |t|
+        readings << [t,nil]
+      end
+      json['readings'] = []
+      readings = readings.sort_by{|t| t[0]}
+      while readings.length > 0
+        this_reading = readings.pop
+        if readings.length > 0
+          next_reading = readings.last
+          if next_reading[0] - this_reading[0] < percent
+            next_reading = readings.pop
+            json['readings'] << [next_reading[0], [this_reading[1], next_reading[1]].max_by(&:to_i) ]
+          else
+            json['readings'] << this_reading
+            # json['readings'] << readings.pop
+          end
+        end
+      end
+    else
+      json['readings'] = readings.sort_by{|t| t[0]}.reverse
+    end
+
+    return json
   end
 
   def self.ingest device_id, data, recorded_at
@@ -125,6 +150,12 @@ class Kairos
   end
 
 private
+
+  def self.time_iterate(start_time, end_time, step, &block)
+    begin
+      yield(start_time)
+    end while (start_time += step) <= end_time
+  end
 
   def self.http_post_to path, data
     uri = URI.parse "http://kairos.server.smartcitizen.me/api/v1#{path}"
