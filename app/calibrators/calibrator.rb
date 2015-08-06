@@ -3,7 +3,7 @@ class Calibrator
   def initialize mac, raw_data
     device = Device.where(mac_address: mac).last
 
-    if raw_data['version'] # temp fix
+    if device and raw_data['version'] # temp fix
 
       firmware = determine_firmware(raw_data['version'])
 
@@ -30,7 +30,6 @@ class Calibrator
       end
 
       data = data.to_h
-
       # if recorded_at > device.last_recorded_at
       device.update_attributes(data: data, last_recorded_at: recorded_at)
       # end
