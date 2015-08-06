@@ -130,7 +130,7 @@ private
       Rails.logger.info ">>> RAW: #{raw_value}"
       Rails.logger.info ">>> ARR[i]: #{arr[i]}"
       Rails.logger.info ">>> ARR[i+1]: #{arr[i+1]}"
-      if raw_value >= arr[i][0] && raw_value < arr[i+1][0])
+      if raw_value >= arr[i][0] && raw_value < arr[i+1][0]
         low, high = [arr[i], arr[i+1]]
         return SCK.linear_regression(raw_value,low[1],high[1],arr[i][0],high[0])
       end
