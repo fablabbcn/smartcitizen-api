@@ -15,6 +15,22 @@ class Device < ActiveRecord::Base
 
   default_scope { includes :owner }
 
+  # temporary kit getter/setter
+  def kit_version
+    if self.kit_id
+      "1.0" if self.kit_id = 2
+      "1.1" if self.kit_id = 3
+    end
+  end
+
+  def kit_version=(kv)
+    if kv == "1.0"
+      self.kit_id = 2
+    elsif kv == "1.1"
+      self.kit_id = 3
+    end
+  end
+
   # delegate :username, :to => :owner, :prefix => true
 
   def owner_username
