@@ -28,14 +28,13 @@ module V0
           h['description'] = s.searchable.description
           h['owner_id'] = s.searchable.owner_id
           h['owner_username'] = s.searchable.owner_username
-          h['city'] = s.searchable.city
-          h['country_code'] = s.searchable.country_code
         else
           h['username'] = s.searchable.username
           h['avatar'] = s.searchable.avatar
+        end
           h['city'] = s.searchable.city
           h['country_code'] = s.searchable.country_code
-        end
+          h['country'] = s.searchable.country
         a << h
       end
       paginate json: a

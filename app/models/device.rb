@@ -38,7 +38,7 @@ class Device < ActiveRecord::Base
   end
 
   include PgSearch
-  multisearchable :against => [:name, :description, :city]#, associated_against: { owner: { :username }
+  multisearchable :against => [:name, :description, :city, :country]#, associated_against: { owner: { :username }
 
   has_many :pg_readings
 
