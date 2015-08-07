@@ -37,10 +37,14 @@ if device.owner
   json.owner(
     device.owner, :id, :uuid, :username, :avatar, :url, :joined_at, :location, :device_ids
   )
+else
+  json.merge! owner: nil
 end
 
 json.data device.formatted_data
 
 if device.kit
   json.kit device.kit, :id, :uuid, :slug, :name, :description, :created_at, :updated_at
+else
+  json.merge! kit: nil
 end
