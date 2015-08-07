@@ -12,6 +12,10 @@ class UserPolicy < ApplicationPolicy
     user.try(:is_admin?) || user == record
   end
 
+  def destroy?
+    user == record
+  end
+
   def request_password_reset?
     create?
   end

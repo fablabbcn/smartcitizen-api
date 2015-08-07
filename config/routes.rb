@@ -76,11 +76,12 @@ Rails.application.routes.draw do
       # password_resets
       resources :password_resets, only: [:show, :create, :update]
       # me
-      resources :me, only: [:index] do
+      resources :me, only: [:index, :destroy] do
         patch 'avatar' => 'uploads#create', on: :collection
         post 'avatar' => 'uploads#create', on: :collection
         patch '/' => 'me#update', on: :collection
         put '/' => 'me#update', on: :collection
+        delete '/' => 'me#destroy', on: :collection
       end
 
     # home
