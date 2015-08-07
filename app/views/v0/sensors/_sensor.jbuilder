@@ -7,6 +7,8 @@ if sensor.measurement
   json.measurement(
     sensor.measurement, :id, :uuid, :name, :description
   )
+else
+  json.merge! measurement: nil
 end
 
 # json . sensor do
