@@ -38,9 +38,15 @@ class Device < ActiveRecord::Base
   end
 
   include PgSearch
-  multisearchable :against => [:name, :description, :city, :country]#, associated_against: { owner: { :username }
+  multisearchable :against => [:name, :description, :city, :country_name]#, associated_against: { owner: { :username }
 
   has_many :pg_readings
+
+  def country_name
+    if country_code
+      country.to_s
+    end
+  end
 
   validate :banned_name
   def banned_name
