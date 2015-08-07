@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
 
   include PgSearch
-  multisearchable :against => [:username, :city]
+  multisearchable :against => [:username, :city, :country_name]
 
   extend FriendlyId
   friendly_id :username
