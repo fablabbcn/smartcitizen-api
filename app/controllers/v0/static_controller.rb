@@ -34,7 +34,7 @@ module V0
         end
           h['city'] = s.searchable.city
           h['country_code'] = s.searchable.country_code
-          h['country'] = s.searchable.country
+          h['country'] = s.searchable.country_name
         a << h
       end
       paginate json: a
