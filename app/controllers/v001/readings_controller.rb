@@ -6,5 +6,9 @@ module V001
       @readings = Reading.all
     end
 
+    def show
+      render json: Device.find(params[:device_id])
+    end
+
   end
 end
