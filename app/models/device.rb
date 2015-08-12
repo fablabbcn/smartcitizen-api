@@ -174,6 +174,24 @@ class Device < ActiveRecord::Base
     return s
   end
 
+  def legacy_serialize
+    {
+      id: id,
+      description: description,
+      city: city,
+      country: country_name,
+      exposure: exposure,
+      exposure: exposure,
+      elevation: elevation.try(:to_f),
+      title: name,
+      location: city,
+      geo_lat: latitude,
+      geo_lng: longitude,
+      created: created_at,
+      last_insert_datetime: updated_at
+    }
+  end
+
 private
 
   def calculate_geohash
