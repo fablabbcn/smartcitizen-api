@@ -1,15 +1,18 @@
-json.(@user,
-  :id,
-  :username,
-  :city,
-  :country,
-  :email
-)
+json.me do
+  json.(@user,
+    :id,
+    :username,
+    :city,
+    :email
+  )
 
-json.merge! website: nil
-json.merge! created: @user.created_at
+  json.merge! country: @user.country_name
+  json.merge! website: nil
+  json.merge! created: @user.created_at
 
-json.devices @user.devices, partial: 'v001/devices/device', as: :device
+  json.devices @user.devices, partial: 'v001/devices/device', as: :device
+
+end
 
 # "me": {
 #   "id": "5",

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     get ':api_key/lastpost', to: 'devices#current_user_index'
     get ':api_key/:device_id/posts', to: 'readings#show'
     get ':api_key/me', to: 'users#show'
+    get '/', to: 'static#home'
   end
 
   # api_version(module: "V2", path: {value: "v2"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=2"}, default: false, defaults: { format: :json }) do

@@ -3,16 +3,18 @@ json.(device,
   :description,
   :city,
   :country,
-  :exposure,
-  :elevation
+  :exposure
 )
 
+json.merge! elevation: device.elevation.try(:to_f)
 json.merge! title: device.name
 json.merge! location: device.city
 json.merge! geo_lat: device.latitude
 json.merge! geo_lng: device.longitude
 json.merge! created: device.created_at
 json.merge! last_insert_datetime: device.updated_at
+
+
 # last_insert_datetime
 
 # {
