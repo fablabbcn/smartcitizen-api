@@ -89,7 +89,8 @@ Rails.application.routes.draw do
     get 'search' => 'static#search'
 
     # use_doorkeeper
-    root to: 'static#home'
+    # root to: 'static#home'
+    get '/', to: 'static#home'
   end
 
   # get '*path', :to => redirect("/v0/%{path}")
