@@ -1,6 +1,8 @@
 module V001
   class StaticController < ApplicationController
 
+    skip_before_action :check_api_key
+
     def home
       render json: {
         devices: ':api_key/devices.json',
