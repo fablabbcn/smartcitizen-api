@@ -174,6 +174,14 @@ class Device < ActiveRecord::Base
     return s
   end
 
+  def self.lightning
+    connection.select_all(select([:name, :description]).arel, nil, all.bind_values).each do |attrs|
+      attrs.each do |name, value|
+        attrs[name] = column_types[name].type_cast_from_database(value)
+      end
+    end
+  end
+
   def legacy_serialize
     {
       id: id,

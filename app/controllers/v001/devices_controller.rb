@@ -4,7 +4,9 @@ module V001
     def index
       # all devices
       # @devices = Device.limit(params[:limit])
-      render json: { devices: Device.limit(params[:limit]).map(&:legacy_serialize) }
+      render json: Oj.dump({
+        devices: Device.limit(params[:limit]).map(&:legacy_serialize)
+      }, mode: :compat)
     end
 
     def current_user_index
