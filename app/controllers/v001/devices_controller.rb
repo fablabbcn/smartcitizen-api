@@ -8,10 +8,9 @@ module V001
 
     def index
       # raw SQL required for performance reasons
-      keys = %w(id title users.username description location city country exposure elevation geo_lat geo_long created last_insert_datetime)
-      sql = "SELECT #{keys.map{|k| "devices.#{k}"}.join(',').gsub('devices.users', 'users') }
-              FROM devices LEFT OUTER JOIN users ON devices.user_id = users.id"
+      sql = "SELECT devices.id, devices.title, users.username, devices.description, devices.location, devices.city, devices.country, devices.exposure, devices.elevation, devices.geo_lat, devices.geo_long, CONCAT(devices.created, ' UTC') , CONCAT(COALESCE(devices.last_insert_datetime, ''), ' UTC') FROM devices LEFT OUTER JOIN users ON devices.user_id = users.id"
       records = MySQL.connection.execute(sql)
+      keys = %w(id title username description location city country exposure elevation geo_lat geo_long created last_insert_datetime)
       render json: Oj.dump({
         devices: records.map{ |record| Hash[keys.zip(record)] }
       }, mode: :compat)
