@@ -28,7 +28,9 @@ if Gem::Specification::find_all_by_name('mysql').any?
       :database => ENV['mysql_database'],
       :host     => ENV['mysql_host'],
       :username => ENV['mysql_username'],
-      :password => ENV['mysql_password']
+      :password => ENV['mysql_password'],
+      :encoding => 'utf8',
+      :collation => 'utf8_general_ci'
     )
   end
 
@@ -44,15 +46,16 @@ if Gem::Specification::find_all_by_name('mysql').any?
   # end
 
   %w(User Device Feed Media).each do |model|
-    # class New#{model} < PostgreSQL
-    #   self.table_name = '#{model.underscore}s'
-    # end
     eval %{
       class Old#{model} < MySQL
         self.table_name = '#{model.underscore}s'
       end
     }
   end
+
+    # class New#{model} < PostgreSQL
+    #   self.table_name = '#{model.underscore}s'
+    # end
 
   class Usr < OldUser; end
 
