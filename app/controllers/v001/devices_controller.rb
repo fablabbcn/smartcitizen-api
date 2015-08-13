@@ -5,7 +5,7 @@ module V001
       # all devices
       # @devices = Device.limit(params[:limit])
       render json: Oj.dump({
-        devices: Device.limit(params[:limit]).map(&:legacy_serialize)
+        devices: Device.lightning#Device.limit(params[:limit]).map(&:legacy_serialize)
       }, mode: :compat)
     end
 

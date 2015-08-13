@@ -174,12 +174,39 @@ class Device < ActiveRecord::Base
     return s
   end
 
+  # def self.lightning
+  #   connection.select_all(select(%w(old_data)).arel, nil, all.bind_values).each do |attrs|
+  #     attrs.each do |name, value|
+  #       attrs[name] = column_types[name].type_cast_from_database(value)
+  #     end
+  #   end
+  # end
+
   def self.lightning
-    connection.select_all(select(%w(old_data)).arel, nil, all.bind_values).each do |attrs|
-      attrs.each do |name, value|
-        attrs[name] = column_types[name].type_cast_from_database(value)
+    ds = []
+    Device.connection.select_all(select(%w(migration_data)).arel, nil, all.bind_values).each do |attrs|
+      attrs.values.each do |hash|
+        begin
+          hash = Oj.load(hash)
+          d = {}
+          d['id'] = hash['id']
+          d['description'] = hash['description']
+          d['city'] = hash['city']
+          d['country'] = hash['country']
+          d['exposure'] = hash['exposure']
+          d['elevation'] = hash['elevation'].try(:to_f)
+          d['title'] = hash['title']
+          d['location'] = hash['location']
+          d['geo_lat'] = hash['geo_lat']
+          d['geo_lng'] = hash['geo_lng']
+          d['created'] = hash['created']
+          d['last_insert_datetime'] = hash['modified']
+          ds << d
+        rescue NoMethodError
+        end
       end
     end
+    ds
   end
 
   def legacy_serialize
