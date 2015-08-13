@@ -190,17 +190,17 @@ class Device < ActiveRecord::Base
           hash = Oj.load(hash)
           d = {}
           d['id'] = hash['id'].try(:to_s)
-          d['description'] = hash['description'].try(:to_s)
+          d['title'] = hash['title'].try(:to_s)
+          # d['username'] = hash['username'].try(:to_s)
+          d['description'] = hash['description'].to_s#.encode("ISO-8859-1")
           d['city'] = hash['city'].try(:to_s)
           d['country'] = hash['country'].try(:to_s)
           d['exposure'] = hash['exposure'].try(:to_s)
           d['elevation'] = hash['elevation'].try(:to_s)
-          d['title'] = hash['title'].try(:to_s)
-          d['location'] = hash['location'].try(:to_s)
-          d['geo_lat'] = hash['geo_lat'].try(:to_s)
-          d['geo_lng'] = hash['geo_lng'].try(:to_s)
-          d['created'] = hash['created'].try(:to_s)
-          d['last_insert_datetime'] = hash['modified'].try(:to_s)
+          d['geo_lat'] = hash['geo_lat']#.split('.').each_with_index.map{|n,i| n }
+          d['geo_lng'] = hash['geo_lng']#.split('.').each_with_index.map{|n,i| n }
+          d['created'] = hash['created'].gsub('T', ' ').gsub('Z', ' UTC')
+          d['last_insert_datetime'] = hash['modified'].gsub('T', ' ').gsub('Z', ' UTC')
           ds << d
         rescue NoMethodError
         end
