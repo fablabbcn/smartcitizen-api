@@ -184,23 +184,23 @@ class Device < ActiveRecord::Base
 
   def self.lightning
     ds = []
-    Device.connection.select_all(select(%w(migration_data)).arel, nil, all.bind_values).each do |attrs|
+    Device.connection.select_all(select(%w(migration_data)).order(:id).arel, nil, all.bind_values).each do |attrs|
       attrs.values.each do |hash|
         begin
           hash = Oj.load(hash)
           d = {}
-          d['id'] = hash['id']
-          d['description'] = hash['description']
-          d['city'] = hash['city']
-          d['country'] = hash['country']
-          d['exposure'] = hash['exposure']
-          d['elevation'] = hash['elevation'].try(:to_f)
-          d['title'] = hash['title']
-          d['location'] = hash['location']
-          d['geo_lat'] = hash['geo_lat']
-          d['geo_lng'] = hash['geo_lng']
-          d['created'] = hash['created']
-          d['last_insert_datetime'] = hash['modified']
+          d['id'] = hash['id'].try(:to_s)
+          d['description'] = hash['description'].try(:to_s)
+          d['city'] = hash['city'].try(:to_s)
+          d['country'] = hash['country'].try(:to_s)
+          d['exposure'] = hash['exposure'].try(:to_s)
+          d['elevation'] = hash['elevation'].try(:to_s)
+          d['title'] = hash['title'].try(:to_s)
+          d['location'] = hash['location'].try(:to_s)
+          d['geo_lat'] = hash['geo_lat'].try(:to_s)
+          d['geo_lng'] = hash['geo_lng'].try(:to_s)
+          d['created'] = hash['created'].try(:to_s)
+          d['last_insert_datetime'] = hash['modified'].try(:to_s)
           ds << d
         rescue NoMethodError
         end
