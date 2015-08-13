@@ -182,50 +182,6 @@ class Device < ActiveRecord::Base
   #   end
   # end
 
-  def self.lightning
-    ds = []
-    Device.connection.select_all(select(%w(migration_data)).order(:id).arel, nil, all.bind_values).each do |attrs|
-      attrs.values.each do |hash|
-        begin
-          hash = Oj.load(hash)
-          d = {}
-          d['id'] = hash['id'].try(:to_s)
-          d['title'] = hash['title'].try(:to_s)
-          # d['username'] = hash['username'].try(:to_s)
-          d['description'] = hash['description'].to_s#.encode("ISO-8859-1")
-          d['city'] = hash['city'].try(:to_s)
-          d['country'] = hash['country'].try(:to_s)
-          d['exposure'] = hash['exposure'].try(:to_s)
-          d['elevation'] = hash['elevation'].try(:to_s)
-          d['geo_lat'] = hash['geo_lat']#.split('.').each_with_index.map{|n,i| n }
-          d['geo_lng'] = hash['geo_lng']#.split('.').each_with_index.map{|n,i| n }
-          d['created'] = hash['created'].gsub('T', ' ').gsub('Z', ' UTC')
-          d['last_insert_datetime'] = hash['modified'].gsub('T', ' ').gsub('Z', ' UTC')
-          ds << d
-        rescue NoMethodError
-        end
-      end
-    end
-    ds
-  end
-
-  def legacy_serialize
-    {
-      id: id,
-      description: description,
-      city: city,
-      country: country_name,
-      exposure: exposure,
-      elevation: elevation.try(:to_f),
-      title: name,
-      location: city,
-      geo_lat: latitude,
-      geo_lng: longitude,
-      created: created_at,
-      last_insert_datetime: updated_at
-    }
-  end
-
 private
 
   def calculate_geohash
