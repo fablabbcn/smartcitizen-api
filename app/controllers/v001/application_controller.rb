@@ -6,7 +6,7 @@ module V001
 private
 
     def current_user
-      @current_user = User.find_by(legacy_api_key: params[:api_key])
+      @current_user = LegacyUser.find_by(api_key: params[:api_key])
     end
     helper_method :current_user
 

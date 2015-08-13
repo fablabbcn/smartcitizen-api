@@ -2,8 +2,10 @@ module V001
   class UsersController < ApplicationController
 
     def show
-      @user = current_user
+      render json: Oj.dump({ me: current_user }, mode: :compat)
     end
 
   end
 end
+
+
