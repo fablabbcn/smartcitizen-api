@@ -3,9 +3,24 @@ class LegacyDevice < MySQL
   self.table_name = 'devices'
   belongs_to :user, class_name: 'LegacyUser'
 
-  def geo_lat
-    self.column['geo_lat'].to_i
-  end
+  KEYS = {
+    '10': 'bat',
+    '17': 'bat',
+    '16': 'co',
+    '9': 'co',
+    '13': 'hum',
+    '5': 'hum',
+    '14': 'light',
+    '6': 'light',
+    '21': 'nets',
+    '15': 'no2',
+    '8': 'no2',
+    '7': 'noise',
+    '11': 'panel',
+    '18': 'panel',
+    '12': 'temp',
+    '4': 'temp'
+  }
 
   def as_json
     hash = {}
