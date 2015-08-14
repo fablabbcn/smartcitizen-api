@@ -32,7 +32,7 @@ class LegacyDevice < MySQL
       hash['posts']['timestamp'] = device.data[''].to_s.gsub("T", " ").gsub("Z", " UTC")
       device.data.select{|d| Float(d) rescue false }.each do |key,value|
         # Rails.logger.info KEYS
-        hash['posts'][KEYS[key.to_sym]] = value.to_s
+        hash['posts'][KEYS[key.to_sym]] = value
       end
       hash['posts']['insert_datetime'] = device.last_recorded_at.to_s
 
