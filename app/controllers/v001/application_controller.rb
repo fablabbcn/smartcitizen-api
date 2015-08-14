@@ -1,5 +1,6 @@
 module V001
   class ApplicationController < ActionController::API
+    # include PrettyJSON
 
     before_action :check_api_key
 

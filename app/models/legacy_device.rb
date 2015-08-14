@@ -3,6 +3,10 @@ class LegacyDevice < MySQL
   self.table_name = 'devices'
   belongs_to :user, class_name: 'LegacyUser'
 
+  def geo_lat
+    self.column['geo_lat'].to_i
+  end
+
   def as_json
     hash = {}
     cols = %w(id title description location city country exposure elevation title location geo_lat geo_long created last_insert_datetime)
@@ -11,7 +15,12 @@ class LegacyDevice < MySQL
     if device = Device.find(id) and device.data
       hash['posts'] = {}
       hash['posts']['timestamp'] = device.data[''].to_s.gsub("T", " ").gsub("Z", " UTC")
+      device.data.select{|d| Float(d) rescue false }.each do |key,value|
+        # Rails.logger.info KEYS
+        hash['posts'][KEYS[key.to_sym]] = value.to_s
+      end
       hash['posts']['insert_datetime'] = device.last_recorded_at.to_s
+
     else
       hash['posts'] = false
     end
