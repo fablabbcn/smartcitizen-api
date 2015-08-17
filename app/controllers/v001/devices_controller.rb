@@ -3,14 +3,32 @@ module V001
 
     def show
       @device = LegacyDevice.find(params[:device_id])
+
+      ranges = ['hour', 'day']
+
+      from = Date.parse(params[:from]) rescue nil # limit 500 posts if not set
+      to = Date.parse(params[:to]) rescue Date.today
+      range = ranges.index params[:range].try(:downcase)
+
+      # Kairos.query(rollup: 500, rollup_unit: ranges[range].pluralize )
+
       render json: Oj.dump({ device: @device }, mode: :compat)
     end
 
     def index
       # raw SQL required for performance reasons
-      sql = "SELECT devices.id, devices.title, users.username, devices.description, devices.location, devices.city, devices.country, devices.exposure, devices.elevation, devices.geo_lat, devices.geo_long, CONCAT(devices.created, ' UTC') , CONCAT(COALESCE(devices.last_insert_datetime, ''), ' UTC') FROM devices LEFT OUTER JOIN users ON devices.user_id = users.id"
+      sql = "
+        SELECT devices.id, devices.title, users.username, devices.description,
+        devices.location, devices.city, devices.country, devices.exposure,
+        devices.elevation, devices.geo_lat, devices.geo_long,
+        CONCAT(devices.created, ' UTC'),
+        CONCAT(COALESCE(devices.last_insert_datetime, ''), ' UTC')
+        FROM devices LEFT OUTER JOIN users ON devices.user_id = users.id"
       records = MySQL.connection.execute(sql)
-      keys = %w(id title username description location city country exposure elevation geo_lat geo_long created last_insert_datetime)
+      keys = %w(
+        id title username description location city country exposure elevation
+        geo_lat geo_long created last_insert_datetime
+      )
       render json: Oj.dump({
         devices: records.map{ |record| Hash[keys.zip(record)] }
       }, mode: :compat)
