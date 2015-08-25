@@ -19,6 +19,29 @@ module V0
     def search
       @results = PgSearch.multisearch(params[:q]).includes(:searchable)#.map(&:searchable)
       a = []
+
+
+      Place.select("DISTINCT on (country_code) country_code, country_name, lat, lng").where("country_name ILIKE :q", q: "%#{params[:q]}%").limit(3).each do |p|
+        a << {
+          type: "Country",
+          country_code: p.country_code,
+          country: p.country_name,
+          latitude: p.lat,
+          longitude: p.lng
+        }
+      end
+
+      Place.where("name ILIKE :q", q: "%#{params[:q]}%").limit(5).each do |p|
+        a << {
+          type: "City",
+          city: p.name,
+          country_code: p.country_code,
+          country: p.country_name,
+          latitude: p.lat,
+          longitude: p.lng
+        }
+      end
+
       @results.each do |s|
         h = {}
         h['id'] = s.searchable_id
@@ -28,15 +51,17 @@ module V0
           h['description'] = s.searchable.description
           h['owner_id'] = s.searchable.owner_id
           h['owner_username'] = s.searchable.owner_username
-        else
+          h['city'] = s.searchable.city
+        elsif s.searchable_type == 'User'
           h['username'] = s.searchable.username
           h['avatar'] = s.searchable.avatar
-        end
           h['city'] = s.searchable.city
+        end
           h['country_code'] = s.searchable.country_code
           h['country'] = s.searchable.country_name
         a << h
       end
+
       paginate json: a
     end
 

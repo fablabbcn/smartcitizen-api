@@ -29,3 +29,5 @@
 /devices
 /doc/*.txt
 banned_words.production.yml
+/data
+

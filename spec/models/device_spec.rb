@@ -9,6 +9,22 @@ RSpec.describe Device, :type => :model do
 
   let(:device) { create(:device) }
 
+  it "has kit_version setter" do
+    device = build(:device, kit_version: "1.1")
+    expect(device.kit_id).to eq(3)
+
+    device = build(:device, kit_version: "1.0")
+    expect(device.kit_id).to eq(2)
+  end
+
+  it "has kit_version getter" do
+    device = build(:device, kit_id: 3)
+    expect(device.kit_version).to eq("1.1")
+
+    device = build(:device, kit_id: 2)
+    expect(device.kit_version).to eq("1.0")
+  end
+
   it "has to_s" do
     device = create(:device, name: 'cool device')
     expect(device.to_s).to eq('cool device')

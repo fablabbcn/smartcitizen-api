@@ -20,6 +20,8 @@ class Device < ActiveRecord::Base
     if self.kit_id
       "1.0" if self.kit_id = 2
       "1.1" if self.kit_id = 3
+    else
+      "1313"
     end
   end
 
