@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
   end
 
   def country_name
-    country ? country.to_s : nil
+    country ? country.data['names'].first : nil
   end
 
   def to_email_s

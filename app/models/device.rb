@@ -45,7 +45,7 @@ class Device < ActiveRecord::Base
   has_many :pg_readings
 
   def country_name
-    country ? country.to_s : nil
+    country ? country.data['names'].first : nil
   end
 
   validate :banned_name

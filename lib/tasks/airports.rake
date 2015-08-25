@@ -9,7 +9,7 @@ namespace :airports do
     CSV.foreach(data, headers: true).each do |row|
       if (row['type'] == "large_airport" || row['type'] == "medium_airport")
         begin
-          Place.create(name: row['municipality'], country_code: row['iso_country'], lat: row['latitude_deg'], lng: row['longitude_deg'], country_name: Country[row['iso_country']].to_s)
+          Place.create(name: row['municipality'], country_code: row['iso_country'], lat: row['latitude_deg'], lng: row['longitude_deg'], country_name: Country[row['iso_country']].data['names'].first )
         rescue
         end
       end
