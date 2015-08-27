@@ -103,7 +103,7 @@ class User < ActiveRecord::Base
   end
 
   def country
-    Country[country_code] if country_code
+    ISO3166::Country[country_code] if country_code
   end
 
   def location

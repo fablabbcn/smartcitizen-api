@@ -1,7 +1,7 @@
 ruby '2.2.2'
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.3'
+gem 'rails', '4.2.4'
 gem 'rails-api'
 
 gem 'rack-timeout'
@@ -37,7 +37,7 @@ gem 'pundit'
 gem 'kaminari'
 gem 'api-pagination'
 gem 'geocoder'
-gem 'countries'
+gem 'countries', github: 'hexorx/countries'
 gem 'ransack'
 gem 'c_geohash', require: false
 gem 'date_validator'

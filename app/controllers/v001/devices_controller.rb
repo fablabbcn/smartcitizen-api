@@ -39,5 +39,9 @@ module V001
       render json: Oj.dump({ devices: @devices }, mode: :compat)
     end
 
+    def destroy
+      render text: "OK"
+    end
+
   end
 end
