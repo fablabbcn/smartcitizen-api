@@ -13,7 +13,17 @@ class Device < ActiveRecord::Base
   validates_uniqueness_of :mac_address#, on: :create
   validates_format_of :mac_address, with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/#, on: :create, allow_blank: true
 
-  default_scope { includes :owner }
+  default_scope { with_active_state.includes(:owner) }
+
+  include Workflow
+  workflow do
+    state :active do
+      event :archive, :transitions_to => :archived
+    end
+    state :archived do
+      event :activate, :transitions_to => :active
+    end
+  end
 
   # temporary kit getter/setter
   def kit_version

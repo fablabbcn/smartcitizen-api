@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150825103243) do
+ActiveRecord::Schema.define(version: 20150827133315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,12 +62,14 @@ ActiveRecord::Schema.define(version: 20150825103243) do
     t.string   "owner_username"
     t.uuid     "uuid",             default: "uuid_generate_v4()"
     t.jsonb    "migration_data"
+    t.string   "workflow_state"
   end
 
   add_index "devices", ["geohash"], name: "index_devices_on_geohash", using: :btree
   add_index "devices", ["kit_id"], name: "index_devices_on_kit_id", using: :btree
   add_index "devices", ["last_recorded_at"], name: "index_devices_on_last_recorded_at", using: :btree
   add_index "devices", ["owner_id"], name: "index_devices_on_owner_id", using: :btree
+  add_index "devices", ["workflow_state"], name: "index_devices_on_workflow_state", using: :btree
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false

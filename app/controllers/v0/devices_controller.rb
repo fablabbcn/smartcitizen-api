@@ -48,7 +48,7 @@ module V0
     def destroy
       @device = Device.find(params[:id])
       authorize @device
-      if @device.destroy
+      if @device.archive!
         render nothing: true, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @device.errors

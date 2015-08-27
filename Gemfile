@@ -21,6 +21,7 @@ gem 'jbuilder'
 gem 'responders'
 gem 'newrelic_rpm'
 gem 'pusher'
+gem 'workflow'
 
 gem 'bcrypt', '~> 3.1.7'
 gem 'aws-sdk'

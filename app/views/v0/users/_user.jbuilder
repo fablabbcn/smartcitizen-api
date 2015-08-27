@@ -12,8 +12,10 @@ json.(user,
 
 if current_user and (current_user.is_admin? or current_user == user)
   json.merge! email: user.email
+  json.merge! legacy_api_key: user.legacy_api_key
 else
   json.merge! email: '[FILTERED]'
+  json.merge! legacy_api_key: '[FILTERED]'
 end
 
 json.devices user.devices do |device|

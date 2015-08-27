@@ -113,19 +113,21 @@ class Kairos
       end
       json['readings'] = []
       readings = readings.sort_by{|t| t[0]}
+
       while readings.length > 0
         this_reading = readings.pop
         if readings.length > 0
           next_reading = readings.last
           if next_reading[0] - this_reading[0] < percent
             next_reading = readings.pop
-            json['readings'] << [next_reading[0], [this_reading[1], next_reading[1]].max_by(&:to_i) ]
+            json['readings'] << [next_reading[0], [this_reading[1], next_reading[1]].max_by(&:to_i)]
           else
             json['readings'] << this_reading
             # json['readings'] << readings.pop
           end
         end
       end
+
     else
       json['readings'] = readings.sort_by{|t| t[0]}.reverse
     end
