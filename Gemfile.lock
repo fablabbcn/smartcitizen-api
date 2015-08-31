@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/hexorx/countries.git
-  revision: 25c6b9d3fb4b41de6ea1bf971bc16eef2c8674ad
+  revision: 11936a3bdf279d09d0b3375b262fb72a4580c2a9
   specs:
     countries (1.0.0)
       currencies (~> 0.4.2)
@@ -8,9 +8,9 @@ GIT
 
 GIT
   remote: git://github.com/presidentbeef/brakeman.git
-  revision: 13fed930d36e5b6d77d9a2c34bf4af5e8a591ff5
+  revision: bf5a7912669c4e7ff1f9a68cc38fe2a17ad54c92
   specs:
-    brakeman (3.0.5)
+    brakeman (3.1.0)
       erubis (~> 2.6)
       fastercsv (~> 1.5)
       haml (>= 3.0, < 5.0)
@@ -73,12 +73,12 @@ GEM
       activerecord (>= 3.0.0)
     api-pagination (4.1.1)
     arel (6.0.3)
-    aws-sdk (2.1.16)
-      aws-sdk-resources (= 2.1.16)
-    aws-sdk-core (2.1.16)
+    aws-sdk (2.1.17)
+      aws-sdk-resources (= 2.1.17)
+    aws-sdk-core (2.1.17)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.1.16)
-      aws-sdk-core (= 2.1.16)
+    aws-sdk-resources (2.1.17)
+      aws-sdk-core (= 2.1.17)
     bcrypt (3.1.10)
     builder (3.2.2)
     c_geohash (1.1.2)
@@ -220,7 +220,7 @@ GEM
     oj_mimic_json (1.0.1)
     parallel (1.6.1)
     pg (0.18.2)
-    pg_search (1.0.4)
+    pg_search (1.0.5)
       activerecord (>= 3.1)
       activesupport (>= 3.1)
       arel
