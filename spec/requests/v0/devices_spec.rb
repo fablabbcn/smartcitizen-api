@@ -14,8 +14,8 @@ describe V0::DevicesController do
       second = create(:device)
       json = api_get 'devices'
       expect(response.status).to eq(200)
-      expect(json[0]['name']).to eq(first.name)
-      expect(json[1]['name']).to eq(second.name)
+      expect(json[1]['name']).to eq(first.name)
+      expect(json[0]['name']).to eq(second.name)
     end
 
     describe "world map" do
@@ -24,7 +24,7 @@ describe V0::DevicesController do
         second = create(:device)
         json = api_get "devices/world_map"
         expect(response.status).to eq(200)
-        expect(json.map{|j| j['id']}).to eq([first, second].map(&:id))
+        expect(json.map{|j| j['id']}).to eq([second, first].map(&:id))
       end
 
       skip "needs more specs"

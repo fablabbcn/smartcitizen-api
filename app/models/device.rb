@@ -28,10 +28,11 @@ class Device < ActiveRecord::Base
   # temporary kit getter/setter
   def kit_version
     if self.kit_id
-      "1.0" if self.kit_id = 2
-      "1.1" if self.kit_id = 3
-    else
-      "1313"
+      if self.kit_id == 2
+        "1.0"
+      elsif self.kit_id == 3
+        "1.1"
+      end
     end
   end
 

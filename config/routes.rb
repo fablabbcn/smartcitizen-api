@@ -8,48 +8,6 @@ Rails.application.routes.draw do
     get '/', to: 'static#home'
   end
 
-  # api_version(module: "V2", path: {value: "v2"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=2"}, default: false, defaults: { format: :json }) do
-  #   # devices
-  #   resources :devices do
-  #     resources :pg_readings, only: :index, on: :member
-  #     resources :readings, only: :index, on: :member
-  #     get 'world_map', on: :collection
-  #   end
-  #   # readings
-  #   match "add" => "readings#create", via: [:get, :post, :patch, :put]
-  #   # sensors
-  #   resources :sensors, except: [:destroy]
-  #   # components
-  #   resources :components, only: :index
-  #   resources :sessions
-
-  #   resources :uploads, path: 'avatars' do
-  #     post 'uploaded' => 'uploads#uploaded', on: :collection
-  #   end
-
-  #   resources :measurements
-  #   # kits
-  #   resources :kits, except: [:create, :destroy]
-  #   # users
-  #     resources :users, only: [:index, :show, :create, :update]
-  #     # password_resets
-  #     resources :password_resets, only: [:show, :create, :update]
-  #     # me
-  #     resources :me, only: [:index] do
-  #       patch 'avatar' => 'uploads#create', on: :collection
-  #       post 'avatar' => 'uploads#create', on: :collection
-  #       patch '/' => 'me#update', on: :collection
-  #       put '/' => 'me#update', on: :collection
-  #     end
-  #   # home
-  #   get 'search' => 'static#search'
-
-  #   # use_doorkeeper
-  #   # root to: 'static#home'
-  #   get '/' => 'static#home'
-  # end
-
-
   api_version(module: "V0", path: {value: "v0"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0"}, default: true, defaults: { format: :json }) do
     # devices
     resources :devices do
@@ -77,7 +35,7 @@ Rails.application.routes.draw do
       # password_resets
       resources :password_resets, only: [:show, :create, :update]
       # me
-      resources :me, only: [:index, :destroy] do
+      resources :me, only: [:index] do
         patch 'avatar' => 'uploads#create', on: :collection
         post 'avatar' => 'uploads#create', on: :collection
         patch '/' => 'me#update', on: :collection

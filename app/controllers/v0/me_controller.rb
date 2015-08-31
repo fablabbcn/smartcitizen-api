@@ -18,12 +18,6 @@ module V0
       end
     end
 
-    def destroy
-      @user = current_user
-      authorize @user
-      render nothing: true, status: :ok
-    end
-
 private
 
     def user_params
