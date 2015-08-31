@@ -9,6 +9,13 @@ RSpec.describe Device, :type => :model do
 
   let(:device) { create(:device) }
 
+  it "does not allow banned names" do
+    puts Smartcitizen::Application.config.banned_words
+    device = build(:device, name: "stupid device")
+    device.valid?
+    expect(device.errors[:name]).to include('is reserved')
+  end
+
   it "has kit_version setter" do
     device = build(:device, kit_version: "1.1")
     expect(device.kit_id).to eq(3)

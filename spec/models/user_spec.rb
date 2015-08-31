@@ -46,6 +46,13 @@ RSpec.describe User, :type => :model do
     expect(user.city).to eq("Barcelona")
   end
 
+  it "does not allow banned usernames" do
+    puts Smartcitizen::Application.config.banned_words
+    user = build(:user, username: "stupid guy")
+    user.valid?
+    expect(user.errors[:username]).to include('is reserved')
+  end
+
   it "has api_token" do
     old_token = create(:api_token, owner: user)
     new_token = create(:api_token, owner: user)

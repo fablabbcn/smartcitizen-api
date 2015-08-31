@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
 
   validate :banned_username
   def banned_username
-    if username.present? and Smartcitizen::Application.config.banned_words.include?(username.downcase.strip)
+    if username.present? and (Smartcitizen::Application.config.banned_words & username.split.map(&:downcase).map(&:strip)).any?
       errors.add(:username, "is reserved")
     end
   end

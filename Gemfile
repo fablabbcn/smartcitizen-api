@@ -9,6 +9,11 @@ gem 'rack-attack' # API Rate Limiting
 gem 'rack-cors', :require => 'rack/cors'
 gem 'rack-contrib'
 
+# https://github.com/guard/listen/wiki/Duplicate-directory-errors
+# prevent 2.8 and greater from being used
+gem 'listen', '~> 2.7.12'
+
+
 gem 'pg'
 # gem 'upsert'
 gem 'parallel', require: false
