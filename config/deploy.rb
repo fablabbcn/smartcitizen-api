@@ -3,7 +3,7 @@ lock '3.4.0'
 
 set :application, 'smartcitizen'
 set :deploy_user, 'deployer'
-set :repo_url, "git@github.com:johnrees/#{fetch(:application)}.git"
+set :repo_url, "git@github.com:fablabbcn/#{fetch(:application)}.git"
 
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
 set :deploy_to, "/home/#{fetch(:deploy_user)}/apps/#{fetch(:full_app_name)}"
