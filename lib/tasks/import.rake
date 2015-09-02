@@ -138,3 +138,11 @@ namespace :import do
 end
 
 
+# Device.all.each do |d|
+#   if LegacyDevice.where(id: d.id).exists?
+#     l = LegacyDevice.find(d.id)
+#     if l.description.present?
+#       d.update_column(:description, l.description.try(:strip))
+#     end
+#   end
+# end
