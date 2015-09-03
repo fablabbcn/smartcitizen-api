@@ -20,12 +20,12 @@ class SCK11 < SCK
   end
 
   def temp=(value)
-    t = (-53 + 175.72 / 65536.0 * value)# / 10.0
+    t = (175.72 / 65536.0 * value) - 53 # / 10.0
     super value, t
   end
 
   def hum=(value)
-    h = (7 + 125.0 / 65536.0  * value)# / 10.0
+    h = (125.0 / 65536.0  * value) + 7 # / 10.0
     super value, h
   end
 
