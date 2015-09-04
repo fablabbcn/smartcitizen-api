@@ -4,13 +4,17 @@ module V001
     def show
       @device = LegacyDevice.find(params[:device_id])
 
-      ranges = ['hour', 'day']
-
       from = Date.parse(params[:from]) rescue nil # limit 500 posts if not set
       to = Date.parse(params[:to]) rescue Date.today
-      range = ranges.index params[:range].try(:downcase)
-
       # Kairos.query(rollup: 500, rollup_unit: ranges[range].pluralize )
+
+      if params[:group_by] and %w(hour day).include?(params[:group_by].downcase)
+        if params[:group_by] == "day"
+          @device = 'day'
+        elsif params[:group_by] == "hour"
+          @device = 'hour'
+        end
+      end
 
       render json: Oj.dump({ device: @device }, mode: :compat)
     end
