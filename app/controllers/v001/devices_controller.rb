@@ -8,11 +8,14 @@ module V001
       to = Date.parse(params[:to]) rescue Date.today
       # Kairos.query(rollup: 500, rollup_unit: ranges[range].pluralize )
 
-      if params[:group_by] and %w(hour day).include?(params[:group_by].downcase)
+      if params[:group_by] and %w(hour day).include?(params[:group_by])
         if params[:group_by] == "day"
-          @device = 'day'
+          # @device = 'day'
+          # date: "2014-09-14 UTC"
+          @device = @device.as_day
         elsif params[:group_by] == "hour"
-          @device = 'hour'
+          @device = @device.as_hour
+          # date: "2014-09-14 UTC", hour: "11"
         end
       end
 

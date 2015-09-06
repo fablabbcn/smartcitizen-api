@@ -31,18 +31,32 @@ class LegacyDevice < MySQL
     cols.map{ |c| hash[c] = self[c].to_s }
 
     if device = Device.find(id) and device.data
-      hash['posts'] = {}
-      hash['posts']['timestamp'] = device.data[''].to_s.gsub("T", " ").gsub("Z", " UTC")
+      posts = {}
+      posts['timestamp'] = device.data[''].to_s.gsub("T", " ").gsub("Z", " UTC")
       device.data.select{|d| Float(d) rescue false }.each do |key,value|
         # Rails.logger.info KEYS
-        hash['posts'][KEYS[key.to_sym]] = value
+        posts[KEYS[key.to_sym]] = value
       end
-      hash['posts']['insert_datetime'] = device.last_recorded_at.to_s
+      posts['insert_datetime'] = device.last_recorded_at.to_s
+      hash['posts'] = [posts]
     else
       hash['posts'] = false
     end
 
     hash
+  end
+
+  def as_day
+    h = as_json
+    h['posts'][0].except!('insert_datetime').except!('timestamp')
+    h['posts'][0]['date'] = "#{Date.today} UTC"
+    return h
+  end
+
+  def as_hour
+    h = as_day
+    h['posts'][0]['hour'] = "11"
+    return h
   end
 
 end
