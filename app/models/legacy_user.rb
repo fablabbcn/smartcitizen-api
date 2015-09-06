@@ -7,7 +7,7 @@ class LegacyUser < MySQL
     cols = %w(id username city country website email created role)
     cols.map{ |c| hash[c] = self[c].to_s }
     hash['created'] = self.created.to_s.gsub(' UTC', '')
-    hash['devices'] = self.devices
+    hash['devices'] = self.devices.map{|d| d.as_json(false) }
     hash
   end
 

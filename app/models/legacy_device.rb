@@ -25,36 +25,38 @@ class LegacyDevice < MySQL
     '4': 'temp'
   }
 
-  def as_json
+  def as_json include_posts=true
     hash = {}
     cols = %w(id title description location city country exposure elevation title location geo_lat geo_long created last_insert_datetime)
     cols.map{ |c| hash[c] = self[c].to_s }
 
-    if device = Device.find(id) and device.data
-      posts = {}
-      posts['timestamp'] = device.data[''].to_s.gsub("T", " ").gsub("Z", " UTC")
-      device.data.select{|d| Float(d) rescue false }.each do |key,value|
-        # Rails.logger.info KEYS
-        posts[KEYS[key.to_sym]] = value
+    if include_posts
+      if device = Device.find(id) and device.data
+        posts = {}
+        posts['timestamp'] = device.data[''].to_s.gsub("T", " ").gsub("Z", " UTC")
+        device.data.select{|d| Float(d) rescue false }.each do |key,value|
+          # Rails.logger.info KEYS
+          posts[KEYS[key.to_sym]] = value
+        end
+        posts['insert_datetime'] = device.last_recorded_at.to_s
+        hash['posts'] = [posts]
+      else
+        hash['posts'] = false
       end
-      posts['insert_datetime'] = device.last_recorded_at.to_s
-      hash['posts'] = [posts]
-    else
-      hash['posts'] = false
     end
 
     hash
   end
 
-  def as_day
+  def as_day date
     h = as_json
     h['posts'][0].except!('insert_datetime').except!('timestamp')
-    h['posts'][0]['date'] = "#{Date.today} UTC"
+    h['posts'][0]['date'] = "#{date} UTC"
     return h
   end
 
-  def as_hour
-    h = as_day
+  def as_hour date
+    h = as_day(date)
     h['posts'][0]['hour'] = "11"
     return h
   end

@@ -4,17 +4,19 @@ module V001
     def show
       @device = LegacyDevice.find(params[:device_id])
 
-      from = Date.parse(params[:from]) rescue nil # limit 500 posts if not set
-      to = Date.parse(params[:to]) rescue Date.today
+      from = Date.parse(params[:from_date]) rescue nil # limit 500 posts if not set
+      to = Date.parse(params[:to_date]) rescue Date.today
       # Kairos.query(rollup: 500, rollup_unit: ranges[range].pluralize )
+      # from_date=2013-05-01
+      # to_date=2013-05-01
 
       if params[:group_by] and %w(hour day).include?(params[:group_by])
         if params[:group_by] == "day"
           # @device = 'day'
           # date: "2014-09-14 UTC"
-          @device = @device.as_day
+          @device = @device.as_day(to)
         elsif params[:group_by] == "hour"
-          @device = @device.as_hour
+          @device = @device.as_hour(to)
           # date: "2014-09-14 UTC", hour: "11"
         end
       end
