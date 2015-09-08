@@ -12,11 +12,12 @@ module V0
 
     def index
       @q = Device.includes(:kit, :sensors, :components, :owner,:tags).ransack(params[:q])
-      @devices = @q.result(distinct: true)
 
       if params[:with_tags]
-        @devices = Device.with_user_tags(params[:with_tags])
+        @q = Device.with_user_tags(params[:with_tags]).includes(:kit, :sensors, :components, :owner,:tags).ransack(params[:q])
       end
+
+      @devices = @q.result(distinct: true)
 
       if params[:near]
         if params[:near] =~ /\A(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)\z/
