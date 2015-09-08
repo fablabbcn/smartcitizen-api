@@ -75,7 +75,7 @@ module V0
           kit_id: device.kit_id,
           state: device.state,
           system_tags: device.system_tags,
-          user_tags: device.tags,
+          user_tags: device.tags.map(&:name),
           # exposure: device.exposure,
           data: device.data,
           added_at: device.added_at
