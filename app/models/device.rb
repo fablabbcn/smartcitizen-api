@@ -18,7 +18,7 @@ class Device < ActiveRecord::Base
   has_and_belongs_to_many :tags
 
   def user_tags
-    tags.pluck(:name)
+    tags.map(&:name)
   end
 
   def user_tags=(tag_names)
