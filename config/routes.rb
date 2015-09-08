@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  # resources :tags, except: [:new, :edit]
   api_version(module: "V001", path: {value: "v0.0.1"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0.0.1"}, defaults: { format: :json }) do
     get ':api_key/devices', to: 'devices#index'
     get ':api_key/lastpost', to: 'devices#current_user_index'
@@ -27,6 +28,7 @@ Rails.application.routes.draw do
       post 'uploaded' => 'uploads#uploaded', on: :collection
     end
 
+    resources :tags
     resources :measurements
     # kits
     resources :kits, except: [:create, :destroy]

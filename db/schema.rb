@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150827133315) do
+ActiveRecord::Schema.define(version: 20150907232654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,15 @@ ActiveRecord::Schema.define(version: 20150827133315) do
   add_index "devices", ["last_recorded_at"], name: "index_devices_on_last_recorded_at", using: :btree
   add_index "devices", ["owner_id"], name: "index_devices_on_owner_id", using: :btree
   add_index "devices", ["workflow_state"], name: "index_devices_on_workflow_state", using: :btree
+
+  create_table "devices_tags", force: :cascade do |t|
+    t.integer  "device_id"
+    t.integer  "tag_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "devices_tags", ["device_id", "tag_id"], name: "index_devices_tags_on_device_id_and_tag_id", unique: true, using: :btree
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -191,6 +200,15 @@ ActiveRecord::Schema.define(version: 20150827133315) do
   add_index "sensors", ["ancestry"], name: "index_sensors_on_ancestry", using: :btree
   add_index "sensors", ["measurement_id"], name: "index_sensors_on_measurement_id", using: :btree
 
+  create_table "tags", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
+
   create_table "uploads", force: :cascade do |t|
     t.string   "type"
     t.string   "original_filename"
@@ -225,6 +243,8 @@ ActiveRecord::Schema.define(version: 20150827133315) do
   add_foreign_key "api_tokens", "users", column: "owner_id"
   add_foreign_key "components", "sensors"
   add_foreign_key "devices", "kits"
+  add_foreign_key "devices_tags", "devices"
+  add_foreign_key "devices_tags", "tags"
   add_foreign_key "pg_readings", "devices"
   add_foreign_key "sensors", "measurements"
   add_foreign_key "uploads", "users"

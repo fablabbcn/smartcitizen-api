@@ -15,6 +15,22 @@ class Device < ActiveRecord::Base
 
   default_scope { with_active_state.includes(:owner) }
 
+  has_and_belongs_to_many :tags
+
+  def user_tags
+    tags.pluck(:name)
+  end
+
+  def user_tags=(tag_names)
+    self.tags = tag_names.split(",").map do |n|
+      Tag.find_by(name: n.strip.downcase)
+    end
+  end
+
+  def self.tagged_with(tag_name)
+    Tag.find_by!(name: tag_name).devices
+  end
+
   include Workflow
   workflow do
     state :active do
@@ -110,7 +126,7 @@ class Device < ActiveRecord::Base
       exposure, # indoor / outdoor
       ('new' if created_at > 1.week.ago), # new
       ((last_recorded_at.present? and last_recorded_at > 10.minutes.ago) ? 'online' : 'offline') # state
-    ].compact.sort
+    ].reject(&:blank?).sort
   end
 
   def to_s

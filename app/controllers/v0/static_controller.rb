@@ -12,7 +12,8 @@ module V0
         kits_url: v0_kits_url,
         measurements_url: v0_measurements_url,
         sensors_url: v0_sensors_url,
-        users_url: v0_users_url
+        users_url: v0_users_url,
+        tags_url: v0_tags_url,
       }
     end
 
