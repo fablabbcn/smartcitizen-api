@@ -23,7 +23,7 @@ class Device < ActiveRecord::Base
 
   def user_tags=(tag_names)
     self.tags = tag_names.split(",").map do |n|
-      Tag.find_by(name: n.strip)
+      Tag.find_by!(name: n.strip)
     end
   end
 
