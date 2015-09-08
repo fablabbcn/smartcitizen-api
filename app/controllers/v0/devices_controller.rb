@@ -88,7 +88,8 @@ private
         :mac_address,
         :latitude,
         :longitude,
-        :kit_id
+        :kit_id,
+        :user_tags
       )
     end
 
