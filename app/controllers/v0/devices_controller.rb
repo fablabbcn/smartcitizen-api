@@ -14,6 +14,10 @@ module V0
       @q = Device.includes(:kit, :sensors, :components, :owner,:tags).ransack(params[:q])
       @devices = @q.result(distinct: true)
 
+      if params[:with_tags]
+        @devices = Device.with_user_tags(params[:with_tags])
+      end
+
       if params[:near]
         if params[:near] =~ /\A(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)\z/
           @devices = @devices.near(params[:near].split(','), (params[:within] || 1000))

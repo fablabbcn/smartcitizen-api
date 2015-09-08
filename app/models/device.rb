@@ -23,12 +23,12 @@ class Device < ActiveRecord::Base
 
   def user_tags=(tag_names)
     self.tags = tag_names.split(",").map do |n|
-      Tag.find_by(name: n.strip.downcase)
+      Tag.find_by(name: n.strip)
     end
   end
 
-  def self.tagged_with(tag_name)
-    Tag.find_by!(name: tag_name).devices
+  def self.with_user_tags(tag_name)
+    Tag.find_by!(name: tag_name.split(',').(&:strip)).devices
   end
 
   include Workflow
