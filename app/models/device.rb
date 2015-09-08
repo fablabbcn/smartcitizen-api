@@ -28,7 +28,7 @@ class Device < ActiveRecord::Base
   end
 
   def self.with_user_tags(tag_name)
-    Tag.find_by!(name: tag_name.split(',').(&:strip)).devices
+    Tag.find_by!(name: tag_name.split(',').map(&:strip)).devices
   end
 
   include Workflow
