@@ -5,13 +5,13 @@ module V0
     after_action :verify_authorized, except: [:index, :world_map]
 
     def show
-      @device = Device.includes(:kit, :owner, :sensors).find(params[:id])
+      @device = Device.includes(:kit, :owner, :sensors,:tags).find(params[:id])
       authorize @device
       @device
     end
 
     def index
-      @q = Device.includes(:kit, :sensors, :components, :owner).ransack(params[:q])
+      @q = Device.includes(:kit, :sensors, :components, :owner,:tags).ransack(params[:q])
       @devices = @q.result(distinct: true)
 
       if params[:near]
@@ -56,7 +56,7 @@ module V0
     end
 
     def world_map
-      @devices = Device.includes(:owner).map do |device|
+      @devices = Device.includes(:owner,:tags).map do |device|
         {
           id: device.id,
           name: device.name,
