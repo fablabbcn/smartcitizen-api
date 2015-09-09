@@ -77,7 +77,7 @@ class Device < ActiveRecord::Base
     country ? country.to_s : nil
   end
 
-  validate :banned_name
+  # validate :banned_name
   def banned_name
     if name.present? and (Smartcitizen::Application.config.banned_words & name.split.map(&:downcase).map(&:strip)).any?
       errors.add(:name, "is reserved")
