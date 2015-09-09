@@ -131,8 +131,8 @@ describe V0::DevicesController do
 
     it "does not create a device with missing parameters" do
       api_post 'devices', {
-        access_token: token.token,
-        name: 'a device'
+        name: nil,
+        access_token: token.token
       }
       expect(response.status).to eq(422)
     end
@@ -147,10 +147,10 @@ describe V0::DevicesController do
       expect(response.status).to eq(401)
     end
 
-    it "does not create a device with empty parameters access_token" do
-      api_post "devices", { device: { name: nil }, access_token: token.token }
-      expect(response.status).to eq(422)
-    end
+    # it "does not create a device with empty parameters access_token" do
+    #   api_post "devices", { device: { name: nil }, access_token: token.token }
+    #   expect(response.status).to eq(422)
+    # end
   end
 
   describe "DELETE /devices/:id" do

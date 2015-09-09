@@ -6,12 +6,13 @@ class Device < ActiveRecord::Base
   belongs_to :kit
 
   belongs_to :owner, class_name: 'User'
-  validates_presence_of :owner, :mac_address, :name
+  validates_presence_of :owner, :name
   # validates_presence_of :mac_address, :name
 
   # validates :mac_address, uniqueness: true, format: { with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/ }#, unless: Proc.new { |d| d.mac_address == 'unknown' }
-  validates_uniqueness_of :mac_address#, on: :create
-  validates_format_of :mac_address, with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/#, on: :create, allow_blank: true
+  validates_uniqueness_of :mac_address, allow_nil: true #, on: :create
+  validates_format_of :mac_address, with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
+  #, on: :create, allow_blank: true
 
   default_scope { with_active_state.includes(:owner) }
 
@@ -96,7 +97,7 @@ class Device < ActiveRecord::Base
   end
   # after_validation :reverse_geocode
 
-  after_initialize :set_default_name
+  # after_initialize :set_default_name
 
   # these get overridden the device is a kit
   has_many :components, as: :board
@@ -221,9 +222,9 @@ private
     end
   end
 
-  def set_default_name
-    self.name ||= "My SCK"
-  end
+  # def set_default_name
+  #   self.name ||= "My SCK"
+  # end
 
 end
 
