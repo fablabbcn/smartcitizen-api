@@ -12,8 +12,12 @@ Rails.application.routes.draw do
   api_version(module: "V0", path: {value: "v0"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0"}, default: true, defaults: { format: :json }) do
     # devices
     resources :devices do
-      resources :pg_readings, only: :index, on: :member
-      resources :readings, only: :index, on: :member
+      member do
+        resources :pg_readings, only: :index
+        resources :readings, only: :index do
+          get 'csv', on: :collection
+        end
+      end
       get 'world_map', on: :collection
     end
     # readings

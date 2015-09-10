@@ -18,6 +18,10 @@ module V0
       end
     end
 
+    def csv
+      render text: 'csv here'
+    end
+
     def create
       begin
         mac = request.headers['X-SmartCitizenMacADDR']
