@@ -43,6 +43,16 @@ module V0
         }
       end
 
+      Tag.where("name ILIKE :q", q: "%#{params[:q]}%").limit(5).each do |t|
+        a << {
+          id: t.id,
+          type: "Tag",
+          name: t.name,
+          description: t.description,
+          url: v0_devices_url(with_tags: t.name)
+        }
+      end
+
       @results.each do |s|
         h = {}
         h['id'] = s.searchable_id
@@ -53,10 +63,12 @@ module V0
           h['owner_id'] = s.searchable.owner_id
           h['owner_username'] = s.searchable.owner_username
           h['city'] = s.searchable.city
+          h['url'] = v0_device_url(s.searchable_id)
         elsif s.searchable_type == 'User'
           h['username'] = s.searchable.username
           h['avatar'] = s.searchable.avatar
           h['city'] = s.searchable.city
+          h['url'] = v0_user_url(s.searchable_id)
         end
           h['country_code'] = s.searchable.country_code
           h['country'] = s.searchable.country_name
