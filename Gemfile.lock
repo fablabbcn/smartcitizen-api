@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/presidentbeef/brakeman.git
-  revision: 34811ebc19ac2d28c32ec16868fd9b8e10b890c3
+  revision: d93169a023772f2dd1402b32678e1ae13cf1f8df
   specs:
     brakeman (3.1.0)
       erubis (~> 2.6)
@@ -76,12 +76,12 @@ GEM
       activerecord (>= 3.0.0)
     api-pagination (4.1.1)
     arel (6.0.3)
-    aws-sdk (2.1.19)
-      aws-sdk-resources (= 2.1.19)
-    aws-sdk-core (2.1.19)
+    aws-sdk (2.1.20)
+      aws-sdk-resources (= 2.1.20)
+    aws-sdk-core (2.1.20)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.1.19)
-      aws-sdk-core (= 2.1.19)
+    aws-sdk-resources (2.1.20)
+      aws-sdk-core (= 2.1.20)
     bcrypt (3.1.10)
     builder (3.2.2)
     c_geohash (1.1.2)
@@ -218,8 +218,7 @@ GEM
       addressable (~> 2.3)
     letter_opener (1.4.1)
       launchy (~> 2.2)
-    listen (2.7.12)
-      celluloid (>= 0.15.2)
+    listen (3.0.3)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
     lograge (0.3.4)
@@ -337,7 +336,7 @@ GEM
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
     redis (3.2.1)
-    redis-actionpack (4.0.0)
+    redis-actionpack (4.0.1)
       actionpack (~> 4)
       redis-rack (~> 1.5.0)
       redis-store (~> 1.1.0)
@@ -480,7 +479,7 @@ DEPENDENCIES
   jbuilder
   kaminari
   letter_opener
-  listen (~> 2.7.12)
+  listen
   lograge
   mailgun_rails
   multi_json

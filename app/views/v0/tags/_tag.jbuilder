@@ -1,3 +1,3 @@
 json.(tag,
-  :id, :name, :description
+  :id, :uuid, :name, :description
 )
