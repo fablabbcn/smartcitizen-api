@@ -8,9 +8,9 @@ class Bookkeeper
   attr_accessor :sensors
 
   def initialize data
-    Rails.logger.info data
+
     version = data['version'].split('-').first
-    device = Device.first.id#select(:id).all.sample#.where(mac_address: data['mac']).last
+    device = Device.select(:id).where(mac_address: mac).last
     timestamp = data['timestamp']
     @sensors = data.select{ |k,v| KEYS.include?(k.to_s) }
 
