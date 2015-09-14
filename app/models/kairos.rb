@@ -279,8 +279,10 @@ private
     http = Net::HTTP.new(uri.host,uri.port)
     response = http.post(uri.path,data.to_json,headers)
 
-    Rails.logger.info(response.inspect)
+    # Rails.logger.info(response.inspect)
     # Rails.logger.info(data.to_json)
+
+    return response
   end
 
   def self.extract_datetime timestamp
