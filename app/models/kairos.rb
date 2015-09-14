@@ -271,11 +271,16 @@ private
   end
 
   def self.http_post_to path, data
-    uri = URI.parse "http://kairos.server.smartcitizen.me/api/v1#{path}"
+    uri = URI.parse "http://#{[ ENV['kairos_server'], ENV['kairos_port'] ].reject(&:blank?).join(':')}/api/v1#{path}"
+    # uri = URI.parse "http://#{ENV['kairos_server']}:8080/api/v1#{path}"
     Rails.logger.info(uri)
     headers = {"Content-Type" => "application/json",'Accept' => "application/json"}
+    # http = Net::HTTP.new(uri.host,uri.port)
     http = Net::HTTP.new(uri.host,uri.port)
     response = http.post(uri.path,data.to_json,headers)
+
+    Rails.logger.info(response.inspect)
+    # Rails.logger.info(data.to_json)
   end
 
   def self.extract_datetime timestamp
