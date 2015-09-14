@@ -7,7 +7,7 @@ class Device < ActiveRecord::Base
 
   belongs_to :owner, class_name: 'User'
   validates_presence_of :owner, :name
-  validates_uniqueness_of :name, scope: 'owner_id'
+  # validates_uniqueness_of :name, scope: 'owner_id' < reintroduce this ASAP
   # validates_presence_of :mac_address, :name
 
   # validates :mac_address, uniqueness: true, format: { with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/ }#, unless: Proc.new { |d| d.mac_address == 'unknown' }
