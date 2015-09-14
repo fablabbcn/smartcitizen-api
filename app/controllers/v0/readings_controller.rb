@@ -35,6 +35,7 @@ module V0
 
         ENV['redis'] ? Calibrator.delay.new(mac, data) : Calibrator.new(mac, data)
       rescue Exception => e
+        Rails.logger.info "OLD ERROR"
         Rails.logger.info e
       end
 
@@ -47,6 +48,7 @@ module V0
         })
         ENV['redis'] ? Bookkeeper.delay.new(data) : Bookkeeper.new(data)
       rescue Exception => e
+        Rails.logger.info "NEW ERROR"
         Rails.logger.info e
       end
 

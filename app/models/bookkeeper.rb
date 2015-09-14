@@ -10,7 +10,7 @@ class Bookkeeper
   def initialize data
 
     version = data['version'].split('-').first
-    device = Device.select(:id).where(mac_address: data['mac']).last
+    device = Device.where(mac_address: data['mac']).last.id
     timestamp = data['timestamp']
     @sensors = data.select{ |k,v| KEYS.include?(k.to_s) }
 
