@@ -162,7 +162,7 @@ class Kairos
     }
 
     json = {
-      device_id: params[:device_id].to_i,
+      device_id: params[:id].to_i,
       sensor_id: params[:sensor_id].to_i,
       rollup: params[:rollup],
       function: function
