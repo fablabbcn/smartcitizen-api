@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/presidentbeef/brakeman.git
-  revision: e3b11cedcb91e9ed4fd87207f5b0f7f1976c9e64
+  revision: 140eaf2c916b9e4cea23d3379e3e6ff6ddd7646f
   specs:
     brakeman (3.1.0)
       erubis (~> 2.6)
