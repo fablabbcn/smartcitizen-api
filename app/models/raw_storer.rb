@@ -9,7 +9,10 @@ class RawStorer
 
   def initialize data
 
+    # version is not always present
+    # undefined method `split' for nil:NilClass
     version = data['version'].split('-').first
+
     timestamp = data['timestamp']
     mac = data['mac']
 
@@ -17,11 +20,12 @@ class RawStorer
 
     _data = []
     @sensors.each do |sensor, value|
+      metric = "#{sensor}.raw"
       ts = Time.parse(timestamp).to_i * 1000
       value = Float(value) rescue value
-      puts "\t#{sensor} #{ts} #{value} mac=#{mac} version=#{version}"
+      puts "\t#{metric} #{ts} #{value} mac=#{mac} version=#{version}"
       _data.push({
-        name: "#{sensor}.raw",
+        name: metric,
         timestamp: ts,
         value: value,
         tags: {
