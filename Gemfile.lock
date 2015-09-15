@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: git://github.com/seuros/capistrano-sidekiq.git
-  revision: 0d85831168ec54861ad704cc47d943a8b1cad6f6
+  revision: 8d8d9317b6f5862d86c800ba56a5e406be24b2c1
   specs:
     capistrano-sidekiq (0.5.4)
       capistrano
