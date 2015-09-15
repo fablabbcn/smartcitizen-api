@@ -14,6 +14,7 @@ gem 'rack-contrib'
 gem 'listen'#, '~> 2.7.12'
 gem 'airbrake'
 
+gem 'statsample'
 gem 'pg'
 # gem 'upsert'
 gem 'parallel', require: false

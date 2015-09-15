@@ -46,7 +46,7 @@ module V0
           'version' => request.headers['X-SmartCitizenVersion'],
           'ip' => request.remote_ip
         })
-        ENV['redis'] ? Bookkeeper.delay.new(data) : Bookkeeper.new(data)
+        ENV['redis'] ? RawStorer.delay.new(data) : RawStorer.new(data)
       rescue Exception => e
         Rails.logger.info "NEW ERROR"
         Rails.logger.info e
