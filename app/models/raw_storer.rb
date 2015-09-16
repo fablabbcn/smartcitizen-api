@@ -8,29 +8,27 @@ class RawStorer
   attr_accessor :sensors
 
   def initialize data
+    mac = data['mac'].downcase.strip
+    device_id = Device.where(mac: mac).last.id
 
     # version is not always present
     # undefined method `split' for nil:NilClass
-    version = data['version'].split('-').first
+    identifier = data['version'].split('-').first
 
-    timestamp = data['timestamp']
-    mac = data['mac']
-
-    @sensors = data.select{ |k,v| KEYS.include?(k.to_s) }
+    ts = Time.parse(data['timestamp']).to_i * 1000
 
     _data = []
-    @sensors.each do |sensor, value|
+    data.select{ |k,v| KEYS.include?(k.to_s) }.each do |sensor, value|
       metric = "#{sensor}.raw"
-      ts = Time.parse(timestamp).to_i * 1000
       value = Float(value) rescue value
-      puts "\t#{metric} #{ts} #{value} mac=#{mac} version=#{version}"
+      puts "\t#{metric} #{ts} #{value} device_id=#{device_id} identifier=#{version}"
       _data.push({
         name: metric,
         timestamp: ts,
         value: value,
         tags: {
-          mac: mac.downcase.strip,
-          version: version
+          device_id: device,
+          identifier: identifier
         }
       })
     end
