@@ -9,7 +9,7 @@ class RawStorer
 
   def initialize data
     mac = data['mac'].downcase.strip
-    device_id = Device.where(mac: mac).last.id
+    device_id = Device.where(mac: mac_address).last.id
 
     # version is not always present
     # undefined method `split' for nil:NilClass
