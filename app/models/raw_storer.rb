@@ -21,7 +21,7 @@ class RawStorer
     data.select{ |k,v| KEYS.include?(k.to_s) }.each do |sensor, value|
       metric = "#{sensor}.raw"
       value = Float(value) rescue value
-      puts "\t#{metric} #{ts} #{value} device_id=#{device_id} identifier=#{version}"
+      puts "\t#{metric} #{ts} #{value} device_id=#{device_id} identifier=#{identifier}"
       _data.push({
         name: metric,
         timestamp: ts,
