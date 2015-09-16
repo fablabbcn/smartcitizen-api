@@ -262,7 +262,7 @@ class Kairos
     response = self.http_post_to("/datapoints", _data)
   end
 
-private
+protected
 
   def self.time_iterate(start_time, end_time, step, &block)
     begin
@@ -294,6 +294,3 @@ private
   end
 
 end
-
-
-[{:name=>"d1356", :timestamp=>1438080463000, :value=>10.23517578125, :tags=>{:s=>12}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>23584, :tags=>{:s=>"12_raw"}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>68.9049072265625, :tags=>{:s=>13}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>32456, :tags=>{:s=>"13_raw"}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>0.0, :tags=>{:s=>14}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>0, :tags=>{:s=>"14_raw"}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>100.0, :tags=>{:s=>17}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>1000, :tags=>{:s=>"17_raw"}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>0, :tags=>{:s=>18}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>0, :tags=>{:s=>"18_raw"}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>92.087, :tags=>{:s=>16}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>92087, :tags=>{:s=>"16_raw"}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>0.0, :tags=>{:s=>15}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>0, :tags=>{:s=>"15_raw"}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>50.0, :tags=>{:s=>7}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>0, :tags=>{:s=>"7_raw"}}, {:name=>"d1356", :timestamp=>1438080463000, :value=>1, :tags=>{:s=>21}}]
