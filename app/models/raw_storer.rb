@@ -27,7 +27,7 @@ class RawStorer
         timestamp: ts,
         value: value,
         tags: {
-          device_id: device,
+          device_id: device_id,
           identifier: identifier
         }
       })
