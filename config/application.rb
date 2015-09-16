@@ -59,6 +59,8 @@ module Smartcitizen
     # gzip
     config.middleware.use Rack::Deflater
 
+    config.autoload_paths += %W(#{config.root}/lib)
+
     config.banned_words = YAML.load_file("#{Rails.root}/config/banned_words.yml").map(&:values).flatten
 
     # Settings in config/environments/* take precedence over those specified here.

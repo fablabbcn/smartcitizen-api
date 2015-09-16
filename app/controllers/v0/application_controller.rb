@@ -25,7 +25,17 @@ module V0
 
     before_filter :prepend_view_paths
 
-  private
+protected
+
+    def check_missing_params *params_list
+      missing_params = []
+      params_list.each do |param|
+        missing_params << param unless params[param]
+      end
+      raise ActionController::ParameterMissing.new(missing_params.to_sentence) if missing_params.any?
+    end
+
+private
 
     def prepend_view_paths
       prepend_view_path "app/views/v0"

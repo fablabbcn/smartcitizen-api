@@ -19,6 +19,10 @@ class Device < ActiveRecord::Base
 
   has_and_belongs_to_many :tags
 
+  def find_sensor_id_by_key sensor_key
+    kit.sensor_map[sensor_key.to_s]
+  end
+
   def user_tags
     tags.map(&:name)
   end

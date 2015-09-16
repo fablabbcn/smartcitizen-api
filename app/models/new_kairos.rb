@@ -1,4 +1,5 @@
 class NewKairos < Kairos
+
   def self.query params
 
     function = params[:function] || "avg"
@@ -6,32 +7,31 @@ class NewKairos < Kairos
     rollup_value = params[:rollup].to_i
     rollup_unit = Kairos.get_timespan( params[:rollup].gsub(rollup_value.to_s,'') )
 
+    device = Device.find(params[:id])
+    sensor_id = device.find_sensor_id_by_key(params[:sensor_id])
+    sensor = Sensor.find(sensor_id)
 
-      metrics = [{
-        tags: {
-          device_id: params[:id]
-        },
-        name: params[:sensor_id],
-        aggregators: [
-          {
-            name: function,
-            align_sampling: true,
-            sampling: {
-              value: rollup_value,#"1",
-              unit: rollup_unit #"days"
-            }
+    metrics = [{
+      tags: { device_id: params[:id] },
+      name: params[:sensor_id],
+      aggregators: [
+        {
+          name: function,
+          align_sampling: true,
+          sampling: {
+            value: rollup_value,#"1",
+            unit: rollup_unit #"days"
           }
-        ]
-      }]
+        }
+      ]
+    }]
 
-    data = {
-      metrics: metrics,
-      cache_time: 0
-    }
+    data = { metrics: metrics, cache_time: 0 }
 
     json = {
       device_id: params[:id].to_i,
-      sensor: params[:sensor_id],
+      sensor_key: params[:sensor_id],
+      sensor_id: sensor_id,
       rollup: params[:rollup],
       function: function
     }
@@ -79,14 +79,14 @@ class NewKairos < Kairos
 
     json['sample_size'] = j['sample_size']
 
-    readings = j['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, r[1]]}
+    readings = j['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, sensor.calibrated_value(r[1]) ]}
 
     if rollup_value.send(rollup_unit) >= 10.minutes && params[:all_intervals]
       # json['readings'] = readings
       distance = rollup_value.send(rollup_unit)
       percent = rollup_value.send(rollup_unit) * 0.1
       time_iterate(json['from'], json['to'], distance ) do |t|
-        readings << [t,nil]
+        readings << [t, nil]
       end
       json['readings'] = []
       readings = readings.sort_by{|t| t[0]}
@@ -100,7 +100,6 @@ class NewKairos < Kairos
             json['readings'] << [next_reading[0], [this_reading[1], next_reading[1]].max_by(&:to_i)]
           else
             json['readings'] << this_reading
-            # json['readings'] << readings.pop
           end
         end
       end

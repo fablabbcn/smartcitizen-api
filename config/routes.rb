@@ -14,10 +14,8 @@ Rails.application.routes.draw do
     resources :devices do
       member do
         resources :pg_readings, only: :index
-        get 'new_readings', to: 'readings#new_readings'
-        resources :readings, only: :index do
-          get 'csv', on: :collection
-        end
+        resources :readings, only: :index
+        resources :new_readings, only: :index
       end
       get 'world_map', on: :collection
     end

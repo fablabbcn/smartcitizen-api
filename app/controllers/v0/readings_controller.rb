@@ -18,22 +18,6 @@ module V0
       end
     end
 
-    def new_readings
-      missing_params = []
-      %w(rollup sensor_id).each do |param|
-        missing_params << param unless params[param]
-      end
-      if missing_params.any?
-        raise ActionController::ParameterMissing.new(missing_params.to_sentence)
-      else
-        render json: NewKairos.query(params)
-      end
-    end
-
-    def csv
-      render text: 'csv here'
-    end
-
     def create
       # OLD IMPLEMENTATION
       begin
