@@ -13,7 +13,8 @@ class RawStorer
     # undefined method `split' for nil:NilClass
     identifier = data['version'].split('-').first
 
-    ts = Time.parse(data['timestamp']).to_i * 1000
+    parsed_ts = Time.parse(data['timestamp'])
+    ts = parsed_ts.to_i * 1000
 
     _data = []
     data.select{ |k,v| KEYS.include?(k.to_s) }.each do |sensor, value|
@@ -34,7 +35,7 @@ class RawStorer
     Kairos.http_post_to("/datapoints", _data)
 
     # device.update_attributes(data: data, last_recorded_at: ts)
-    if !device.last_recorded_at or Time.at(data['timestamp']) > device.last_recorded_at
+    if device.last_recorded_at.blank? or parsed_ts > device.last_recorded_at
       device.update_attributes(last_recorded_at: data['timestamp'])
     end
 
