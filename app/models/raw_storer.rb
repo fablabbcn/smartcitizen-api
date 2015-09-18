@@ -34,7 +34,9 @@ class RawStorer
     Kairos.http_post_to("/datapoints", _data)
 
     # device.update_attributes(data: data, last_recorded_at: ts)
-    device.update_attributes(last_recorded_at: data['timestamp'])
+    if !device.last_recorded_at or Time.at(data['timestamp']) > device.last_recorded_at
+      device.update_attributes(last_recorded_at: data['timestamp'])
+    end
 
   end
 
