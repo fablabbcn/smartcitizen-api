@@ -9,7 +9,8 @@ class NewKairos < Kairos
 
     device = Device.find(params[:id])
     sensor_id = device.find_sensor_id_by_key(params[:sensor_key])
-    sensor = Sensor.find(sensor_id)
+    component = device.find_component_by_sensor_id(sensor_id)
+    # sensor = Sensor.find(sensor_id)
 
     metrics = [{
       tags: { device_id: params[:id] },
@@ -32,6 +33,7 @@ class NewKairos < Kairos
       device_id: params[:id].to_i,
       sensor_key: params[:sensor_key],
       sensor_id: sensor_id,
+      component_id: component.id,
       rollup: params[:rollup],
       function: function
     }
@@ -79,7 +81,7 @@ class NewKairos < Kairos
 
     json['sample_size'] = j['sample_size']
 
-    readings = j['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, sensor.calibrated_value(r[1]) ]}
+    readings = j['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, component.calibrated_value(r[1]) ]}
 
     if rollup_value.send(rollup_unit) >= 10.minutes && params[:all_intervals]
       # json['readings'] = readings
