@@ -33,7 +33,8 @@ class RawStorer
 
     Kairos.http_post_to("/datapoints", _data)
 
-    device.update_attributes(data: data, last_recorded_at: ts)
+    # device.update_attributes(data: data, last_recorded_at: ts)
+    device.update_attributes(last_recorded_at: ts)
 
   end
 
