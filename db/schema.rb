@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150917235839) do
+ActiveRecord::Schema.define(version: 20150918012211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -197,7 +197,6 @@ ActiveRecord::Schema.define(version: 20150917235839) do
     t.datetime "updated_at",                                    null: false
     t.integer  "measurement_id"
     t.uuid     "uuid",           default: "uuid_generate_v4()"
-    t.text     "equation"
   end
 
   add_index "sensors", ["ancestry"], name: "index_sensors_on_ancestry", using: :btree
