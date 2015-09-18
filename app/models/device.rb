@@ -20,7 +20,7 @@ class Device < ActiveRecord::Base
   has_and_belongs_to_many :tags
 
   def find_component_by_sensor_id sensor_id
-    components.find(sensor_id)
+    components.where(sensor_id: sensor_id).first
   end
 
   def find_sensor_id_by_key sensor_key
