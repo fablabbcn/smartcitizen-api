@@ -79,7 +79,7 @@ group :development do
   gem 'spring'
   gem 'sshkit-sudo'
   gem 'capistrano-rbenv'
-  gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
+  gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq', ref: '8d8d9317b6f5862d86c800ba56a5e406be24b2c1'
 end
 
 group :development, :test do
