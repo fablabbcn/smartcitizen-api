@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150918012211) do
+ActiveRecord::Schema.define(version: 20150920212633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -241,6 +241,7 @@ ActiveRecord::Schema.define(version: 20150918012211) do
     t.uuid     "uuid",                 default: "uuid_generate_v4()"
     t.jsonb    "old_data"
     t.string   "legacy_api_key"
+    t.integer  "cached_device_ids",                                                array: true
   end
 
   add_foreign_key "api_tokens", "users", column: "owner_id"

@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
 
   validates :url, format: URI::regexp(%w(http https)), allow_nil: true, allow_blank: true
 
-  has_many :devices, foreign_key: 'owner_id'
+  has_many :devices, foreign_key: 'owner_id', after_add: :update_cached_device_ids!, after_remove: :update_cached_device_ids!
   has_many :sensors, through: :devices
   has_many :api_tokens, foreign_key: 'owner_id'
 
@@ -112,6 +112,14 @@ class User < ActiveRecord::Base
       country: country.try(:name),
       country_code: country_code
     }
+  end
+
+  def update_cached_device_ids!(record)
+    record.owner.update_all_device_ids! if record.owner
+  end
+
+  def update_all_device_ids!
+    update_column(:cached_device_ids, device_ids)
   end
 
 private

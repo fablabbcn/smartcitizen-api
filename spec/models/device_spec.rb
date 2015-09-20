@@ -12,7 +12,7 @@ RSpec.describe Device, :type => :model do
 
   it "does not allow banned names" do
     puts Smartcitizen::Application.config.banned_words
-    device = build(:device, name: "stupid device")
+    device = build(:device, name: "stupid")
     device.valid?
     expect(device.errors[:name]).to include('is reserved')
   end

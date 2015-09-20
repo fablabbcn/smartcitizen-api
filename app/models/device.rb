@@ -85,9 +85,10 @@ class Device < ActiveRecord::Base
     country ? country.to_s : nil
   end
 
-  # validate :banned_name
+  validate :banned_name
   def banned_name
-    if name.present? and (Smartcitizen::Application.config.banned_words & name.split.map(&:downcase).map(&:strip)).any?
+    if name.present? and (Smartcitizen::Application.config.banned_words.include? name.downcase)
+      # name.split.map(&:downcase).map(&:strip)).any?
       errors.add(:name, "is reserved")
     end
   end
@@ -184,7 +185,6 @@ class Device < ActiveRecord::Base
       recorded_at: updated_at,
       added_at: updated_at,
       # calibrated_at: updated_at,
-      firmware: "[IGNORE]",
       location: {
         ip: nil,
         exposure: exposure,

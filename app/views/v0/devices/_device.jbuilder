@@ -17,27 +17,17 @@ else
   json.merge! mac_address: '[FILTERED]'
 end
 
-# # TO REMOVE
-# json. device do
-#   json.notice ">>> THIS OBJECT WILL BE DEPRECATED, USE THE ROOT PARAMETERS <<<"
-#   json.id device.id
-#   json.name ">> CHECK JSON << - #{device.name}"
-#   json.description ">> CHECK JSON << - #{device.description}"
-#   json.status ">> CHECK JSON << - #{device.status}"
-#   json.last_reading_at device.last_reading_at
-#   json.added_at device.added_at.utc.iso8601
-#   json.updated_at device.updated_at.utc.iso8601
-#   if current_user and (current_user.is_admin? or (device.owner_id and current_user.id == device.owner_id))
-#     json.mac_address device.mac_address
-#   else
-#     json.mac_address '[FILTERED]'
-#   end
-# end
-
 if device.owner
-  json.owner(
-    device.owner, :id, :uuid, :username, :avatar, :url, :joined_at, :location, :device_ids
-  )
+  json.owner do
+    json.id device.owner.id
+    json.uuid device.owner.uuid
+    json.username device.owner.username
+    json.avatar device.owner.avatar
+    json.url device.owner.url
+    json.joined_at device.owner.joined_at
+    json.location device.owner.location
+    json.device_ids device.owner.cached_device_ids
+  end
 else
   json.merge! owner: nil
 end
