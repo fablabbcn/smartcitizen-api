@@ -8,13 +8,19 @@ class NewKairos < Kairos
     rollup_unit = Kairos.get_timespan( params[:rollup].gsub(rollup_value.to_s,'') )
 
     device = Device.find(params[:id])
-    sensor_id = device.find_sensor_id_by_key(params[:sensor_key])
+
+    if sensor_key =params[:sensor_key]
+      sensor_id = device.find_sensor_id_by_key(params[:sensor_key])
+    else
+      sensor_id = params[:sensor_id]
+      sensor_key = device.find_sensor_key_by_id(sensor_id.to_i)
+    end
+
     component = device.find_component_by_sensor_id(sensor_id)
-    # sensor = Sensor.find(sensor_id)
 
     metrics = [{
       tags: { device_id: params[:id] },
-      name: params[:sensor_key],
+      name: sensor_key,
       aggregators: [
         {
           name: function,
@@ -31,7 +37,7 @@ class NewKairos < Kairos
 
     json = {
       device_id: params[:id].to_i,
-      sensor_key: params[:sensor_key],
+      sensor_key: sensor_key,
       sensor_id: sensor_id,
       component_id: component.id,
       rollup: params[:rollup],

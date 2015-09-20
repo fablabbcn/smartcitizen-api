@@ -14,8 +14,8 @@ Rails.application.routes.draw do
     resources :devices do
       member do
         resources :pg_readings, only: :index
-        resources :readings, only: :index
-        resources :new_readings, only: :index
+        # resources :readings, only: :index
+        resources :new_readings, only: :index, path: 'readings'
       end
       get 'world_map', on: :collection
     end

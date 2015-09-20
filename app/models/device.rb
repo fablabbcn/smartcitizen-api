@@ -24,7 +24,11 @@ class Device < ActiveRecord::Base
   end
 
   def find_sensor_id_by_key sensor_key
-    kit.sensor_map[sensor_key.to_s]
+    kit.sensor_map[sensor_key.to_s] rescue nil
+  end
+
+  def find_sensor_key_by_id sensor_id
+    kit.sensor_map.invert[sensor_id] rescue nil
   end
 
   def user_tags

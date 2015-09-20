@@ -5,7 +5,7 @@ module V0
   class NewReadingsController < ApplicationController
 
     def index
-      check_missing_params(:rollup, :sensor_key)
+      check_missing_params(:rollup) # sensor_key or sensor_id
       render json: NewKairos.query(params)
     end
 
