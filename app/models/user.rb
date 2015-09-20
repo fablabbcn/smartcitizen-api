@@ -119,7 +119,7 @@ class User < ActiveRecord::Base
   end
 
   def update_all_device_ids!
-    update_column(:cached_device_ids, device_ids)
+    update_column(:cached_device_ids, device_ids.try(:sort))
   end
 
 private
