@@ -9,14 +9,15 @@ class NewKairos < Kairos
 
     device = Device.find(params[:id])
 
-    if sensor_key =params[:sensor_key]
+    if sensor_key = params[:sensor_key]
       sensor_id = device.find_sensor_id_by_key(params[:sensor_key])
     else
-      sensor_id = params[:sensor_id]
+      sensor_id = params[:sensor_id].try(:to_i)
       sensor_key = device.find_sensor_key_by_id(sensor_id.to_i)
     end
 
     component = device.find_component_by_sensor_id(sensor_id)
+
 
     metrics = [{
       tags: { device_id: params[:id] },
