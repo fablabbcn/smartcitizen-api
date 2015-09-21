@@ -56,7 +56,7 @@ class LegacyDevice < MySQL
     # h['posts'][0].except!('insert_datetime').except!('timestamp')
     # h['posts'][0]['date'] = "#{date} UTC"
     h['posts'] = Kairos.legacy_query({rollup: '1d', device_id: id, sensor_ids: Device.find(id).kit.sensors.pluck(:id)})
-    h['posts'].map{|hash| hash.except!('hour') }
+    h['posts'].map{|hash| hash.except!(:hour) }
     return h
   end
 
