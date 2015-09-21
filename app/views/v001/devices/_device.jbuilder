@@ -12,7 +12,7 @@ json.merge! location: device.city
 json.merge! geo_lat: device.latitude
 json.merge! geo_lng: device.longitude
 json.merge! created: device.created_at
-json.merge! last_insert_datetime: device.updated_at
+json.merge! last_insert_datetime: device.last_insert_datetime #Device.find(device.id).last_reading_at
 
 
 # last_insert_datetime
