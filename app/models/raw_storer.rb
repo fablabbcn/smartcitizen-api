@@ -44,7 +44,7 @@ class RawStorer
 
     if parsed_ts > (device.last_recorded_at || Time.at(0))
       Device.where(id: device.id).update_all(last_recorded_at: parsed_ts, data: sql_data) # update without touching updated_at
-      LegacyDevice.where(id: device.id).update_column(last_insert_datetime: Time.now.utc)
+      LegacyDevice.find(device.id).update_column(last_insert_datetime: Time.now.utc)
     end
 
   end
