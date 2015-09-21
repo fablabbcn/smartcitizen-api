@@ -7,6 +7,10 @@ Rails.application.routes.draw do
     get ':api_key/:device_id/posts', to: 'devices#show'
     get ':api_key/me', to: 'users#show'
     get '/', to: 'static#home'
+
+    get "/404" => "errors#not_found"
+    get "/500" => "errors#exception"
+    match "*path", to: "errors#not_found", via: :all
   end
 
   api_version(module: "V0", path: {value: "v0"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0"}, default: true, defaults: { format: :json }) do
@@ -50,17 +54,16 @@ Rails.application.routes.draw do
 
     # home
     get 'search' => 'static#search'
-
     # use_doorkeeper
     # root to: 'static#home'
     get '/', to: 'static#home'
+
+    get "/404" => "errors#not_found"
+    get "/500" => "errors#exception"
+    match "*path", to: "errors#not_found", via: :all
   end
 
   # get '*path', :to => redirect("/v0/%{path}")
   # root to: redirect('/v0')
-
-  get "/404" => "errors#not_found"
-  get "/500" => "errors#exception"
-  match "*path", to: "errors#not_found", via: :all
 
 end
