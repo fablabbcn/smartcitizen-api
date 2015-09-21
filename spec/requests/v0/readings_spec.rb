@@ -4,7 +4,7 @@ describe V0::ReadingsController do
 
   let(:device) { create(:device) }
 
-  describe "GET devices/:id/k_readings" do
+  describe "GET devices/:id/readings" do
 
     %w(sensor_id rollup).each do |param|
       it "requires #{param}" do
@@ -16,7 +16,7 @@ describe V0::ReadingsController do
     skip "returns readings" do
       b = api_get "devices/#{device.id}/readings?sensor_id=#{device.sensors.first.id}"
       expect(response.status).to eq(200)
-      puts b
+      # puts b
     end
 
   end

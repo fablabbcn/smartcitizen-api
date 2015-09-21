@@ -108,9 +108,9 @@ describe V0::DevicesController do
       expect(response.status).to eq(401)
     end
 
-    it "does not update a device with empty parameters access_token" do
+    it "will update a device with empty parameters access_token" do
       api_put "devices/#{device.id}", { name: nil, access_token: token.token }
-      expect(response.status).to eq(422)
+      expect(response.status).to eq(200)
     end
 
   end
