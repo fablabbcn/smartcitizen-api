@@ -50,19 +50,19 @@ class LegacyDevice < MySQL
     hash
   end
 
-  def as_day date
+  def as_day from, to
     h = as_json(true)
     # h['posts'] = []
     # h['posts'][0].except!('insert_datetime').except!('timestamp')
     # h['posts'][0]['date'] = "#{date} UTC"
-    h['posts'] = Kairos.legacy_query({rollup: '1d', device_id: id, sensor_ids: Device.find(id).kit.sensors.pluck(:id)})
+    h['posts'] = Kairos.legacy_query({rollup: '1d', device_id: id, sensor_ids: Device.find(id).kit.sensors.pluck(:id), from: from_date, to: to_date})
     h['posts'].map{|hash| hash.except!(:hour) }
     return h
   end
 
-  def as_hour date
-    h = as_day(date)
-    h['posts'] = Kairos.legacy_query({rollup: '1h', device_id: id, sensor_ids: Device.find(id).kit.sensors.pluck(:id)})
+  def as_hour from, to
+    h = as_day(from, to)
+    h['posts'] = Kairos.legacy_query({rollup: '1h', device_id: id, sensor_ids: Device.find(id).kit.sensors.pluck(:id), from: from_date, to: to_date})
     # h['posts'][0]['hour'] = "11"
     return h
   end

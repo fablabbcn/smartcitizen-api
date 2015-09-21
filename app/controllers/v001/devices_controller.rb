@@ -16,9 +16,9 @@ module V001
         if params[:group_by] == "day"
           # @device = 'day'
           # date: "2014-09-14 UTC"
-          @device = @device.as_day(to)
+          @device = @device.as_day(from, to)
         elsif params[:group_by] == "hour"
-          @device = @device.as_hour(to)
+          @device = @device.as_hour(from, to)
           # date: "2014-09-14 UTC", hour: "11"
         end
       end
