@@ -43,7 +43,7 @@ class RawStorer
     Kairos.http_post_to("/datapoints", _data)
 
     if parsed_ts > (device.last_recorded_at || Time.at(0))
-      device.update_attributes(last_recorded_at: parsed_ts, data: sql_data)
+      Device.where(id: device.id).update_all(last_recorded_at: parsed_ts, data: sql_data) # update without touching updated_at
     end
 
   end
