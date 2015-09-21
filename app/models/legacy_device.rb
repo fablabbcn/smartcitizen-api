@@ -30,6 +30,7 @@ class LegacyDevice < MySQL
     cols = %w(id title description location city country exposure elevation title location geo_lat geo_long created last_insert_datetime)
     cols.map{ |c| hash[c] = self[c].to_s }
     # self['last_insert_datetime'] = Device.find(id).last_reading_at
+    hash['last_insert_datetime'] = (hash['last_insert_datetime'] + " UTC").gsub(/( UTC)+/, " UTC")
 
     if include_posts
       if device = Device.find(id) and device.data
@@ -52,14 +53,15 @@ class LegacyDevice < MySQL
   def as_day date
     h = as_json(true)
     # h['posts'] = []
-    h['posts'][0].except!('insert_datetime').except!('timestamp')
-    h['posts'][0]['date'] = "#{date} UTC"
+    # h['posts'][0].except!('insert_datetime').except!('timestamp')
+    # h['posts'][0]['date'] = "#{date} UTC"
+    h['posts'] = Kairos.legacy_query({rollup: '1d', device_id: id, sensor_ids: Device.find(id).kit.sensors.pluck(:id)})
     return h
   end
 
   def as_hour date
     h = as_day(date)
-    h['posts'] = Kairos.legacy_query({rollup: '1h', device_id: id, sensor_ids: Device.find(id).kit.sensors.pluck(:id)  })
+    h['posts'] = Kairos.legacy_query({rollup: '1h', device_id: id, sensor_ids: Device.find(id).kit.sensors.pluck(:id)})
     # h['posts'][0]['hour'] = "11"
     return h
   end
