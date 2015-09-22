@@ -47,6 +47,10 @@ module Smartcitizen
       config.logger.level = Logger.const_get(log_level)
       config.log_level = log_level
       config.lograge.enabled = true
+      config.lograge.custom_options = lambda do |event|
+        {:time => event.time}
+      end
+
     end
 
     config.middleware.insert_before 0, "Rack::Cors" do
