@@ -5,7 +5,7 @@ gem 'rails', '4.2.4'
 gem 'rails-api'
 
 gem 'rack-timeout'
-gem 'rack-attack' # API Rate Limiting
+# gem 'rack-attack' # API Rate Limiting
 gem 'rack-cors', :require => 'rack/cors'
 gem 'rack-contrib'
 
