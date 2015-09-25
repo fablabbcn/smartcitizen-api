@@ -30,7 +30,8 @@ protected
     def check_missing_params *params_list
       missing_params = []
       params_list.each do |param|
-        missing_params << param unless params[param]
+        individual_params = param.split("||")
+        missing_params << individual_params.join(" OR ") unless (params.keys & individual_params).any?
       end
       raise ActionController::ParameterMissing.new(missing_params.to_sentence) if missing_params.any?
     end
