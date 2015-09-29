@@ -40,7 +40,7 @@ class NewKairos < Kairos
       device_id: params[:id].to_i,
       sensor_key: sensor_key,
       sensor_id: sensor_id,
-      component_id: component.id,
+      component_id: component.try(:id),
       rollup: params[:rollup],
       function: function
     }
