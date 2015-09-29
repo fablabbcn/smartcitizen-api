@@ -20,7 +20,7 @@ class NewKairos < Kairos
 
 
     metrics = [{
-      tags: { device_id: params[:id] },
+      tags: { device: params[:id] },
       name: sensor_key,
       aggregators: [
         {
