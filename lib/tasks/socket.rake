@@ -11,7 +11,8 @@ namespace :socket do
     keys = %w(bat co hum light nets no2 noise panel temp)
     LegacyDevice.all.order(id: :asc).each do |device|
       kit_version = device.kit_version
-      Feed.where(device_id: device.id).each do |feed|
+      device_id = device.id
+      Feed.where(device_id: device_id).each do |feed|
         timestamp = feed.insert_datetime.to_i
         keys.each do |sensor_key|
           s = "put #{sensor_key} #{timestamp} #{Float(feed[sensor_key]) rescue feed[sensor_key]} device=#{device_id} identifier=#{kit_version}\n"
