@@ -11,6 +11,8 @@ module V0
     end
 
     def index
+      Rails.logger.info params.inspect
+
       @q = Device.includes(:kit, :sensors, :components, :owner,:tags).ransack(params[:q])
 
       if params[:with_tags]

@@ -22,7 +22,7 @@ gem 'parallel', require: false
 gem 'lograge'
 
 gem 'figaro'
-gem 'versionist'
+gem 'versionist', github: 'bploetz/versionist'
 gem 'jbuilder'
 gem 'responders'
 gem 'newrelic_rpm'
