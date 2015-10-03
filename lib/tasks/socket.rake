@@ -1,15 +1,15 @@
 require 'socket'
 
 def bat i, v
-  return i/10.0
+  return i#/10.0
 end
 
 def co i, v
-  return i/1000.0
+  return i#/1000.0
 end
 
 def light i, v
-  return i/10.0
+  return i#/10.0
 end
 
 def nets i, v
@@ -17,7 +17,7 @@ def nets i, v
 end
 
 def no2 i, v
-  return i/1000.0
+  return i#/1000.0
 end
 
 def noise i, v
@@ -26,26 +26,25 @@ def noise i, v
   elsif v == "1.0"
     db = {5 => 45,10 => 55,15 => 63,20 => 65,30 => 67,40 => 69,50 => 70,60 => 71,80 => 72,90 => 73,100 => 74,130 => 75,160 => 76,190 => 77,220 => 78,260 => 79,300 => 80,350 => 81,410 => 82,450 => 83,550 => 84,600 => 85,650 => 86,750 => 87,850 => 88,950 => 89,1100 => 90,1250 => 91,1375 => 92,1500 => 93,1650 => 94,1800 => 95,1900 => 96,2000 => 97,2125 => 98,2250 => 99,2300 => 100,2400 => 101,2525 => 102,2650 => 103}
   end
-  i = Mathematician.reverse_table_calibration( db, i)
-  return i
+  return Mathematician.reverse_table_calibration(db, i)
 end
 
 def panel i, v
-  return i/1000.0
+  return i#/1000.0
 end
 
 def hum i, v
   if v.to_s == "1.1"
     i = ((i - 7) / (125.0 / 65536.0) / 10.0)
   end
-  return i/10.0
+  return i#/10.0
 end
 
 def temp i, v
   if v.to_s == "1.1"
     i = ((i + 53) / (175.72 / 65536.0) / 10.0)
   end
-  return i/10.0
+  return i#/10.0
 end
 
 namespace :socket do
