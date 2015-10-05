@@ -43,7 +43,7 @@ class RawStorer
   end
 
   def hum i, v
-    # i = i/10.0
+    i = i/10.0
     # if v.to_s == "1.1"
     #   i = (i - 7) / (125.0 / 65536.0)
     # end
@@ -51,7 +51,7 @@ class RawStorer
   end
 
   def temp i, v
-    # i = i/10.0
+    i = i/10.0
     # if v.to_s == "1.1"
     #   i = (i + 53) / (175.72 / 65536.0)
     # end
