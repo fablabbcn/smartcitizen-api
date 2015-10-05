@@ -278,6 +278,7 @@ protected
     # http = Net::HTTP.new(uri.host,uri.port)
     http = Net::HTTP.new(uri.host,uri.port)
     response = http.post(uri.path,data.to_json,headers)
+    # puts data.to_json
 
     # Rails.logger.info(response.inspect)
     # Rails.logger.info(data.to_json)

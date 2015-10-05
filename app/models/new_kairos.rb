@@ -84,6 +84,9 @@ class NewKairos < Kairos
     end
 
     response = self.http_post_to("/datapoints/query", data)
+
+    # puts data.to_json
+
     j = JSON.parse(response.body)['queries'][0]
 
     json['sample_size'] = j['sample_size']
