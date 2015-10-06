@@ -23,7 +23,7 @@ module V0
 
     force_ssl if: :ssl_configured?
 
-    before_filter :prepend_view_paths
+    before_action :prepend_view_paths
 
 protected
 
@@ -37,6 +37,12 @@ protected
     end
 
 private
+
+    # def check_cache
+    #   response.headers['Cache-Control'] = 'public, max-age=10, must-revalidate'
+    #   # `stale?' renders a 304 response, thus halting the filter chain, automatically.
+    #   stale?(last_modified: @current_site.updated_at)
+    # end
 
     def prepend_view_paths
       prepend_view_path "app/views/v0"

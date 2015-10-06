@@ -6,34 +6,39 @@ module V0
 
     skip_after_action :verify_authorized
 
+    # def index
+    #   missing_params = []
+    #   %w(rollup sensor_id).each do |param|
+    #     missing_params << param unless params[param]
+    #   end
+    #   if missing_params.any?
+    #     raise ActionController::ParameterMissing.new(missing_params.to_sentence)
+    #   else
+    #     render json: Kairos.query(params)
+    #   end
+    # end
+
     def index
-      missing_params = []
-      %w(rollup sensor_id).each do |param|
-        missing_params << param unless params[param]
-      end
-      if missing_params.any?
-        raise ActionController::ParameterMissing.new(missing_params.to_sentence)
-      else
-        render json: Kairos.query(params)
-      end
+      check_missing_params("rollup", "sensor_key||sensor_id") # sensor_key or sensor_id
+      render json: NewKairos.query(params)
     end
 
     def create
-      # OLD IMPLEMENTATION
-      begin
-        mac = request.headers['X-SmartCitizenMacADDR']
-        version = request.headers['X-SmartCitizenVersion']
-        data = JSON.parse(request.headers['X-SmartCitizenData'])[0].merge({
-          'version' => version,
-          'ip' => request.remote_ip
-        })
-        # @reading = Kairos.delay.create_from_api(mac, data)
+      # # OLD IMPLEMENTATION
+      # begin
+      #   mac = request.headers['X-SmartCitizenMacADDR']
+      #   version = request.headers['X-SmartCitizenVersion']
+      #   data = JSON.parse(request.headers['X-SmartCitizenData'])[0].merge({
+      #     'version' => version,
+      #     'ip' => request.remote_ip
+      #   })
+      #   # @reading = Kairos.delay.create_from_api(mac, data)
 
-        ENV['redis'] ? Calibrator.delay.new(mac, data) : Calibrator.new(mac, data)
-      rescue Exception => e
-        Rails.logger.info "OLD ERROR"
-        Rails.logger.info e
-      end
+      #   ENV['redis'] ? Calibrator.delay.new(mac, data) : Calibrator.new(mac, data)
+      # rescue Exception => e
+      #   Rails.logger.info "OLD ERROR"
+      #   Rails.logger.info e
+      # end
 
       # NEW IMPLEMENTATION
       begin

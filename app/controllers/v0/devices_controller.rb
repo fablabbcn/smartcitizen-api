@@ -3,6 +3,7 @@ module V0
 
     before_action :check_if_authorized!, only: [:create, :update]
     after_action :verify_authorized, except: [:index, :world_map]
+    # before_action :check_cache, only: :world_map
 
     def show
       @device = Device.includes(:kit, :owner, :sensors,:tags).find(params[:id])
