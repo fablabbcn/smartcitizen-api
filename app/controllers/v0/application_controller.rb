@@ -24,16 +24,8 @@ module V0
     force_ssl if: :ssl_configured?
 
     before_filter :prepend_view_paths
-    before_filter :check_headers
 
 protected
-
-    def check_headers
-      puts request.headers['Accept']
-      if controller_name.match(/^\/v\d/) && request.headers['Accept'].include?('application/vnd.smartcitizen')
-        request.headers['Accept'] = '*/*'
-      end
-    end
 
     def check_missing_params *params_list
       missing_params = []

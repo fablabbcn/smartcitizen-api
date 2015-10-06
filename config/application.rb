@@ -53,6 +53,7 @@ module Smartcitizen
 
     end
 
+    config.middleware.insert_before 0, "HeaderCheck"
     config.middleware.insert_before 0, "Rack::Cors" do
       allow do
         origins '*'
