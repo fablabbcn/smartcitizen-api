@@ -20,7 +20,7 @@ module V0
         })
         ENV['redis'] ? RawStorer.delay.new(data) : RawStorer.new(data)
       rescue Exception => e
-        Airbrake.notify_airbrake(e, parameters: params, cgi_data: ENV.to_hash)
+        notify_airbrake(e, parameters: params, cgi_data: ENV.to_hash)
         Rails.logger.info "NEW ERROR"
         Rails.logger.info e
       end
