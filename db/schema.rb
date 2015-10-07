@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151007152201) do
+ActiveRecord::Schema.define(version: 20151007191504) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -163,17 +163,6 @@ ActiveRecord::Schema.define(version: 20151007152201) do
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
-  create_table "pg_readings", force: :cascade do |t|
-    t.integer  "device_id"
-    t.jsonb    "data"
-    t.jsonb    "raw_data"
-    t.datetime "recorded_at"
-    t.datetime "created_at"
-  end
-
-  add_index "pg_readings", ["device_id"], name: "index_pg_readings_on_device_id", using: :btree
-  add_index "pg_readings", ["recorded_at"], name: "index_pg_readings_on_recorded_at", using: :btree
-
   create_table "pg_search_documents", force: :cascade do |t|
     t.text     "content"
     t.integer  "searchable_id"
@@ -257,7 +246,6 @@ ActiveRecord::Schema.define(version: 20151007152201) do
   add_foreign_key "devices", "kits"
   add_foreign_key "devices_tags", "devices"
   add_foreign_key "devices_tags", "tags"
-  add_foreign_key "pg_readings", "devices"
   add_foreign_key "sensors", "measurements"
   add_foreign_key "uploads", "users"
 end
