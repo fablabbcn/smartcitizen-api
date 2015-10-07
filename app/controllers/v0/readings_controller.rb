@@ -20,9 +20,8 @@ module V0
         })
         ENV['redis'] ? RawStorer.delay.new(data) : RawStorer.new(data)
       rescue Exception => e
+        BadReading.create(data: data, remote_ip: request.remote_ip)
         notify_airbrake(e)
-        Rails.logger.info "NEW ERROR"
-        Rails.logger.info e
       end
       render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S#") # render time for SCK to sync clock
     end

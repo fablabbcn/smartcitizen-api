@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150920212633) do
+ActiveRecord::Schema.define(version: 20151007152201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,14 @@ ActiveRecord::Schema.define(version: 20150920212633) do
 
   add_index "api_tokens", ["owner_id", "token"], name: "index_api_tokens_on_owner_id_and_token", unique: true, using: :btree
   add_index "api_tokens", ["owner_id"], name: "index_api_tokens_on_owner_id", using: :btree
+
+  create_table "bad_readings", force: :cascade do |t|
+    t.integer  "tags"
+    t.string   "remote_ip"
+    t.jsonb    "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "components", force: :cascade do |t|
     t.integer  "board_id"
