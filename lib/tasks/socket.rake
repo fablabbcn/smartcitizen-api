@@ -62,16 +62,19 @@ keys = %w(noise temp co no2 bat light nets panel hum)
 namespace :socket do
 
   task :get_latest_data => :environment do
-    Device.where(data: nil).each do |device|
+    # where(data: nil)
+    Device.where(id: [41]).each do |device|
       if feeds = Feed.where(device_id: device.id).order(id: :desc).limit(2)
-        feeds.each do |feed|
+        feeds.reverse.each do |feed|
           data = { "" => feed.timestamp }
+
           keys.each do |sensor_key|
             i = device.find_sensor_id_by_key(sensor_key).to_s
             data[i] = method(sensor_key).call(feed[sensor_key], device.kit_version)
             data["#{i}_raw"] = feed[sensor_key]
           end
-          device.update_attribute(:data, data)
+
+          device.update_attributes(data: data, last_recorded_at: feed.timestamp)
         end
       end
     end

@@ -40,7 +40,7 @@ class LegacyDevice < MySQL
           # Rails.logger.info KEYS
           posts[KEYS[key.to_sym]] = value
         end
-        posts['insert_datetime'] = device.last_recorded_at.to_s
+        posts['insert_datetime'] = hash['last_insert_datetime']
         hash['posts'] = [posts]
       else
         hash['posts'] = false
