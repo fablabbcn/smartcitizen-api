@@ -49,7 +49,7 @@ class RawStorer
     keys = %w(temp bat co hum light nets no2 noise panel)
 
     mac = data['mac'].downcase.strip
-    device = Device.includes(:components).where(mac_address: mac).last
+    device = Device.unscoped.includes(:components).where(mac_address: mac).last
 
     # version is not always present
     # undefined method `split' for nil:NilClass
@@ -89,7 +89,7 @@ class RawStorer
     Kairos.http_post_to("/datapoints", _data)
 
     if parsed_ts > (device.last_recorded_at || Time.at(0))
-      Device.where(id: device.id).update_all(last_recorded_at: parsed_ts, data: sql_data) # update without touching updated_at
+      Device.unscoped.where(id: device.id).update_all(last_recorded_at: parsed_ts, data: sql_data) # update without touching updated_at
       LegacyDevice.find(device.id).update_column(:last_insert_datetime, Time.now.utc)
     end
 

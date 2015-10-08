@@ -55,17 +55,34 @@ def temp i, v
   return i
 end
 
+class Feed < MySQL; end
+keys = %w(noise temp co no2 bat light nets panel hum)
+
+
 namespace :socket do
+
+  task :get_latest_data => :environment do
+    Device.where(data: nil).each do |device|
+      if feeds = Feed.where(device_id: device.id).order(id: :desc).limit(2)
+        feeds.each do |feed|
+          data = { "" => feed.timestamp }
+          keys.each do |sensor_key|
+            i = device.find_sensor_id_by_key(sensor_key).to_s
+            data[i] = method(sensor_key).call(feed[sensor_key], device.kit_version)
+            data["#{i}_raw"] = feed[sensor_key]
+          end
+          device.update_attribute(:data, data)
+        end
+      end
+    end
+  end
 
   task :push => :environment do
 
     sock = TCPSocket.new(ENV['telnet_ip'], ENV['telnet_port'])
 
-    class Feed < MySQL; end
-
     batch_size = 3000
 
-    keys = %w(noise temp co no2 bat light nets panel hum)
     LegacyDevice.where('id > 496').order(id: :asc).each do |device|
 
       kit_version = device.kit_version
