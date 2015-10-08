@@ -5,6 +5,8 @@ module V0
     after_action :verify_authorized, except: [:index, :world_map]
     # before_action :check_cache, only: :world_map
 
+    # caches_page :world_map, expires_in: 1.minute
+
     def show
       @device = Device.includes(:kit, :owner, :sensors,:tags).find(params[:id])
       authorize @device
@@ -64,6 +66,7 @@ module V0
     end
 
     def world_map
+      expires_in 1.minute, :public => true
       @devices = Device.includes(:owner,:tags).map do |device|
         {
           id: device.id,

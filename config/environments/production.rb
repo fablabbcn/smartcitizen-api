@@ -20,6 +20,10 @@ Rails.application.configure do
   # For large-scale production use, consider using a caching reverse proxy like
   # NGINX, varnish or squid.
   # config.action_dispatch.rack_cache = true
+  config.middleware.use Rack::Cache,
+    :verbose => true
+    :metastore   => 'file:/var/cache/rack/meta',
+    :entitystore => 'file:/var/cache/rack/body'
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.

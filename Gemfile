@@ -8,6 +8,9 @@ gem 'rack-timeout'
 # gem 'rack-attack' # API Rate Limiting
 gem 'rack-cors', :require => 'rack/cors'
 gem 'rack-contrib'
+gem 'rack-cache'
+# gem 'actionpack-page_caching'
+# gem 'actionpack-action_caching'
 
 # https://github.com/guard/listen/wiki/Duplicate-directory-errors
 # prevent 2.8 and greater from being used

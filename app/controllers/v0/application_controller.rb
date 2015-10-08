@@ -9,6 +9,7 @@ module V0
     # include AbstractController::Helpers::ClassMethods
     include ActionController::Helpers
     include ActionController::ImplicitRender
+    # include ActionController::Caching
 
     # skip_before_action :verify_authenticity_token
     # protect_from_forgery with: :null_session
