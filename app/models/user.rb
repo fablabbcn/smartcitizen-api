@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
 
   validates :username, length: { in: 3..30 }, allow_nil: true
 
-  validates :url, format: URI::regexp(%w(http https)), allow_nil: true, allow_blank: true
+  validates :url, format: URI::regexp(%w(http https)), allow_nil: true, allow_blank: true, on: :create
 
   has_many :devices, foreign_key: 'owner_id', after_add: :update_cached_device_ids!, after_remove: :update_cached_device_ids!
   has_many :sensors, through: :devices
