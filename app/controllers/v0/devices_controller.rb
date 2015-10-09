@@ -67,7 +67,7 @@ module V0
 
     def world_map
       expires_in 90.seconds, public: true # CRON cURL every 60 seconds to cache
-      @devices = Device.includes(:owner,:tags).map do |device|
+      @devices = Device.where.not(latitude: nil).includes(:owner,:tags).map do |device|
         {
           id: device.id,
           name: device.name,
