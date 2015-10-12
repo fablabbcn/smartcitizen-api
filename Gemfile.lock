@@ -526,7 +526,7 @@ DEPENDENCIES
   redis-rails
   responders
   rspec-rails
-  shoulda-matchers
+  shoulda-matchers (~> 3.0)
   sidekiq
   simplecov
   spring

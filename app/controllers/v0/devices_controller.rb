@@ -3,9 +3,6 @@ module V0
 
     before_action :check_if_authorized!, only: [:create, :update]
     after_action :verify_authorized, except: [:index, :world_map]
-    # before_action :check_cache, only: :world_map
-
-    # caches_page :world_map, expires_in: 1.minute
 
     def show
       @device = Device.includes(:kit, :owner, :sensors,:tags).find(params[:id])
@@ -14,16 +11,11 @@ module V0
     end
 
     def index
-      Rails.logger.info params.inspect
-
       @q = Device.includes(:kit, :sensors, :components, :owner,:tags).ransack(params[:q])
-
       if params[:with_tags]
         @q = Device.with_user_tags(params[:with_tags]).includes(:kit, :sensors, :components, :owner,:tags).ransack(params[:q])
       end
-
       @devices = @q.result(distinct: true)
-
       if params[:near]
         if params[:near] =~ /\A(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)\z/
           @devices = @devices.near(params[:near].split(','), (params[:within] || 1000))

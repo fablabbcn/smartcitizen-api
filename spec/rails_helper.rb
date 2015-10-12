@@ -15,6 +15,16 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'shoulda-matchers'
 require "pundit/rspec"
+
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
+
+
 # require 'rspec_api_blueprint'
 # Add additional requires below this line. Rails is not loaded until this point!
 

@@ -6,25 +6,19 @@ module V0
 
     include ActionController::HttpAuthentication::Basic::ControllerMethods
     include ActionController::HttpAuthentication::Token::ControllerMethods
-    # include AbstractController::Helpers::ClassMethods
     include ActionController::Helpers
     include ActionController::ImplicitRender
-    # include ActionController::Caching
-
-    # skip_before_action :verify_authenticity_token
-    # protect_from_forgery with: :null_session
-
-    respond_to :json
 
     include Pundit
     include PrettyJSON
     include ErrorHandlers
 
+    respond_to :json
+
+    before_action :prepend_view_paths
     after_action :verify_authorized, except: :index
 
     force_ssl if: :ssl_configured?
-
-    before_action :prepend_view_paths
 
 protected
 
@@ -39,13 +33,8 @@ protected
 
 private
 
-    # def check_cache
-    #   response.headers['Cache-Control'] = 'public, max-age=10, must-revalidate'
-    #   # `stale?' renders a 304 response, thus halting the filter chain, automatically.
-    #   stale?(last_modified: @current_site.updated_at)
-    # end
-
     def prepend_view_paths
+      # is this still necessary?
       prepend_view_path "app/views/v0"
     end
 
