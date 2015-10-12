@@ -7,31 +7,21 @@ class User < ActiveRecord::Base
   friendly_id :username
 
   has_secure_password validations: false
-  validates :password, presence: { on: :create }, length: { minimum: 5, allow_blank: true }
 
+  validates :password, presence: { on: :create }, length: { minimum: 5, allow_blank: true }
   validates :username, :email, presence: true
   validates :username, uniqueness: true, if: :username?
-  validates :email, format: { with: /@/ }, uniqueness: true, if: :email?
-
   validates :username, length: { in: 3..30 }, allow_nil: true
-
+  validate :check_for_banned_username
+  validates :email, format: { with: /@/ }, uniqueness: true, if: :email?
   validates :url, format: URI::regexp(%w(http https)), allow_nil: true, allow_blank: true, on: :create
 
   has_many :devices, foreign_key: 'owner_id', after_add: :update_cached_device_ids!, after_remove: :update_cached_device_ids!
   has_many :sensors, through: :devices
   has_many :api_tokens, foreign_key: 'owner_id'
-
   has_many :uploads
 
-  validate :banned_username
-  def banned_username
-    if username.present? and (Smartcitizen::Application.config.banned_words & username.split.map(&:downcase).map(&:strip)).any?
-      errors.add(:username, "is reserved")
-    end
-  end
-
   before_create { generate_token(:legacy_api_key, Digest::SHA1.hexdigest(SecureRandom.uuid) ) }
-
 
   def to_s
     username
@@ -44,14 +34,6 @@ class User < ActiveRecord::Base
   def avatar
     avatar_url || "http://smartcitizen.s3.amazonaws.com/avatars/default.svg"
   end
-
-  # def avatar=_avatar
-  #   self.avatar_url = "http://images.smartcitizen.me/s100/avatars/#{_avatar}"
-  # end
-
-  # def avatar
-  #   avatar_url
-  # end
 
   def access_token!
     access_token.expires_in = 2.days.from_now
@@ -128,6 +110,12 @@ private
     begin
       self[column] = token
     end while User.exists?(column => self[column])
+  end
+
+  def check_for_banned_username
+    if username.present? and (Smartcitizen::Application.config.banned_words & username.split.map(&:downcase).map(&:strip)).any?
+      errors.add(:username, "is reserved")
+    end
   end
 
 end
