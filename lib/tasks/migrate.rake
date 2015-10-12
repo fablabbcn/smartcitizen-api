@@ -40,9 +40,6 @@ if Gem::Specification::find_all_by_name('mysql').any?
     }
   end
 
-    # class New#{model} < PostgreSQL
-    #   self.table_name = '#{model.underscore}s'
-    # end
 
   class Usr < OldUser; end
 
