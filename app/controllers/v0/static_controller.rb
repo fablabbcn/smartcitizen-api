@@ -21,7 +21,6 @@ module V0
       @results = PgSearch.multisearch(params[:q]).includes(:searchable)#.map(&:searchable)
       a = []
 
-
       Place.select("DISTINCT on (country_code) country_code, country_name, lat, lng").where("country_name ILIKE :q", q: "%#{params[:q]}%").limit(3).each do |p|
         a << {
           type: "Country",
