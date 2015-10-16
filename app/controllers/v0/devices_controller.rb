@@ -91,6 +91,8 @@ private
         :mac_address,
         :latitude,
         :longitude,
+        :elevation,
+        :meta,
         :kit_id,
         :user_tags
       )
