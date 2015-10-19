@@ -17,7 +17,8 @@ class Device < ActiveRecord::Base
 
   default_scope { with_active_state.includes(:owner) }
 
-  has_and_belongs_to_many :tags
+  has_many :devices_tags, dependent: :destroy
+  has_many :devices, through: :tags
 
   def find_component_by_sensor_id sensor_id
     components.where(sensor_id: sensor_id).first

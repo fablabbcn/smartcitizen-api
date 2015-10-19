@@ -31,6 +31,16 @@ module V0
       end
     end
 
+    def destroy
+      @tag = Tag.find(params[:id])
+      authorize @tag
+      if @tag.destroy
+        render nothing: true, status: :ok
+      else
+        raise Smartcitizen::UnprocessableEntity.new @tag.errors
+      end
+    end
+
 private
 
     def tag_params
