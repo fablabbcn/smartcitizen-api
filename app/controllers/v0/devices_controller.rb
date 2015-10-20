@@ -92,6 +92,7 @@ private
         :latitude,
         :longitude,
         :elevation,
+        :exposure,
         :meta,
         :kit_id,
         :user_tags
