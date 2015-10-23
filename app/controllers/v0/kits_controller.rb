@@ -28,7 +28,8 @@ private
       params.permit(
         :name,
         :description,
-        :slug
+        :slug,
+        :sensor_map
       )
     end
 

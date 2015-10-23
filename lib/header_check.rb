@@ -1,4 +1,5 @@
 class HeaderCheck
+
   def initialize(app)
     @app = app
   end
@@ -10,4 +11,5 @@ class HeaderCheck
     status, headers, response = @app.call(env)
     [status, headers, response]
   end
+
 end

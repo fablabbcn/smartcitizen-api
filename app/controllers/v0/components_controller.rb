@@ -6,5 +6,16 @@ module V0
       @components = paginate(@components)
     end
 
+private
+
+    def component_params
+      params.permit(
+        :board_id,
+        :board_type,
+        :sensor_id,
+        :equation
+      )
+    end
+
   end
 end

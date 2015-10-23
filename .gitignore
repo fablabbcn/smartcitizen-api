@@ -22,8 +22,6 @@
 /public/api
 /public/coverage
 /coverage
-/csv
-/json
 *.rdb
 *.sql*
 /devices

@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   has_many :api_tokens, foreign_key: 'owner_id'
   has_many :uploads
 
-  before_create { generate_token(:legacy_api_key, Digest::SHA1.hexdigest(SecureRandom.uuid) ) }
+  before_create :generate_legacy_api_key
 
   def to_s
     username
@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   end
 
   def avatar
-    avatar_url || "http://smartcitizen.s3.amazonaws.com/avatars/default.svg"
+    avatar_url || "https://smartcitizen.s3.amazonaws.com/avatars/default.svg"
   end
 
   def access_token!
@@ -47,6 +47,10 @@ class User < ActiveRecord::Base
 
   def api_token
     api_tokens.last
+  end
+
+  def country
+    ISO3166::Country[country_code] if country_code
   end
 
   def country_name
@@ -84,10 +88,6 @@ class User < ActiveRecord::Base
     role_mask < 5 ? 'citizen' : 'admin'
   end
 
-  def country
-    ISO3166::Country[country_code] if country_code
-  end
-
   def location
     {
       city: city,
@@ -105,6 +105,10 @@ class User < ActiveRecord::Base
   end
 
 private
+
+  def generate_legacy_api_key
+    generate_token(:legacy_api_key, Digest::SHA1.hexdigest(SecureRandom.uuid) )
+  end
 
   def generate_token(column, token=SecureRandom.urlsafe_base64)
     begin
