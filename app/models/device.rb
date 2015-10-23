@@ -2,12 +2,23 @@ require 'geohash'
 
 class Device < ActiveRecord::Base
 
+  include Workflow
+  workflow do
+    state :active do
+      event :archive, :transitions_to => :archived
+    end
+    state :archived do
+      event :activate, :transitions_to => :active
+    end
+  end
+
   belongs_to :owner
   belongs_to :kit
 
   belongs_to :owner, class_name: 'User'
   validates_presence_of :owner, :name, on: :create
   validates_uniqueness_of :name, scope: :owner_id, on: :create
+  validate :banned_name
   # validates_presence_of :mac_address, :name
 
   # validates :mac_address, uniqueness: true, format: { with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/ }#, unless: Proc.new { |d| d.mac_address == 'unknown' }
@@ -17,8 +28,34 @@ class Device < ActiveRecord::Base
 
   default_scope { with_active_state.includes(:owner) }
 
+  include PgSearch
+  multisearchable :against => [:name, :description, :city, :country_name]#, associated_against: { owner: { :username }
+
   has_many :devices_tags, dependent: :destroy
   has_many :tags, through: :devices_tags
+  has_many :components, as: :board
+  has_many :sensors, through: :components
+
+  before_save :calculate_geohash
+  # after_validation :reverse_geocode
+  # after_initialize :set_default_name
+
+  store_accessor :location,
+    :address,
+    :city,
+    :postal_code,
+    :state,
+    :state_code,
+    :country,
+    :country_code
+
+  store_accessor :meta,
+    :elevation,
+    :exposure,
+    :firmware_version,
+    :smart_cal,
+    :debug_push,
+    :enclosure_type
 
   def find_component_by_sensor_id sensor_id
     components.where(sensor_id: sensor_id).first
@@ -46,16 +83,6 @@ class Device < ActiveRecord::Base
     Tag.find_by!(name: tag_name.split('|').map(&:strip)).devices
   end
 
-  include Workflow
-  workflow do
-    state :active do
-      event :archive, :transitions_to => :archived
-    end
-    state :archived do
-      event :activate, :transitions_to => :active
-    end
-  end
-
   # temporary kit getter/setter
   def kit_version
     if self.kit_id
@@ -81,21 +108,8 @@ class Device < ActiveRecord::Base
     owner.username if owner
   end
 
-  include PgSearch
-  multisearchable :against => [:name, :description, :city, :country_name]#, associated_against: { owner: { :username }
-
-  has_many :pg_readings
-
   def country_name
     country ? country.to_s : nil
-  end
-
-  validate :banned_name
-  def banned_name
-    if name.present? and (Smartcitizen::Application.config.banned_words.include? name.downcase)
-      # name.split.map(&:downcase).map(&:strip)).any?
-      errors.add(:name, "is reserved")
-    end
   end
 
   # reverse_geocoded_by :latitude, :longitude
@@ -110,32 +124,7 @@ class Device < ActiveRecord::Base
       obj.country_code = geo.country_code
     end
   end
-  # after_validation :reverse_geocode
-
-  # after_initialize :set_default_name
-
   # these get overridden the device is a kit
-  has_many :components, as: :board
-  has_many :sensors, through: :components
-
-  before_save :calculate_geohash
-
-  store_accessor :location,
-    :address,
-    :city,
-    :postal_code,
-    :state,
-    :state_code,
-    :country,
-    :country_code
-
-  store_accessor :meta,
-    :elevation,
-    :exposure,
-    :firmware_version,
-    :smart_cal,
-    :debug_push,
-    :enclosure_type
 
   def system_tags
     [
@@ -218,14 +207,6 @@ class Device < ActiveRecord::Base
     return s
   end
 
-  # def self.lightning
-  #   connection.select_all(select(%w(old_data)).arel, nil, all.bind_values).each do |attrs|
-  #     attrs.each do |name, value|
-  #       attrs[name] = column_types[name].type_cast_from_database(value)
-  #     end
-  #   end
-  # end
-
 private
 
   def calculate_geohash
@@ -233,6 +214,13 @@ private
     # if latitude.changed? or longitude.changed?
     if latitude.is_a?(Float) and longitude.is_a?(Float)
       self.geohash = GeoHash.encode(latitude, longitude)
+    end
+  end
+
+  def banned_name
+    if name.present? and (Smartcitizen::Application.config.banned_words.include? name.downcase)
+      # name.split.map(&:downcase).map(&:strip)).any?
+      errors.add(:name, "is reserved")
     end
   end
 
