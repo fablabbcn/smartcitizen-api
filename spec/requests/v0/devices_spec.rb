@@ -14,8 +14,11 @@ describe V0::DevicesController do
       second = create(:device)
       json = api_get 'devices'
       expect(response.status).to eq(200)
-      expect(json[1]['name']).to eq(first.name)
-      expect(json[0]['name']).to eq(second.name)
+      expect(json.length).to eq(2)
+      # expect(json[0]['name']).to eq(first.name)
+      # expect(json[1]['name']).to eq(second.name)
+      expect(json[0].keys).to eq(%w(id uuid name description state
+        system_tags user_tags last_reading_at added_at updated_at mac_address owner data kit))
     end
 
     describe "world map" do

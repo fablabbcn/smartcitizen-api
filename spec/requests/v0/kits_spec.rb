@@ -10,8 +10,12 @@ describe V0::KitsController do
     it "returns all the kits" do
       first = create(:kit)
       second = create(:kit)
-      api_get 'kits'
+      json = api_get 'kits'
+
       expect(response.status).to eq(200)
+      expect(json.length).to eq(2)
+      expect(json[0]['id']).to eq(first.id)
+      expect(json[0].keys).to eq(%w(id uuid slug name description created_at updated_at sensors))
     end
   end
 
