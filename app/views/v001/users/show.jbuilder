@@ -3,7 +3,8 @@ json.me do
     :id,
     :username,
     :city,
-    :email
+    :email,
+    :location
   )
 
   json.merge! country: @user.country_name
