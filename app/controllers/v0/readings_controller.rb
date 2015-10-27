@@ -31,7 +31,8 @@ module V0
         metrics:[{tags:{device:[params[:id]]},name: "temp"}], cache_time: 0, start_absolute: 1262304000000
       }
       response = NewKairos.http_post_to("/datapoints/query",query)
-      render text: JSON.parse(response.body)['queries'][0]['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, r[1]].join(',') ]}.join("\n")
+      values = JSON.parse(response.body)['queries'][0]['results'][0]['values']
+      render text: values.map{|r| [Time.at(r[0]/1000).utc, r[1]].join(',') }.join("\n")
       # send_data "this,is,a,test", filename: "device-#{params[:id]}.csv", type: 'text/csv'
     end
 
