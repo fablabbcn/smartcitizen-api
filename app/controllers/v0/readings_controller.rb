@@ -27,7 +27,7 @@ module V0
     end
 
     def csv_archive
-      keys = %w(temp bat co hum light nets no2 noise panel)
+      keys = %w(temp bat co) # hum light nets no2 noise panel
       data = {}
       keys.each_with_index do |key, index|
         query = {metrics:[{tags:{device:[params[:id]]},name: key}], cache_time: 0, start_absolute: 1262304000000}
