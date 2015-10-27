@@ -17,7 +17,9 @@ Rails.application.routes.draw do
     # devices
     resources :devices do
       member do
-        resources :readings, only: :index
+        resources :readings, only: :index do
+          get 'csv_archive', on: :collection
+        end
       end
       get 'world_map', on: :collection
     end
