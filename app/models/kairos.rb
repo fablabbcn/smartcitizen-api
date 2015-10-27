@@ -262,14 +262,6 @@ class Kairos
     response = self.http_post_to("/datapoints", _data)
   end
 
-protected
-
-  def self.time_iterate(start_time, end_time, step, &block)
-    begin
-      yield(start_time)
-    end while (start_time += step) <= end_time
-  end
-
   def self.http_post_to path, data
     uri = URI.parse "http://#{[ ENV['kairos_server'], ENV['kairos_port'] ].reject(&:blank?).join(':')}/api/v1#{path}"
     # uri = URI.parse "http://#{ENV['kairos_server']}:8080/api/v1#{path}"
@@ -285,6 +277,16 @@ protected
 
     return response
   end
+
+protected
+
+  def self.time_iterate(start_time, end_time, step, &block)
+    begin
+      yield(start_time)
+    end while (start_time += step) <= end_time
+  end
+
+
 
   def self.extract_datetime timestamp
     begin

@@ -27,8 +27,13 @@ module V0
     end
 
     def csv_archive
-      @device = Device.find(params[:id])
-      send_data "this,is,a,test", filename: "device-#{@device.id}.csv", type: 'text/csv'
+      query = {
+        metrics:[{tags:{device:[params[:id]]},name: "temp"}], cache_time: 0, start_absolute: 1262304000000
+      }
+      response = NewKairos.http_post_to("/datapoints/query",query)
+      j = JSON.parse(response.body)['queries'][0]
+      render text: j
+      # send_data "this,is,a,test", filename: "device-#{params[:id]}.csv", type: 'text/csv'
     end
 
   end
