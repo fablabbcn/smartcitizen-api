@@ -1,3 +1,4 @@
+require 'open-uri'
 require 'geohash'
 
 class Device < ActiveRecord::Base
@@ -56,6 +57,8 @@ class Device < ActiveRecord::Base
     :smart_cal,
     :debug_push,
     :enclosure_type
+
+  before_save :set_elevation
 
   def find_component_by_sensor_id sensor_id
     components.where(sensor_id: sensor_id).first
@@ -227,6 +230,17 @@ private
   # def set_default_name
   #   self.name ||= "My SCK"
   # end
+
+  def set_elevation
+    begin
+      if elevation.blank? and (latitude and longitude)
+        response = open("https://maps.googleapis.com/maps/api/elevation/json?locations=#{latitude},#{longitude}&key=#{ENV['google_api_key']}").read
+        self.elevation = JSON.parse(response)['results'][0]['elevation'].to_i
+      end
+    rescue Exception => e
+      # notify_airbrake(e)
+    end
+  end
 
 end
 
