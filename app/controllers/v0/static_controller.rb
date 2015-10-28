@@ -40,6 +40,8 @@ module V0
       rescue Exception => e
         notify_airbrake(e)
       end
+
+      a.uniq!{|h| [h[:name],h[:description]].join }
       # Place.select("DISTINCT on (country_code) country_code, country_name, lat, lng").where("country_name ILIKE :q", q: "%#{params[:q]}%").limit(3).each do |p|
       #   a << {
       #     type: "Country",
@@ -71,7 +73,6 @@ module V0
         }
       end
 
-      a.uniq!{|h| [h[:name],h[:description]].join }
 
       @results.each do |s|
         h = {}
