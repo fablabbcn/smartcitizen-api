@@ -25,12 +25,13 @@ module V0
       a = []
 
       begin
-        data = JSON.parse(open("http://search.mapzen.com/v1/autocomplete?api_key=#{ENV['mapzen_api_key']}&text=#{CGI.escape(params[:q])}").read)
+        url = "http://search.mapzen.com/v1/autocomplete?api_key=#{ENV['mapzen_api_key']}&text=#{CGI.escape(params[:q])}"
+        data = JSON.parse(open(url).read)
         data['features'].each do |feature|
           a << {
             type: "City",
             city: feature['properties']['name'],
-            country_code: ISO3166::Country.find_country_by_alpha3(feature['properties']['country'].downcase).alpha2,
+            country_code: ISO3166::Country.find_country_by_alpha3(feature['properties']['country_a'].downcase).alpha2,
             country: feature['properties']['country'],
             latitude: feature['geometry']['coordinates'][0],
             longitude: feature['geometry']['coordinates'][1]
