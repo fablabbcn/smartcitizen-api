@@ -71,6 +71,8 @@ module V0
         }
       end
 
+      a.uniq!{|h| [h[:name],h[:description]].join }
+
       @results.each do |s|
         h = {}
         h['id'] = s.searchable_id
@@ -93,7 +95,7 @@ module V0
         a << h
       end
 
-      paginate json: a.uniq
+      paginate json: a
     end
 
   end
