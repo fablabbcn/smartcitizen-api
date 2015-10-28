@@ -135,6 +135,8 @@ GEM
     coderay (1.1.0)
     colorize (0.7.7)
     connection_pool (2.2.0)
+    crack (0.4.2)
+      safe_yaml (~> 1.0.0)
     currencies (0.4.2)
     dalli (2.7.4)
     daru (0.1.1)
@@ -190,6 +192,7 @@ GEM
       rspec (>= 2.99.0, < 4.0)
     haml (4.0.7)
       tilt
+    hashdiff (0.2.2)
     highline (1.7.8)
     hitimes (1.2.3)
     http-cookie (1.0.2)
@@ -466,6 +469,11 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    vcr (2.9.3)
+    webmock (1.22.1)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
+      hashdiff
     workflow (1.2.0)
     yard (0.8.7.6)
     zonebie (0.5.1)
@@ -537,6 +545,8 @@ DEPENDENCIES
   statsample
   timecop
   unicorn
+  vcr
   versionist!
+  webmock
   workflow
   zonebie

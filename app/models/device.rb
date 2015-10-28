@@ -234,7 +234,7 @@ private
 
   def set_elevation
     begin
-      if elevation.blank? and (latitude and longitude)
+      if elevation.blank? and (latitude_changed? or longitude_changed?)
         response = open("https://maps.googleapis.com/maps/api/elevation/json?locations=#{latitude},#{longitude}&key=#{ENV['google_api_key']}").read
         self.elevation = JSON.parse(response)['results'][0]['elevation'].to_i
       end
@@ -244,7 +244,7 @@ private
   end
 
   def do_geocoding
-    reverse_geocode if (latitude_changed? or longitude_changed?) and city.blank?
+    reverse_geocode if city.blank? and (latitude_changed? or longitude_changed?)
   end
 
 end

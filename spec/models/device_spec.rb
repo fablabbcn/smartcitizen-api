@@ -78,16 +78,21 @@ RSpec.describe Device, :type => :model do
   end
 
   describe "geocoding" do
-    let(:berlin) { create(:device, latitude: 52.5075419, longitude: 13.4251364) }
 
     it "reverse geocodes on create" do
+      # VCR.use_cassette("cities/barcelona") do
+      berlin = create(:device, latitude: 52.4850463, longitude: 13.489651)
       expect(berlin.city).to eq("Berlin")
       expect(berlin.country).to eq("Germany")
       expect(berlin.country_code).to eq("DE")
+      # end
     end
 
     it "calculates geohash on save" do
-      expect(berlin.geohash).to match('u33d9qxy')
+      # VCR.use_cassette("cities/berlin") do
+      barcelona = create(:device)
+      expect(barcelona.geohash).to match('sp3e9bh31y')
+      # end
     end
   end
 
@@ -167,13 +172,13 @@ RSpec.describe Device, :type => :model do
   end
 
   it "can sort by distance" do
-    barcelona = create(:device, latitude: 41.39479, longitude: 2.1487679)
-    paris = create(:device, latitude: 48.8588589, longitude: 2.3470599)
-    manchester = create(:device, latitude: 53.4722454, longitude: -2.2235922)
+    barcelona = create(:device)
+    paris = create(:device, latitude: 48.8582606, longitude: 2.2923184)
+    old_trafford = create(:device, latitude: 53.4630589, longitude: -2.2935288)
 
-    london_coordiantes = [51.5286416,-0.1015987]
+    london_coordinates = [51.503324,-0.1217317]
 
-    expect(Device.near(london_coordiantes, 5000)).to eq([manchester, paris, barcelona])
+    expect(Device.near(london_coordinates, 5000)).to eq([old_trafford, paris, barcelona])
   end
 
 end

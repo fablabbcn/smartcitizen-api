@@ -4,8 +4,9 @@ FactoryGirl.define do
     sequence("name") { |n| "device#{n}"}
     description "my device"
     mac_address { Faker::Internet.mac_address }
-    latitude 53.3069303
-    longitude -3.7495789
+    latitude 41.3966908
+    longitude 2.1921909
+    elevation 100
   end
 
 end

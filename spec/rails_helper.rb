@@ -24,6 +24,14 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
+require 'webmock/rspec'
+require 'vcr'
+
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/vcr_cassettes"
+  config.hook_into :webmock # or :fakeweb
+end
+
 
 # require 'rspec_api_blueprint'
 # Add additional requires below this line. Rails is not loaded until this point!
