@@ -30,7 +30,7 @@ module V0
           a << {
             type: "City",
             city: feature['properties']['name'],
-            country_code: ISO3166::Country.find_country_by_alpha3(feature['properties']['country']downcase).alpha2,
+            country_code: ISO3166::Country.find_country_by_alpha3(feature['properties']['country'].downcase).alpha2,
             country: feature['properties']['country'],
             latitude: feature['geometry']['coordinates'][0],
             longitude: feature['geometry']['coordinates'][1]
