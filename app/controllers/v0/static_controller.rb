@@ -93,7 +93,7 @@ module V0
         a << h
       end
 
-      paginate json: a
+      paginate json: a.uniq
     end
 
   end
