@@ -13,32 +13,31 @@ class Device < ActiveRecord::Base
     end
   end
 
-  belongs_to :owner
+  # belongs_to :owner
   belongs_to :kit
-
   belongs_to :owner, class_name: 'User'
-  validates_presence_of :owner, :name, on: :create
-  validates_uniqueness_of :name, scope: :owner_id, on: :create
-  validate :banned_name
-  # validates_presence_of :mac_address, :name
-
-  # validates :mac_address, uniqueness: true, format: { with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/ }#, unless: Proc.new { |d| d.mac_address == 'unknown' }
-  validates_uniqueness_of :mac_address, allow_nil: true, on: :create
-  validates_format_of :mac_address, with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
-  #, on: :create, allow_blank: true
-
-  default_scope { with_active_state.includes(:owner) }
-
-  include PgSearch
-  multisearchable :against => [:name, :description, :city, :country_name]#, associated_against: { owner: { :username }
 
   has_many :devices_tags, dependent: :destroy
   has_many :tags, through: :devices_tags
   has_many :components, as: :board
   has_many :sensors, through: :components
 
+
+  validates_presence_of :name, :owner, on: :create
+  validates_uniqueness_of :name, scope: :owner_id, on: :create
+  validate :banned_name
+  # validates_presence_of :mac_address, :name
+
+  validates_uniqueness_of :mac_address, allow_nil: true, on: :create
+  validates_format_of :mac_address, with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
+
+  default_scope { with_active_state.includes(:owner) }
+
+  include PgSearch
+  multisearchable :against => [:name, :description, :city, :country_name]#, associated_against: { owner: { :username }
+
   before_save :calculate_geohash
-  # after_validation :reverse_geocode
+  after_validation :do_geocoding
   # after_initialize :set_default_name
 
   store_accessor :location,
@@ -59,6 +58,20 @@ class Device < ActiveRecord::Base
     :enclosure_type
 
   before_save :set_elevation
+
+  # reverse_geocoded_by :latitude, :longitude
+  reverse_geocoded_by :latitude, :longitude do |obj, results|
+    if geo = results.first
+      obj.address = geo.address
+      obj.city = geo.city
+      obj.postal_code = geo.postal_code
+      obj.state = geo.state
+      obj.state_code = geo.state_code
+      obj.country = geo.country
+      obj.country_code = geo.country_code
+    end
+  end
+  # these get overridden the device is a kit
 
   def find_component_by_sensor_id sensor_id
     components.where(sensor_id: sensor_id).first
@@ -112,22 +125,10 @@ class Device < ActiveRecord::Base
   end
 
   def country_name
-    country ? country.to_s : nil
-  end
-
-  # reverse_geocoded_by :latitude, :longitude
-  reverse_geocoded_by :latitude, :longitude do |obj, results|
-    if geo = results.first
-      obj.address = geo.address
-      obj.city = geo.city
-      obj.postal_code = geo.postal_code
-      obj.state = geo.state
-      obj.state_code = geo.state_code
-      obj.country = geo.country
-      obj.country_code = geo.country_code
+    if country_code =~ /\w{2}/
+      ISO3166::Country.new(country_code).name
     end
   end
-  # these get overridden the device is a kit
 
   def system_tags
     [
@@ -240,6 +241,10 @@ private
     rescue Exception => e
       # notify_airbrake(e)
     end
+  end
+
+  def do_geocoding
+    reverse_geocode if (latitude_changed? or longitude_changed?) and city.blank?
   end
 
 end

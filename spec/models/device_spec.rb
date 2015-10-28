@@ -2,19 +2,93 @@ require 'rails_helper'
 
 RSpec.describe Device, :type => :model do
 
+  let(:device) { create(:device) }
+
+  it { is_expected.to belong_to(:kit) }
   it { is_expected.to belong_to(:owner) }
+  it { is_expected.to have_many(:devices_tags) }
+  it { is_expected.to have_many(:tags).through(:devices_tags) }
+  it { is_expected.to have_many(:components) }
+  it { is_expected.to have_many(:sensors).through(:components) }
+
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_presence_of(:owner) }
   it { is_expected.to validate_uniqueness_of(:name).scoped_to(:owner_id) }
-  # it { is_expected.to validate_presence_of(:mac_address) }
-
-  let(:device) { create(:device) }
 
   it "does not allow banned names" do
     puts Smartcitizen::Application.config.banned_words
     device = build(:device, name: "stupid")
     device.valid?
     expect(device.errors[:name]).to include('is reserved')
+  end
+
+  it "validates format of mac address" do
+    expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to_not raise_error
+    expect{ create(:device, mac_address: 123) }.to raise_error
+  end
+
+  it "validates uniqueness of mac address" do
+    create(:device, mac_address: '10:9A:DD:63:C0:10')
+    expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to raise_error
+  end
+
+  describe "states" do
+    it "has a default active state" do
+      expect(device.workflow_state).to eq('active')
+    end
+
+    it "can be archived" do
+      device.archive!
+      expect(device.workflow_state).to eq('archived')
+    end
+
+    it "can be activated from archive state" do
+      device.archive!
+      device.activate!
+      expect(device.workflow_state).to eq('active')
+    end
+
+    it "only returns active devices by default (default_scope)" do
+      a = create(:device)
+      b = create(:device, workflow_state: :archived)
+      expect(Device.all).to eq([a])
+    end
+
+  end
+
+  skip "includes owner in default_scope"
+
+  describe "searching" do
+    it "is (multi)searchable" do
+      device = create(:device,
+        name: 'awesome',
+        description: 'amazing',
+        city: 'paris',
+        country_code: 'FR'
+      )
+      expect(PgSearch.multisearch('test')).to be_empty
+      %w(awesome amazing paris France).each do |search_term|
+        result = PgSearch.multisearch(search_term)
+        expect(result.length).to eq(1)
+        expect(result.first.searchable_id).to eq(device.id)
+        expect(result.first.searchable_type).to eq('Device')
+      end
+    end
+
+  end
+
+  describe "geocoding" do
+    let(:berlin) { create(:device, latitude: 52.5075419, longitude: 13.4251364) }
+
+    it "reverse geocodes on create" do
+      expect(berlin.city).to eq("Berlin")
+      expect(berlin.country).to eq("Germany")
+      expect(berlin.country_code).to eq("DE")
+    end
+
+    it "calculates geohash on save" do
+      expect(berlin.geohash).to match('u33d9qxy')
+    end
   end
 
   it "has kit_version setter" do
@@ -36,16 +110,6 @@ RSpec.describe Device, :type => :model do
   it "has to_s" do
     device = create(:device, name: 'cool device')
     expect(device.to_s).to eq('cool device')
-  end
-
-  it "validates format of mac address" do
-    expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to_not raise_error
-    expect{ create(:device, mac_address: 123) }.to raise_error
-  end
-
-  it "validates uniqueness of mac address" do
-    create(:device, mac_address: '10:9A:DD:63:C0:10')
-    expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to raise_error
   end
 
   skip "has all_readings, in latest first order" do
@@ -110,11 +174,6 @@ RSpec.describe Device, :type => :model do
     london_coordiantes = [51.5286416,-0.1015987]
 
     expect(Device.near(london_coordiantes, 5000)).to eq([manchester, paris, barcelona])
-  end
-
-  it "calculates geohash on save" do
-    berlin = create(:device, latitude: 52.5075419, longitude: 13.4251364)
-    expect(berlin.geohash).to match('u33d9qxy')
   end
 
 end
