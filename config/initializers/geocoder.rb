@@ -62,7 +62,8 @@ if Rails.env.test?
         "state"=>nil,
         "address"=>"United Rd, Stretford, Manchester M16, UK",
         "country"=>"United Kingdom",
-        "state_code"=>nil, "postal_code"=>"M16",
+        "state_code"=>nil,
+        "postal_code"=>"M16",
         "country_code"=>"GB"
       }
     ]

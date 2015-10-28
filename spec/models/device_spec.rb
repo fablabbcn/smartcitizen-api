@@ -78,38 +78,42 @@ RSpec.describe Device, :type => :model do
   end
 
   describe "geocoding" do
-
     it "reverse geocodes on create" do
-      # VCR.use_cassette("cities/barcelona") do
       berlin = create(:device, latitude: 52.4850463, longitude: 13.489651)
       expect(berlin.city).to eq("Berlin")
       expect(berlin.country).to eq("Germany")
       expect(berlin.country_code).to eq("DE")
-      # end
     end
 
     it "calculates geohash on save" do
-      # VCR.use_cassette("cities/berlin") do
       barcelona = create(:device)
       expect(barcelona.geohash).to match('sp3e9bh31y')
-      # end
+    end
+
+    it "calculates elevation on save" do
+      VCR.use_cassette("devices/barcelona_elevation") do
+        barcelona = create(:device, elevation: nil)
+        expect(barcelona.elevation).to eq(4)
+      end
     end
   end
 
-  it "has kit_version setter" do
-    device = build(:device, kit_version: "1.1")
-    expect(device.kit_id).to eq(3)
+  describe "kit_version" do
+    it "has kit_version setter" do
+      device = build(:device, kit_version: "1.1")
+      expect(device.kit_id).to eq(3)
 
-    device = build(:device, kit_version: "1.0")
-    expect(device.kit_id).to eq(2)
-  end
+      device = build(:device, kit_version: "1.0")
+      expect(device.kit_id).to eq(2)
+    end
 
-  it "has kit_version getter" do
-    device = build(:device, kit_id: 3)
-    expect(device.kit_version).to eq("1.1")
+    it "has kit_version getter" do
+      device = build(:device, kit_id: 3)
+      expect(device.kit_version).to eq("1.1")
 
-    device = build(:device, kit_id: 2)
-    expect(device.kit_version).to eq("1.0")
+      device = build(:device, kit_id: 2)
+      expect(device.kit_version).to eq("1.0")
+    end
   end
 
   it "has to_s" do

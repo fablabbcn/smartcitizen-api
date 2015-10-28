@@ -1,3 +1,6 @@
+require 'cgi'
+require 'open-uri'
+
 module V0
   class StaticController < ApplicationController
 
@@ -21,26 +24,41 @@ module V0
       @results = PgSearch.multisearch(params[:q]).includes(:searchable)#.map(&:searchable)
       a = []
 
-      Place.select("DISTINCT on (country_code) country_code, country_name, lat, lng").where("country_name ILIKE :q", q: "%#{params[:q]}%").limit(3).each do |p|
-        a << {
-          type: "Country",
-          country_code: p.country_code,
-          country: p.country_name,
-          latitude: p.lat,
-          longitude: p.lng
-        }
+      begin
+        data = JSON.parse(open("http://search.mapzen.com/v1/autocomplete?api_key=#{ENV['mapzen_api_key']}&text=#{CGI.escape(params[:q])}").read)
+        data.features.each do |feature|
+          a << {
+            type: "City",
+            city: feature.properties.name,
+            country_code: ISO3166::Country.find_country_by_alpha3(feature.properties.country.downcase).alpha2,
+            country: feature.properties.country,
+            latitude: feature.geometry.coordinates[0],
+            longitude: feature.geometry.coordinates[1]
+          }
+        end
+      rescue Exception => e
+        notify_airbrake(e)
       end
+      # Place.select("DISTINCT on (country_code) country_code, country_name, lat, lng").where("country_name ILIKE :q", q: "%#{params[:q]}%").limit(3).each do |p|
+      #   a << {
+      #     type: "Country",
+      #     country_code: p.country_code,
+      #     country: p.country_name,
+      #     latitude: p.lat,
+      #     longitude: p.lng
+      #   }
+      # end
 
-      Place.where("name ILIKE :q", q: "%#{params[:q]}%").limit(5).each do |p|
-        a << {
-          type: "City",
-          city: p.name,
-          country_code: p.country_code,
-          country: p.country_name,
-          latitude: p.lat,
-          longitude: p.lng
-        }
-      end
+      # Place.where("name ILIKE :q", q: "%#{params[:q]}%").limit(5).each do |p|
+      #   a << {
+      #     type: "City",
+      #     city: p.name,
+      #     country_code: p.country_code,
+      #     country: p.country_name,
+      #     latitude: p.lat,
+      #     longitude: p.lng
+      #   }
+      # end
 
       Tag.where("name ILIKE :q", q: "%#{params[:q]}%").limit(5).each do |t|
         a << {
