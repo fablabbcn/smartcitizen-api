@@ -28,27 +28,14 @@ module V0
 
     def csv_archive
       @device = Device.find(params[:id])
-      ENV['redis'] ? UserMailer.delay.device_archive(@device.id) : UserMailer.device_archive(@device.id).deliver
-      render json: { id: "ok", message: "CSV Archive job added to queue", url: nil, errors: nil }, status: :ok
-
-      # keys = %w(temp bat) # co hum light nets no2 noise panel
-      # data = {}
-      # keys.each_with_index do |key, index|
-      #   query = {metrics:[{tags:{device:[params[:id]]},name: key}], cache_time: 0, start_absolute: 1262304000000}
-      #   response = NewKairos.http_post_to("/datapoints/query",query)
-      #   values = JSON.parse(response.body)['queries'][0]['results'][0]['values']
-      #   values.each do |v|
-      #     time = Time.at(v[0]/1000).utc
-      #     data[time] ||= []
-      #     data[time] << v
-      #   end
-      # end
-      # data = data.map{|d| d.join(",")}.join("\n")
-      # if params[:inline]
-      #   render text: data
-      # else
-      #   send_data data, filename: "device-#{params[:id]}.csv", type: 'text/csv'
-      # end
+      authorize @device, :update?
+      @device.update_column(:csv_export_requested_at, Time.now.utc)
+      if !@device.csv_export_requested_at or (@device.csv_export_requested_at < 6.hours.ago)
+        ENV['redis'] ? UserMailer.delay.device_archive(@device.id, current_user.id) : UserMailer.device_archive(@device.id).deliver
+        render json: { id: "ok", message: "CSV Archive job added to queue", url: nil, errors: nil }, status: :ok
+      else
+        render json: { id: "enhance_your_calm", message: "You can only make this request once every 6 hours, (this is rate-limited)", url: nil, errors: nil }, status: 420
+      end
     end
 
   end

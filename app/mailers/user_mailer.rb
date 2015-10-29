@@ -13,22 +13,26 @@ class UserMailer < ApplicationMailer
     mail to: @user.to_email_s, subject: 'Password Reset Instructions'
   end
 
-  def device_archive device_id
+  def device_archive device_id, user_id
     @device = Device.find(device_id)
+    @user = User.find(user_id)
 
     keys = %w(temp bat co hum light nets no2 noise panel)
     data = {}
     keys.each_with_index do |key, index|
       query = {metrics:[{tags:{device:[device_id]},name: key}], cache_time: 0, start_absolute: 1262304000000}
       response = NewKairos.http_post_to("/datapoints/query",query)
+      metric_id = @device.find_sensor_id_by_key(key)
+      component = @device.components.detect{|c|c["sensor_id"] == metric_id}
       values = JSON.parse(response.body)['queries'][0]['results'][0]['values']
       values.each do |v|
         time = Time.at(v[0]/1000).utc
         data[time] ||= []
-        data[time] << v
+        data[time] << component.calibrated_value(v[1])
       end
     end
-    csv = data.map{|d| d.join(",")}.join("\n")
+    csv = "timestamp,#{keys.join(',')}\n"
+    csv += data.map{|d| d.join(",")}.join("\n")
 
     s3 = Fog::Storage.new({
       :provider                 => 'AWS',
