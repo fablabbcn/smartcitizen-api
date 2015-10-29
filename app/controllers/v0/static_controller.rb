@@ -31,6 +31,8 @@ module V0
           a << {
             type: "City",
             city: feature['properties']['name'],
+            name: feature['properties']['name'],
+            layer: feature['properties']['layer'],
             country_code: ISO3166::Country.find_country_by_alpha3(feature['properties']['country_a'].downcase).alpha2,
             country: feature['properties']['country'],
             latitude: feature['geometry']['coordinates'][1],
