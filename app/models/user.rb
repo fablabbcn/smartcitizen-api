@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
   def send_password_reset
     generate_token(:password_reset_token)
     save!
-    UserMailer.password_reset(self).deliver_now
+    ENV['redis'] ? UserMailer.delay.password_reset(id) : UserMailer.password_reset(id).deliver_now
   end
 
   def authenticate_with_legacy_support raw_password
@@ -103,6 +103,8 @@ class User < ActiveRecord::Base
   def update_all_device_ids!
     update_column(:cached_device_ids, device_ids.try(:sort))
   end
+
+
 
 private
 

@@ -27,24 +27,27 @@ module V0
     end
 
     def csv_archive
-      keys = %w(temp bat) # co hum light nets no2 noise panel
-      data = {}
-      keys.each_with_index do |key, index|
-        query = {metrics:[{tags:{device:[params[:id]]},name: key}], cache_time: 0, start_absolute: 1262304000000}
-        response = NewKairos.http_post_to("/datapoints/query",query)
-        values = JSON.parse(response.body)['queries'][0]['results'][0]['values']
-        values.each do |v|
-          time = Time.at(v[0]/1000).utc
-          data[time] ||= []
-          data[time] << v
-        end
-      end
-      data = data.map{|d| d.join(",")}.join("\n")
-      if params[:inline]
-        render text: data
-      else
-        send_data data, filename: "device-#{params[:id]}.csv", type: 'text/csv'
-      end
+      @device = Device.find(params[:id])
+      ENV['redis'] ? UserMailer.delay.device_archive(@device.id) : UserMailer.device_archive(@device.id).deliver_now
+      render nothing: true
+      # keys = %w(temp bat) # co hum light nets no2 noise panel
+      # data = {}
+      # keys.each_with_index do |key, index|
+      #   query = {metrics:[{tags:{device:[params[:id]]},name: key}], cache_time: 0, start_absolute: 1262304000000}
+      #   response = NewKairos.http_post_to("/datapoints/query",query)
+      #   values = JSON.parse(response.body)['queries'][0]['results'][0]['values']
+      #   values.each do |v|
+      #     time = Time.at(v[0]/1000).utc
+      #     data[time] ||= []
+      #     data[time] << v
+      #   end
+      # end
+      # data = data.map{|d| d.join(",")}.join("\n")
+      # if params[:inline]
+      #   render text: data
+      # else
+      #   send_data data, filename: "device-#{params[:id]}.csv", type: 'text/csv'
+      # end
     end
 
   end
