@@ -12,7 +12,7 @@ class UserMailer < ApplicationMailer
 
   def device_archive device_id
     @device = Device.find(device_id)
-    mail to: @device.owner.to_email_s, subject: 'Device CSV Archive Ready'
+    mail to: 'john@bitsushi.com', subject: 'Device CSV Archive Ready'
   end
 
 end
