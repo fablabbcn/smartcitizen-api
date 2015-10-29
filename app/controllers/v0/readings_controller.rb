@@ -29,7 +29,8 @@ module V0
     def csv_archive
       @device = Device.find(params[:id])
       ENV['redis'] ? UserMailer.delay.device_archive(@device.id) : UserMailer.device_archive(@device.id).deliver
-      render nothing: true
+      render json: { id: "ok", message: "CSV Archive job added to queue", url: nil, errors: nil }, status: :ok
+
       # keys = %w(temp bat) # co hum light nets no2 noise panel
       # data = {}
       # keys.each_with_index do |key, index|
