@@ -57,7 +57,7 @@ class UserMailer < ApplicationMailer
 
     # connection.directories.new(:key => ENV['s3_bucket']).files.new(:key => key).url(1.day.from_now)
 
-    mail to: 'john@bitsushi.com', subject: 'Device CSV Archive Ready'
+    mail to: @user.to_email_s, subject: 'Device CSV Archive Ready'
   end
 
 end
