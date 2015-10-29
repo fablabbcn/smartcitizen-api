@@ -19,6 +19,7 @@ class UserMailer < ApplicationMailer
 
     keys = %w(temp bat co hum light nets no2 noise panel)
     data = {}
+    keys_length = keys.length
     keys.each_with_index do |key, index|
       query = {metrics:[{tags:{device:[device_id]},name: key}], cache_time: 0, start_absolute: 1262304000000}
       response = NewKairos.http_post_to("/datapoints/query",query)
@@ -27,8 +28,8 @@ class UserMailer < ApplicationMailer
       values = JSON.parse(response.body)['queries'][0]['results'][0]['values']
       values.each do |v|
         time = Time.at(v[0]/1000).utc
-        data[time] ||= []
-        data[time] << component.calibrated_value(v[1])
+        data[time] ||= Array.new(keys_length)
+        data[time][index] = component.calibrated_value(v[1])
       end
     end
     csv = "timestamp,#{keys.join(',')}\n"
