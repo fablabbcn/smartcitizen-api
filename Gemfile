@@ -38,6 +38,8 @@ gem 'aws-sdk'
 gem 'redis-rails'
 gem 'sidekiq'
 
+gem 'fog'
+
 gem 'oauth2', require: false
 gem 'doorkeeper'
 
