@@ -24,12 +24,12 @@ RSpec.describe Device, :type => :model do
 
   it "validates format of mac address" do
     expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to_not raise_error
-    expect{ create(:device, mac_address: 123) }.to raise_error
+    expect{ create(:device, mac_address: 123) }.to raise_error#(ActiveRecord::RecordInvalid)
   end
 
   it "validates uniqueness of mac address" do
     create(:device, mac_address: '10:9A:DD:63:C0:10')
-    expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to raise_error
+    expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   describe "states" do
