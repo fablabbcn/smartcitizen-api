@@ -19,7 +19,7 @@ module V0
       @user = User.new(user_params)
       authorize @user
       if @user.save
-        ENV['redis'] ? UserMailer.delay.welcome(@user.id) : UserMailer.welcome(@user.id).deliver
+        ENV['redis'] ? UserMailer.delay.welcome(@user.id) : UserMailer.welcome(@user.id).deliver_now
         render :show, status: :created
       else
         raise Smartcitizen::UnprocessableEntity.new @user.errors

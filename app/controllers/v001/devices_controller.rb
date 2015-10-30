@@ -6,11 +6,6 @@ module V001
 
       from = Date.parse(params[:from_date]) rescue nil # limit 500 posts if not set
       to = Date.parse(params[:to_date]) rescue Date.today
-      # to = @device.last_insert_datetime.to_date rescue Date.today
-
-      # Kairos.query(rollup: 500, rollup_unit: ranges[range].pluralize )
-      # from_date=2013-05-01
-      # to_date=2013-05-01
 
       if params[:group_by] and %w(hour day).include?(params[:group_by])
         if params[:group_by] == "day"

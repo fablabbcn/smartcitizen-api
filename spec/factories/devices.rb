@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :device do
+    uuid { SecureRandom.uuid }
     association :owner, factory: :user
     sequence("name") { |n| "device#{n}"}
     description "my device"

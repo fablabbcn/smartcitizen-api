@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :kit do
-    name "MyString"
-description "MyText"
+    name "Testing kit"
+    description "A kit that was made for the test environment"
   end
 
 end

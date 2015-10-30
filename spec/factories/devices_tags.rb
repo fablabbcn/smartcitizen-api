@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :devices_tag do
-    device nil
-tag nil
+    association :device
+    association :tag
   end
 
 end
