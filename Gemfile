@@ -37,7 +37,6 @@ gem 'aws-sdk'
 
 gem 'redis-rails'
 gem 'sinatra', '>= 1.3.0', :require => nil
-gem 'slim'
 gem 'sidekiq'
 
 gem 'fog'
