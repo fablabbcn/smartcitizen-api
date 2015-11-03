@@ -28,6 +28,7 @@ json.devices user.devices do |device|
   end
   json.name device.name.present? ? device.name : nil
   json.description device.description.present? ? device.description : nil
+  json.location device.location
   json.latitude device.latitude
   json.longitude device.longitude
   json.kit_id device.kit_id
