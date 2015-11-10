@@ -25,37 +25,22 @@
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td class="content-block">
-                    <h2 class="corporate-text-color">Welcome <%= @user.username %></h2>
+                    <h2 class="corporate-text-color"><%= @user.username %>,</h2>
                   </td>
                 </tr>
                 <tr>
                   <td class="content-block">
-                    <p class="corporate-text-color">Thanks for joining us. Smart Citizen is a platform to generate participatory processes of the people in the cities. Connecting data, people and knowledge, the objective of the platform is to serve as a node for building productive open indicators and distributed tools, and thereafter the collective construction of the city for its own inhabitants.</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="">
-                    <a href="<%= ENV['frontend_root_url'] %>" class="btn-primary">Go to Smart Citizen</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="subtitles-content-block">
-                    <h3 class="corporate-text-color">Get your Smart Citizen Kit.</h3>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="">
-                    <p class="corporate-text-color">Purchase your own Smart Citizen Kit and start streaming your location data.</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="subtitles-content-block">
-                    <h3 class="corporate-text-color">Smart Citizen for Android.</h3>
+                    <p class="corporate-text-color">The CSV archive for '<%= @device %>' is now ready for download. You can access it here:</p>
                   </td>
                 </tr>
                 <tr>
                   <td class="content-block">
-                    <p class="corporate-text-color">Check out our Smart Citizen Android app to browse data from our kit network.</p>
+                    <a href="<%= @url %>" class="btn-primary">Download CSV</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="content-block">
+                    <p class="corporate-text-color">Thank you.</p>
                   </td>
                 </tr>
               </table>
