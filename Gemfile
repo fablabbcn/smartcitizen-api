@@ -16,6 +16,7 @@ gem 'rack-cache'
 # prevent 2.8 and greater from being used
 gem 'listen'#, '~> 2.7.12'
 gem 'airbrake'
+gem 'premailer-rails'
 
 gem 'statsample'
 gem 'pg'
