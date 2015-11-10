@@ -90,6 +90,8 @@ module Smartcitizen
 
     config.exceptions_app = self.routes
 
+    config.assets.enabled = false
+
     config.generators do |g|
       g.helper false
       g.assets false
