@@ -104,8 +104,6 @@ class User < ActiveRecord::Base
     update_column(:cached_device_ids, device_ids.try(:sort))
   end
 
-
-
 private
 
   def generate_legacy_api_key
