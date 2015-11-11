@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git://github.com/hexorx/countries.git
-  revision: 6009b6a486eae4d10b3d3828178c18335d113027
+  revision: 2d14bcd3cea59d6dbd760e88ca9a967d62d54e17
   specs:
     countries (1.2.1)
       currencies (~> 0.4.2)
@@ -89,12 +89,12 @@ GEM
     api-pagination (4.1.1)
     arel (6.0.3)
     awesome_print (1.6.1)
-    aws-sdk (2.1.35)
-      aws-sdk-resources (= 2.1.35)
-    aws-sdk-core (2.1.35)
+    aws-sdk (2.1.36)
+      aws-sdk-resources (= 2.1.36)
+    aws-sdk-core (2.1.36)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.1.35)
-      aws-sdk-core (= 2.1.35)
+    aws-sdk-resources (2.1.36)
+      aws-sdk-core (= 2.1.36)
     bcrypt (3.1.10)
     builder (3.2.2)
     c_geohash (1.1.2)
