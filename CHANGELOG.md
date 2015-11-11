@@ -1,7 +1,6 @@
 # Change Log
 
-## [Unreleased](https://github.com/fablabbcn/smartcitizen/tree/HEAD)
-
+## [v0.0.2](https://github.com/fablabbcn/smartcitizen/tree/v0.0.2) (2015-11-11)
 **Implemented enhancements:**
 
 - Exposure as system tag [\#12](https://github.com/fablabbcn/smartcitizen/issues/12)
