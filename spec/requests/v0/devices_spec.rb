@@ -23,8 +23,8 @@ describe V0::DevicesController do
 
     describe "world map" do
       it "returns all devices" do
-        first = create(:device)
-        second = create(:device)
+        first = create(:device, data: { "": Time.now })
+        second = create(:device, data: { "": Time.now })
         json = api_get "devices/world_map"
         expect(response.status).to eq(200)
         expect(json.map{|j| j['id']}).to eq([second, first].map(&:id))
