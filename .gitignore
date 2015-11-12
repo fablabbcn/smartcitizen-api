@@ -28,4 +28,4 @@
 /doc/*.txt
 banned_words.production.yml
 /data
-
+spec/vcr_cassettes

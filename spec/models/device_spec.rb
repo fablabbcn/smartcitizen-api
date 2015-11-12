@@ -90,12 +90,11 @@ RSpec.describe Device, :type => :model do
       expect(barcelona.geohash).to match('sp3e9bh31y')
     end
 
-    it "calculates elevation on save" do
-      VCR.use_cassette("devices/barcelona_elevation") do
-        barcelona = create(:device, elevation: nil)
-        expect(barcelona.elevation).to eq(4)
-      end
+    it "calculates elevation on save", :vcr do
+      barcelona = create(:device, elevation: nil)
+      expect(barcelona.elevation).to eq(4)
     end
+
   end
 
   describe "kit_version" do
