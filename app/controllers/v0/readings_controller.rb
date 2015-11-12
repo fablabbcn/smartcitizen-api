@@ -20,7 +20,10 @@ module V0
         })
         ENV['redis'] ? RawStorer.delay(:retry => false).new(data) : RawStorer.new(data)
       rescue Exception => e
-        BadReading.add(data, request.headers['X-SmartCitizenIP'])
+        begin
+          BadReading.add(data, request.headers['X-SmartCitizenIP'])
+        rescue Exception => e
+        end
         notify_airbrake(e)
       end
       render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S#") # render time for SCK to sync clock
