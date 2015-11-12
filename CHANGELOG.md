@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.0.3](https://github.com/fablabbcn/smartcitizen/tree/v0.0.3) (2015-11-12)
+[Full Changelog](https://github.com/fablabbcn/smartcitizen/compare/v0.0.2...v0.0.3)
+
+**Fixed bugs:**
+
+- new devices are not recording data as they have no 'kit' [\#16](https://github.com/fablabbcn/smartcitizen/issues/16)
+
 ## [v0.0.2](https://github.com/fablabbcn/smartcitizen/tree/v0.0.2) (2015-11-11)
 **Implemented enhancements:**
 
