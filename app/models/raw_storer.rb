@@ -55,6 +55,12 @@ class RawStorer
     # undefined method `split' for nil:NilClass
     identifier = data['version'].split('-').first
 
+# temporary fix for device 1000008
+    if identifier and !device.kit_id
+      device.kit_version = identifier
+      device.save
+    end
+
     parsed_ts = Time.parse(data['timestamp'])
     ts = parsed_ts.to_i * 1000
 
