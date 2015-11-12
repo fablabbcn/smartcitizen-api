@@ -5,8 +5,8 @@ gem 'rails', '4.2.4'
 gem 'rails-api'
 
 gem 'rack-timeout'
-# gem 'rack-attack' # API Rate Limiting
-gem 'rack-cors', :require => 'rack/cors'
+# gem 'rack-attack' API Rate Limiting
+gem 'rack-cors', require: 'rack/cors'
 gem 'rack-contrib'
 gem 'rack-cache'
 # gem 'actionpack-page_caching'
@@ -14,7 +14,8 @@ gem 'rack-cache'
 
 # https://github.com/guard/listen/wiki/Duplicate-directory-errors
 # prevent 2.8 and greater from being used
-gem 'listen'#, '~> 2.7.12'
+
+gem 'listen' # '~> 2.7.12'
 gem 'airbrake'
 gem 'premailer-rails'
 
@@ -37,7 +38,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'aws-sdk'
 
 gem 'redis-rails'
-gem 'sinatra', '>= 1.3.0', :require => nil
+gem 'sinatra', '>= 1.3.0', require: nil
 gem 'sidekiq'
 
 gem 'fog'
@@ -75,8 +76,8 @@ group :test do
   gem 'database_cleaner'
   gem 'simplecov', require: false
   gem 'zonebie'
-  gem "codeclimate-test-reporter", require: nil
-  gem "timecop"
+  gem 'codeclimate-test-reporter', require: nil
+  gem 'timecop'
   gem 'vcr'
   gem 'webmock'
 end
@@ -88,7 +89,10 @@ group :development do
   gem 'spring'
   gem 'sshkit-sudo'
   gem 'capistrano-rbenv'
-  gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq', ref: '8d8d9317b6f5862d86c800ba56a5e406be24b2c1'
+  gem 'capistrano-sidekiq',
+    github: 'seuros/capistrano-sidekiq',
+    ref: '8d8d9317b6f5862d86c800ba56a5e406be24b2c1'
+  gem 'rubocop', require: false
 end
 
 group :development, :test do
@@ -103,6 +107,7 @@ group :development, :test do
   gem 'railroady'
   # gem 'byebug'
   # gem 'web-console', '~> 2.0'
+  gem 'rdoc'
 end
 
 group :development, :test, :linode do
@@ -111,4 +116,4 @@ end
 
 # Deployment
 gem 'unicorn'
-gem 'capistrano-rails', :group => :development
+gem 'capistrano-rails', group: :development

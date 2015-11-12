@@ -5,12 +5,12 @@ class Component < ActiveRecord::Base
   validates_presence_of :board, :sensor
   validates :sensor_id, :uniqueness => { :scope => [:board_id, :board_type] }
 
+  # Accepts a raw sensor reading and uses its equation to process and return
+  # a calibrated version
+  # Params:
+  # +x+:: raw sensor value
   def calibrated_value x
     return x unless equation
-    # e.g. equation = "x/1000"
-    # x = 3200
-    # ->x{x/1000}
-    # x = 32
     eval( ['->x{',equation,'}'].join ).call(x)
   end
 

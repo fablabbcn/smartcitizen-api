@@ -29,3 +29,5 @@
 banned_words.production.yml
 /data
 spec/vcr_cassettes
+README.rdoc
+doc/app
