@@ -22,19 +22,20 @@ class Device < ActiveRecord::Base
   has_many :components, as: :board
   has_many :sensors, through: :components
 
-
   validates_presence_of :name, :owner, on: :create
   validates_uniqueness_of :name, scope: :owner_id, on: :create
   validate :banned_name
   # validates_presence_of :mac_address, :name
 
   validates_uniqueness_of :mac_address, allow_nil: true, on: :create
-  validates_format_of :mac_address, with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
+  validates_format_of :mac_address,
+    with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
 
   default_scope { with_active_state.includes(:owner) }
 
   include PgSearch
-  multisearchable :against => [:name, :description, :city, :country_name]#, associated_against: { owner: { :username }
+  multisearchable :against => [:name, :description, :city, :country_name]
+  #, associated_against: { owner: { :username }
 
   before_save :calculate_geohash
   after_validation :do_geocoding
@@ -234,8 +235,10 @@ private
 
   def set_elevation
     begin
-      if elevation.blank? and latitude.present? and longitude.present? and (latitude_changed? or longitude_changed?)
-        response = open("https://maps.googleapis.com/maps/api/elevation/json?locations=#{latitude},#{longitude}&key=#{ENV['google_api_key']}").read
+      if elevation.blank? and latitude.present? and longitude.present? and
+        (latitude_changed? or longitude_changed?)
+          url = "https://maps.googleapis.com/maps/api/elevation/json?locations=#{latitude},#{longitude}&key=#{ENV['google_api_key']}"
+          response = open(url).read
         self.elevation = JSON.parse(response)['results'][0]['elevation'].to_i
       end
     rescue Exception => e
@@ -251,7 +254,7 @@ end
 
 
 # REDIS
-# online_kits = [12,13,4,546,45,4564,46,75,68,97] - TTL 15 minutes? // last_recorded_at
+# online_kits = [12,13,4,546,45,4564,46,75,68,97] - TTL 15 minutes?
 # online? - online_kits.include?(id)
 # offline? - !online_kits.include?(id)
 
