@@ -642,6 +642,7 @@ DEPENDENCIES
   capistrano-rbenv
   capistrano-sidekiq!
   codeclimate-test-reporter
+  colorize
   countries!
   dalli
   database_cleaner
