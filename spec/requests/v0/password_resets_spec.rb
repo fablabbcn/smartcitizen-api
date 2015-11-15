@@ -108,7 +108,6 @@ describe V0::PasswordResetsController do
 
     it "cannot reset password with empty password" do
       api_put "password_resets/#{user.password_reset_token}", { password: nil }
-      puts response.body
       expect(response.status).to eq(400)
     end
 
