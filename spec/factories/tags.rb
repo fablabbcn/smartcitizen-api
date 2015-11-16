@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :tag do
-    name "MyString"
-    description "MyText"
+    sequence(:name) { |n| "tag#{n}"}
+    description "tag description"
   end
 
 end
