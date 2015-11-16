@@ -6,8 +6,14 @@ describe V0::DevicesController do
   let(:user) { create :user }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
   let(:device) { create(:device) }
+  let(:admin) { create :admin }
+  let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
 
   describe "GET /devices" do
+
+    it "can be filered"
+
+    it "is paginated"
 
     it "returns all the devices" do
       first = create(:device)
@@ -68,26 +74,42 @@ describe V0::DevicesController do
   end
 
   describe "GET /devices/:id" do
+
     it "returns a device" do
-      api_get "devices/#{device.id}"
+      j = api_get "devices/#{device.id}"
+      expect(j['id']).to eq(device.id)
       expect(response.status).to eq(200)
     end
 
     it "returns 404 if device not found" do
-      api_get 'devices/100'
+      j = api_get 'devices/100'
+      expect(j['id']).to eq('record_not_found')
       expect(response.status).to eq(404)
     end
 
+    describe "mac_address" do
 
-    it "has filtered mac address" do
-      j = api_get "devices/#{device.id}"
-      expect(j['mac_address']).to eq('[FILTERED]')
-    end
+      it "filters mac address from guests" do
+        j = api_get "devices/#{device.id}"
+        expect(j['mac_address']).to eq('[FILTERED]')
+      end
 
-    it "exposes mac address for an admin" do
-      user.update_attribute(:role_mask, 5)
-      j = api_get "devices/#{device.id}?access_token=#{token.token}"
-      expect(j['mac_address']).to eq(device.mac_address)
+      it "filters mac address from users" do
+        j = api_get "devices/#{device.id}?access_token=#{token.token}"
+        expect(j['mac_address']).to eq('[FILTERED]')
+      end
+
+      it "exposes mac address to device owner" do
+        device = create(:device, owner: user)
+        j = api_get "devices/#{device.id}?access_token=#{token.token}"
+        expect(j['mac_address']).to eq(device.mac_address)
+      end
+
+      it "exposes mac address to admin" do
+        j = api_get "devices/#{device.id}?access_token=#{admin_token.token}"
+        expect(j['mac_address']).to eq(device.mac_address)
+      end
+
     end
 
   end
