@@ -10,6 +10,7 @@ describe SensorPolicy do
     it { is_expected.to permitz(:show) }
     it { is_expected.to_not permitz(:update) }
     it { is_expected.to_not permitz(:create) }
+    it { is_expected.to_not permitz(:destroy) }
   end
 
   context "for a user" do
@@ -17,6 +18,7 @@ describe SensorPolicy do
     it { is_expected.to permitz(:show) }
     it { is_expected.to_not permitz(:update) }
     it { is_expected.to_not permitz(:create) }
+    it { is_expected.to_not permitz(:destroy) }
   end
 
   context "for an admin" do
@@ -24,6 +26,7 @@ describe SensorPolicy do
     it { is_expected.to permitz(:show) }
     it { is_expected.to permitz(:update) }
     it { is_expected.to permitz(:create) }
+    it { is_expected.to permitz(:destroy) }
   end
 
 end
