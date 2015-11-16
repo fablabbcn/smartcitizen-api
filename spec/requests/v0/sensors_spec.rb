@@ -20,9 +20,11 @@ describe V0::SensorsController do
 
   describe "GET /sensors" do
     it "returns all the sensors" do
-      first = create(:sensor)
+      first = create(:sensor, name: 'testing sensor')
       second = create(:sensor)
-      api_get 'sensors'
+      j = api_get 'sensors'
+      expect(j.length).to eq(2)
+      expect(j[0]['name']).to eq('testing sensor')
       expect(response.status).to eq(200)
     end
   end
@@ -30,20 +32,22 @@ describe V0::SensorsController do
   describe "POST /sensors" do
 
     it "creates a sensor" do
-      api_post 'sensors', {
+      j = api_post 'sensors', {
         name: 'new sensor',
         description: 'blah blah blah',
         unit: 'm',
         access_token: admin_token.token
       }
+      expect(j['name']).to eq('new sensor')
       expect(response.status).to eq(201)
     end
 
     it "does not create a sensor with missing parameters" do
-      api_post 'sensors', {
+      j = api_post 'sensors', {
         name: 'Missing params',
         access_token: admin_token.token
       }
+      expect(j['id']).to eq('unprocessable_entity')
       expect(response.status).to eq(422)
     end
 
