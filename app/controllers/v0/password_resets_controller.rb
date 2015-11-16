@@ -3,15 +3,8 @@ module V0
 
     skip_after_action :verify_authorized, only: :create
 
-    def show
-      @user = User.find_by!(password_reset_token: params[:id])
-      @current_user = @user
-      authorize @user, :update_password?
-      render 'users/show', status: :ok
-    end
-
+    # 1/3 - A reset must be created with an authenticated request
     def create
-      # u_or_e = params.require(:username_or_email)
       if params[:email].present?
         @user = User.find_by!(email: params[:email])
       elsif params[:username].present?
@@ -32,6 +25,15 @@ module V0
       render json: {message: 'Password Reset Instructions Delivered'}, status: :ok
     end
 
+    # 2/3 - The associated user object is returned, indicating a valid token
+    def show
+      @user = User.find_by!(password_reset_token: params[:id])
+      @current_user = @user
+      authorize @user, :update_password?
+      render 'users/show', status: :ok
+    end
+
+    # 3/3 - The password reset is submitted and committed to the database
     def update
       @user = User.find_by!(password_reset_token: params[:id])
       @current_user = @user
