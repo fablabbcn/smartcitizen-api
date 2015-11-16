@@ -1,16 +1,15 @@
 language: ruby
 rvm:
-  - 2.2.2
-env:
-  # cassandra_keyspace=smart_citizen_test
-script: 'bundle exec rake spec'
-bundler_args: '--without=debug'
+- 2.2.2
+script: bundle exec rake spec
+bundler_args: "--without=debug"
 services:
-  - redis-server
+- redis-server
 addons:
-  postgresql: "9.4"
+  postgresql: '9.4'
   code_climate:
-    repo_token: bfdefd53a4b61a5cf7890945006981d65f4166fe2d6c667968a4a560b9b0034b
+    repo_token:
+      secure: "aeLLEEn+42UCOH2nEuuebv8WnnTRAM4js7+61720OM4jnSgTZjluGWGecufjPagIbj2tZ2ldXMEs+SQbfy6PJC9QKcHuo6/OUehg1BcTALqPCvfzKHw55nvFZbFUvW+2Oewnd0Gufmy0GmhLldk8+ElSlk2jTxnBgKuXil/xpZU="
 before_script:
-  - cp config/database.travis.yml config/database.yml
-  - psql -c 'create database travis_ci_test;' -U postgres
+- cp config/database.travis.yml config/database.yml
+- psql -c 'create database travis_ci_test;' -U postgres
