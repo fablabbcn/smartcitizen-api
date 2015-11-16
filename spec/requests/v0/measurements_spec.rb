@@ -4,7 +4,7 @@ describe V0::MeasurementsController do
 
   let(:application) { create :application }
   let(:user) { create :user }
-  let(:admin) { create :user, role_mask: 5 }
+  let(:admin) { create :admin }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
   let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
 

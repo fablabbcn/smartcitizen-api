@@ -20,7 +20,7 @@ describe SensorPolicy do
   end
 
   context "for an admin" do
-    let(:user) { FactoryGirl.create(:user, role_mask: 5) }
+    let(:user) { FactoryGirl.create(:admin) }
     it { is_expected.to permitz(:show) }
     it { is_expected.to permitz(:update) }
     it { is_expected.to permitz(:create) }

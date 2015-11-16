@@ -6,7 +6,7 @@ describe V0::SensorsController do
   let(:user) { create :user }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
 
-  let(:admin) { create :user, role_mask: 5 }
+  let(:admin) { create :admin }
   let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
 
   describe "GET /sensor/<id>" do
