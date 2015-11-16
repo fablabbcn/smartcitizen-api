@@ -4,6 +4,15 @@ module ErrorHandlers
 
   included do
 
+    # rescue_from RuntimeError do |exception|
+    #   render json: {
+    #     id: "internal_server_error",
+    #     message: "Internal Server Error",
+    #     errors: nil,
+    #     url: nil
+    #   }, status: 500
+    # end
+
     rescue_from Pundit::NotAuthorizedError do |exception|
       render json: { id: "forbidden", message: "You do not have the access permissions to do this", url: nil, errors: nil }, status: :forbidden
     end

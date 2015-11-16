@@ -67,6 +67,7 @@ Rails.application.routes.draw do
 
     get "/404" => "errors#not_found"
     get "/500" => "errors#exception"
+    get "/test_error" => "errors#test_error"
     match "*path", to: "errors#not_found", via: :all
   end
 

@@ -1,5 +1,7 @@
 module V0
-  class ErrorsController < ActionController::API
+  class ErrorsController < ApplicationController
+
+    skip_after_action :verify_authorized
 
     def not_found
       render json: {
@@ -17,6 +19,10 @@ module V0
         errors: nil,
         url: nil
       }, status: 500
+    end
+
+    def test_error
+      raise "test error"
     end
 
   end
