@@ -4,14 +4,18 @@ describe V0::MeasurementsController do
 
   let(:application) { create :application }
   let(:user) { create :user }
+  let(:admin) { create :user, role_mask: 5 }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
+  let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
+
+  it "needs general user tests"
 
   describe "GET /measurement/<id>" do
     it "returns a measurement" do
       measurement = create(:measurement)
-      json = api_get "measurements/#{measurement.id}"
+      j = api_get "measurements/#{measurement.id}"
+      expect(j['id']).to eq(measurement.id)
       expect(response.status).to eq(200)
-      # expect(json.as_json).to eq(MeasurementSerializer.new(measurement).as_json)
     end
   end
 
@@ -19,29 +23,38 @@ describe V0::MeasurementsController do
     it "returns all the measurements" do
       first = create(:measurement)
       second = create(:measurement)
-      api_get 'measurements'
+      j = api_get 'measurements'
+      expect(j.length).to eq(2)
+      expect(j.map{|m| m['id']}).to eq([first.id, second.id])
       expect(response.status).to eq(200)
+      expect(response.headers.keys).to include('Total')
     end
   end
 
   describe "POST /measurements" do
 
-    it "creates a measurement" do
-      api_post 'measurements', {
-        name: 'new measurement',
-        description: 'blah blah blah',
-        unit: 'm',
-        access_token: token.token
-      }
-      expect(response.status).to eq(201)
-    end
+    describe "admin" do
 
-    it "does not create a measurement with missing parameters" do
-      api_post 'measurements', {
-        name: 'Missing params',
-        access_token: token.token
-      }
-      expect(response.status).to eq(422)
+      it "creates a measurement" do
+        j = api_post 'measurements', {
+          name: 'new measurement',
+          description: 'blah blah blah',
+          unit: 'm',
+          access_token: admin_token.token
+        }
+        expect(j['name']).to eq('new measurement')
+        expect(response.status).to eq(201)
+      end
+
+      it "does not create a measurement with missing parameters" do
+        j = api_post 'measurements', {
+          name: 'Missing params',
+          access_token: admin_token.token
+        }
+        expect(j['id']).to eq('unprocessable_entity')
+        expect(response.status).to eq(422)
+      end
+
     end
 
   end
@@ -51,22 +64,26 @@ describe V0::MeasurementsController do
     let!(:measurement) { create :measurement }
 
     it "updates a measurement" do
-      api_put "measurements/#{measurement.id}", { name: 'new name', access_token: token.token }
+      j = api_put "measurements/#{measurement.id}", { name: 'new name', access_token: admin_token.token }
+      expect(j['name']).to eq('new name')
       expect(response.status).to eq(200)
     end
 
     it "does not update a measurement with invalid access_token" do
-      api_put "measurements/#{measurement.id}", { name: 'new name', access_token: '123' }
+      j = api_put "measurements/#{measurement.id}", { name: 'new name', access_token: '123' }
+      expect(j['id']).to eq('forbidden')
       expect(response.status).to eq(403)
     end
 
     it "does not update a measurement with missing access_token" do
-      api_put "measurements/#{measurement.id}", { name: 'new name', access_token: nil }
+      j = api_put "measurements/#{measurement.id}", { name: 'new name', access_token: nil }
+      expect(j['id']).to eq('forbidden')
       expect(response.status).to eq(403)
     end
 
     it "does not update a measurement with empty parameters access_token" do
-      api_put "measurements/#{measurement.id}", { name: nil, access_token: token.token }
+      j = api_put "measurements/#{measurement.id}", { name: nil, access_token: admin_token.token }
+      expect(j['id']).to eq('unprocessable_entity')
       expect(response.status).to eq(422)
     end
 

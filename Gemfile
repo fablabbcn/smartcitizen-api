@@ -103,7 +103,7 @@ group :development, :test do
   gem 'brakeman', github: 'presidentbeef/brakeman', require: false
   gem 'rspec-rails'
   gem 'factory_girl_rails'
-  gem 'shoulda-matchers', '~> 3.0', require: false
+  gem 'shoulda-matchers', github: 'thoughtbot/shoulda-matchers', require: false
   gem 'guard-rspec'
   gem 'railroady'
   # gem 'byebug'

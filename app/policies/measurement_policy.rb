@@ -5,7 +5,7 @@ class MeasurementPolicy < ApplicationPolicy
   end
 
   def create?
-    user
+    user and user.is_admin?
   end
 
   def update?
