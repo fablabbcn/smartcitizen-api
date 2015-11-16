@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe DevicePolicy do
   subject { DevicePolicy.new(user, device) }

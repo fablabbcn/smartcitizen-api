@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MeasurementPolicy do
   subject { MeasurementPolicy.new(user, measurement) }

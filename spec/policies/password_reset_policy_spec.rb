@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe PasswordResetPolicy do
   subject { PasswordResetPolicy.new(user, password_reset) }
