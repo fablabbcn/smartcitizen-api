@@ -6,6 +6,11 @@ describe V0::KitsController do
   let(:user) { create :user }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
 
+  let(:admin) { create :admin }
+  let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
+
+  let(:kit) { create :kit }
+
   describe "GET /kits" do
     it "returns all the kits" do
       first = create(:kit)
@@ -22,12 +27,14 @@ describe V0::KitsController do
   describe "GET /kits/:id" do
     it "returns a kit" do
       kit = create(:kit)
-      api_get "kits/#{kit.id}"
+      j = api_get "kits/#{kit.id}"
+      expect(j['id']).to eq(kit.id)
       expect(response.status).to eq(200)
     end
 
     it "returns 404 if kit not found" do
-      api_get 'kits/100'
+      j = api_get 'kits/100'
+      expect(j['id']).to eq('record_not_found')
       expect(response.status).to eq(404)
     end
   end
@@ -37,7 +44,7 @@ describe V0::KitsController do
     let!(:kit) { create :kit }
 
     it "updates a kit" do
-      api_put "kits/#{kit.id}", { name: 'new name', access_token: token.token }
+      api_put "kits/#{kit.id}", { name: 'new name', access_token: admin_token.token }
       expect(response.status).to eq(200)
     end
 
@@ -52,7 +59,7 @@ describe V0::KitsController do
     end
 
     it "does not update a kit with empty parameters access_token" do
-      api_put "kits/#{kit.id}", { name: nil, access_token: token.token }
+      api_put "kits/#{kit.id}", { name: nil, access_token: admin_token.token }
       expect(response.status).to eq(422)
     end
 

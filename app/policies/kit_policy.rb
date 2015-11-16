@@ -4,8 +4,12 @@ class KitPolicy < ApplicationPolicy
     true
   end
 
+  def create?
+    user and user.is_admin?
+  end
+
   def update?
-    user
+    create?
   end
 
 end
