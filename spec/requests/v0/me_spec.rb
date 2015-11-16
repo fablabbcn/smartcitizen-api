@@ -3,26 +3,29 @@ require 'rails_helper'
 describe V0::MeController, type: :request do
 
   let(:application) { create :application }
-  let(:user) { create :user, password: '1234567' }
+  let(:user) { create :user, username: 'barney', password: '1234567' }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
 
   describe "current_user" do
 
     describe "OAuth 2.0" do
       it "valid credentials" do
-        api_get "me", { access_token: token.token }
+        j = api_get "me", { access_token: token.token }
+        expect(j['username']).to eq('barney')
         expect(response.status).to eq(200)
       end
 
       it "invalid credentials" do
         r = api_get 'me', { access_token: 'moo' }
         expect(response.status).to eq(401)
+        expect(r["id"]).to eq("unauthorized")
         expect(r["message"]).to eq("Invalid OAuth2 Params")
       end
 
       it "(empty) invalid credentials" do
         r = api_get 'me'
         expect(response.status).to eq(401)
+        expect(r["id"]).to eq("unauthorized")
         expect(r["message"]).to eq("Authorization required")
       end
     end
@@ -71,12 +74,14 @@ describe V0::MeController, type: :request do
 
   describe "GET /me" do
     it "returns current_user" do
-      resp = api_get "me", { access_token: token.token }
-      expect(resp["username"]).to eq(user.username)
+      j = api_get "me", { access_token: token.token }
+      expect(j["username"]).to eq('barney')
+      expect(response.status).to eq(200)
     end
 
     it "returns 401 if not authorized" do
-      api_get 'me'
+      j = api_get 'me'
+      expect(j['id']).to eq('unauthorized')
       expect(response.status).to eq(401)
     end
   end
@@ -84,22 +89,26 @@ describe V0::MeController, type: :request do
   describe "PUT /me" do
 
     it "updates current_user" do
-      api_put "me", { first_name: 'Bart', access_token: token.token }
+      j = api_put "me", { username: 'krusty', access_token: token.token }
+      expect(j['username']).to eq('krusty')
       expect(response.status).to eq(200)
     end
 
     it "does not update a user with invalid access_token" do
-      api_put "me", { first_name: 'Bart', access_token: '123' }
+      j = api_put "me", { username: 'krusty', access_token: '123' }
+      expect(j['id']).to eq('unauthorized')
       expect(response.status).to eq(401)
     end
 
     it "does not update a user with missing access_token" do
-      api_put "me", { first_name: 'Bart', access_token: nil }
+      j = api_put "me", { username: 'krusty', access_token: nil }
+      expect(j['id']).to eq('unauthorized')
       expect(response.status).to eq(401)
     end
 
     it "does not update a user with empty parameters access_token" do
-      api_put "me", { username: nil, access_token: token.token }
+      j = api_put "me", { username: nil, access_token: token.token }
+      expect(j['id']).to eq('unprocessable_entity')
       expect(response.status).to eq(422)
     end
 
