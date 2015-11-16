@@ -4,68 +4,112 @@ describe V0::UsersController do
 
   let(:application) { create :application }
   let(:other_user) { create :user }
-  let(:user) { create :user }
-  let(:token) { create :access_token, application: application, resource_owner_id: user.id }
+  let(:token) {
+    create :access_token,
+    application: application,
+    resource_owner_id: user.id
+  }
 
+  # show
   describe "GET /users/<username||id>" do
-
-    let(:user) { create(:user) }
+    let!(:user) { create :user, username: 'testguy' }
 
     it "returns a user by id" do
-      api_get "users/#{user.id}"
+      j = api_get "users/#{user.id}"
+      expect(j['username']).to eq('testguy')
       expect(response.status).to eq(200)
     end
 
     it "returns a user by username" do
-      api_get "users/#{user.username}"
+      j = api_get "users/testguy"
+      expect(j['username']).to eq('testguy')
       expect(response.status).to eq(200)
     end
 
     it "returns not found if no user exists" do
-      api_get "users/notauser"
+      j = api_get "users/notauser"
+      expect(j['id']).to eq('record_not_found')
       expect(response.status).to eq(404)
     end
 
     it "has filtered email address" do
-      j = api_get "users/#{user.id}"
+      j = api_get "users/testguy"
       expect(j['email']).to eq('[FILTERED]')
     end
 
     it "exposes email address for an admin" do
-      j = api_get "users/#{user.id}?access_token=#{token.token}"
+      j = api_get "users/testguy?access_token=#{token.token}"
       expect(j['email']).to eq(user.email)
     end
 
   end
 
+  # index
   describe "GET /users" do
 
-    let(:first) { create(:user, username: "first") }
-    let(:second) { create(:user, username: "second") }
-    before(:each) do
-      Timecop.freeze do
-        first
-        Timecop.travel(10.seconds)
-        second
+    let(:first) { create(:user, username: "firstguy") }
+    let(:second) { create(:user, username: "secondguy") }
+    let(:another) { create(:user, username: "anotherguy") }
+
+    describe "ordering" do
+
+      before(:each) do
+        Timecop.freeze do
+          first # touch record
+          Timecop.travel(1.second) # force ordering
+          second # touch record
+        end
       end
+
+      it "returns all the users" do
+        j = api_get 'users'
+        expect(j.map{|b| b['username']}).to eq(%w(firstguy secondguy))
+        expect(response.status).to eq(200)
+      end
+
+      it "can be ordered by created_at" do
+        j = api_get 'users?q[s]=created_at desc'
+        expect(j.map{|b| b['username']}).to eq(%w(secondguy firstguy))
+      end
+
+      it "can be ordered by username" do
+        another # touch record
+        j = api_get 'users?q[s]=username asc'
+        expect(
+          j.map{|b| b['username']}
+        ).to eq(%w(anotherguy firstguy secondguy))
+      end
+
     end
 
-    it "returns all the users" do
-      body = api_get 'users'
-      expect(response.status).to eq(200)
-      expect(body.map{|b| b['username']}).to eq([first.username,second.username])
-    end
+    describe "pagination" do
+      before(:all) do
+        30.times { create(:user) }
+      end
 
-    it "can be ordered" do
-      # body = api_get 'users?order=created_at&direction=desc'
-      body = api_get 'users?q[s]=created_at desc'
-      expect(body.map{|b| b['username']}).to eq([second.username,first.username])
-    end
+      it "has default 25 per page limit" do
+        get "/v0/users"
+        j = JSON.parse(response.body)
+        expect(response.headers['Total']).to eq('30')
+        expect(response.headers['Per-Page']).to eq('25')
+        expect(j.length).to eq(25)
+      end
 
-    it "has default asc order" do
-      # body = api_get 'users?order=username'
-      body = api_get 'users?q[s]=username asc'
-      expect(body.map{|b| b['username']}).to eq([first.username,second.username])
+      it "has a second page" do
+        get "/v0/users?page=2"
+        j = JSON.parse(response.body)
+        expect(response.headers['Total']).to eq('30')
+        expect(response.headers['Per-Page']).to eq('25')
+        expect(j.length).to eq(5)
+      end
+
+      it "can change the per page limit" do
+        get "/v0/users?per_page=4"
+        j = JSON.parse(response.body)
+        expect(response.headers['Total']).to eq('30')
+        expect(response.headers['Per-Page']).to eq('4')
+        expect(j.length).to eq(4)
+      end
     end
 
   end
@@ -97,33 +141,45 @@ describe V0::UsersController do
     let(:user) { create(:user, username: 'lisasimpson') }
 
     it "updates user" do
-      api_put "users/#{[user.username,user.id].sample}", { username: 'bart', access_token: token.token }
+      api_put "users/#{[user.username,user.id].sample}", {
+        username: 'bart', access_token: token.token
+      }
       expect(response.status).to eq(200)
     end
 
     it "does not update a user with invalid access_token" do
-      api_put "users/#{[user.username,user.id].sample}", { username: 'bart', access_token: '123' }
+      api_put "users/#{[user.username,user.id].sample}", {
+        username: 'bart', access_token: '123'
+      }
       expect(response.status).to eq(401)
     end
 
     it "does not update another user" do
-      api_put "users/#{[other_user.username,other_user.id].sample}", { username: 'Bart', access_token: token.token }
+      api_put "users/#{[other_user.username,other_user.id].sample}", {
+        username: 'Bart', access_token: token.token
+      }
       expect(response.status).to eq(403)
     end
 
     it "updates another user if admin" do
       user.update_attribute(:role_mask, 5)
-      api_put "users/#{[other_user.username,other_user.id].sample}", { username: 'Bart', access_token: token.token }
+      api_put "users/#{[other_user.username,other_user.id].sample}", {
+        username: 'Bart', access_token: token.token
+      }
       expect(response.status).to eq(200)
     end
 
     it "does not update a user with missing access_token" do
-      api_put "users/#{[user.username,user.id].sample}", { username: 'Bart', access_token: nil }
+      api_put "users/#{[user.username,user.id].sample}", {
+        username: 'Bart', access_token: nil
+      }
       expect(response.status).to eq(401)
     end
 
     it "does not update a user with empty parameters access_token" do
-      api_put "users/#{[user.username,user.id].sample}", { username: nil, access_token: token.token }
+      api_put "users/#{[user.username,user.id].sample}", {
+        username: nil, access_token: token.token
+      }
       expect(response.status).to eq(422)
     end
 

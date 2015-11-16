@@ -56,15 +56,15 @@ guard :rspec, cmd: "RUBYOPT='-W0' bin/rspec" do
   watch(rails.controllers) do |m|
     [
       # rspec.spec.("routing/#{m[1]}_routing"),
-      rspec.spec.("controllers/#{m[1]}_controller"),
-      rspec.spec.("acceptance/#{m[1]}")
+      # rspec.spec.("controllers/#{m[1]}_controller"),
+      rspec.spec.("requests/#{m[1]}")
     ]
   end
 
   # Rails config changes
   watch(rails.spec_helper)     { rspec.spec_dir }
   # watch(rails.routes)          { "#{rspec.spec_dir}/routing" }
-  watch(rails.app_controller)  { "#{rspec.spec_dir}/controllers" }
+  watch(rails.app_controller)  { "#{rspec.spec_dir}/requests" }
 
   # # Capybara features specs
   watch(rails.view_dirs)     { |m| rspec.spec.("requests/#{m[1]}") }
