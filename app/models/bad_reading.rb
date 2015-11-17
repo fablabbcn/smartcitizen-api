@@ -4,8 +4,8 @@ class BadReading < ActiveRecord::Base
   # UNREGISTERED_DEVICE
   # BAD_DATA
 
-  def self.add data, header
-    create(data: data, remote_ip: header)
+  def self.add data, header, message = nil
+    create(data: data, remote_ip: header, message: message)
   end
 
 end

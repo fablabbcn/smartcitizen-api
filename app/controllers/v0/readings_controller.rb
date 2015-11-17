@@ -20,13 +20,8 @@ module V0
               'version' => request.headers['X-SmartCitizenVersion'],
               'ip' => request.remote_ip
             })
-            ENV['redis'] ? RawStorer.delay.new(data) : RawStorer.new(data)
+            ENV['redis'] ? RawStorer.delay(retry: false).new(data) : RawStorer.new(data)
           rescue Exception => e
-            begin
-              BadReading.add(data, request.headers['X-SmartCitizenIP'])
-            rescue Exception => e
-              notify_airbrake(e)
-            end
             notify_airbrake(e)
           end
         end
