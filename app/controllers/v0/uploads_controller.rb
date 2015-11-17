@@ -10,6 +10,7 @@ class UploadsController < ApplicationController
     # create the document in rails, then send json back to our javascript to populate the form that will be
     # going to amazon.
     def create
+      check_missing_params 'original_filename'
       @avatar = current_user.uploads.create(original_filename: params[:filename])
       authorize current_user, :update?
       response.headers.except! 'X-Frame-Options'
@@ -22,6 +23,7 @@ class UploadsController < ApplicationController
     end
 
     def uploaded
+      check_missing_params 'key'
       upload = Upload.find_by(key: params[:key])
       upload.user.update_attribute(:avatar_url, upload.full_path)
       head :ok
