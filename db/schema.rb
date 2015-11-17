@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151117194000) do
+ActiveRecord::Schema.define(version: 20151117194820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20151117194000) do
     t.string   "message"
     t.integer  "device_id"
     t.string   "mac_address"
+    t.string   "version"
   end
 
   create_table "components", force: :cascade do |t|

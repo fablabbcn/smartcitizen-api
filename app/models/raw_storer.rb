@@ -44,17 +44,17 @@ class RawStorer
     return i
   end
 
-  def initialize data
+  def initialize data, mac, version, ip
 
     begin
       keys = %w(temp bat co hum light nets no2 noise panel)
 
-      mac = data['mac'].downcase.strip
+      mac = mac.downcase.strip
       device = Device.unscoped.includes(:components).where(mac_address: mac).last
 
       # version is not always present
       # undefined method `split' for nil:NilClass
-      identifier = data['version'].split('-').first
+      identifier = version.split('-').first
 
       # temporary fix for device 1000008
       if identifier and (identifier == "1.1" or identifier == "1.0") # and !device.kit_id
@@ -107,8 +107,9 @@ class RawStorer
 
       BadReading.create({
         data: data,
-        remote_ip: data['ip'],
+        remote_ip: ip,
         message: e,
+        version: version,
         device_id: (device.id if device),
         mac_address: mac
       })
