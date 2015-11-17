@@ -1,5 +1,25 @@
 # Change Log
 
+## [Unreleased](https://github.com/fablabbcn/smartcitizen/tree/HEAD)
+
+[Full Changelog](https://github.com/fablabbcn/smartcitizen/compare/v0.0.4...HEAD)
+
+**Implemented enhancements:**
+
+- have complete request/integration spec coverage [\#18](https://github.com/fablabbcn/smartcitizen/issues/18)
+- move sidekiq to active\_job [\#14](https://github.com/fablabbcn/smartcitizen/issues/14)
+
+## [v0.0.4](https://github.com/fablabbcn/smartcitizen/tree/v0.0.4) (2015-11-17)
+[Full Changelog](https://github.com/fablabbcn/smartcitizen/compare/v0.0.3...v0.0.4)
+
+**Implemented enhancements:**
+
+- change all hstore instances to jsonb [\#17](https://github.com/fablabbcn/smartcitizen/issues/17)
+
+**Closed issues:**
+
+- Improve geolocation search [\#9](https://github.com/fablabbcn/smartcitizen/issues/9)
+
 ## [v0.0.3](https://github.com/fablabbcn/smartcitizen/tree/v0.0.3) (2015-11-12)
 [Full Changelog](https://github.com/fablabbcn/smartcitizen/compare/v0.0.2...v0.0.3)
 
@@ -16,10 +36,6 @@
 - Support devices Tags [\#5](https://github.com/fablabbcn/smartcitizen/issues/5)
 - CSV download [\#3](https://github.com/fablabbcn/smartcitizen/issues/3)
 - Restructuring the data model in Kairos  [\#1](https://github.com/fablabbcn/smartcitizen/issues/1)
-
-**Closed issues:**
-
-- Improve geolocation search [\#9](https://github.com/fablabbcn/smartcitizen/issues/9)
 
 
 
