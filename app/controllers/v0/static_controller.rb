@@ -26,7 +26,11 @@ module V0
 
       begin
         url = "http://search.mapzen.com/v1/autocomplete?api_key=#{ENV['mapzen_api_key']}&text=#{CGI.escape(params[:q])}"
-        data = JSON.parse(open(url).read)
+        if Rails.env.test?
+          data = JSON.parse( open(url).read ) # let VCR handle it
+        else
+          data = JSON.parse( APICache.get(url) )
+        end
         data['features'].take(5).each do |feature|
           a << {
             type: "City",
@@ -44,6 +48,7 @@ module V0
       end
 
       a.uniq!{|h| [h[:city],h[:country_code]].join }
+
       # Place.select("DISTINCT on (country_code) country_code, country_name, lat, lng").where("country_name ILIKE :q", q: "%#{params[:q]}%").limit(3).each do |p|
       #   a << {
       #     type: "Country",

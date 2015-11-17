@@ -10,6 +10,8 @@ gem 'rack-cors', require: 'rack/cors'
 gem 'rack-contrib'
 gem 'rack-cache'
 gem 'colorize'
+gem 'moneta'
+gem 'api_cache'
 # gem 'actionpack-page_caching'
 # gem 'actionpack-action_caching'
 
