@@ -18,7 +18,7 @@ module V0
 
             mac = request.headers['X-SmartCitizenMacADDR']
             version = request.headers['X-SmartCitizenVersion']
-            ip = request.remote_ip
+            ip = (request.headers['X-SmartCitizenIP'] || request.remote_ip)
 
             if ENV['redis']
               RawStorer.delay(retry: false).new(raw_reading,mac,version,ip)
