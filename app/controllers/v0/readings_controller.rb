@@ -13,17 +13,24 @@ module V0
 
     def create
       begin
-        data = JSON.parse(request.headers['X-SmartCitizenData'])[0].merge({
-          'mac' => request.headers['X-SmartCitizenMacADDR'],
-          'version' => request.headers['X-SmartCitizenVersion'],
-          'ip' => request.remote_ip
-        })
-        ENV['redis'] ? RawStorer.delay(:retry => false).new(data) : RawStorer.new(data)
-      rescue Exception => e
-        begin
-          BadReading.add(data, request.headers['X-SmartCitizenIP'])
-        rescue Exception => e
+        JSON.parse(request.headers['X-SmartCitizenData']).each do |raw_reading|
+          begin
+            data = raw_reading.merge({
+              'mac' => request.headers['X-SmartCitizenMacADDR'],
+              'version' => request.headers['X-SmartCitizenVersion'],
+              'ip' => request.remote_ip
+            })
+            ENV['redis'] ? RawStorer.delay.new(data) : RawStorer.new(data)
+          rescue Exception => e
+            begin
+              BadReading.add(data, request.headers['X-SmartCitizenIP'])
+            rescue Exception => e
+              notify_airbrake(e)
+            end
+            notify_airbrake(e)
+          end
         end
+      rescue Exception => e
         notify_airbrake(e)
       end
       render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S#") # render time for SCK to sync clock
