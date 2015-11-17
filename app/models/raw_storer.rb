@@ -57,9 +57,9 @@ class RawStorer
       identifier = data['version'].split('-').first
 
       # temporary fix for device 1000008
-      if identifier and !device.kit_id
+      if identifier and (identifier == "1.1" or identifier == "1.0") # and !device.kit_id
         device.kit_version = identifier
-        device.save
+        device.save validate: false
       end
 
       parsed_ts = Time.parse(data['timestamp'])
