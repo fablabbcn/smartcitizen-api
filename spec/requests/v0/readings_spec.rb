@@ -2,7 +2,13 @@ require 'rails_helper'
 
 describe V0::ReadingsController do
 
-  let(:device) { create(:device) }
+  let(:user) { create(:user) }
+  let(:device) { create(:device, owner: user) }
+  let(:application) { create :application }
+  let(:token) { create :access_token, application: application, resource_owner_id: user.id }
+
+  let(:general_user) { create(:user) }
+  let(:general_token) { create :access_token, application: application, resource_owner_id: general_user.id }
 
   describe "GET devices/:id/readings" do
 
@@ -30,14 +36,42 @@ describe V0::ReadingsController do
     end
   end
 
+  describe "csv_archive" do
+
+    it "sends email to authenticated owner of kit", :vcr do
+      j = api_get "devices/#{device.id}/readings/csv_archive?access_token=#{token.token}"
+      expect(last_email.to).to eq([user.email])
+      expect(j['id']).to eq('ok')
+      expect(j['message']).to include('added to queue')
+      expect(response.status).to eq(200)
+    end
+
+    it "doesn't send email to guest" do
+      j = api_get "devices/#{device.id}/readings/csv_archive"
+      expect(j['id']).to eq('forbidden')
+      expect(response.status).to eq(403)
+    end
+
+    skip "doesn't send email to user that isn't kit owner" do
+      j = api_get "devices/#{device.id}/readings/csv_archive?access_token=#{general_token.token}"
+      expect(j['id']).to eq('not_authorized')
+      expect(response.status).to eq(403)
+    end
+
+    it "is a rate limited request"
+
+    it "always sends email to admin"
+
+  end
+
   describe "has legacy push support" do
 
-    `curl –silent -v -X PUT -H 'Host: sc.dev' \
-    -H 'User-Agent: SmartCitizen' \
-    -H 'X-SmartCitizenMacADDR: 00:00:00:00:00:00' \
-    -H 'X-SmartCitizenVersion: 1.1-0.8.5-A' \
-    -H 'X-SmartCitizenData: [{"temp":"29090.6","hum":"6815.74","light":"30000","bat":"786","panel":"0","co":"112500","no2":"200000","noise":"2","nets":"10","timestamp":"2013-10-28 1:34:26"}]' \
-    sc.dev/add >/dev/null 2>/dev/null`
+    # `curl –silent -v -X PUT -H 'Host: sc.dev' \
+    # -H 'User-Agent: SmartCitizen' \
+    # -H 'X-SmartCitizenMacADDR: 00:00:00:00:00:00' \
+    # -H 'X-SmartCitizenVersion: 1.1-0.8.5-A' \
+    # -H 'X-SmartCitizenData: [{"temp":"29090.6","hum":"6815.74","light":"30000","bat":"786","panel":"0","co":"112500","no2":"200000","noise":"2","nets":"10","timestamp":"2013-10-28 1:34:26"}]' \
+    # sc.dev/add >/dev/null 2>/dev/null`
 
     # reading = Reading.first
     # expect(reading.temp).to eq(29090.6)
