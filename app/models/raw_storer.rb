@@ -106,12 +106,13 @@ class RawStorer
     rescue Exception => e
 
       BadReading.create({
-        data: data,
-        remote_ip: ip,
-        message: e,
-        version: version,
-        device_id: (device.id if device),
-        mac_address: mac
+        data: (data rescue nil),
+        remote_ip: (ip rescue nil),
+        message: (e rescue nil),
+        version: (version rescue nil),
+        device_id: ((device.id if device) rescue nil),
+        mac_address: (mac rescue nil),
+        timestamp: (parsed_ts rescue nil)
       })
       Airbrake.notify(e)
 
