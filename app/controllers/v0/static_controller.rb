@@ -7,6 +7,7 @@ module V0
     skip_after_action :verify_authorized
 
     def home
+      expires_in 5.minutes, public: true
       params[:pretty] = true
       render json: {
         current_user_url: v0_me_index_url,
@@ -21,6 +22,7 @@ module V0
     end
 
     def search
+      expires_in 5.seconds, public: true
       @results = PgSearch.multisearch(params[:q]).includes(:searchable)#.map(&:searchable)
       a = []
 
