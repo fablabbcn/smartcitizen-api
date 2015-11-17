@@ -105,7 +105,13 @@ class RawStorer
 
     rescue Exception => e
 
-      BadReading.add(data, data['ip'], e)
+      BadReading.create({
+        data: data,
+        remote_ip: data['ip'],
+        message: e,
+        device_id: (device.id if device),
+        mac_address: mac
+      })
       Airbrake.notify(e)
 
     end
