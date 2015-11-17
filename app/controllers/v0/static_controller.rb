@@ -26,8 +26,10 @@ module V0
       @results = PgSearch.multisearch(params[:q]).includes(:searchable)#.map(&:searchable)
       a = []
 
+      query = CGI.escape(params[:q]).downcase.strip
+
       begin
-        url = "http://search.mapzen.com/v1/autocomplete?api_key=#{ENV['mapzen_api_key']}&text=#{CGI.escape(params[:q])}"
+        url = "http://search.mapzen.com/v1/autocomplete?api_key=#{ENV['mapzen_api_key']}&text=#{query}"
         if Rails.env.test?
           data = JSON.parse( open(url).read ) # let VCR handle it
         else
