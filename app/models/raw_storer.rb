@@ -103,6 +103,12 @@ class RawStorer
         end
       end
 
+      if Rails.env.production?
+        Pusher.trigger('add', 'success', {
+          device_id: ((device.id if device) rescue nil)
+        })
+      end
+
     rescue Exception => e
 
       BadReading.create({
