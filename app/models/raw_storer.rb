@@ -123,6 +123,8 @@ class RawStorer
 
     end
 
+    BackupReading.create(data: data, mac: mac, version: version, ip: ip, stored: success)
+
     if Rails.env.production? and device
       Pusher.trigger('add', 'success', {
         device_id: device.id,
