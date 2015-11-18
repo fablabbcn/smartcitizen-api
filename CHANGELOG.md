@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/fablabbcn/smartcitizen/tree/HEAD)
-
-[Full Changelog](https://github.com/fablabbcn/smartcitizen/compare/v0.0.4...HEAD)
+## [v0.0.5](https://github.com/fablabbcn/smartcitizen/tree/v0.0.5) (2015-11-18)
+[Full Changelog](https://github.com/fablabbcn/smartcitizen/compare/v0.0.4...v0.0.5)
 
 **Implemented enhancements:**
 
