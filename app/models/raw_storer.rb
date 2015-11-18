@@ -46,6 +46,8 @@ class RawStorer
 
   def initialize data, mac, version, ip
 
+    success = true
+
     begin
       keys = %w(temp bat co hum light nets no2 noise panel)
 
@@ -103,13 +105,9 @@ class RawStorer
         end
       end
 
-      if Rails.env.production?
-        Pusher.trigger('add', 'success', {
-          device_id: ((device.id if device) rescue nil)
-        })
-      end
-
     rescue Exception => e
+
+      success = false
 
       BadReading.create({
         data: (data rescue nil),
@@ -123,6 +121,13 @@ class RawStorer
       })
       Airbrake.notify(e)
 
+    end
+
+    if Rails.env.production? and device
+      Pusher.trigger('add', 'success', {
+        device_id: device.id,
+        success: success
+      })
     end
 
   end
