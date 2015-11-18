@@ -112,7 +112,8 @@ class RawStorer
         version: (version rescue nil),
         device_id: ((device.id if device) rescue nil),
         mac_address: (mac rescue nil),
-        timestamp: (parsed_ts rescue nil)
+        timestamp: (parsed_ts rescue nil),
+        backtrace: (e.backtrace rescue nil)
       })
       Airbrake.notify(e)
 
