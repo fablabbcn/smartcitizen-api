@@ -6,6 +6,7 @@ module V0
       user = User.find_by_username!(params[:username])
       authorize user, :show?
       if user && user.authenticate_with_legacy_support(params[:password])
+        $analytics.track("login:successful", user.id)
         render json: { access_token: user.access_token!.token }, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new({

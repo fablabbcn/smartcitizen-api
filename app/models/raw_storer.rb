@@ -49,6 +49,7 @@ class RawStorer
     success = true
 
     begin
+
       keys = %w(temp bat co hum light nets no2 noise panel)
 
       mac = mac.downcase.strip
@@ -104,6 +105,8 @@ class RawStorer
         rescue
         end
       end
+
+      $analytics.track("readings:create", device.id)
 
     rescue Exception => e
 

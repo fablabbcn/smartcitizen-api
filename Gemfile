@@ -13,6 +13,7 @@ gem 'colorize'
 gem 'moneta'
 gem 'api_cache'
 gem 'browser', '0.3.0'
+gem 'minuteman'
 # gem 'actionpack-page_caching'
 # gem 'actionpack-action_caching'
 
