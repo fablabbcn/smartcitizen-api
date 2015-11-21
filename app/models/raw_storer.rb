@@ -90,8 +90,8 @@ class RawStorer
           timestamp: ts,
           value: value,
           tags: {
-            device: device.id,
-            identifier: identifier
+            device_id: device.id,
+            identifier: "sck#{identifier}"
           }
         })
       end

@@ -14,6 +14,8 @@ gem 'moneta'
 gem 'api_cache'
 gem 'browser', '0.3.0'
 gem 'minuteman'
+gem 'diffy', require: false
+gem 'awesome_print', require: false
 # gem 'actionpack-page_caching'
 # gem 'actionpack-action_caching'
 

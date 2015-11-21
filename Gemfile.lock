@@ -146,6 +146,7 @@ GEM
     date_validator (0.8.1)
       activemodel
     diff-lcs (1.2.5)
+    diffy (3.0.7)
     dirty-memoize (0.0.4)
     distribution (0.7.3)
     docile (1.1.5)
@@ -627,6 +628,7 @@ DEPENDENCIES
   ancestry
   api-pagination
   api_cache
+  awesome_print
   aws-sdk
   bcrypt (~> 3.1.7)
   brakeman!
@@ -642,6 +644,7 @@ DEPENDENCIES
   dalli
   database_cleaner
   date_validator
+  diffy
   doorkeeper
   factory_girl_rails
   faker
