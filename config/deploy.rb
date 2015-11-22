@@ -21,12 +21,10 @@ set :rbenv_path, "/home/#{fetch(:deploy_user)}/.rbenv"
 set :rbenv_type, :system
 set :rbenv_ruby, '2.2.2'
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
-set :rbenv_map_bins, %w{rake gem bundle ruby rails}
+# set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 
 # Default value for :pty is false
 set :pty, false
-
-set :bundle_bins, fetch(:bundle_bins, []).push(%w(sidekiq sidekiqctl))
 
 # how many old releases do we want to keep
 set :keep_releases, 5
