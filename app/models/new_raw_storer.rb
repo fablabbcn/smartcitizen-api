@@ -1,1 +1,0 @@
-new_raw_storer.rb

@@ -21,7 +21,7 @@ class UserMailer < ApplicationMailer
     data = {}
     keys_length = keys.length
     keys.each_with_index do |key, index|
-      query = {metrics:[{tags:{device:[device_id]},name: key}], cache_time: 0, start_absolute: 1262304000000}
+      query = {metrics:[{tags:{device_id:[device_id]},name: key}], cache_time: 0, start_absolute: 1262304000000}
       response = Kairos.http_post_to("/datapoints/query",query)
       metric_id = @device.find_sensor_id_by_key(key)
       if component = @device.components.detect{|c|c["sensor_id"] == metric_id}
