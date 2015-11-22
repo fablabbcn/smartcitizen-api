@@ -61,6 +61,7 @@ Rails.application.routes.draw do
 
     # home
     get 'search' => 'static#search'
+    get 'metrics' => 'static#metrics'
     # use_doorkeeper
     # root to: 'static#home'
     get '/', to: 'static#home'

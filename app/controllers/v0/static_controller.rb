@@ -21,6 +21,20 @@ module V0
       }
     end
 
+    def metrics
+      render json: {
+        devices: {
+          online: {
+            now: $analytics.hour("readings:create", Time.now.utc).length,
+            today: $analytics.day("readings:create", Time.now.utc).length,
+            this_week: $analytics.week("readings:create", Time.now.utc).length,
+            this_month: $analytics.month("readings:create", Time.now.utc).length,
+            this_year: $analytics.year("readings:create", Time.now.utc).length
+          }
+        }
+      }
+    end
+
     def search
       expires_in 5.seconds, public: true
       @results = PgSearch.multisearch(params[:q]).includes(:searchable)#.map(&:searchable)
