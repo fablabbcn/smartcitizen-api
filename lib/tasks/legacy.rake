@@ -48,6 +48,7 @@ namespace :legacy do
   task :check => :environment do
 
     api_key = User.where.not(legacy_api_key: nil).sample.legacy_api_key
+
     # diff "v0.0.1/#{api_key}/lastpost.json"
     # diff "v0.0.1/#{api_key}/me.json"
     diff "v0.0.1/#{ENV['admin_legacy_api_key']}/devices.json"
