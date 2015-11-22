@@ -26,7 +26,7 @@ set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 # Default value for :pty is false
 set :pty, false
 
-set :bundle_bins, fetch(:bundle_bins, []).push %w(sidekiq sidekiqctl)
+set :bundle_bins, fetch(:bundle_bins, []).push(%w(sidekiq sidekiqctl))
 
 # how many old releases do we want to keep
 set :keep_releases, 5
