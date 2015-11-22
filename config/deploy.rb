@@ -24,7 +24,7 @@ set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rben
 set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 
 # Default value for :pty is false
-set :pty, true
+set :pty, false
 
 # how many old releases do we want to keep
 set :keep_releases, 5
