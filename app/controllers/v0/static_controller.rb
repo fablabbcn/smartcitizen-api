@@ -28,8 +28,8 @@ module V0
             now: $analytics.hour("readings:create", Time.now.utc).length,
             today: $analytics.day("readings:create", Time.now.utc).length,
             this_week: $analytics.week("readings:create", Time.now.utc).length,
-            this_month: $analytics.month("readings:create", Time.now.utc).length,
-            this_year: $analytics.year("readings:create", Time.now.utc).length
+            this_month: nil,
+            this_year: nil
           }
         }
       }
