@@ -32,7 +32,7 @@ module V0
             this_week: $analytics.week("readings:create", Time.now.utc).length,
             this_month: nil,
             this_year: nil,
-            all_time: nil
+            all_time: Device.where.not(last_recorded_at: nil).count
           },
           readings: {
             total: nil
