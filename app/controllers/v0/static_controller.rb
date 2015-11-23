@@ -27,7 +27,7 @@ module V0
           total: Device.count,
           online: {
             now: Device.where('last_recorded_at > ?', 10.minutes.ago).count,
-            this_hour: $analytics.week("readings:create", Time.now.utc).length,
+            this_hour: $analytics.hour("readings:create", Time.now.utc).length,
             today: $analytics.day("readings:create", Time.now.utc).length,
             this_week: $analytics.week("readings:create", Time.now.utc).length,
             this_month: nil,
