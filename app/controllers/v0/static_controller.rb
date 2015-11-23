@@ -24,12 +24,23 @@ module V0
     def metrics
       render json: {
         devices: {
+          total: Device.count,
           online: {
             now: $analytics.hour("readings:create", Time.now.utc).length,
             today: $analytics.day("readings:create", Time.now.utc).length,
             this_week: $analytics.week("readings:create", Time.now.utc).length,
             this_month: nil,
-            this_year: nil
+            this_year: nil,
+            all_time: nil
+          },
+          readings: {
+            total: nil
+          }
+        },
+        users: {
+          total: User.count,
+          online: {
+            now: nil
           }
         }
       }
