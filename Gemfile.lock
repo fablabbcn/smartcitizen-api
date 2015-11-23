@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: git://github.com/presidentbeef/brakeman.git
-  revision: 5bcce2c2806467f5756162fdde302b1623f015e5
+  revision: 789102c8326d8b10b73751afcd8b88c0501d963a
   specs:
     brakeman (3.1.2)
       erubis (~> 2.6)
@@ -106,7 +106,7 @@ GEM
     aws-sdk-resources (2.2.1)
       aws-sdk-core (= 2.2.1)
     bcrypt (3.1.10)
-    browser (0.3.0)
+    browser (1.0.1)
     builder (3.2.2)
     c_geohash (1.1.2)
     cane (2.6.2)
@@ -631,7 +631,7 @@ DEPENDENCIES
   aws-sdk
   bcrypt (~> 3.1.7)
   brakeman!
-  browser (= 0.3.0)
+  browser (= 1.0.1)
   c_geohash
   cane
   capistrano-rails
