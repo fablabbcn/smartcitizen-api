@@ -123,7 +123,7 @@ class RawStorer
         timestamp: (parsed_ts rescue nil),
         backtrace: (e.backtrace rescue nil)
       })
-      Airbrake.notify(e)
+      # Airbrake.notify(e)
 
     end
 
