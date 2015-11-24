@@ -99,7 +99,8 @@ class RawStorer
       Kairos.http_post_to("/datapoints", _data)
 
       if parsed_ts > (device.last_recorded_at || Time.at(0))
-        Device.unscoped.where(id: device.id).update_all(last_recorded_at: parsed_ts, data: sql_data) # update without touching updated_at
+        device.update_column(:last_recorded_at, parsed_ts)
+        device.update_column(:data, sql_data) # update without touching updated_at
         begin
           LegacyDevice.find(device.id).update_column(:last_insert_datetime, Time.now.utc)
         rescue
