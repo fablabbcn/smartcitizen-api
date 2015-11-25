@@ -43,7 +43,7 @@ class LegacyDevice < MySQL
           posts[KEYS[key.to_sym]] = value
         end
         posts['insert_datetime'] = hash['last_insert_datetime']
-        hash['posts'] = [posts]
+        hash['posts'] = posts
       else
         hash['posts'] = false
       end
