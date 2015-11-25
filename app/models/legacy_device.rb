@@ -37,7 +37,7 @@ class LegacyDevice < MySQL
     if include_posts
       if device = Device.find(id) and device.data
         posts = {}
-        posts['timestamp'] = device.data[''].to_s.gsub("T", " ").gsub("Z", " UTC")
+        posts['timestamp'] = [device.data[''].to_s.gsub("T", " "), 'UTC'].join(' ').gsub(" UTC UTC", " UTC")
         device.data.select{|d| Float(d) rescue false }.each do |key,value|
           # Rails.logger.info KEYS
           posts[KEYS[key.to_sym]] = value
