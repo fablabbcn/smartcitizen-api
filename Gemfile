@@ -16,6 +16,7 @@ gem 'minuteman'
 gem 'diffy', require: false
 gem 'awesome_print', require: false
 gem 'browser', '1.0.1'
+gem 'stamp'
 # gem 'actionpack-page_caching'
 # gem 'actionpack-action_caching'
 

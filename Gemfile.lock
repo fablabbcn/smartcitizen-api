@@ -578,6 +578,7 @@ GEM
       net-ssh (>= 2.8.0)
     sshkit-sudo (0.0.4)
       sshkit
+    stamp (0.6.0)
     statsample (2.0.1)
       awesome_print (~> 1.6)
       daru (~> 0.1)
@@ -694,6 +695,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   sshkit-sudo
+  stamp
   statsample
   timecop
   unicorn
