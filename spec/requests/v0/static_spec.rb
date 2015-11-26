@@ -8,6 +8,7 @@ describe V0::StaticController do
       json = api_get '/'
       expect(response.status).to eq(200)
       expect(json.keys).to eq %w(
+        notice
         api_documentation_url
         current_user_url
         components_url

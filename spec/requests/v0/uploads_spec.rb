@@ -11,7 +11,7 @@ describe V0::UploadsController do
     it "creates an upload" do
       j = api_post "avatars",
         access_token: token.token,
-        original_filename: "test.jpg"
+        filename: "test.jpg"
       expect(response.status).to eq(200)
       user.reload
       expect(j['policy']).to_not be_blank
@@ -19,7 +19,7 @@ describe V0::UploadsController do
       expect(j['key']).to eq(user.uploads.last.key)
     end
 
-    it "requires original_filename" do
+    it "requires filename" do
       j = api_post "avatars",
         access_token: token.token
       expect(response.status).to eq(400)
@@ -27,7 +27,7 @@ describe V0::UploadsController do
 
     it "requires access_token" do
       j = api_post "avatars",
-        original_filename: "test.jpg"
+        filename: "test.jpg"
       expect(response.status).to eq(401)
     end
 
