@@ -33,12 +33,12 @@ namespace :sqlmigrate do
         if device.new_record?
           device.name ||= old_device.title.present? ? old_device.title : nil
           device.owner_id ||= old_device.user_id.present? ? old_device.user_id : nil
-          device.description ||= old_device.description.present? ? old_device.description : nil
+          device.description = old_device.description.present? ? old_device.description : nil
           device.city ||= old_device.city.present? ? old_device.city : nil
           device.exposure ||= old_device.exposure.present? ? old_device.exposure : nil
           device.elevation ||= old_device.elevation.present? ? old_device.elevation : nil
-          device.latitude ||= old_device.geo_lat.present? ? old_device.geo_lat : nil
-          device.longitude ||= old_device.geo_long.present? ? old_device.geo_long : nil
+          device.latitude = old_device.geo_lat.present? ? old_device.geo_lat : nil
+          device.longitude = old_device.geo_long.present? ? old_device.geo_long : nil
           device.created_at ||= old_device.created
           device.updated_at ||= old_device.modified
           device.workflow_state ||= "active"
