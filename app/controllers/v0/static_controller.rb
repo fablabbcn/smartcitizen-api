@@ -61,7 +61,7 @@ module V0
         if Rails.env.test?
           data = JSON.parse( open(url).read ) # let VCR handle it
         else
-          data = JSON.parse( APICache.get(url) )
+          data = JSON.parse( APICache.get(url, cache: 5.days, valid: 1.week) )
         end
         data['features'].take(5).each do |feature|
           a << {
