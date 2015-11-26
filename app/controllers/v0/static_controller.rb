@@ -10,6 +10,7 @@ module V0
       expires_in 5.minutes, public: true
       params[:pretty] = true
       render json: {
+        notice: "!!! This is the new API. The old API is here - http://api.smartcitizen.me/v0.0.1 !!!",
         api_documentation_url: "https://developer.smartcitizen.me",
         current_user_url: v0_me_index_url,
         components_url: v0_components_url,

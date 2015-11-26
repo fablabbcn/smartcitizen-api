@@ -78,7 +78,8 @@ private
     end
 
     def ssl_configured?
-      request.host.match /api.smartcitizen.me/
+      false
+      # request.host.match /api.smartcitizen.me/
     end
 
   end
