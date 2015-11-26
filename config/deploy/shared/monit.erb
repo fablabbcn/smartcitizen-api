@@ -1,13 +1,20 @@
+set httpd port <%= ENV['monit_http_port'] %>
+  use address 0.0.0.0
+  allow 0.0.0.0/0.0.0.0
+  allow <%= ENV['monit_http_username'] %>:<%= ENV['monit_http_password'] %>
+
 <% application = fetch(:application) %>
+
 set mail-format { subject: <%= "#{fetch(:full_app_name)} - #{fetch(:rails_env)}" %> $SERVICE $EVENT at $DATE }
 
+<% # unicorn %>
 check process unicorn_<%= application %>
   with pidfile <%= current_path %>/tmp/pids/unicorn.pid
   start program = "/etc/init.d/unicorn_<%= application %>_<%= fetch(:rails_env)%> start"
   stop program = "/etc/init.d/unicorn_<%= application %>_<%= fetch(:rails_env)%> stop"
-  if mem is greater than 300.0 MB for 1 cycles then restart       # eating up memory?
-  if cpu is greater than 50% for 2 cycles then alert                  # send an email to admin
-  if cpu is greater than 80% for 30 cycles then restart                # hung process?
+  if mem is greater than 300.0 MB for 1 cycles then restart   # eating up memory?
+  if cpu is greater than 50% for 2 cycles then alert          # send an email to admin
+  if cpu is greater than 80% for 30 cycles then restarts      # hung process?
   group unicorn
 
 <% (0..(fetch(:unicorn_worker_count) -1)).each do |worker| %>
@@ -19,4 +26,12 @@ check process unicorn_worker_<%= (5000 + worker).to_s %>_<%= application %>_
   if cpu is greater than 80% for 30 cycles then restart
 
   group unicorn_workers
+
+<% # nginx %>
+check process nginx with pidfile /var/run/nginx.pid
+  start program = "/etc/init.d/nginx start"
+  stop program = "/etc/init.d/nginx stop"
+  if children > 250 then restart
+  if 5 restarts within 5 cycles then timeout
+
 <% end %>
