@@ -212,6 +212,14 @@ class Device < ActiveRecord::Base
     return s
   end
 
+  def self.geocode_all_without_location
+    Device.where(location: "{}").where.not(latitude: nil).each do |device|
+      device.reverse_geocode
+      device.save validate: false
+      sleep(1)
+    end
+  end
+
 private
 
   def calculate_geohash
