@@ -5,10 +5,11 @@ module V001
 
     def home
       render json: {
-        devices: ':api_key/devices.json',
-        lastpost: ':api_key/lastpost.json',
-        posts: ':api_key/:device_id/posts.json?from_date=:from&to_date=:to&group_by=:range',
-        me: ':api_key/me.json'
+        api_documentation_url: 'http://legacy-api-docs.smartcitizen.me/',
+        devices_url: 'http://api.smartcitizen.me/v0.0.1/:api_key/devices.json',
+        lastpost_url: 'http://api.smartcitizen.me/v0.0.1/:api_key/lastpost.json',
+        posts_url: 'http://api.smartcitizen.me/v0.0.1/:api_key/:device_id/posts.json?from_date=:from&to_date=:to&group_by=:range',
+        me_url: 'http://api.smartcitizen.me/v0.0.1/:api_key/me.json'
       }
     end
 
