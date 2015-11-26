@@ -78,7 +78,7 @@ private
     end
 
     def ssl_configured?
-      request.host.match /(new-api|api-staging)\.smartcitizen\.me/
+      request.host.match /api.smartcitizen.me/
     end
 
   end
