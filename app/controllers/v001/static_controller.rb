@@ -4,6 +4,8 @@ module V001
     skip_before_action :check_api_key
 
     def home
+      expires_in 5.minutes, public: true
+      params[:pretty] = true
       render json: {
         api_documentation_url: 'http://legacy-api-docs.smartcitizen.me/',
         devices_url: 'http://api.smartcitizen.me/v0.0.1/:api_key/devices.json',
