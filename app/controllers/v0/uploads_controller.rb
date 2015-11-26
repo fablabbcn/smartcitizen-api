@@ -10,7 +10,7 @@ class UploadsController < ApplicationController
     # create the document in rails, then send json back to our javascript to populate the form that will be
     # going to amazon.
     def create
-      check_missing_params 'original_filename'
+      check_missing_params 'filename'
       @avatar = current_user.uploads.create(original_filename: params[:filename])
       authorize current_user, :update?
       response.headers.except! 'X-Frame-Options'
