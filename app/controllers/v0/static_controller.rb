@@ -7,19 +7,19 @@ module V0
     skip_after_action :verify_authorized
 
     def home
-      expires_in 5.minutes, public: true
+      # expires_in 5.minutes, public: true
       params[:pretty] = true
       render json: {
         notice: "!!! This is the new API. The old API is here - http://api.smartcitizen.me/v0.0.1 !!!",
         api_documentation_url: "https://developer.smartcitizen.me",
-        current_user_url: v0_me_index_url,
-        components_url: v0_components_url,
-        devices_url: v0_devices_url,
-        kits_url: v0_kits_url,
-        measurements_url: v0_measurements_url,
-        sensors_url: v0_sensors_url,
-        users_url: v0_users_url,
-        tags_url: v0_tags_url,
+        current_user_url: ['https://api.smartcitizen.me', v0_me_index_path].join,
+        components_url: ['https://api.smartcitizen.me', v0_components_path].join,
+        devices_url: ['https://api.smartcitizen.me', v0_devices_path].join,
+        kits_url: ['https://api.smartcitizen.me', v0_kits_path].join,
+        measurements_url: ['https://api.smartcitizen.me', v0_measurements_path].join,
+        sensors_url: ['https://api.smartcitizen.me', v0_sensors_path].join,
+        users_url: ['https://api.smartcitizen.me', v0_users_path].join,
+        tags_url: ['https://api.smartcitizen.me', v0_tags_path].join
       }
     end
 
