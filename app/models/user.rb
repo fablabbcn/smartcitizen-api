@@ -104,6 +104,14 @@ class User < ActiveRecord::Base
     update_column(:cached_device_ids, device_ids.try(:sort))
   end
 
+  def self.check_bad_avatar_urls
+    User.where.not(avatar_url: nil).each do |user|
+      unless `curl -I #{user.avatar_url} 2>/dev/null | head -n 1`.split(' ')[1] == "200"
+        puts [user.id, user.avatar_url].join(' - ')
+      end
+    end
+  end
+
 private
 
   def generate_legacy_api_key
