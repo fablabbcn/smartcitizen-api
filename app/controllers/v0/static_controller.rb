@@ -7,7 +7,7 @@ module V0
     skip_after_action :verify_authorized
 
     def home
-      # expires_in 5.minutes, public: true
+      expires_in 5.minutes, public: true
       params[:pretty] = true
       render json: {
         notice: "!!! This is the new API. The old API is here - http://api.smartcitizen.me/v0.0.1 !!!",
