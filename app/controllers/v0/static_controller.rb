@@ -69,7 +69,7 @@ module V0
             city: feature['properties']['name'],
             name: feature['properties']['name'],
             layer: feature['properties']['layer'],
-            country_code: ISO3166::Country.find_country_by_alpha3(feature['properties']['country_a'].downcase).alpha2,
+            country_code: (ISO3166::Country.find_country_by_alpha3(feature['properties']['country_a'].downcase).alpha2 if feature['properties']['country_a']),
             country: feature['properties']['country'],
             latitude: feature['geometry']['coordinates'][1],
             longitude: feature['geometry']['coordinates'][0]
