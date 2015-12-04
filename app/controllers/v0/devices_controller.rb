@@ -2,7 +2,7 @@ module V0
   class DevicesController < ApplicationController
 
     before_action :check_if_authorized!, only: [:create, :update]
-    after_action :verify_authorized, except: [:index, :world_map]
+    after_action :verify_authorized, except: [:index, :world_map, :fresh_world_map]
 
     def show
       @device = Device.includes(:kit, :owner, :sensors,:tags).find(params[:id])
@@ -57,6 +57,7 @@ module V0
       end
     end
 
+    # debug method, must be refactored
     def fresh_world_map
       @devices = Device.where.not(latitude: nil).where.not(data: nil).includes(:owner,:tags).map do |device|
         {
