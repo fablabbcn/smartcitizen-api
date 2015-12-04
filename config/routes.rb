@@ -29,6 +29,7 @@ Rails.application.routes.draw do
         end
       end
       get 'world_map', on: :collection
+      get 'fresh_world_map', on: :collection
     end
     # readings
     match "add" => "readings#create", via: [:get, :post, :patch, :put]
