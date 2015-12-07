@@ -2,7 +2,7 @@ module V0
   class TagsController < ApplicationController
 
     def show
-      @tag = Tag.find(params[:id])
+      @tag = Tag.friendly.find(params[:id])
       authorize @tag
     end
 
