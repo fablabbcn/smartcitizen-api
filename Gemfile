@@ -4,6 +4,8 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.5'
 gem 'rails-api'
 
+gem 'redis', '3.0.7'
+
 gem 'rack-timeout'
 # gem 'rack-attack' API Rate Limiting
 gem 'rack-cors', require: 'rack/cors'
@@ -12,7 +14,7 @@ gem 'rack-cache'
 gem 'colorize'
 gem 'moneta'
 gem 'api_cache'
-gem 'minuteman'
+gem 'minuteman', '~> 1.0.3'
 gem 'diffy', require: false
 gem 'awesome_print', require: false
 gem 'browser', '1.0.1'
@@ -95,6 +97,7 @@ group :development do
   gem 'spring-commands-rspec'
   gem 'letter_opener'
   gem 'spring'
+  gem 'sshkit', '1.7.1'
   gem 'sshkit-sudo'
   gem 'capistrano-rbenv'
   gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
