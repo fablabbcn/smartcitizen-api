@@ -114,4 +114,23 @@ describe V0::MeController, type: :request do
 
   end
 
+
+  describe "DELETE /me" do
+
+    it "deletes current_user" do
+      api_delete "me", { access_token: token.token }
+      expect(response.status).to eq(200)
+    end
+
+    it "does not delete current_user with invalid access_token" do
+      api_delete "me", { access_token: '123' }
+      expect(response.status).to eq(401)
+    end
+
+    it "does not delete current_user with missing access_token" do
+      api_delete "me"
+      expect(response.status).to eq(401)
+    end
+
+  end
 end

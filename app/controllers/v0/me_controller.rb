@@ -18,6 +18,16 @@ module V0
       end
     end
 
+    def destroy
+      @user = current_user
+      authorize @user
+      if @user.archive!
+        render nothing: true, status: :ok
+      else
+        raise Smartcitizen::UnprocessableEntity.new @user.errors
+      end
+    end
+
 private
 
     def user_params
