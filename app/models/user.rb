@@ -35,6 +35,14 @@ class User < ActiveRecord::Base
 
   before_create :generate_legacy_api_key
 
+  def archive
+    devices.map(&:archive!)
+  end
+
+  def activate
+    Device.unscoped.where(owner: self).map(&:activate!)
+  end
+
   def to_s
     username
   end
