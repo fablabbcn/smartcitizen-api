@@ -1,9 +1,6 @@
 module V0
 class UploadsController < ApplicationController
 
-    # before_action :check_if_authorized!
-    # skip_after_action :verify_authorized
-
     before_action :check_if_authorized!, only: [:create]
     after_action :verify_authorized, only: [:create]
 

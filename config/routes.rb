@@ -48,17 +48,17 @@ Rails.application.routes.draw do
     # kits
     resources :kits, except: [:create, :destroy]
     # users
-      resources :users, only: [:index, :show, :create, :update]
-      # password_resets
-      resources :password_resets, only: [:show, :create, :update]
-      # me
-      resources :me, only: [:index] do
-        patch 'avatar' => 'uploads#create', on: :collection
-        post 'avatar' => 'uploads#create', on: :collection
-        patch '/' => 'me#update', on: :collection
-        put '/' => 'me#update', on: :collection
-        delete '/' => 'me#destroy', on: :collection
-      end
+    resources :users
+    # password_resets
+    resources :password_resets, only: [:show, :create, :update]
+    # me
+    resources :me, only: [:index] do
+      patch 'avatar' => 'uploads#create', on: :collection
+      post 'avatar' => 'uploads#create', on: :collection
+      patch '/' => 'me#update', on: :collection
+      put '/' => 'me#update', on: :collection
+      delete '/' => 'me#destroy', on: :collection
+    end
 
     # home
     get 'search' => 'static#search'

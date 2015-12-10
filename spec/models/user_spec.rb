@@ -110,4 +110,28 @@ RSpec.describe User, :type => :model do
 
   end
 
+  describe "states" do
+    it "has a default active state" do
+      expect(user.workflow_state).to eq('active')
+    end
+
+    it "can be archived" do
+      user.archive!
+      expect(user.workflow_state).to eq('archived')
+    end
+
+    it "can be activated from archive state" do
+      user.archive!
+      user.activate!
+      expect(user.workflow_state).to eq('active')
+    end
+
+    it "only returns active users by default (default_scope)" do
+      a = create(:user)
+      b = create(:user, workflow_state: :archived)
+      expect(User.all).to eq([a])
+    end
+
+  end
+
 end

@@ -1,7 +1,7 @@
 module V0
   class UsersController < ApplicationController
 
-    before_action :check_if_authorized!, only: :update
+    # before_action :check_if_authorized!, except: [:show, :create, :index]
 
     def show
       @user = User.includes(:sensors).friendly.find(params[:id])
@@ -35,6 +35,16 @@ module V0
       authorize @user
       if @user.update_attributes(user_params)
         render :show, status: :ok
+      else
+        raise Smartcitizen::UnprocessableEntity.new @user.errors
+      end
+    end
+
+    def destroy
+      @user = User.find(params[:id])
+      authorize @user
+      if @user.archive!
+        render nothing: true, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @user.errors
       end

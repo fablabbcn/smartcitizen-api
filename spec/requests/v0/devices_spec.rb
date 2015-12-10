@@ -125,12 +125,12 @@ describe V0::DevicesController do
 
     it "does not update a device with invalid access_token" do
       api_put "devices/#{device.id}", { name: 'new name', access_token: '123' }
-      expect(response.status).to eq(401)
+      expect(response.status).to eq(403)
     end
 
     it "does not update a device with missing access_token" do
       api_put "devices/#{device.id}", { name: 'new name', access_token: nil }
-      expect(response.status).to eq(401)
+      expect(response.status).to eq(403)
     end
 
     it "will update a device with empty parameters access_token" do
@@ -188,8 +188,8 @@ describe V0::DevicesController do
     end
 
     it "does not delete a device with invalid access_token" do
-      api_delete "devices/#{device.id}"
-      expect(response.status).to eq(403), { access_token: '123' }
+      api_delete "devices/#{device.id}", { access_token: '123' }
+      expect(response.status).to eq(403)
     end
 
     it "does not delete a device with missing access_token" do

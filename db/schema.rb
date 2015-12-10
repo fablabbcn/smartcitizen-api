@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151118143226) do
+ActiveRecord::Schema.define(version: 20151209135345) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -255,7 +255,10 @@ ActiveRecord::Schema.define(version: 20151118143226) do
     t.jsonb    "old_data"
     t.string   "legacy_api_key"
     t.integer  "cached_device_ids",                                                array: true
+    t.string   "workflow_state"
   end
+
+  add_index "users", ["workflow_state"], name: "index_users_on_workflow_state", using: :btree
 
   add_foreign_key "api_tokens", "users", column: "owner_id"
   add_foreign_key "components", "sensors"

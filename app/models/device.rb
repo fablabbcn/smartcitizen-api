@@ -3,6 +3,8 @@ require 'geohash'
 
 class Device < ActiveRecord::Base
 
+  default_scope { with_active_state.includes(:owner) }
+
   include Workflow
   workflow do
     state :active do
@@ -31,7 +33,6 @@ class Device < ActiveRecord::Base
   validates_format_of :mac_address,
     with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
 
-  default_scope { with_active_state.includes(:owner) }
 
   include PgSearch
   multisearchable :against => [:name, :description, :city, :country_name]

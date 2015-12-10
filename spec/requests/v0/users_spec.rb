@@ -154,8 +154,8 @@ describe V0::UsersController do
       j = api_put "users/#{[user.username,user.id].sample}", {
         username: 'bart', access_token: '123'
       }
-      expect(j['id']).to eq('unauthorized')
-      expect(response.status).to eq(401)
+      expect(j['id']).to eq('forbidden')
+      expect(response.status).to eq(403)
     end
 
     it "does not update another user" do
@@ -179,8 +179,8 @@ describe V0::UsersController do
       j = api_put "users/#{[user.username,user.id].sample}", {
         username: 'bart', access_token: nil
       }
-      expect(j['id']).to eq('unauthorized')
-      expect(response.status).to eq(401)
+      expect(j['id']).to eq('forbidden')
+      expect(response.status).to eq(403)
     end
 
     it "does not update a user with empty parameters access_token" do
@@ -189,6 +189,29 @@ describe V0::UsersController do
       }
       expect(j['id']).to eq('unprocessable_entity')
       expect(response.status).to eq(422)
+    end
+
+  end
+
+
+
+  describe "DELETE /users/:id" do
+
+    let!(:user) { create :user }
+
+    it "deletes a user" do
+      api_delete "users/#{user.id}", { access_token: token.token }
+      expect(response.status).to eq(200)
+    end
+
+    it "does not delete a user with invalid access_token" do
+      api_delete "users/#{user.id}", { access_token: '123' }
+      expect(response.status).to eq(403)
+    end
+
+    it "does not delete a user with missing access_token" do
+      api_delete "users/#{user.id}"
+      expect(response.status).to eq(403)
     end
 
   end

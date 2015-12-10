@@ -1,7 +1,7 @@
 module V0
   class DevicesController < ApplicationController
 
-    before_action :check_if_authorized!, only: [:create, :update]
+    before_action :check_if_authorized!, only: [:create]
     after_action :verify_authorized, except: [:index, :world_map, :fresh_world_map]
 
     def show
@@ -28,7 +28,7 @@ module V0
     end
 
     def update
-      @device = current_user.devices.find(params[:id])
+      @device = Device.find(params[:id])
       authorize @device
       if @device.update_attributes(device_params)
         render :show, status: :ok
