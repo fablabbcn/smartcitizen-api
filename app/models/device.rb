@@ -13,6 +13,7 @@ class Device < ActiveRecord::Base
     state :archived do
       event :activate, :transitions_to => :active
     end
+    after_transition { User.unscoped.find(owner_id).update_all_device_ids! }
   end
 
   # belongs_to :owner
