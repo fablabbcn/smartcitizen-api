@@ -62,7 +62,7 @@ module Smartcitizen
     end
 
     # gzip
-    config.middleware.use Rack::Deflater
+    # config.middleware.use Rack::Deflater
 
     config.autoload_paths += %W(#{config.root}/lib)
 
