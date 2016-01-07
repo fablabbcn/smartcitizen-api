@@ -36,6 +36,10 @@ module V0
       render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S#") # render time for SCK to sync clock
     end
 
+    def datetime
+      render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S#")
+    end
+
     def csv_archive
       @device = Device.find(params[:id])
       authorize @device, :update?

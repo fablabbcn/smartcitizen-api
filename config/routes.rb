@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     end
     # readings
     match "add" => "readings#create", via: [:get, :post, :patch, :put]
+    match "datetime" => "readings#datetime", via: [:get, :post, :patch, :put]
     # sensors
     resources :sensors, except: [:destroy]
     # components
