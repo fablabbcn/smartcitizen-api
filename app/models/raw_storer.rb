@@ -53,7 +53,7 @@ class RawStorer
       keys = %w(temp bat co hum light nets no2 noise panel)
 
       mac = mac.downcase.strip
-      device = Device.unscoped.includes(:components).where(mac_address: mac).last
+      device = Device.includes(:components).where(mac_address: mac).last
 
       # version is not always present
       # undefined method `split' for nil:NilClass
