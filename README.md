@@ -37,6 +37,8 @@
 
 `cd smartcitizen`
 
+`get config/application.yml and config/banned_words.production.yml (check production server or contact john@bitsushi.com)`
+
 `bundle install`
 
 `bundle exec rails s`
