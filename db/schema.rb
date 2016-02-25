@@ -42,9 +42,8 @@ ActiveRecord::Schema.define(version: 20151209135345) do
   create_table "bad_readings", force: :cascade do |t|
     t.integer  "tags"
     t.string   "remote_ip"
-    t.jsonb    "data"
+    t.jsonb    "data",        null: false
     t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
     t.string   "message"
     t.integer  "device_id"
     t.string   "mac_address"
@@ -79,6 +78,8 @@ ActiveRecord::Schema.define(version: 20151209135345) do
     t.hstore   "latest_data"
     t.string   "geohash"
     t.datetime "last_recorded_at"
+    t.jsonb    "meta"
+    t.jsonb    "location"
     t.jsonb    "data"
     t.jsonb    "old_data"
     t.string   "owner_username"
@@ -86,8 +87,6 @@ ActiveRecord::Schema.define(version: 20151209135345) do
     t.jsonb    "migration_data"
     t.string   "workflow_state"
     t.datetime "csv_export_requested_at"
-    t.jsonb    "meta"
-    t.jsonb    "location"
   end
 
   add_index "devices", ["geohash"], name: "index_devices_on_geohash", using: :btree
@@ -252,12 +251,13 @@ ActiveRecord::Schema.define(version: 20151209135345) do
     t.string   "avatar_url"
     t.integer  "role_mask",            default: 0,                    null: false
     t.uuid     "uuid",                 default: "uuid_generate_v4()"
+    t.string   "legacy_api_key",                                      null: false
     t.jsonb    "old_data"
-    t.string   "legacy_api_key"
     t.integer  "cached_device_ids",                                                array: true
     t.string   "workflow_state"
   end
 
+  add_index "users", ["legacy_api_key"], name: "index_users_on_legacy_api_key", unique: true, using: :btree
   add_index "users", ["workflow_state"], name: "index_users_on_workflow_state", using: :btree
 
   add_foreign_key "api_tokens", "users", column: "owner_id"
