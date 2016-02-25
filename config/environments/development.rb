@@ -14,21 +14,21 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
-  config.middleware.use Rack::Cache,
-    :verbose => true
-    # :metastore   => 'file:/var/cache/rack/meta',
-    # :entitystore => 'file:/var/cache/rack/body'
+  # config.middleware.use Rack::Cache,
+  #   :verbose => true
+  #   # :metastore   => 'file:/var/cache/rack/meta',
+  #   # :entitystore => 'file:/var/cache/rack/body'
 
   # Do not eager load code on boot.
   config.eager_load = false
 
   # Show full error reports and disable caching.
-  config.consider_all_requests_local       = false#true
+  config.consider_all_requests_local       = true
 
-  config.action_controller.perform_caching = true
-  if ENV["MEMCACHEDCLOUD_SERVERS"]
-    config.cache_store = :dalli_store, ENV["MEMCACHEDCLOUD_SERVERS"].split(','), { :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"] }
-  end
+  config.action_controller.perform_caching = false
+  # if ENV["MEMCACHEDCLOUD_SERVERS"]
+  #   config.cache_store = :dalli_store, ENV["MEMCACHEDCLOUD_SERVERS"].split(','), { :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"] }
+  # end
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
