@@ -1,5 +1,5 @@
-require 'error_handlers'
-require 'pretty_json'
+# require 'error_handlers'
+# require 'pretty_json'
 
 module V0
   class ApplicationController < ActionController::API
@@ -14,7 +14,7 @@ module V0
     include ErrorHandlers
 
     respond_to :json
-
+    
     before_action :prepend_view_paths
     after_action :verify_authorized, except: :index
 

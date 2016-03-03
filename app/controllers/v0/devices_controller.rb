@@ -51,7 +51,7 @@ module V0
       @device = Device.find(params[:id])
       authorize @device
       if @device.archive!
-        render nothing: true, status: :ok
+        render json: {message: 'OK'}, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @device.errors
       end

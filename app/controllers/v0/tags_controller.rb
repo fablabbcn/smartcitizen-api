@@ -35,7 +35,7 @@ module V0
       @tag = Tag.find(params[:id])
       authorize @tag
       if @tag.destroy
-        render nothing: true, status: :ok
+        render json: {message: 'OK'}, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @tag.errors
       end

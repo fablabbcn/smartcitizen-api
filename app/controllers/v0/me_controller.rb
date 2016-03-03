@@ -22,7 +22,7 @@ module V0
       @user = current_user
       authorize @user
       if @user.archive!
-        render nothing: true, status: :ok
+        render json: {message: 'OK'}, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @user.errors
       end

@@ -23,7 +23,8 @@ class UploadsController < ApplicationController
       check_missing_params 'key'
       upload = Upload.find_by(key: params[:key])
       upload.user.update_attribute(:avatar_url, upload.full_path)
-      head :ok
+      # head :ok
+      render json: {message: 'OK'}, status: :ok
     end
 
     # # just in case you need to do anything after the document gets uploaded to amazon.
