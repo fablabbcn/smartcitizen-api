@@ -21,7 +21,7 @@ class UploadsController < ApplicationController
 
     def uploaded
       check_missing_params 'key'
-      upload = Upload.find_by(key: params[:key])
+      upload = Upload.find_by(key: CGI.unescape(params[:key]) )
       upload.user.update_attribute(:avatar_url, upload.full_path)
       # head :ok
       render json: {message: 'OK'}, status: :ok
