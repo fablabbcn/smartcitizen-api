@@ -7,7 +7,9 @@ RSpec.describe Upload, type: :model do
   let(:user) { create(:user) }
   let(:upload) { create(:upload, user: user, original_filename: 'testing.jpg') }
 
-  skip "!!! double check its ok to remove (head :ok) in uploads_controller !!!"
+  it "works with filenames with spaces"
+
+  it "works with filenames with special characters"
 
   it "has a new_filename" do
     expect(upload.new_filename).to eq("#{upload.created_at.to_i.to_s(32)}.testing.jpg")
