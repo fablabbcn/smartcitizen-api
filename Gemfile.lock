@@ -8,14 +8,6 @@ GIT
       yard (~> 0.7)
 
 GIT
-  remote: git://github.com/hexorx/countries.git
-  revision: 142a28d5058494a287135642419a4ce693cac272
-  specs:
-    countries (1.2.7)
-      currencies (~> 0.4.2)
-      i18n_data (~> 0.7.0)
-
-GIT
   remote: git://github.com/presidentbeef/brakeman.git
   revision: dda7d10e79feed40b4c28b680cf4838003baa1b6
   specs:
@@ -96,12 +88,12 @@ GEM
     arel (6.0.3)
     ast (2.2.0)
     awesome_print (1.6.1)
-    aws-sdk (2.2.22)
-      aws-sdk-resources (= 2.2.22)
-    aws-sdk-core (2.2.22)
+    aws-sdk (2.2.24)
+      aws-sdk-resources (= 2.2.24)
+    aws-sdk-core (2.2.24)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.2.22)
-      aws-sdk-core (= 2.2.22)
+    aws-sdk-resources (2.2.24)
+      aws-sdk-core (= 2.2.24)
     bcrypt (3.1.10)
     browser (1.0.1)
     builder (3.2.2)
@@ -130,6 +122,9 @@ GEM
     colorize (0.7.7)
     concurrent-ruby (1.0.1)
     connection_pool (2.2.0)
+    countries (1.2.5)
+      currencies (~> 0.4.2)
+      i18n_data (~> 0.7.0)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     css_parser (1.3.7)
@@ -204,7 +199,7 @@ GEM
     fog-atmos (0.1.0)
       fog-core
       fog-xml
-    fog-aws (0.8.1)
+    fog-aws (0.9.1)
       fog-core (~> 1.27)
       fog-json (~> 1.0)
       fog-xml (~> 0.1)
@@ -231,7 +226,7 @@ GEM
     fog-json (1.0.2)
       fog-core (~> 1.0)
       multi_json (~> 1.10)
-    fog-local (0.2.1)
+    fog-local (0.3.0)
       fog-core (~> 1.27)
     fog-powerdns (0.1.1)
       fog-core (~> 1.27)
@@ -270,7 +265,7 @@ GEM
     fog-voxel (0.1.0)
       fog-core
       fog-xml
-    fog-vsphere (0.6.0)
+    fog-vsphere (0.6.1)
       fog-core
       rbvmomi (~> 1.8)
     fog-xenserver (0.2.3)
@@ -646,7 +641,7 @@ DEPENDENCIES
   capistrano-sidekiq!
   codeclimate-test-reporter
   colorize
-  countries!
+  countries
   dalli
   database_cleaner
   date_validator

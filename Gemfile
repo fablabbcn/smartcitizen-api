@@ -62,7 +62,7 @@ gem 'pundit'
 gem 'kaminari'
 gem 'api-pagination'
 gem 'geocoder'
-gem 'countries', github: 'hexorx/countries'
+gem 'countries'
 gem 'ransack'
 gem 'c_geohash', require: false
 gem 'date_validator'
