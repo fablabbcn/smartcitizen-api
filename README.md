@@ -42,3 +42,11 @@
 `bundle install`
 
 `bundle exec rails s`
+
+### Deploying
+
+`bundle exec cap production deploy` < password currently required. *Don't run this without discussing in slack or issues first*. We will be automating deployments with CI/Travis so this command will eventually be deprecated.
+
+### Useful commands
+
+`bundle exec cap production sidekiq:restart` < if sidekiq has a memory leak or something
