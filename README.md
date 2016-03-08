@@ -6,7 +6,8 @@
 
 ### [Documentation](https://developer.smartcitizen.me)
 
-* API - [https://api.smartcitizen.me](https://api.smartcitizen.me)
+* Production API - [https://api.smartcitizen.me](https://api.smartcitizen.me)
+* Errors - [https://errors.smartcitizen.me](https://errors.smartcitizen.me)
 * Basic Map Example - [https://api.smartcitizen.me/examples/map](https://api.smartcitizen.me/examples/map) ([map](https://github.com/fablabbcn/smartcitizen/blob/master/public/examples/map.html))
 
 ## Installing Locally
