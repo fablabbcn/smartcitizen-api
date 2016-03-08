@@ -7,6 +7,8 @@ upstream unicorn {
 
 server {
 
+  chunked_transfer_encoding off;
+
   access_log <%= current_path %>/log/access_nginx.log;
   error_log <%= current_path %>/log/errors_nginx.log;
 
