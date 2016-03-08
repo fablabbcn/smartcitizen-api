@@ -102,6 +102,7 @@ group :development do
   gem 'capistrano-rbenv'
   gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
   gem 'rubocop', require: false
+  gem "parallel_tests"
 end
 
 group :development, :test do
