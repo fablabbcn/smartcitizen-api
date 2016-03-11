@@ -50,10 +50,10 @@ module Smartcitizen
       config.lograge.custom_options = lambda do |event|
         {:time => event.time}
       end
-
     end
 
     config.middleware.insert_before 0, "HeaderCheck"
+    config.middleware.insert_before(ActionDispatch::Static, "DeleteResponseHeaders")
     config.middleware.insert_before 0, "Rack::Cors" do
       allow do
         origins '*'
