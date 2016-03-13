@@ -66,6 +66,7 @@ class RawStorer
       end
 
       parsed_ts = Time.parse(data['timestamp'])
+      raise "timestamp error" if parsed_ts > 1.hour.from_now or parsed_ts < 3.years.ago
       ts = parsed_ts.to_i * 1000
 
       _data = []
