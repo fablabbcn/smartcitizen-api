@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151209135345) do
+ActiveRecord::Schema.define(version: 20160313185543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 20151209135345) do
     t.jsonb    "migration_data"
     t.string   "workflow_state"
     t.datetime "csv_export_requested_at"
+    t.macaddr  "old_mac_address"
   end
 
   add_index "devices", ["geohash"], name: "index_devices_on_geohash", using: :btree
@@ -266,5 +267,4 @@ ActiveRecord::Schema.define(version: 20151209135345) do
   add_foreign_key "devices_tags", "devices"
   add_foreign_key "devices_tags", "tags"
   add_foreign_key "sensors", "measurements"
-  add_foreign_key "uploads", "users"
 end
