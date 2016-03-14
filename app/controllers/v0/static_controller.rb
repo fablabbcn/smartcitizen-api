@@ -30,6 +30,7 @@ module V0
           online: {
             now: Device.where('last_recorded_at > ?', 10.minutes.ago).count,
             last_hour: Device.where('last_recorded_at > ?', 1.hour.ago).count,
+            today: Device.where('last_recorded_at > ?', Time.now.beginning_of_day).count,
             this_month: Device.where('last_recorded_at > ?', Time.now.beginning_of_month).count,
             this_year: Device.where('last_recorded_at > ?', Time.now.beginning_of_year).count,
             all_time: Device.where.not(last_recorded_at: nil).count
