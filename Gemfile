@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '~> 4.2'
 gem 'rails-api'
 
-gem 'redis', '3.0.7'
+gem 'redis'#, '3.0.7'
 
 gem 'rack-timeout'
 # gem 'rack-attack' API Rate Limiting
@@ -14,7 +14,7 @@ gem 'rack-cache'
 gem 'colorize'
 gem 'moneta'
 gem 'api_cache'
-gem 'minuteman', '~> 1.0.3'
+gem 'minuteman', '~> 2'
 gem 'diffy', require: false
 gem 'awesome_print', require: false
 gem 'browser', '1.0.1'
@@ -49,7 +49,6 @@ gem 'aws-sdk'
 
 gem 'redis-rails'
 gem 'sinatra', '>= 1.3.0', require: nil
-gem 'sidekiq'
 
 gem 'fog'
 
@@ -76,6 +75,7 @@ gem 'fast_blank'
 gem 'oj'
 gem 'oj_mimic_json'
 gem 'multi_json'
+gem 'sidekiq', '~> 4.0'
 # gem 'charlock_holmes'
 
 group :production do

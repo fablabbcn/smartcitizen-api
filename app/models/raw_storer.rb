@@ -108,7 +108,9 @@ class RawStorer
         end
       end
 
-      $analytics.track("readings:create", device.id)
+      # $analytics.track("readings:create", device.id)
+      MinuteMan.track("readings:create", device)
+      Minuteman.add("good_readings")
 
     rescue Exception => e
 
@@ -125,6 +127,8 @@ class RawStorer
         backtrace: (e.backtrace rescue nil)
       })
       # Airbrake.notify(e)
+
+      Minuteman.add("bad_readings")
 
     end
 

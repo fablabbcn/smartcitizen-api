@@ -30,8 +30,8 @@ module V0
           online: {
             now: Device.where('last_recorded_at > ?', 10.minutes.ago).count,
             last_hour: Device.where('last_recorded_at > ?', 1.hour.ago).count,
-            today: $analytics.day("readings:create", Time.now.utc).length,
-            this_week: $analytics.week("readings:create", Time.now.utc).length,
+            today: Minuteman.count("good_readings").day.count,#$analytics.day("readings:create", Time.now.utc).length,
+            this_week: Minuteman.count("good_readings").week.count,#$analytics.week("readings:create", Time.now.utc).length,
             this_month: Device.where('last_recorded_at > ?', Time.now.beginning_of_month).count,
             this_year: Device.where('last_recorded_at > ?', Time.now.beginning_of_year).count,
             all_time: Device.where.not(last_recorded_at: nil).count
