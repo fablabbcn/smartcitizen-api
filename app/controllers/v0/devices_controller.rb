@@ -5,7 +5,7 @@ module V0
     after_action :verify_authorized, except: [:index, :world_map, :fresh_world_map]
 
     def show
-      @device = Device.includes(:kit, :owner, :sensors,:tags).find(params[:id])
+      @device = Device.unscoped.includes(:kit, :owner, :sensors,:tags).find(params[:id])
       authorize @device
       @device
     end
