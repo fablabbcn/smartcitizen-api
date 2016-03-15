@@ -6,11 +6,11 @@ module V0
     # 1/3 - A reset must be created with an authenticated request
     def create
       if params[:email].present?
-        @user = User.find_by!(email: params[:email])
+        @user = User.where("lower(email) = lower(?)", params[:email]).first!
       elsif params[:username].present?
-        @user = User.find_by!(username: params[:username])
+        @user = User.where("lower(username) = lower(?)", params[:username]).first!
       elsif e_o_u = params[:email_or_username]
-        @user = User.where('username = ? OR email = ?', e_o_u, e_o_u).first!
+        @user = User.where("lower(username) = lower(?) OR lower(email) = lower(?)", e_o_u, e_o_u).first!
       else
         raise Smartcitizen::UnprocessableEntity.new "Please include parameter email, username or email_or_username"
       end

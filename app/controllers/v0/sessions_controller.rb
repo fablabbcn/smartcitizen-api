@@ -3,7 +3,8 @@ module V0
 
     def create
       check_missing_params("username", "password")
-      user = User.find_by_username!(params[:username])
+      # user = User.find_by_username!(params[:username])
+      user = User.where("lower(username) = lower(?)", params[:username]).first!
       authorize user, :show?
       if user && user.authenticate_with_legacy_support(params[:password])
         # $analytics.track("login:successful", user.id)
