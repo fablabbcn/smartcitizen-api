@@ -30,10 +30,9 @@ class Device < ActiveRecord::Base
   validate :banned_name
   # validates_presence_of :mac_address, :name
 
-  validates_uniqueness_of :mac_address, allow_nil: true, on: :create
+  validates_uniqueness_of :mac_address, allow_nil: true, if: Proc.new { |d| d.new_record? or d.owner_id == 5187 }
   validates_format_of :mac_address,
     with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
-
 
   include PgSearch
   multisearchable :against => [:name, :description, :city, :country_name]
