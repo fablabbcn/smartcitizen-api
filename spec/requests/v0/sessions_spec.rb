@@ -16,6 +16,12 @@ describe V0::SessionsController do
     expect(j['access_token']).to eq(token)
   end
 
+  it "is case insensitive when checking the username" do
+    j = api_post 'sessions', { username: 'MiLHousE', password: 'greatpass'}
+    token = user.access_token.token
+    expect(j['access_token']).to eq(user.access_token.token)
+  end
+
   it "doesn't get access_token with incorrect password" do
     j = api_post 'sessions', { username: 'milhouse', password: 'incorrect'}
     expect(j['id']).to eq('unprocessable_entity')

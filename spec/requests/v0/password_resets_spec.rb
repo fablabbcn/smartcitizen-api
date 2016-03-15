@@ -23,6 +23,17 @@ describe V0::PasswordResetsController do
         key: 'username',
         valid: 'homer',
         invalid: 'bart'
+      },
+      # case insensitive
+      {
+        key: 'email',
+        valid: 'HOmEr@sIMPSON.com',
+        invalid: 'homer @simpson.com'
+      },
+      {
+        key: 'username',
+        valid: 'homER',
+        invalid: 'ho mer'
       }
     ]
 
