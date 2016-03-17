@@ -32,21 +32,11 @@ RSpec.describe Device, :type => :model do
     expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  it "doesn't validate uniqueness of mac address on update" do
+  it "validates uniqueness of mac address on update" do
     d1 = create(:device, mac_address: '10:9A:DD:63:C0:10')
     d2 = create(:device, mac_address: '10:9A:DD:63:C0:11')
     d2.mac_address = '10:9A:DD:63:C0:10'
-    expect(d2).to be_valid
-  end
-
-  it "validates uniqueness of mac address on update (NEW FEATURE)" do
-    user = create(:user, id: 5187)
-    d1 = create(:device, mac_address: '10:9A:DD:63:C0:10', owner: user)
-    d2 = create(:device, mac_address: '10:9A:DD:63:C0:11', owner: user)
-    expect(d2).to be_valid
-    d2.mac_address = '10:9A:DD:63:C0:10'
     expect(d2).to be_invalid
-    expect(d2.errors[:mac_address].to_s).to match("has already been taken")
   end
 
   describe "states" do
