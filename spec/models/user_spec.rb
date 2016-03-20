@@ -127,6 +127,7 @@ RSpec.describe User, :type => :model do
     end
 
     it "only returns active users by default (default_scope)" do
+      User.unscoped.delete_all # < needed because database_cleaner doesn't delete User.unscoped
       a = create(:user)
       b = create(:user, workflow_state: :archived)
       expect(User.all).to eq([a])

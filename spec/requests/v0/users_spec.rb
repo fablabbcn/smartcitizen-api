@@ -54,6 +54,7 @@ describe V0::UsersController do
     describe "ordering" do
 
       before(:each) do
+        User.unscoped.destroy_all # needed because database_cleaner doesn't do unscoped
         Timecop.freeze do
           first # touch record
           Timecop.travel(1.second) # force ordering
