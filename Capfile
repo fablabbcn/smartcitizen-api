@@ -1,3 +1,9 @@
+# Load environment vars
+require 'figaro'
+Figaro.application = Figaro::Application.new(
+  environment: ENV.fetch('RAILS_ENV') { 'production' }, path: "config/application.yml")
+Figaro.load
+
 # Load DSL and set up stages
 require 'capistrano/setup'
 # Include default deployment tasks

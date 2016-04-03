@@ -23,4 +23,21 @@ namespace :monit do
       sudo "monit reload"
     end
   end
+
+  desc "Monitor everything"
+  task :monitor_all do
+    on roles(:app) do
+      sudo "monit monitor all"
+    end
+  end
+
+  desc "Unmonitor everything"
+  task :unmonitor_all do
+    on roles(:app) do
+      sudo "monit unmonitor all"
+    end
+  end
 end
+
+before 'deploy', "monit:unmonitor_all"
+after 'deploy', 'monit:monitor_all'

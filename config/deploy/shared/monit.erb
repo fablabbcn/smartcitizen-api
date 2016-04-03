@@ -1,13 +1,68 @@
-set httpd port <%= ENV['monit_http_port'] %>
+set daemon 10 # check every 10 seconds
+
+set logfile /var/log/monit.log
+set idfile /var/lib/monit/id
+set statefile /var/lib/monit/state
+
+set alert <%= ENV.fetch('monit_email') %> only on { timeout, nonexist }
+
+set eventqueue
+  basedir /var/lib/monit/events
+  slots 100
+
+set mailserver <%= ENV.fetch('monit_email_server') %> port <%= ENV.fetch('monit_email_port') %>
+  username "<%= ENV.fetch('monit_email') %>" password "<%= ENV.fetch('monit_email_password') %>"
+  using tlsv1
+  with timeout 30 seconds
+
+set httpd port <%= ENV.fetch('monit_http_port') %>
   use address 0.0.0.0
   allow 0.0.0.0/0.0.0.0
-  allow <%= ENV['monit_http_username'] %>:<%= ENV['monit_http_password'] %>
+  allow <%= ENV.fetch('monit_http_username') %>:<%= ENV.fetch('monit_http_password') %>
+
+set mail-format { subject: <%= "[monit] #{fetch(:application)} - #{fetch(:rails_env)}" %> $SERVICE $EVENT at $DATE }
 
 <% application = fetch(:application) %>
 
-set mail-format { subject: <%= "#{fetch(:full_app_name)} - #{fetch(:rails_env)}" %> $SERVICE $EVENT at $DATE }
+# application
+check system <%= application %>
+  if loadavg(5min) > 2 for 2 cycles then alert
+  if memory > 75% for 2 cycles then alert
+  if cpu(user) > 75% for 2 cycles then alert
 
-<% # unicorn %>
+# postgres
+check process postgresql with pidfile /var/run/postgresql/<%= ENV.fetch('postgres_version') %>-main.pid
+  start program = "/etc/init.d/postgresql start"
+  stop program = "/etc/init.d/postgresql stop"
+  if failed host localhost port <%= ENV.fetch('postgres_port') %> protocol pgsql then restart
+  if 10 restarts within 10 cycles then timeout
+
+# nginx
+check process nginx with pidfile /var/run/nginx.pid
+  start program = "/etc/init.d/nginx start" # as uid "<%= fetch(:deploy_user) %>"
+  stop program = "/etc/init.d/nginx stop"
+  if children > 250 then restart
+  if mem is greater than 800.0 MB for 5 cycles then restart   # eating up memory?
+  if cpu is greater than 80% for 3 cycles then restart      # hung process?
+  if 10 restarts within 10 cycles then timeout
+
+# sidekiq (check other monit file)
+# check process sidekiq
+#   with pidfile <%= current_path %>/tmp/pids/sidekiq.pid
+#   start program = "/sbin/start workers"
+#   stop program = "/sbin/stop workers"
+#   if mem is greater than 800.0 MB for 5 cycles then restart   # eating up memory?
+#   if cpu is greater than 80% for 5 cycles then restart     # hung process?
+
+# redis
+check process redis with pidfile /var/run/redis_<%= ENV.fetch('redis_port') %>.pid
+  start program = "/etc/init.d/redis_<%= ENV.fetch('redis_port') %> start"
+  stop program = "/etc/init.d/redis_<%= ENV.fetch('redis_port') %> stop"
+  if mem is greater than 800.0 MB for 5 cycles then restart   # eating up memory?
+  if cpu is greater than 80% for 5 cycles then restart      # hung process?
+  if 10 restarts within 10 cycles then timeout
+
+# unicorn
 check process unicorn_<%= application %>
   with pidfile <%= current_path %>/tmp/pids/unicorn.pid
   start program = "/etc/init.d/unicorn_<%= application %>_<%= fetch(:rails_env)%> start"
@@ -24,14 +79,5 @@ check process unicorn_worker_<%= (5000 + worker).to_s %>_<%= application %>_
   stop program = "/etc/init.d/unicorn_<%= application %>_<%= fetch(:rails_env)%> kill_worker <%= (5000 + worker).to_s %>"
   if mem is greater than 350.0 MB for 1 cycles then restart
   if cpu is greater than 80% for 30 cycles then restart
-
   group unicorn_workers
-
-<% # nginx %>
-check process nginx with pidfile /var/run/nginx.pid
-  start program = "/etc/init.d/nginx start"
-  stop program = "/etc/init.d/nginx stop"
-  if children > 250 then restart
-  if 5 restarts within 5 cycles then timeout
-
 <% end %>
