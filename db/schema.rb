@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160313185543) do
+ActiveRecord::Schema.define(version: 20160404101737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -188,18 +188,6 @@ ActiveRecord::Schema.define(version: 20160313185543) do
   end
 
   add_index "pg_search_documents", ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id", using: :btree
-
-  create_table "places", force: :cascade do |t|
-    t.string   "name"
-    t.string   "country_code"
-    t.string   "country_name"
-    t.float    "lat"
-    t.float    "lng"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-  end
-
-  add_index "places", ["name", "country_code"], name: "index_places_on_name_and_country_code", unique: true, using: :btree
 
   create_table "sensors", force: :cascade do |t|
     t.string   "ancestry"

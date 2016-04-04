@@ -88,27 +88,6 @@ module V0
 
       a.uniq!{|h| [h[:city],h[:country_code]].join }
 
-      # Place.select("DISTINCT on (country_code) country_code, country_name, lat, lng").where("country_name ILIKE :q", q: "%#{params[:q]}%").limit(3).each do |p|
-      #   a << {
-      #     type: "Country",
-      #     country_code: p.country_code,
-      #     country: p.country_name,
-      #     latitude: p.lat,
-      #     longitude: p.lng
-      #   }
-      # end
-
-      # Place.where("name ILIKE :q", q: "%#{params[:q]}%").limit(5).each do |p|
-      #   a << {
-      #     type: "City",
-      #     city: p.name,
-      #     country_code: p.country_code,
-      #     country: p.country_name,
-      #     latitude: p.lat,
-      #     longitude: p.lng
-      #   }
-      # end
-
       Tag.where("name ILIKE :q", q: "%#{params[:q]}%").limit(5).each do |t|
         a << {
           id: t.id,
