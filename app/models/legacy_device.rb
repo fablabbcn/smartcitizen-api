@@ -1,3 +1,6 @@
+# This is due to be removed soon, it is an artifact from the migration from the
+# old platform and old API.
+
 class LegacyDevice < MySQL
 
   self.table_name = 'devices'

@@ -1,4 +1,6 @@
-# This class is not being used, it is due to be deprecated
+# This class is not being used, it was initially added to support HTTP token
+# authentication in the API (supported in legacy 0.0.1). But is no longer
+# required.
 
 class ApiToken < ActiveRecord::Base
 

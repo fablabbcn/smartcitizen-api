@@ -1,3 +1,6 @@
+# Only Avatars are uploaded right now, this is the base class that they inherit.
+# Some of its methods are specific to Avatar, this needs to be fixed.
+
 require 'digest'
 
 class Upload < ActiveRecord::Base

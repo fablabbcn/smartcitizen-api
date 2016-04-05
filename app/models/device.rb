@@ -1,3 +1,7 @@
+# This is an SCK (referred to as a 'Kit' in the frontend).
+# It's called Device and not Kit or SCK because it's expected that the platform
+# will support different kinds of hardware in the future (phones, arduino etc).
+
 require 'open-uri'
 require 'geohash'
 

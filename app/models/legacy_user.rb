@@ -1,3 +1,6 @@
+# This is due to be removed soon, it is an artifact from the migration from the
+# old platform and old API.
+
 class LegacyUser < MySQL
   self.table_name = 'users'
   has_many :devices, class_name: 'LegacyDevice', foreign_key: 'user_id'

@@ -1,3 +1,5 @@
+# This joins a device with its sensors.
+
 class Component < ActiveRecord::Base
   belongs_to :board, polymorphic: true
   belongs_to :sensor

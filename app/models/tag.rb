@@ -1,3 +1,6 @@
+# Tags can be assigned to multiple Devices. They are currently managed solely by
+# admins, this is likely to change.
+
 class Tag < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_presence_of :name

@@ -1,3 +1,8 @@
+# This is going to be removed from app/models and refactored into lib/.
+# It is the interface between the KairosDB HTTP REST API and this app. When
+# performing bulk operations with Kairos it's probably better to use telnet
+# https://kairosdb.github.io/docs/build/html/PushingData.html
+
 require 'net/http'
 require 'uri'
 

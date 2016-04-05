@@ -1,5 +1,14 @@
-class User < ActiveRecord::Base
+# Note the default_scope.
 
+# Users are considered admin if user.role_mask >= 5. This was done to allow
+# other levels such as 3 == moderator etc. rolify might be more suitable if
+# a users needs different permissions for different classes or records, but it
+# has been left simple for now.
+
+class User < ActiveRecord::Base
+  
+  # Users are generally not deleted, they are archived. If you want to query
+  # ALL users, remember to use User.unscoped.all, User.unscoped.find(id) etc.
   default_scope { with_active_state }
 
   include Workflow

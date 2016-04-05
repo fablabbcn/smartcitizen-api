@@ -1,3 +1,7 @@
+# Like app/models/kairos.rb, this class needs to be refactored and moved into
+# /lib or /app/workers. It is called asynchronously by sidekiq and is used to
+# ingest raw data posted by Devices into Kairos and Postgres (backup purposes).
+
 class RawStorer
 
   attr_accessor :sensors
