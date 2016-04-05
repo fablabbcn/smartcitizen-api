@@ -1,3 +1,5 @@
+# This class is not being used, it is due to be deprecated
+
 class ApiToken < ActiveRecord::Base
 
   belongs_to :owner, class_name: 'User'
