@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2'
 gem 'rails-api'
+gem 'pg'
 
 gem 'redis'#, '3.0.7'
 
@@ -11,31 +12,19 @@ gem 'rack-timeout'
 gem 'rack-cors', require: 'rack/cors'
 gem 'rack-contrib'
 gem 'rack-cache'
-gem 'colorize'
 gem 'moneta'
 gem 'api_cache'
 gem 'minuteman', '~> 2'
-gem 'diffy', require: false
-gem 'awesome_print', require: false
+
 gem 'browser', '1.0.1'
 gem 'stamp'
-# gem 'actionpack-page_caching'
-# gem 'actionpack-action_caching'
-
-# https://github.com/guard/listen/wiki/Duplicate-directory-errors
-# prevent 2.8 and greater from being used
-
-gem 'listen' # '~> 2.7.12'
+gem 'listen'
 gem 'airbrake', '~> 4.3'
 gem 'premailer-rails'
-
-gem 'statsample'
-gem 'pg'
+# gem 'statsample'
 # gem 'upsert'
-gem 'parallel', require: false
 
 gem 'lograge'
-
 gem 'figaro'
 gem 'versionist', github: 'bploetz/versionist'
 gem 'jbuilder'
@@ -48,7 +37,9 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'aws-sdk'
 
 gem 'redis-rails'
+
 gem 'sinatra', '>= 1.3.0', require: nil
+gem 'sidekiq', '~> 4.0'
 
 gem 'fog'
 
@@ -64,19 +55,18 @@ gem 'geocoder'
 gem 'countries'
 gem 'ransack'
 gem 'c_geohash', require: false
+gem 'diffy', require: false
+gem 'awesome_print', require: false
+gem 'parallel', require: false
+
 gem 'date_validator'
 gem 'pg_search'
-
 gem 'mailgun_rails'
-
 gem 'dalli'
-
 gem 'fast_blank'
 gem 'oj'
 gem 'oj_mimic_json'
 gem 'multi_json'
-gem 'sidekiq', '~> 4.0'
-# gem 'charlock_holmes'
 
 group :production do
   gem 'rails_12factor'
@@ -103,6 +93,7 @@ group :development do
   gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
   gem 'rubocop', require: false
   gem "parallel_tests"
+  gem 'capistrano-rails'
 end
 
 group :development, :test do
@@ -128,4 +119,3 @@ end
 
 # Deployment
 gem 'unicorn'
-gem 'capistrano-rails', group: :development
