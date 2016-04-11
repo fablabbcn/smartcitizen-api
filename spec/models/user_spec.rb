@@ -11,7 +11,9 @@ RSpec.describe User, :type => :model do
   it { is_expected.to validate_uniqueness_of(:username) }
   it { is_expected.to validate_length_of(:username).is_at_least(3).is_at_most(30) }
 
+
   it { is_expected.to have_many(:api_tokens) }
+  it { is_expected.to have_many(:oauth_applications) }
 
   it { is_expected.to have_many(:devices) }
 

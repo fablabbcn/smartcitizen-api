@@ -6,7 +6,7 @@
 # has been left simple for now.
 
 class User < ActiveRecord::Base
-  
+
   # Users are generally not deleted, they are archived. If you want to query
   # ALL users, remember to use User.unscoped.all, User.unscoped.find(id) etc.
   default_scope { with_active_state }
@@ -41,6 +41,7 @@ class User < ActiveRecord::Base
   has_many :sensors, through: :devices
   has_many :api_tokens, foreign_key: 'owner_id'
   has_many :uploads
+  has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
 
   before_create :generate_legacy_api_key
 
