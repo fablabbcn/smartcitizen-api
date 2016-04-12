@@ -9,6 +9,7 @@
 * Production API - [https://api.smartcitizen.me](https://api.smartcitizen.me)
 * Errors - [https://errors.smartcitizen.me](https://errors.smartcitizen.me)
 * Basic Map Example - [https://api.smartcitizen.me/examples/map](https://api.smartcitizen.me/examples/map) ([map](https://github.com/fablabbcn/smartcitizen/blob/master/public/examples/map.html))
+* OAuth 2.0 (Implicit Grant) Example - [http://example.smartcitizen.me](http://example.smartcitizen.me) ([smartcitizen-oauth-example](https://github.com/fablabbcn/smartcitizen-oauth-example))
 
 ## Installing Locally
 
@@ -49,9 +50,3 @@
 ### Useful commands
 
 `bundle exec cap production sidekiq:restart` < if sidekiq has a memory leak or something
-
-
-## To be fixed...
-
-* Login Page - [https://id.smartcitizen.me](https://id.smartcitizen.me) ([smartcitizen-auth](https://github.com/fablabbcn/smartcitizen-auth))
-* OAuth Example - [http://example.smartcitizen.me](http://example.smartcitizen.me) ([smartcitizen-oauth-example](https://github.com/fablabbcn/smartcitizen-oauth-example))
