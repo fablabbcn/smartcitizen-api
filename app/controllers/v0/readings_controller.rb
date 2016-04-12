@@ -1,39 +1,20 @@
-require 'net/http'
-require 'uri'
-
 module V0
   class ReadingsController < ApplicationController
 
     skip_after_action :verify_authorized
 
     def index
-      check_missing_params("rollup", "sensor_key||sensor_id") # sensor_key or sensor_id
+      check_missing_params("rollup", "sensor_key||sensor_id")
       render json: Kairos.query(params)
     end
 
     def create
       begin
-        JSON.parse(request.headers['X-SmartCitizenData']).each do |raw_reading|
-          begin
-
-            mac = request.headers['X-SmartCitizenMacADDR']
-            version = request.headers['X-SmartCitizenVersion']
-            ip = (request.headers['X-SmartCitizenIP'] || request.remote_ip)
-
-            if ENV['redis']
-              RawStorer.delay(retry: false).new(raw_reading,mac,version,ip)
-            else
-              RawStorer.new(raw_reading,mac,version,ip)
-            end
-
-          rescue Exception => e
-            notify_airbrake(e)
-          end
-        end
-      rescue Exception => e
+        ReadingStorer.store request.headers['X-SmartCitizenData']
+      rescue => e
         notify_airbrake(e)
       end
-      render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S#") # render time for SCK to sync clock
+      datetime # render time for SCK to sync clock
     end
 
     def datetime
