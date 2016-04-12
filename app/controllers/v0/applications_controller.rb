@@ -2,6 +2,7 @@ module V0
   class ApplicationsController < ApplicationController
 
     before_action :check_if_authorized!
+    skip_after_action :verify_authorized # see naming conflict comment below
 
     def index
       @applications = current_user.oauth_applications
@@ -9,11 +10,12 @@ module V0
 
     def show
       @application = current_user.oauth_applications.find(params[:id])
+      # authorize @application < naming conflict with policies/application_policy.rb
     end
 
     def create
       @application = current_user.oauth_applications.build(application_params)
-      # authorize @application < naming conflict with policies/application_policy.rb
+      # authorize @application
       if @application.save
         render :show, status: :created
       else
