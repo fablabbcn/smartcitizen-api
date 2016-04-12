@@ -7,5 +7,45 @@ module V0
       @applications = current_user.oauth_applications
     end
 
+    def show
+      @application = current_user.oauth_applications.find(params[:id])
+    end
+
+    def create
+      @application = current_user.oauth_applications.build(application_params)
+      # authorize @application < naming conflict with policies/application_policy.rb
+      if @application.save
+        render :show, status: :created
+      else
+        raise Smartcitizen::UnprocessableEntity.new @application.errors
+      end
+    end
+
+    def update
+      @application = current_user.oauth_applications.find(params[:id])
+      # authorize @application
+      if @application.update_attributes(application_params)
+        render :show, status: :ok
+      else
+        raise Smartcitizen::UnprocessableEntity.new @application.errors
+      end
+    end
+
+    def destroy
+      @application = current_user.oauth_applications.find(params[:id])
+      # authorize @application
+      if @application.archive!
+        render json: {message: 'OK'}, status: :ok
+      else
+        raise Smartcitizen::UnprocessableEntity.new @application.errors
+      end
+    end
+
+private
+
+    def application_params
+      params.permit(:name, :redirect_uri, :scopes)
+    end
+
   end
 end
