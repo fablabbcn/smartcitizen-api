@@ -1,5 +1,11 @@
 namespace :monit do
 
+  desc ' wait 10 seconds '
+  task :wait_10_seconds do
+    puts "waiting 10 seconds for services to start before reenabling monit"
+    sleep 10
+  end
+
   desc "Install Monit"
   task :install do
     on roles(:app) do
@@ -40,4 +46,5 @@ namespace :monit do
 end
 
 before 'deploy', "monit:unmonitor_all"
+after 'deploy', 'monit:wait_10_seconds'
 after 'deploy', 'monit:monitor_all'
