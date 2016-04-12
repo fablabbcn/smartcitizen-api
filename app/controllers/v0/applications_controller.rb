@@ -2,6 +2,7 @@ module V0
   class ApplicationsController < ApplicationController
 
     before_action :check_if_authorized!
+    before_action :set_application, only: [:show, :update, :destroy]
     skip_after_action :verify_authorized # see naming conflict comment below
 
     def index
@@ -9,7 +10,6 @@ module V0
     end
 
     def show
-      @application = current_user.oauth_applications.find(params[:id])
       # authorize @application < naming conflict with policies/application_policy.rb
     end
 
@@ -24,7 +24,6 @@ module V0
     end
 
     def update
-      @application = current_user.oauth_applications.find(params[:id])
       # authorize @application
       if @application.update_attributes(application_params)
         render :show, status: :ok
@@ -34,7 +33,6 @@ module V0
     end
 
     def destroy
-      @application = current_user.oauth_applications.find(params[:id])
       # authorize @application
       if @application.destroy
         render json: {message: 'OK'}, status: :ok
@@ -47,6 +45,10 @@ private
 
     def application_params
       params.permit(:name, :redirect_uri, :scopes)
+    end
+
+    def set_application
+      @application = current_user.oauth_applications.find(params[:id])
     end
 
   end
