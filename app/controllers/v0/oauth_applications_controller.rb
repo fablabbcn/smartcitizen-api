@@ -1,3 +1,11 @@
+# require 'oauth2'
+# require 'json'
+# require 'open-uri'
+# app = JSON.parse(open("https://api.smartcitizen.me/v0/applications?access_token=ACCESS_TOKEN").read)[0]
+# client = OAuth2::Client.new(app['uid'], app['secret'], site: 'https://id.smartcitizen.me')
+# client.auth_code.authorize_url(redirect_uri: app['redirect_uri'])
+# access = client.auth_code.get_token(RESPONSE_TOKEN, redirect_uri: app['redirect_uri'])
+
 module V0
   class OauthApplicationsController < ApplicationController
 
