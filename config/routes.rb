@@ -48,7 +48,7 @@ Rails.application.routes.draw do
     resources :kits, except: [:create, :destroy]
     resources :users
     resources :password_resets, only: [:show, :create, :update]
-    resources :applications
+    resources :oauth_applications, path: 'applications'
 
     resources :me, only: [:index] do
       patch 'avatar' => 'uploads#create', on: :collection
