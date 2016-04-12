@@ -6,7 +6,7 @@ class DeleteResponseHeaders
 
   def call(env)
     status, headers, response = @app.call(env)
-    headers = {} if env['QUERY_STRING'] == "noheaders"
+    headers = {} unless env['QUERY_STRING'] == "allheaders"
     [status, headers, response]
   end
 
