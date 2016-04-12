@@ -1,8 +1,9 @@
 module V0
   class MeasurementsController < ApplicationController
 
+    before_action :set_measurement, only: [:show, :update, :destroy]
+
     def show
-      @measurement = Measurement.find(params[:id])
       authorize @measurement
     end
 
@@ -22,7 +23,6 @@ module V0
     end
 
     def update
-      @measurement = Measurement.find(params[:id])
       authorize @measurement
       if @measurement.update_attributes(measurement_params)
         render :show, status: :ok
@@ -34,11 +34,11 @@ module V0
 private
 
     def measurement_params
-      params.permit(
-        :name,
-        :description,
-        :unit
-      )
+      params.permit( :name, :description, :unit )
+    end
+
+    def set_measurement
+      @measurement = Measurement.find(params[:id])
     end
 
   end
