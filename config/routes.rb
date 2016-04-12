@@ -34,9 +34,8 @@ Rails.application.routes.draw do
     # readings
     match "add" => "readings#create", via: [:get, :post, :patch, :put]
     match "datetime" => "readings#datetime", via: [:get, :post, :patch, :put]
-    # sensors
+
     resources :sensors, except: [:destroy]
-    # components
     resources :components, only: :index
     resources :sessions, only: :create
 
@@ -46,13 +45,11 @@ Rails.application.routes.draw do
 
     resources :tags
     resources :measurements
-    # kits
     resources :kits, except: [:create, :destroy]
-    # users
     resources :users
-    # password_resets
     resources :password_resets, only: [:show, :create, :update]
-    # me
+    resources :applications
+
     resources :me, only: [:index] do
       patch 'avatar' => 'uploads#create', on: :collection
       post 'avatar' => 'uploads#create', on: :collection
@@ -61,7 +58,6 @@ Rails.application.routes.draw do
       delete '/' => 'me#destroy', on: :collection
     end
 
-    # home
     get 'search' => 'static#search'
     get 'metrics' => 'static#metrics'
     # use_doorkeeper
