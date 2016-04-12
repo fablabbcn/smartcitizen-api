@@ -36,7 +36,7 @@ module V0
     def destroy
       @application = current_user.oauth_applications.find(params[:id])
       # authorize @application
-      if @application.archive!
+      if @application.destroy
         render json: {message: 'OK'}, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @application.errors
