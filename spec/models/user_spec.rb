@@ -119,12 +119,14 @@ RSpec.describe User, :type => :model do
 
     it "can be archived" do
       user.archive!
+      user.reload
       expect(user.workflow_state).to eq('archived')
     end
 
-    it "can be activated from archive state" do
+    it "can be unarchived from archive state" do
       user.archive!
-      user.activate!
+      user.unarchive!
+      user.reload
       expect(user.workflow_state).to eq('active')
     end
 

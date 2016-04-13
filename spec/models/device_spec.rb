@@ -70,18 +70,18 @@ RSpec.describe Device, :type => :model do
       expect(device.old_mac_address).to eq('10:9a:dd:63:c0:10')
     end
 
-    it "can be activated from archive state" do
+    it "can be unarchived from archive state" do
       device = create(:device, mac_address: '10:9a:dd:63:c0:10')
       device.archive!
-      device.activate!
+      device.unarchive!
       device.reload
       expect(device.workflow_state).to eq('active')
     end
 
-    it "reassigns old_mac_address when reactivated" do
+    it "reassigns old_mac_address when unarchived" do
       device = create(:device, mac_address: '10:9a:dd:63:c0:10')
       device.archive!
-      device.activate!
+      device.unarchive!
       device.reload
       expect(device.mac_address).to eq('10:9a:dd:63:c0:10')
     end
@@ -90,7 +90,7 @@ RSpec.describe Device, :type => :model do
       device = create(:device, mac_address: '10:9a:dd:63:c0:10')
       device.archive!
       device2 = create(:device, mac_address: '10:9a:dd:63:c0:10')
-      device.activate!
+      device.unarchive!
       device.reload
       expect(device.mac_address).to be_blank
     end

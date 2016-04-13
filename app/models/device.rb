@@ -15,7 +15,7 @@ class Device < ActiveRecord::Base
       event :archive, :transitions_to => :archived
     end
     state :archived do
-      event :activate, :transitions_to => :active
+      event :unarchive, :transitions_to => :active
     end
     after_transition { User.unscoped.find(owner_id).update_all_device_ids! }
   end
@@ -153,7 +153,7 @@ class Device < ActiveRecord::Base
     update_attributes({mac_address: nil, old_mac_address: mac_address})
   end
 
-  def activate
+  def unarchive
     unless Device.unscoped.where(mac_address: old_mac_address).exists?
       update_attributes({mac_address: old_mac_address, old_mac_address: nil})
     end

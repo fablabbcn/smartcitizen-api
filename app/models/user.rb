@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
       event :archive, :transitions_to => :archived
     end
     state :archived do
-      event :activate, :transitions_to => :active
+      event :unarchive, :transitions_to => :active
     end
   end
 
@@ -49,8 +49,8 @@ class User < ActiveRecord::Base
     devices.map{ |d| d.archive! rescue nil }
   end
 
-  def activate
-    Device.unscoped.where(owner: self).map{ |d| d.activate! rescue nil }
+  def unarchive
+    Device.unscoped.where(owner: self).map{ |d| d.unarchive! rescue nil }
   end
 
   def to_s
