@@ -30,35 +30,69 @@ RSpec.describe Device, :type => :model do
   it "validates uniqueness of mac address on create" do
     create(:device, mac_address: '10:9A:DD:63:C0:10', owner: create(:user))
     expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to raise_error(ActiveRecord::RecordInvalid)
+    # different case
+    expect{ create(:device, mac_address: '10:9a:dd:63:c0:10') }.to raise_error(ActiveRecord::RecordInvalid)
+  end
+
+  it "can find device with upper or lowercase mac_address" do
+    device = create(:device, mac_address: '10:9A:DD:63:C0:10')
+    expect(Device.where(mac_address: '10:9A:DD:63:C0:10' )).to eq([device])
+    expect(Device.where(mac_address: '10:9a:dd:63:c0:10' )).to eq([device])
   end
 
   it "validates uniqueness of mac address on update" do
     d1 = create(:device, mac_address: '10:9A:DD:63:C0:10')
     d2 = create(:device, mac_address: '10:9A:DD:63:C0:11')
     d2.mac_address = '10:9A:DD:63:C0:10'
-    expect(d2).to be_invalid
+    d2.valid?
+    expect(d2.errors[:mac_address].to_s).to match("already been taken")
   end
 
   describe "states" do
-    it "has a default active state" do
-      expect(device.workflow_state).to eq('active')
-    end
-
-    it "can be archived" do
-      device.archive!
-      expect(device.workflow_state).to eq('archived')
-    end
-
-    it "can be activated from archive state" do
-      device.archive!
-      device.activate!
-      expect(device.workflow_state).to eq('active')
-    end
 
     it "only returns active devices by default (default_scope)" do
       a = create(:device)
       b = create(:device, workflow_state: :archived)
       expect(Device.all).to eq([a])
+    end
+
+    it "has a default active state" do
+      expect(device.workflow_state).to eq('active')
+    end
+
+    it "can be archived" do
+      device = create(:device, mac_address: '10:9a:dd:63:c0:10')
+      expect(device.old_mac_address).to be_blank
+      device.archive!
+      device.reload
+      expect(device.workflow_state).to eq('archived')
+      expect(device.mac_address).to be_blank
+      expect(device.old_mac_address).to eq('10:9a:dd:63:c0:10')
+    end
+
+    it "can be activated from archive state" do
+      device = create(:device, mac_address: '10:9a:dd:63:c0:10')
+      device.archive!
+      device.activate!
+      device.reload
+      expect(device.workflow_state).to eq('active')
+    end
+
+    it "reassigns old_mac_address when reactivated" do
+      device = create(:device, mac_address: '10:9a:dd:63:c0:10')
+      device.archive!
+      device.activate!
+      device.reload
+      expect(device.mac_address).to eq('10:9a:dd:63:c0:10')
+    end
+
+    it "doesn't reassign old_mac_address if another device exists with that mac address" do
+      device = create(:device, mac_address: '10:9a:dd:63:c0:10')
+      device.archive!
+      device2 = create(:device, mac_address: '10:9a:dd:63:c0:10')
+      device.activate!
+      device.reload
+      expect(device.mac_address).to be_blank
     end
 
   end

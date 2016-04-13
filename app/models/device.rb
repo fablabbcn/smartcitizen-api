@@ -34,7 +34,7 @@ class Device < ActiveRecord::Base
   validate :banned_name
   # validates_presence_of :mac_address, :name
 
-  validates_uniqueness_of :mac_address, allow_nil: true
+  validates_uniqueness_of :mac_address, allow_nil: true, case_sensitive: false
 
   validates_format_of :mac_address,
     with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
@@ -148,6 +148,17 @@ class Device < ActiveRecord::Base
   def to_s
     name
   end
+
+  def archive
+    update_attributes({mac_address: nil, old_mac_address: mac_address})
+  end
+
+  def activate
+    unless Device.unscoped.where(mac_address: old_mac_address).exists?
+      update_attributes({mac_address: old_mac_address, old_mac_address: nil})
+    end
+  end
+
 
   def added_at
     created_at
