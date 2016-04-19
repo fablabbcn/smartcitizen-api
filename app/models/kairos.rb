@@ -99,7 +99,11 @@ class Kairos
 
     json['sample_size'] = j['sample_size']
 
-    readings = j['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, component.calibrated_value(r[1]) ]}
+    if params[:raw]
+      readings = j['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, r[1] ]}
+    else
+      readings = j['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, component.calibrated_value(r[1]) ]}
+    end
 
     if rollup_value.send(rollup_unit) >= 10.minutes && params[:all_intervals]
       # json['readings'] = readings
