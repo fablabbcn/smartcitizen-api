@@ -139,10 +139,18 @@ class RawStorer
     BackupReading.create(data: data, mac: mac, version: version, ip: ip, stored: success)
 
     if Rails.env.production? and device
-      Pusher.trigger('add', 'success', {
-        device_id: device.id,
-        success: success
-      })
+      begin
+        Redis.current.publish("data-received", {device_id: device.id}.to_json)
+      rescue
+      end
+
+      begin
+        Pusher.trigger('add', 'success', {
+          device_id: device.id,
+          success: success
+        })
+      rescue
+      end
     end
 
   end
