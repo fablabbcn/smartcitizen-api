@@ -11,8 +11,10 @@ class Device < ActiveRecord::Base
 
   include Workflow
   include ArchiveWorkflow
+  include PgSearch
 
-  # belongs_to :owner
+  multisearchable :against => [:name, :description, :city, :country_name], if: :active?
+
   belongs_to :kit
   belongs_to :owner, class_name: 'User'
 
@@ -21,23 +23,16 @@ class Device < ActiveRecord::Base
   has_many :components, as: :board
   has_many :sensors, through: :components
 
+  validate :banned_name
   validates_presence_of :name, :owner, on: :create
   validates_uniqueness_of :name, scope: :owner_id, on: :create
-  validate :banned_name
-  # validates_presence_of :mac_address, :name
-
   validates_uniqueness_of :mac_address, allow_nil: true, case_sensitive: false
-
   validates_format_of :mac_address,
     with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
 
-  include PgSearch
-  multisearchable :against => [:name, :description, :city, :country_name], if: :active?
-  #, associated_against: { owner: { :username }
-
+  before_save :set_elevation
   before_save :calculate_geohash
   after_validation :do_geocoding
-  # after_initialize :set_default_name
 
   store_accessor :location,
     :address,
@@ -56,9 +51,6 @@ class Device < ActiveRecord::Base
     :debug_push,
     :enclosure_type
 
-  before_save :set_elevation
-
-  # reverse_geocoded_by :latitude, :longitude
   reverse_geocoded_by :latitude, :longitude do |obj, results|
     if geo = results.first
       obj.address = geo.address
@@ -70,7 +62,6 @@ class Device < ActiveRecord::Base
       obj.country_code = geo.country_code
     end
   end
-  # these get overridden the device is a kit
 
   def find_component_by_sensor_id sensor_id
     components.where(sensor_id: sensor_id).first
@@ -116,8 +107,6 @@ class Device < ActiveRecord::Base
       self.kit_id = 3
     end
   end
-
-  # delegate :username, :to => :owner, :prefix => true
 
   def owner_username
     owner.username if owner
@@ -245,10 +234,6 @@ private
     end
   end
 
-  # def set_default_name
-  #   self.name ||= "My SCK"
-  # end
-
   def set_elevation
     begin
       if elevation.blank? and latitude.present? and longitude.present? and
@@ -267,19 +252,3 @@ private
   end
 
 end
-
-
-# REDIS
-# online_kits = [12,13,4,546,45,4564,46,75,68,97] - TTL 15 minutes?
-# online? - online_kits.include?(id)
-# offline? - !online_kits.include?(id)
-
-# exposure - indoor / outdoor
-# search by name, city & description
-# date range - granulation hour/day/week/month/year/lifetime
-# filter by:
-#   online
-#   offline
-#   kit type
-#   firmware version
-#   ...
