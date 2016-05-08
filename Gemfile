@@ -94,6 +94,7 @@ group :development do
   gem 'rubocop', require: false
   gem "parallel_tests"
   gem 'capistrano-rails'
+  gem "rails-erd"
 end
 
 group :development, :test do
