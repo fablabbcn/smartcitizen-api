@@ -10,15 +10,7 @@ class Device < ActiveRecord::Base
   default_scope { with_active_state.includes(:owner) }
 
   include Workflow
-  workflow do
-    state :active do
-      event :archive, :transitions_to => :archived
-    end
-    state :archived do
-      event :unarchive, :transitions_to => :active
-    end
-    after_transition { User.unscoped.find(owner_id).update_all_device_ids! }
-  end
+  include ArchiveWorkflow
 
   # belongs_to :owner
   belongs_to :kit
@@ -40,7 +32,7 @@ class Device < ActiveRecord::Base
     with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
 
   include PgSearch
-  multisearchable :against => [:name, :description, :city, :country_name]
+  multisearchable :against => [:name, :description, :city, :country_name], if: :active?
   #, associated_against: { owner: { :username }
 
   before_save :calculate_geohash
@@ -158,7 +150,6 @@ class Device < ActiveRecord::Base
       update_attributes({mac_address: old_mac_address, old_mac_address: nil})
     end
   end
-
 
   def added_at
     created_at

@@ -12,17 +12,10 @@ class User < ActiveRecord::Base
   default_scope { with_active_state }
 
   include Workflow
-  workflow do
-    state :active do
-      event :archive, :transitions_to => :archived
-    end
-    state :archived do
-      event :unarchive, :transitions_to => :active
-    end
-  end
+  include ArchiveWorkflow
 
   include PgSearch
-  multisearchable :against => [:username, :city, :country_name]
+  multisearchable :against => [:username, :city, :country_name], if: :active?
 
   extend FriendlyId
   friendly_id :username
