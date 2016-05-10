@@ -100,7 +100,7 @@ GEM
     c_geohash (1.1.2)
     cane (3.0.0)
       parallel
-    capistrano (3.4.1)
+    capistrano (3.4.0)
       i18n
       rake (>= 10.0.0)
       sshkit (~> 1.3)
@@ -628,6 +628,7 @@ DEPENDENCIES
   browser (= 1.0.1)
   c_geohash
   cane
+  capistrano (= 3.4.0)
   capistrano-rails
   capistrano-rbenv
   capistrano-sidekiq!

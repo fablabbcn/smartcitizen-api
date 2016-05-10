@@ -93,6 +93,7 @@ group :development do
   gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
   gem 'rubocop', require: false
   gem "parallel_tests"
+  gem 'capistrano', '3.4.0'
   gem 'capistrano-rails'
   gem "rails-erd"
 end
