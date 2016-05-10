@@ -18,7 +18,7 @@ gem 'minuteman', '~> 2'
 
 gem 'browser', '1.0.1'
 gem 'stamp'
-gem 'listen'
+gem 'listen', '~> 3.0.0'
 gem 'airbrake', '~> 4.3'
 gem 'premailer-rails'
 # gem 'statsample'
