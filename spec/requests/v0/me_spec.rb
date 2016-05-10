@@ -49,27 +49,6 @@ describe V0::MeController, type: :request do
       end
     end
 
-    describe "token auth" do
-      before(:each) { create(:api_token, owner: user) }
-
-      it "valid credentials" do
-        request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Token.encode_credentials(user.api_token))
-        expect(response.status).to eq(200)
-      end
-
-      it "invalid credentials" do
-        request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Token.encode_credentials('1234'))
-        expect(response.status).to eq(401)
-        expect(JSON.parse(response.body)["message"]).to eq("Invalid API Token")
-      end
-
-      it "(empty) invalid credentials" do
-        request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: "")
-        expect(response.status).to eq(401)
-        expect(JSON.parse(response.body)["message"]).to eq("Authorization required")
-      end
-    end
-
   end
 
   describe "GET /me" do

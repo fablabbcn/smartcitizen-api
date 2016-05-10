@@ -32,7 +32,6 @@ class User < ActiveRecord::Base
 
   has_many :devices, foreign_key: 'owner_id', after_add: :update_cached_device_ids!, after_remove: :update_cached_device_ids!
   has_many :sensors, through: :devices
-  has_many :api_tokens, foreign_key: 'owner_id'
   has_many :uploads
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
 
@@ -66,10 +65,6 @@ class User < ActiveRecord::Base
 
   def joined_at
     created_at
-  end
-
-  def api_token
-    api_tokens.last
   end
 
   def country

@@ -11,8 +11,6 @@ RSpec.describe User, :type => :model do
   it { is_expected.to validate_uniqueness_of(:username) }
   it { is_expected.to validate_length_of(:username).is_at_least(3).is_at_most(30) }
 
-
-  it { is_expected.to have_many(:api_tokens) }
   it { is_expected.to have_many(:oauth_applications) }
 
   it { is_expected.to have_many(:devices) }
@@ -53,12 +51,6 @@ RSpec.describe User, :type => :model do
     user = build(:user, username: "stupid guy")
     user.valid?
     expect(user.errors[:username]).to include('is reserved')
-  end
-
-  it "has api_token" do
-    old_token = create(:api_token, owner: user)
-    new_token = create(:api_token, owner: user)
-    expect(user.api_token).to eq(new_token)
   end
 
   skip "has name and to_s" do

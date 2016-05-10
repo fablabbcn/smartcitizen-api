@@ -14,7 +14,7 @@ module V0
     include ErrorHandlers
 
     respond_to :json
-    
+
     before_action :prepend_view_paths
     after_action :verify_authorized, except: :index
 
@@ -50,15 +50,6 @@ private
             else
               self.headers["WWW-Authenticate"] = %(Basic realm="Application", Token realm="Application")
               raise Smartcitizen::Unauthorized.new "Invalid Username/Password Combination"
-            end
-          end
-        elsif ActionController::HttpAuthentication::Token::token_and_options(request) # http token
-          authenticate_with_http_token do |token, options|
-            if token = ApiToken.find_by(token: token) and token.owner
-              @current_user = token.owner
-            else
-              self.headers["WWW-Authenticate"] = %(Basic realm="Application", Token realm="Application")
-              raise Smartcitizen::Unauthorized.new "Invalid API Token"
             end
           end
         end
