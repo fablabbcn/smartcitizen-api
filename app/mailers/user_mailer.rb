@@ -1,4 +1,3 @@
-
 require 'fog'
 
 class UserMailer < ApplicationMailer
@@ -14,6 +13,7 @@ class UserMailer < ApplicationMailer
   end
 
   def device_archive device_id, user_id
+    # needs to be extracted out of here!
     @device = Device.find(device_id)
     @user = User.find(user_id)
 

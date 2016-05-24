@@ -1,6 +1,3 @@
-# require 'error_handlers'
-# require 'pretty_json'
-
 module V0
   class ApplicationController < ActionController::API
 
