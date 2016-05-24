@@ -2,25 +2,37 @@ module V0
   class DevicesController < ApplicationController
 
     before_action :check_if_authorized!, only: [:create]
-    after_action :verify_authorized, except: [:index, :world_map, :fresh_world_map]
+    after_action :verify_authorized,
+      except: [:index, :world_map, :fresh_world_map]
 
     def show
-      @device = Device.unscoped.includes(:kit, :owner, :sensors,:tags).find(params[:id])
+      @device = Device.unscoped.includes(
+        :kit, :owner, :sensors,:tags).find(params[:id])
       authorize @device
       @device
     end
 
     def index
-      @q = Device.includes(:kit, :sensors, :components, :owner, :tags).ransack(params[:q])
+      @q = Device.includes(
+        :kit, :sensors, :components, :owner, :tags).ransack(params[:q])
+
       if params[:with_tags]
-        @q = Device.with_user_tags(params[:with_tags]).includes(:kit, :sensors, :components, :owner,:tags).ransack(params[:q])
+        @q = Device.with_user_tags(
+          params[:with_tags]).includes(
+            :kit, :sensors, :components, :owner,:tags).ransack(params[:q])
       end
+
       @devices = @q.result(distinct: true)
+
       if params[:near]
         if params[:near] =~ /\A(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)\z/
-          @devices = @devices.near(params[:near].split(','), (params[:within] || 1000))
+          @devices = @devices.near(
+            params[:near].split(','), (params[:within] || 1000))
         else
-          return render json: { id: "bad_request", message: "Malformed near parameter", url: 'https://fablabbcn.github.io/smartcitizen-api-docs/#get-all-devices', errors: nil }, status: :bad_request
+          return render json: { id: "bad_request",
+            message: "Malformed near parameter",
+            url: 'https://fablabbcn.github.io/smartcitizen-api-docs/#get-all-devices',
+            errors: nil }, status: :bad_request
         end
       end
 
