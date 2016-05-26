@@ -6,48 +6,6 @@ class RawStorer
 
   attr_accessor :sensors
 
-  def bat i, v
-    return i/10.0
-  end
-
-  def co i, v
-    return i/1000.0
-  end
-
-  def light i, v
-    return i/10.0
-  end
-
-  def nets i, v
-    return i
-  end
-
-  def no2 i, v
-    return i/1000.0
-  end
-
-  def noise i, v
-    return i
-  end
-
-  def panel i, v
-    return i/1000.0
-  end
-
-  def hum i, v
-    if v.to_s == "1.0"
-      i = i/10.0
-    end
-    return i
-  end
-
-  def temp i, v
-    if v.to_s == "1.0"
-      i = i/10.0
-    end
-    return i
-  end
-
   def initialize data, mac, version, ip
 
     success = true
@@ -83,8 +41,7 @@ class RawStorer
       data.select{ |k,v| keys.include?(k.to_s) }.each do |sensor, value|
         metric = sensor
 
-        value = method(sensor).call( (Float(value) rescue value), device.kit_version)
-        # value = Calibrator.send(sensor, (Float(value) rescue value), device.kit_version)
+        value = Calibrator.send(sensor, (Float(value) rescue value), device.kit_version)
 
         # puts "\t#{metric} #{ts} #{value} device=#{device.id} identifier=#{identifier}"
 
