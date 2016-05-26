@@ -100,8 +100,9 @@ class RawStorer
     BackupReading.create(data: data, mac: mac, version: version, ip: ip, stored: success)
 
     if Rails.env.production? and device
+
       begin
-        Redis.current.publish("data-received", {device_id: device.id}.to_json)
+        Redis.current.publish("data-received", {device_id: device.id, device: device.to_json(only: [:name, :location]) }.to_json)
       rescue
       end
 
@@ -112,6 +113,7 @@ class RawStorer
         })
       rescue
       end
+
     end
 
   end

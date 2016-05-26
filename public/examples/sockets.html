@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style type="text/css">
+    .device-id {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<table id="table"></table>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-rc1/jquery.slim.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    var socket = io.connect('ws://178.79.183.198:8000');
+    socket.on('welcome', function(data) {
+      console.log(data);
+    });
+    socket.on('data-received', function(data) {
+      // console.log(data.device_id);
+      console.log(data.device);
+      var timestamp = new Date().toLocaleTimeString();
+      $('#table').prepend("<tr><td class='device-id'>" + data.device_id.toString() + "</td><td>" + timestamp );
+    });
+  });
+</script>
+
+</body>
+</html>
