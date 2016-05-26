@@ -36,7 +36,7 @@ Rails.application.routes.draw do
     match "datetime" => "readings#datetime", via: [:get, :post, :patch, :put]
 
     resources :sensors, except: [:destroy]
-    resources :components, only: :index
+    resources :components, only: [:show, :index]
     resources :sessions, only: :create
 
     resources :uploads, path: 'avatars' do

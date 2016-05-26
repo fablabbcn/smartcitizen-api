@@ -1,0 +1,2 @@
+class ComponentPolicy < AdminPolicy
+end

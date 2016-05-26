@@ -6,5 +6,21 @@ module V0
       @components = paginate(@components)
     end
 
+    def show
+      @component = Component.includes(:board, :sensor).find(params[:id])
+      authorize @component
+    end
+
+private
+
+    def component_params
+      params.permit(
+        :board_id,
+        :board_type,
+        :sensor_id,
+        :equation
+      )
+    end
+
   end
 end
