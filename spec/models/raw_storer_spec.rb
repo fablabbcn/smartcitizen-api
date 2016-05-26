@@ -6,12 +6,6 @@ end
 
 RSpec.describe RawStorer, :type => :model do
 
-  let(:time) { 1.day.ago }
-
-  let(:json) {
-    {"co": "118439", "bat": "1000", "hum": "21592", "no2": "260941", "nets": "17", "temp": "25768", "light": "509", "noise": "0", "panel": "0", "timestamp": to_ts(1.day.ago) }
-  }
-
   before(:all) do
     # yeah, this will be removed soon..
 
@@ -61,6 +55,10 @@ RSpec.describe RawStorer, :type => :model do
   after(:all) do
     DatabaseCleaner.clean_with(:truncation)
   end
+
+  let(:json) {
+    {"co": "118439", "bat": "1000", "hum": "21592", "no2": "260941", "nets": "17", "temp": "25768", "light": "509", "noise": "0", "panel": "0", "timestamp": to_ts(1.day.ago) }
+  }
 
   let(:device) { create(:device, kit: Kit.last) }
 
