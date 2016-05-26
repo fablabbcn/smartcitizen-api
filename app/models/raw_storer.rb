@@ -69,8 +69,10 @@ class RawStorer
         device.save validate: false
       end
 
-      parsed_ts = Time.parse(data['timestamp'])
-      raise "timestamp error" if parsed_ts > 1.hour.from_now or parsed_ts < 3.years.ago
+      ts = data['timestamp'] || data[:timestamp]
+      parsed_ts = Time.parse(ts)
+
+      raise "timestamp error" if parsed_ts > 1.day.from_now or parsed_ts < 3.years.ago
       ts = parsed_ts.to_i * 1000
 
       _data = []
@@ -82,11 +84,13 @@ class RawStorer
         metric = sensor
 
         value = method(sensor).call( (Float(value) rescue value), device.kit_version)
+        # value = Calibrator.send(sensor, (Float(value) rescue value), device.kit_version)
 
         # puts "\t#{metric} #{ts} #{value} device=#{device.id} identifier=#{identifier}"
 
         metric_id = device.find_sensor_id_by_key(metric)
         component = device.components.detect{|c|c["sensor_id"] == metric_id} #find_component_by_sensor_id(metric_id)
+
         sql_data["#{metric_id}_raw"] = value
         sql_data[metric_id] = component.calibrated_value(value)
 
