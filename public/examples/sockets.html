@@ -3,13 +3,52 @@
 <head>
   <title></title>
   <style type="text/css">
+    * {
+      font-family: Helvetica, Arial, sans;
+    }
     .device-id {
       font-weight: bold;
+    }
+    td {
+      padding: 4px;
+    }
+    tr:nth-child(even) {
+      background: #eee;
+    }
+    td:nth-child(even) {
+      background: #e5e5e5;
+    }
+    tr:nth-child(even) td:nth-child(even) {
+      background: #d5d5d5;
+    }
+    table,tr,td {
+      border-collapse: collapse;
+    }
+    thead td {
+      border-bottom: 1px solid #555;
     }
   </style>
 </head>
 <body>
-<table id="table"></table>
+<table id="table">
+  <thead>
+    <tr>
+      <td>ok?</td>
+      <td>Device ID</td>
+      <td>temp</td>
+      <td>bat</td>
+      <td>co</td>
+      <td>hum</td>
+      <td>light</td>
+      <td>nets</td>
+      <td>no2</td>
+      <td>noise</td>
+      <td>panel</td>
+      <td>timestamp</td>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-rc1/jquery.slim.min.js"></script>
@@ -20,13 +59,33 @@
       console.log(data);
     });
     socket.on('data-received', function(data) {
-      // console.log(data.device_id);
-      console.log(data.device);
+      // console.log(data);
       var timestamp = new Date().toLocaleTimeString();
-      $('#table').prepend("<tr><td class='device-id'>" + data.device_id.toString() + "</td><td>" + timestamp );
+      $('#table tbody:first').prepend(
+          "<tr><td>" +
+          data.stored.toString() + "</td><td class='device-id'>" +
+          data.device_id.toString() + "</td><td>" +
+          data.readings.temp[2].toFixed(2) + "</td><td>" +
+          data.readings.bat[2].toFixed(2) + "</td><td>" +
+          data.readings.co[2].toFixed(2) + "</td><td>" +
+          data.readings.hum[2].toFixed(2) + "</td><td>" +
+          data.readings.light[2].toFixed(2) + "</td><td>" +
+          data.readings.nets[2] + "</td><td>" +
+          data.readings.no2[2].toFixed(2) + "</td><td>" +
+          data.readings.noise[2].toFixed(2) + "</td><td>" +
+          data.readings.panel[2].toFixed(2) + "</td><td>" +
+          new Date(data.timestamp).toLocaleTimeString());
     });
   });
 </script>
-
+<!--
+Redis.current.publish("data-received", {
+  device_id: device.id,
+  device: device.to_json(only: [:id, :name, :location]),
+  timestamp: ts,
+  readings: readings,
+  stored: success
+}.to_json)
+ -->
 </body>
 </html>
