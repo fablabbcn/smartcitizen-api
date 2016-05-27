@@ -12,6 +12,7 @@ class RawStorer
 
     begin
 
+      readings = {}
       keys = %w(temp bat co hum light nets no2 noise panel)
 
       mac = mac.downcase.strip
@@ -60,6 +61,8 @@ class RawStorer
             identifier: "sck#{identifier}"
           }
         })
+
+        readings[sensor] = [metric_id, value, sql_data[metric_id]]
       end
 
       Kairos.http_post_to("/datapoints", _data)
@@ -102,7 +105,13 @@ class RawStorer
     if Rails.env.production? and device
 
       begin
-        Redis.current.publish("data-received", {device_id: device.id, device: device.to_json(only: [:name, :location]) }.to_json)
+        Redis.current.publish("data-received", {
+          device_id: device.id,
+          device: device.to_json(only: [:id, :name, :location]),
+          timestamp: ts,
+          readings: readings,
+          stored: success
+        }.to_json)
       rescue
       end
 
