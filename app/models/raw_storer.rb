@@ -4,8 +4,6 @@
 
 class RawStorer
 
-  attr_accessor :sensors
-
   def initialize data, mac, version, ip
 
     success = true
