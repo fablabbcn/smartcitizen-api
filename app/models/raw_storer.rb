@@ -108,7 +108,9 @@ class RawStorer
           device: device.to_json(only: [:id, :name, :location]),
           timestamp: ts,
           readings: readings,
-          stored: success
+          stored: success,
+          data: ActionController::Base.new.view_context.render(
+            partial: "v0/devices/device", locals: {device: device, current_user: nil})
         }.to_json)
       rescue
       end
