@@ -14,7 +14,6 @@ describe V0::SensorsController do
       sensor = create(:sensor)
       json = api_get "sensors/#{sensor.id}"
       expect(response.status).to eq(200)
-      # expect(json.as_json).to eq(SensorSerializer.new(sensor).as_json)
     end
   end
 
