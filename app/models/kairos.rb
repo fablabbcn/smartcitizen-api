@@ -148,11 +148,6 @@ class Kairos
     end
   end
 
-  def self.create_from_api mac, data
-    # self.ingest(mac, data.except('timestamp'), extract_datetime(data['timestamp']))
-    Calibrator.new(self) if raw_data.present? and data.blank?
-  end
-
   def self.legacy_query params
     function = params[:function] || "avg"
 
