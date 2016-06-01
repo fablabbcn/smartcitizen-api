@@ -15,7 +15,7 @@ class Component < ActiveRecord::Base
     equation ? eval( ['->x{',equation,'}'].join ).call(x) : x
   end
 
-  def reverse_calibrated_value x
+  def normalized_value x
     reverse_equation ? eval( ['->x{',reverse_equation,'}'].join ).call(x) : x
   end
 

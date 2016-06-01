@@ -40,12 +40,14 @@ class RawStorer
       data.select{ |k,v| keys.include?(k.to_s) }.each do |sensor, value|
         metric = sensor
 
-        value = Calibrator.send(sensor, (Float(value) rescue value), device.kit_version)
-
         # puts "\t#{metric} #{ts} #{value} device=#{device.id} identifier=#{identifier}"
 
         metric_id = device.find_sensor_id_by_key(metric)
         component = device.components.detect{|c|c["sensor_id"] == metric_id} #find_component_by_sensor_id(metric_id)
+
+        value = component.normalized_value( (Float(value) rescue value) )
+        # value = Calibrator.send(sensor, (Float(value) rescue value), device.kit_version)
+        # p [value, value2]
 
         sql_data["#{metric_id}_raw"] = value
         sql_data[metric_id] = component.calibrated_value(value)
