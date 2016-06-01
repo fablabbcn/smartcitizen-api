@@ -51,6 +51,9 @@ class Device < ActiveRecord::Base
     :debug_push,
     :enclosure_type
 
+  alias_attribute :added_at, :created_at
+  alias_attribute :last_reading_at, :last_recorded_at
+
   reverse_geocoded_by :latitude, :longitude do |obj, results|
     if geo = results.first
       obj.address = geo.address

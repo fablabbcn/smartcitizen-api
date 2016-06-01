@@ -22,6 +22,20 @@ RSpec.describe Device, :type => :model do
     expect(device.errors[:name]).to include('is reserved')
   end
 
+  it "has last_reading_at" do
+    Timecop.freeze do
+      device = create(:device, last_recorded_at: 1.minute.ago)
+      expect(device.last_reading_at).to eq(1.minute.ago)
+    end
+  end
+
+  it "has added_at"do
+    Timecop.freeze do
+      expect(create(:device).added_at).to eq(Time.current.utc)
+    end
+  end
+
+
   it "validates format of mac address" do
     expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to_not raise_error
     expect{ create(:device, mac_address: 123) }.to raise_error#(ActiveRecord::RecordInvalid)
