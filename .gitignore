@@ -32,3 +32,4 @@ spec/vcr_cassettes
 README.rdoc
 doc/app
 CLEANING.rb
+.tags*
