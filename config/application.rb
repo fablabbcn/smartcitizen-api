@@ -64,7 +64,7 @@ module Smartcitizen
     # gzip
     # config.middleware.use Rack::Deflater
 
-    config.autoload_paths += %W(#{config.root}/lib app/models/concerns)
+    config.autoload_paths += %W(#{config.root}/lib app/models/concerns app/models/legacy)
 
     config.banned_words = YAML.load_file("#{Rails.root}/config/banned_words.yml").map(&:values).flatten
 
