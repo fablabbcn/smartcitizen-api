@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160411194100) do
+ActiveRecord::Schema.define(version: 20160601120221) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,10 +56,11 @@ ActiveRecord::Schema.define(version: 20160411194100) do
     t.integer  "board_id"
     t.string   "board_type"
     t.integer  "sensor_id"
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
-    t.uuid     "uuid",       default: "uuid_generate_v4()"
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+    t.uuid     "uuid",             default: "uuid_generate_v4()"
     t.text     "equation"
+    t.text     "reverse_equation"
   end
 
   add_index "components", ["board_type", "board_id"], name: "index_components_on_board_type_and_board_id", using: :btree

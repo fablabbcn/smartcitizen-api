@@ -12,8 +12,11 @@ class Component < ActiveRecord::Base
   # Params:
   # +x+:: raw sensor value
   def calibrated_value x
-    return x unless equation
-    eval( ['->x{',equation,'}'].join ).call(x)
+    equation ? eval( ['->x{',equation,'}'].join ).call(x) : x
+  end
+
+  def reverse_calibrated_value x
+    reverse_equation ? eval( ['->x{',reverse_equation,'}'].join ).call(x) : x
   end
 
 end
