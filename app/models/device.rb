@@ -65,6 +65,11 @@ class Device < ActiveRecord::Base
     end
   end
 
+  def sensor_keys
+    # will be changed when different kinds of device added
+    %w(temp bat co hum light nets no2 noise panel)
+  end
+
   def find_component_by_sensor_id sensor_id
     components.where(sensor_id: sensor_id).first
   end
@@ -202,6 +207,15 @@ class Device < ActiveRecord::Base
       device.reverse_geocode
       device.save validate: false
       sleep(1)
+    end
+  end
+
+  def set_version_if_required! identifier
+    if identifier and (identifier == "1.1" or identifier == "1.0") # and !device.kit_id
+      if self.kit_version.blank? or self.kit_version != identifier
+        self.kit_version = identifier
+        self.save validate: false
+      end
     end
   end
 

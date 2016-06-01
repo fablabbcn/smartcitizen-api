@@ -11,33 +11,23 @@ class RawStorer
     begin
 
       readings = {}
-      keys = %w(temp bat co hum light nets no2 noise panel)
 
       mac = mac.downcase.strip
       device = Device.includes(:components).where(mac_address: mac).last
 
-      # version is not always present
-      # undefined method `split' for nil:NilClass
       identifier = version.split('-').first
 
-      # temporary fix for device 1000008
-      if identifier and (identifier == "1.1" or identifier == "1.0") # and !device.kit_id
-        device.kit_version = identifier
-        device.save validate: false
-      end
+      device.set_version_if_required!(identifier)
 
       ts = data['timestamp'] || data[:timestamp]
       parsed_ts = Time.parse(ts)
-
       raise "timestamp error" if parsed_ts > 1.day.from_now or parsed_ts < 3.years.ago
       ts = parsed_ts.to_i * 1000
 
       _data = []
       sql_data = {"" => parsed_ts}
 
-      # puts data.to_json
-
-      data.select{ |k,v| keys.include?(k.to_s) }.each do |sensor, value|
+      data.select{ |k,v| device.sensor_keys.include?(k.to_s) }.each do |sensor, value|
         metric = sensor
 
         metric_id = device.find_sensor_id_by_key(metric)
@@ -73,8 +63,6 @@ class RawStorer
         end
       end
 
-      # $analytics.track("readings:create", device.id)
-      # Minuteman.track("readings:create", device)
       Minuteman.add("good_readings")
 
     rescue Exception => e
@@ -91,7 +79,6 @@ class RawStorer
         timestamp: (parsed_ts rescue nil),
         backtrace: (e.backtrace rescue nil)
       })
-      # Airbrake.notify(e)
 
       Minuteman.add("bad_readings")
 
@@ -100,7 +87,6 @@ class RawStorer
     BackupReading.create(data: data, mac: mac, version: version, ip: ip, stored: success)
 
     if Rails.env.production? and device
-
       begin
         Redis.current.publish("data-received", {
           device_id: device.id,
@@ -113,7 +99,6 @@ class RawStorer
         }.to_json)
       rescue
       end
-
     end
 
   end
