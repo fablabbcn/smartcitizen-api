@@ -12,6 +12,7 @@ class Device < ActiveRecord::Base
   include Workflow
   include ArchiveWorkflow
   include PgSearch
+  include CountryMethods
 
   multisearchable :against => [:name, :description, :city, :country_name], if: :active?
 
@@ -40,7 +41,6 @@ class Device < ActiveRecord::Base
     :postal_code,
     :state,
     :state_code,
-    :country,
     :country_code
 
   store_accessor :meta,
@@ -61,7 +61,6 @@ class Device < ActiveRecord::Base
       obj.postal_code = geo.postal_code
       obj.state = geo.state
       obj.state_code = geo.state_code
-      obj.country = geo.country
       obj.country_code = geo.country_code
     end
   end
@@ -115,12 +114,6 @@ class Device < ActiveRecord::Base
     owner.username if owner
   end
 
-  def country_name
-    if country_code =~ /\w{2}/
-      ISO3166::Country.new(country_code).name
-    end
-  end
-
   def system_tags
     [
       exposure, # indoor / outdoor
@@ -141,14 +134,6 @@ class Device < ActiveRecord::Base
     unless Device.unscoped.where(mac_address: old_mac_address).exists?
       update_attributes({mac_address: old_mac_address, old_mac_address: nil})
     end
-  end
-
-  def added_at
-    created_at
-  end
-
-  def last_reading_at
-    last_recorded_at
   end
 
   def firmware
@@ -193,7 +178,7 @@ class Device < ActiveRecord::Base
         geohash: geohash,
         city: city,
         country_code: country_code,
-        country: country
+        country: country_name
       },
       sensors: []
     }

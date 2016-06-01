@@ -43,6 +43,7 @@ RSpec.describe User, :type => :model do
   it "has a location" do
     user = create(:user, country_code: 'es', city: 'Barcelona')
     expect(user.country.to_s).to eq("Spain")
+    expect(user.country_name).to eq("Spain")
     expect(user.city).to eq("Barcelona")
   end
 

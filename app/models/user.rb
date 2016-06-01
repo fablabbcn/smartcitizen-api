@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
 
   include Workflow
   include ArchiveWorkflow
+  include CountryMethods
 
   include PgSearch
   multisearchable :against => [:username, :city, :country_name], if: :active?
@@ -63,14 +64,6 @@ class User < ActiveRecord::Base
     access_token.expires_in = 2.days.from_now
     access_token.save
     access_token
-  end
-
-  def country
-    ISO3166::Country[country_code] if country_code
-  end
-
-  def country_name
-    country ? country.to_s : nil
   end
 
   def to_email_s

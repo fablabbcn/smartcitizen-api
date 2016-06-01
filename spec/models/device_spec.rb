@@ -121,6 +121,7 @@ RSpec.describe Device, :type => :model do
         city: 'paris',
         country_code: 'FR'
       )
+
       expect(PgSearch.multisearch('test')).to be_empty
       %w(awesome amazing paris France).each do |search_term|
         result = PgSearch.multisearch(search_term)
@@ -136,7 +137,8 @@ RSpec.describe Device, :type => :model do
     it "reverse geocodes on create" do
       berlin = create(:device, latitude: 52.4850463, longitude: 13.489651)
       expect(berlin.city).to eq("Berlin")
-      expect(berlin.country).to eq("Germany")
+      expect(berlin.country.to_s).to eq("Germany")
+      expect(berlin.country_name).to eq("Germany")
       expect(berlin.country_code).to eq("DE")
     end
 
