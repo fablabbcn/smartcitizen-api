@@ -8,7 +8,6 @@ gem 'pg'
 gem 'redis'#, '3.0.7'
 
 gem 'rack-timeout'
-# gem 'rack-attack' API Rate Limiting
 gem 'rack-cors', require: 'rack/cors'
 gem 'rack-contrib'
 gem 'rack-cache'
