@@ -90,12 +90,11 @@ class RawStorer
       begin
         Redis.current.publish("data-received", {
           device_id: device.id,
-          device: device.to_json(only: [:id, :name, :location]),
+          device: JSON.parse(device.to_json(only: [:id, :name, :location])),
           timestamp: ts,
           readings: readings,
           stored: success,
-          data: ActionController::Base.new.view_context.render(
-            partial: "v0/devices/device", locals: {device: device, current_user: nil})
+          data: JSON.parse(ActionController::Base.new.view_context.render( partial: "v0/devices/device", locals: {device: device, current_user: nil}))
         }.to_json)
       rescue
       end
