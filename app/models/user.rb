@@ -37,6 +37,8 @@ class User < ActiveRecord::Base
 
   before_create :generate_legacy_api_key
 
+  alias_attribute :joined_at, :created_at
+
   def archive
     devices.map{ |d| d.archive! rescue nil }
   end
@@ -61,10 +63,6 @@ class User < ActiveRecord::Base
     access_token.expires_in = 2.days.from_now
     access_token.save
     access_token
-  end
-
-  def joined_at
-    created_at
   end
 
   def country
