@@ -114,14 +114,6 @@ class RawStorer
       rescue
       end
 
-      begin
-        Pusher.trigger('add', 'success', {
-          device_id: device.id,
-          success: success
-        })
-      rescue
-      end
-
     end
 
   end
