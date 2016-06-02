@@ -27,10 +27,11 @@ class Device < ActiveRecord::Base
   validate :banned_name
   validates_presence_of :name, :owner, on: :create
   validates_uniqueness_of :name, scope: :owner_id, on: :create
-  validates_uniqueness_of :mac_address, allow_nil: true, case_sensitive: false
+
   validates_format_of :mac_address,
     with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
 
+  before_save :nullify_other_mac_addresses, if: :mac_address
   before_save :set_elevation
   before_save :calculate_geohash
   after_validation :do_geocoding
@@ -219,6 +220,10 @@ class Device < ActiveRecord::Base
     end
   end
 
+  def remove_mac_address_for_newly_registered_device!
+    update_attributes(old_mac_address: mac_address, mac_address: nil)
+  end
+
 private
 
   def calculate_geohash
@@ -251,6 +256,12 @@ private
 
   def do_geocoding
     reverse_geocode if city.blank? and (latitude_changed? or longitude_changed?)
+  end
+
+  def nullify_other_mac_addresses
+    if mac_address_changed?
+      Device.unscoped.where(mac_address: mac_address).map(&:remove_mac_address_for_newly_registered_device!)
+    end
   end
 
 end

@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Device, :type => :model do
 
-  let(:device) { create(:device) }
+  let(:mac_address) { "10:9a:dd:63:c0:10" }
+  let(:device) { create(:device, mac_address: mac_address) }
 
   it { is_expected.to belong_to(:kit) }
   it { is_expected.to belong_to(:owner) }
@@ -35,31 +36,47 @@ RSpec.describe Device, :type => :model do
     end
   end
 
-
-  it "validates format of mac address" do
+  it "validates format of mac address, but allows nil" do
     expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to_not raise_error
+    expect{ create(:device, mac_address: nil) }.to_not raise_error
     expect{ create(:device, mac_address: 123) }.to raise_error#(ActiveRecord::RecordInvalid)
   end
 
-  it "validates uniqueness of mac address on create" do
-    create(:device, mac_address: '10:9A:DD:63:C0:10', owner: create(:user))
-    expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to raise_error(ActiveRecord::RecordInvalid)
-    # different case
-    expect{ create(:device, mac_address: '10:9a:dd:63:c0:10') }.to raise_error(ActiveRecord::RecordInvalid)
-  end
+  describe "mac_address" do
 
-  it "can find device with upper or lowercase mac_address" do
-    device = create(:device, mac_address: '10:9A:DD:63:C0:10')
-    expect(Device.where(mac_address: '10:9A:DD:63:C0:10' )).to eq([device])
-    expect(Device.where(mac_address: '10:9a:dd:63:c0:10' )).to eq([device])
-  end
+    it "takes mac_address from existing device on update" do
+      device = FactoryGirl.create(:device, mac_address: mac_address)
+      new_device = FactoryGirl.create(:device)
+      new_device.update_attribute(:mac_address, mac_address)
+      expect(new_device.mac_address).to eq(mac_address)
+      expect(new_device).to be_valid
+      device.reload
+      expect(device.mac_address).to be_blank
+      # should be checking the following instead
+      # expect(device).to receive(:remove_mac_address_for_newly_registered_device!)
+    end
 
-  it "validates uniqueness of mac address on update" do
-    d1 = create(:device, mac_address: '10:9A:DD:63:C0:10')
-    d2 = create(:device, mac_address: '10:9A:DD:63:C0:11')
-    d2.mac_address = '10:9A:DD:63:C0:10'
-    d2.valid?
-    expect(d2.errors[:mac_address].to_s).to match("already been taken")
+    it "takes mac_address from existing device on create" do
+      device = FactoryGirl.create(:device, mac_address: mac_address)
+      new_device = FactoryGirl.create(:device, mac_address: mac_address)
+      expect(new_device.mac_address).to eq(mac_address)
+      expect(new_device).to be_valid
+      device.reload
+      expect(device.mac_address).to be_blank
+    end
+
+    it "has remove_mac_address_for_newly_registered_device!" do
+      device = create(:device, mac_address: mac_address, old_mac_address: nil)
+      device.remove_mac_address_for_newly_registered_device!
+      expect(device.mac_address).to be_blank
+      expect(device.old_mac_address).to eq(mac_address)
+    end
+
+    it "can find device with upper or lowercase mac_address" do
+      expect(Device.where(mac_address: mac_address.upcase )).to eq([device])
+      expect(Device.where(mac_address: mac_address.downcase )).to eq([device])
+    end
+
   end
 
   describe "states" do
@@ -75,17 +92,18 @@ RSpec.describe Device, :type => :model do
     end
 
     it "can be archived" do
-      device = create(:device, mac_address: '10:9a:dd:63:c0:10')
+      device = create(:device, mac_address: mac_address)
       expect(device.old_mac_address).to be_blank
       device.archive!
       device.reload
       expect(device.workflow_state).to eq('archived')
       expect(device.mac_address).to be_blank
-      expect(device.old_mac_address).to eq('10:9a:dd:63:c0:10')
+      puts device.old_mac_address
+      expect(device.old_mac_address).to eq(mac_address)
     end
 
     it "can be unarchived from archive state" do
-      device = create(:device, mac_address: '10:9a:dd:63:c0:10')
+      device = create(:device, mac_address: mac_address)
       device.archive!
       device.unarchive!
       device.reload
@@ -93,7 +111,7 @@ RSpec.describe Device, :type => :model do
     end
 
     it "reassigns old_mac_address when unarchived" do
-      device = create(:device, mac_address: '10:9a:dd:63:c0:10')
+      device = create(:device, mac_address: mac_address)
       device.archive!
       device.unarchive!
       device.reload
@@ -101,9 +119,9 @@ RSpec.describe Device, :type => :model do
     end
 
     it "doesn't reassign old_mac_address if another device exists with that mac address" do
-      device = create(:device, mac_address: '10:9a:dd:63:c0:10')
+      device = create(:device, mac_address: mac_address)
       device.archive!
-      device2 = create(:device, mac_address: '10:9a:dd:63:c0:10')
+      device2 = create(:device, mac_address: mac_address)
       device.unarchive!
       device.reload
       expect(device.mac_address).to be_blank
