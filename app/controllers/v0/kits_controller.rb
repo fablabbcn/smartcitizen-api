@@ -12,6 +12,16 @@ module V0
       @kits = paginate(@kits)
     end
 
+    def create
+      @kit = Kit.new(kit_params)
+      authorize @kit
+      if @kit.save
+        render :show, status: :created
+      else
+        raise Smartcitizen::UnprocessableEntity.new @kit.errors
+      end
+    end
+
     def update
       @kit = Kit.find(params[:id])
       authorize @kit

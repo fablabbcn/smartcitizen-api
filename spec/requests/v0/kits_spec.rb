@@ -39,6 +39,28 @@ describe V0::KitsController do
     end
   end
 
+  describe "POST /kits" do
+
+    it "creates a kit" do
+      j = api_post 'kits', {
+        name: 'new kit',
+        description: 'blah blah blah',
+        access_token: admin_token.token
+      }
+      expect(j['name']).to eq('new kit')
+      expect(response.status).to eq(201)
+    end
+
+    it "does not create a kit with missing parameters" do
+      j = api_post 'kits', {
+        access_token: admin_token.token
+      }
+      expect(j['id']).to eq('unprocessable_entity')
+      expect(response.status).to eq(422)
+    end
+
+  end
+
   describe "PUT /kits/:id" do
 
     let!(:kit) { create :kit }
