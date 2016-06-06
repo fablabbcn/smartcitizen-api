@@ -39,7 +39,8 @@ private
         :name,
         :description,
         :slug,
-        :sensor_map
+        :sensor_map,
+        :sensor_ids => []
       )
     end
 
