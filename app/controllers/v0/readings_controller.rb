@@ -52,7 +52,7 @@ module V0
       rescue Exception => e
         notify_airbrake(e)
       end
-      render json: Time.current.utc.strftime("UTC:%Y,%-m,%-d,%H,%M,%S#") # render time for SCK to sync clock
+      datetime
     end
 
     def datetime
