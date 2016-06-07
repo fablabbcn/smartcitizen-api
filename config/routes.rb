@@ -24,7 +24,7 @@ Rails.application.routes.draw do
     # devices
     resources :devices do
       member do
-        resources :readings, only: :index do
+        resources :readings, only: [:index, :create] do
           get 'csv_archive', on: :collection
         end
       end
@@ -32,7 +32,7 @@ Rails.application.routes.draw do
       get 'fresh_world_map', on: :collection
     end
     # readings
-    match "add" => "readings#create", via: [:get, :post, :patch, :put]
+    match "add" => "readings#legacy_create", via: [:get, :post, :patch, :put]
     match "datetime" => "readings#datetime", via: [:get, :post, :patch, :put]
 
     resources :sensors, except: [:destroy]

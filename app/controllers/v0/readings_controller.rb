@@ -4,7 +4,7 @@ require 'uri'
 module V0
   class ReadingsController < ApplicationController
 
-    skip_after_action :verify_authorized
+    skip_after_action :verify_authorized, except: :create
 
     def index
       check_missing_params("rollup", "sensor_key||sensor_id") # sensor_key or sensor_id
@@ -12,6 +12,25 @@ module V0
     end
 
     def create
+      check_missing_params("data")
+      @device = Device.find(params[:id])
+      authorize @device
+      begin
+        params[:data].each do |reading|
+          puts reading
+          # Reading.create(
+          #   kit_id: kit,
+          #   recorded_at: Time.now,
+          #   sensors: [{id:1,value:2}]
+          # )
+        end
+        render json: { id: "ok", message: "Data successfully added to ingestion queue", url: nil, errors: nil }, status: :ok
+      rescue
+        raise Smartcitizen::UnprocessableEntity.new "Problem(s) with the data"
+      end
+    end
+
+    def legacy_create
       begin
         JSON.parse(request.headers['X-SmartCitizenData']).each do |raw_reading|
           begin
