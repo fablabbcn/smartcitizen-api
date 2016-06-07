@@ -33,7 +33,7 @@ describe V0::DevicesController do
         second = create(:device, data: { "": Time.now })
         json = api_get "devices/world_map"
         expect(response.status).to eq(200)
-        expect(json.map{|j| j['id']}).to eq([second, first].map(&:id))
+        expect(json.map{|j| j['id']}).to eq([first, second].map(&:id))
       end
 
       skip "needs more specs"
@@ -199,4 +199,25 @@ describe V0::DevicesController do
 
   end
 
+  describe "states" do
+
+    before(:all) do
+      @not_configured = create(:device, mac_address: nil)
+      @never_published = create(:device, mac_address: '2a:f3:e6:d9:76:84')
+      @has_published = create(:device, mac_address: '2a:f3:e6:d9:76:86', data: {'a': 'b'})
+    end
+
+    after(:all) do
+      DatabaseCleaner.clean_with(:truncation)
+    end
+
+    %w(not_configured never_published has_published).each do |state|
+      it "filters by q[state_eq] #{state}" do
+        json = api_get "devices?q[state_eq]=#{state}"
+        expect(response.status).to eq(200)
+        expect(json.map{|j| j['id']}).to eq([ instance_variable_get("@#{state}") ].map(&:id))
+      end
+    end
+
+  end
 end

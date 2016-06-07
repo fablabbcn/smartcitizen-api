@@ -40,7 +40,7 @@ class Device < ActiveRecord::Base
     :address,
     :city,
     :postal_code,
-    :state,
+    :state_name,
     :state_code,
     :country_code
 
@@ -55,12 +55,14 @@ class Device < ActiveRecord::Base
   alias_attribute :added_at, :created_at
   alias_attribute :last_reading_at, :last_recorded_at
 
+  before_save :set_state
+
   reverse_geocoded_by :latitude, :longitude do |obj, results|
     if geo = results.first
       obj.address = geo.address
       obj.city = geo.city
       obj.postal_code = geo.postal_code
-      obj.state = geo.state
+      obj.state_name = geo.state
       obj.state_code = geo.state_code
       obj.country_code = geo.country_code
     end
@@ -160,7 +162,7 @@ class Device < ActiveRecord::Base
     data.present? ? state : 'new'
   end
 
-  def state
+  def soft_state
     if data.present?
       'has_published'
     elsif mac_address.present?
@@ -224,44 +226,48 @@ class Device < ActiveRecord::Base
     update_attributes(old_mac_address: mac_address, mac_address: nil)
   end
 
-private
+  private
 
-  def calculate_geohash
-    # include ActiveModel::Dirty
-    # if latitude.changed? or longitude.changed?
-    if latitude.is_a?(Float) and longitude.is_a?(Float)
-      self.geohash = GeoHash.encode(latitude, longitude)
+    def set_state
+      self.state = self.soft_state
     end
-  end
 
-  def banned_name
-    if name.present? and (Smartcitizen::Application.config.banned_words.include? name.downcase)
-      # name.split.map(&:downcase).map(&:strip)).any?
-      errors.add(:name, "is reserved")
-    end
-  end
-
-  def set_elevation
-    begin
-      if elevation.blank? and latitude.present? and longitude.present? and
-        (latitude_changed? or longitude_changed?)
-          url = "https://maps.googleapis.com/maps/api/elevation/json?locations=#{latitude},#{longitude}&key=#{ENV['google_api_key']}"
-          response = open(url).read
-        self.elevation = JSON.parse(response)['results'][0]['elevation'].to_i
+    def calculate_geohash
+      # include ActiveModel::Dirty
+      # if latitude.changed? or longitude.changed?
+      if latitude.is_a?(Float) and longitude.is_a?(Float)
+        self.geohash = GeoHash.encode(latitude, longitude)
       end
-    rescue Exception => e
-      # notify_airbrake(e)
     end
-  end
 
-  def do_geocoding
-    reverse_geocode if city.blank? and (latitude_changed? or longitude_changed?)
-  end
-
-  def nullify_other_mac_addresses
-    if mac_address_changed?
-      Device.unscoped.where(mac_address: mac_address).map(&:remove_mac_address_for_newly_registered_device!)
+    def banned_name
+      if name.present? and (Smartcitizen::Application.config.banned_words.include? name.downcase)
+        # name.split.map(&:downcase).map(&:strip)).any?
+        errors.add(:name, "is reserved")
+      end
     end
-  end
+
+    def set_elevation
+      begin
+        if elevation.blank? and latitude.present? and longitude.present? and
+          (latitude_changed? or longitude_changed?)
+            url = "https://maps.googleapis.com/maps/api/elevation/json?locations=#{latitude},#{longitude}&key=#{ENV['google_api_key']}"
+            response = open(url).read
+          self.elevation = JSON.parse(response)['results'][0]['elevation'].to_i
+        end
+      rescue Exception => e
+        # notify_airbrake(e)
+      end
+    end
+
+    def do_geocoding
+      reverse_geocode if city.blank? and (latitude_changed? or longitude_changed?)
+    end
+
+    def nullify_other_mac_addresses
+      if mac_address_changed?
+        Device.unscoped.where(mac_address: mac_address).map(&:remove_mac_address_for_newly_registered_device!)
+      end
+    end
 
 end

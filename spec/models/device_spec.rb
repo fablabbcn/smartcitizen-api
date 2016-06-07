@@ -81,6 +81,30 @@ RSpec.describe Device, :type => :model do
 
   describe "states" do
 
+    it "is not_configured by default" do
+      device = create(:device, mac_address: nil)
+      expect(device.state).to eq('not_configured')
+    end
+
+    it "is never_published if it has a mac_address and no data" do
+      device = create(:device, mac_address: '5e:1d:41:62:76:d8', data: nil)
+      expect(device.state).to eq('never_published')
+    end
+
+    it "is has_published if it has data and a mac_address" do
+      device = create(:device, data: {a: 'b'}, mac_address: '5e:1d:41:62:76:d8')
+      expect(device.state).to eq('has_published')
+    end
+
+    it "is has_published if it has data and NO mac_address" do
+      device = create(:device, data: {a: 'b'}, mac_address: nil)
+      expect(device.state).to eq('has_published')
+    end
+
+  end
+
+  describe "workflow state" do
+
     it "only returns active devices by default (default_scope)" do
       a = create(:device)
       b = create(:device, workflow_state: :archived)

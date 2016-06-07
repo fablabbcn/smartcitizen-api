@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160601120221) do
+ActiveRecord::Schema.define(version: 20160607101112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,12 +89,14 @@ ActiveRecord::Schema.define(version: 20160601120221) do
     t.string   "workflow_state"
     t.datetime "csv_export_requested_at"
     t.macaddr  "old_mac_address"
+    t.string   "state"
   end
 
   add_index "devices", ["geohash"], name: "index_devices_on_geohash", using: :btree
   add_index "devices", ["kit_id"], name: "index_devices_on_kit_id", using: :btree
   add_index "devices", ["last_recorded_at"], name: "index_devices_on_last_recorded_at", using: :btree
   add_index "devices", ["owner_id"], name: "index_devices_on_owner_id", using: :btree
+  add_index "devices", ["state"], name: "index_devices_on_state", using: :btree
   add_index "devices", ["workflow_state"], name: "index_devices_on_workflow_state", using: :btree
 
   create_table "devices_tags", force: :cascade do |t|
