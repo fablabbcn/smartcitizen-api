@@ -5,6 +5,7 @@ module V0
   class ReadingsController < ApplicationController
 
     skip_after_action :verify_authorized, except: :create
+    skip_after_action :verify_authorized
 
     def index
       check_missing_params("rollup", "sensor_key||sensor_id") # sensor_key or sensor_id
@@ -14,20 +15,15 @@ module V0
     def create
       check_missing_params("data")
       @device = Device.find(params[:id])
-      authorize @device
-      begin
+      # authorize @device
+      # begin
         params[:data].each do |reading|
-          puts reading
-          # Reading.create(
-          #   kit_id: kit,
-          #   recorded_at: Time.now,
-          #   sensors: [{id:1,value:2}]
-          # )
+          Storer.new(@device.id, reading)
         end
         render json: { id: "ok", message: "Data successfully added to ingestion queue", url: nil, errors: nil }, status: :ok
-      rescue
-        raise Smartcitizen::UnprocessableEntity.new "Problem(s) with the data"
-      end
+      # rescue
+      #   raise Smartcitizen::UnprocessableEntity.new "Problem(s) with the data"
+      # end
     end
 
     def legacy_create
