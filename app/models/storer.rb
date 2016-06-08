@@ -22,7 +22,7 @@ class Storer
     reading['sensors'].each do |sensor|
       component = device.components.detect{|c|c["sensor_id"] == sensor['id'].to_i}
       metric = device.find_sensor_key_by_id( sensor['id'].to_i )
-      value = component.normalized_value( (Float(value) rescue value) )
+      value = component.normalized_value( (Float(sensor['value']) rescue sensor['value']) )
       _data.push({
         name: metric,
         timestamp: ts,
