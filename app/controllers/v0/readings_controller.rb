@@ -15,15 +15,16 @@ module V0
     def create
       check_missing_params("data")
       @device = Device.find(params[:id])
-      # authorize @device
-      # begin
+      authorize @device
+      begin
         params[:data].each do |reading|
+          # move to async method call
           Storer.new(@device.id, reading)
         end
         render json: { id: "ok", message: "Data successfully added to ingestion queue", url: nil, errors: nil }, status: :ok
-      # rescue
-      #   raise Smartcitizen::UnprocessableEntity.new "Problem(s) with the data"
-      # end
+      rescue
+        raise Smartcitizen::UnprocessableEntity.new "Problem(s) with the data"
+      end
     end
 
     def legacy_create
