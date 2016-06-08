@@ -15,13 +15,20 @@ class Storer
     sql_data = {"" => parsed_ts}
 
     reading['sensors'].each do |sensor|
-      sensor_id = sensor['id'].to_i
+
+      begin
+        sensor_id = Integer(sensor['id'])
+        sensor_key = device.find_sensor_key_by_id(sensor_id)
+      rescue
+        sensor_key = sensor['id']
+        sensor_id = device.find_sensor_id_by_key(sensor_key)
+      end
 
       component = device.components.detect{|c|c["sensor_id"] == sensor_id}
-      metric = device.find_sensor_key_by_id( sensor_id )
       value = component.normalized_value( (Float(sensor['value']) rescue sensor['value']) )
+
       _data.push({
-        name: metric,
+        name: sensor_key,
         timestamp: ts,
         value: value,
         tags: {
