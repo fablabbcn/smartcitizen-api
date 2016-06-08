@@ -2,12 +2,6 @@ class Storer
 
   def initialize device_id, reading
 
-    # Reading.create(
-    #   kit_id: kit,
-    #   recorded_at: Time.now,
-    #   sensors: [{id:1,value:2}]
-    # )
-
     device = Device.includes(:components).find(device_id)
 
     # identifier = version.split('-').first
@@ -18,10 +12,13 @@ class Storer
     ts = parsed_ts.to_i * 1000
 
     _data = []
+    sql_data = {"" => parsed_ts}
 
     reading['sensors'].each do |sensor|
-      component = device.components.detect{|c|c["sensor_id"] == sensor['id'].to_i}
-      metric = device.find_sensor_key_by_id( sensor['id'].to_i )
+      sensor_id = sensor['id'].to_i
+
+      component = device.components.detect{|c|c["sensor_id"] == sensor_id}
+      metric = device.find_sensor_key_by_id( sensor_id )
       value = component.normalized_value( (Float(sensor['value']) rescue sensor['value']) )
       _data.push({
         name: metric,
@@ -32,11 +29,17 @@ class Storer
           method: 'REST'
         }
       })
+
+      sql_data["#{sensor_id}_raw"] = value
+      sql_data[sensor_id] = component.calibrated_value(value)
     end
 
     Kairos.http_post_to("/datapoints", _data)
-
     Minuteman.add("rest_readings")
+
+    if parsed_ts > (device.last_recorded_at || Time.at(0))
+      device.update_columns(last_recorded_at: parsed_ts, data: sql_data, state: 'has_published')
+    end
 
   end
 
