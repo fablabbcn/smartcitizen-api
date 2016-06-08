@@ -22,7 +22,8 @@ module V0
           Storer.new(@device.id, reading)
         end
         render json: { id: "ok", message: "Data successfully added to ingestion queue", url: nil, errors: nil }, status: :ok
-      rescue
+      rescue Exception => e
+        notify_airbrake(e)
         raise Smartcitizen::UnprocessableEntity.new "Problem(s) with the data"
       end
     end
