@@ -9,6 +9,8 @@ set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
 set :deploy_to, "/home/#{fetch(:deploy_user)}/apps/#{fetch(:full_app_name)}"
 
 
+set :sidekiq_concurrency, 10
+
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # set :assets_roles, [:app]
