@@ -9,9 +9,9 @@ GIT
 
 GIT
   remote: git://github.com/presidentbeef/brakeman.git
-  revision: fa310a9b736d858a929715802d98b1a3f0887569
+  revision: cba2d0447956bf8984ba52a2ce6ae9d3fb4fb186
   specs:
-    brakeman (3.3.1)
+    brakeman (3.3.2)
       erubis (~> 2.6)
       haml (>= 3.0, < 5.0)
       highline (>= 1.6.20, < 2.0)
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: git://github.com/seuros/capistrano-sidekiq.git
-  revision: 0794cf99be7bfe7f3e6828c4965db135d7e1c20b
+  revision: 57a42f930cf429ac1da472e10aa0cf7d0df1a005
   specs:
     capistrano-sidekiq (0.5.4)
       capistrano
@@ -78,7 +78,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.4.0)
-    airbrake (4.3.6)
+    airbrake (4.3.7)
       builder
       multi_json
     ancestry (2.1.0)
@@ -86,14 +86,14 @@ GEM
     api-pagination (4.3.0)
     api_cache (0.3.0)
     arel (6.0.3)
-    ast (2.2.0)
-    awesome_print (1.6.1)
-    aws-sdk (2.3.11)
-      aws-sdk-resources (= 2.3.11)
-    aws-sdk-core (2.3.11)
+    ast (2.3.0)
+    awesome_print (1.7.0)
+    aws-sdk (2.3.14)
+      aws-sdk-resources (= 2.3.14)
+    aws-sdk-core (2.3.14)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.3.11)
-      aws-sdk-core (= 2.3.11)
+    aws-sdk-resources (2.3.14)
+      aws-sdk-core (= 2.3.14)
     bcrypt (3.1.11)
     browser (1.0.1)
     builder (3.2.2)
@@ -107,14 +107,14 @@ GEM
     capistrano-bundler (1.1.4)
       capistrano (~> 3.1)
       sshkit (~> 1.2)
-    capistrano-rails (1.1.6)
+    capistrano-rails (1.1.7)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
     capistrano-rbenv (2.0.4)
       capistrano (~> 3.1)
       sshkit (~> 1.3)
     choice (0.2.0)
-    codeclimate-test-reporter (0.5.1)
+    codeclimate-test-reporter (0.5.2)
       simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.1)
     colorize (0.7.7)
@@ -136,7 +136,7 @@ GEM
     diff-lcs (1.2.5)
     diffy (3.1.0)
     docile (1.1.5)
-    domain_name (0.5.20160310)
+    domain_name (0.5.20160615)
       unf (>= 0.0.5, < 1.0.0)
     doorkeeper (3.1.0)
       railties (>= 3.2)
@@ -259,7 +259,7 @@ GEM
     fog-serverlove (0.1.2)
       fog-core
       fog-json
-    fog-softlayer (1.1.1)
+    fog-softlayer (1.1.2)
       fog-core
       fog-json
     fog-storm_on_demand (0.1.1)
@@ -274,7 +274,7 @@ GEM
     fog-voxel (0.1.0)
       fog-core
       fog-xml
-    fog-vsphere (0.7.0)
+    fog-vsphere (0.8.0)
       fog-core
       rbvmomi (~> 1.8)
     fog-xenserver (0.2.3)
@@ -286,7 +286,7 @@ GEM
     formatador (0.2.5)
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
-    geocoder (1.3.6)
+    geocoder (1.3.7)
     git-version-bump (0.15.1)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
@@ -350,7 +350,7 @@ GEM
       rest-client (>= 1.6.7)
     method_source (0.8.2)
     mime-types (2.99.2)
-    mini_portile2 (2.0.0)
+    mini_portile2 (2.1.0)
     minitest (5.9.0)
     minuteman (2.0.0)
       ohm (~> 2.3.0)
@@ -368,8 +368,9 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (3.15.2.317)
     nido (1.0.0)
-    nokogiri (1.6.7.2)
-      mini_portile2 (~> 2.0.0.rc2)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
     notiffany (0.1.0)
       nenv (~> 0.1)
       shellany (~> 0.0)
@@ -387,7 +388,7 @@ GEM
     oj (2.15.1)
     oj_mimic_json (1.0.1)
     parallel (1.9.0)
-    parallel_tests (2.5.0)
+    parallel_tests (2.6.0)
       parallel
     parser (2.3.1.2)
       ast (~> 2.2)
@@ -396,13 +397,14 @@ GEM
       activerecord (>= 3.1)
       activesupport (>= 3.1)
       arel
+    pkg-config (1.1.7)
     polyamorous (1.3.0)
       activerecord (>= 3.0)
     powerpack (0.1.1)
     premailer (1.8.6)
       css_parser (>= 1.3.6)
       htmlentities (>= 4.0.0)
-    premailer-rails (1.9.2)
+    premailer-rails (1.9.3)
       actionmailer (>= 3, < 6)
       premailer (~> 1.7, >= 1.7.9)
     pry (0.10.3)
@@ -465,7 +467,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.1.0)
     raindrops (0.16.0)
-    rake (11.1.2)
+    rake (11.2.2)
     ransack (1.7.0)
       actionpack (>= 3.0)
       activerecord (>= 3.0)
@@ -581,7 +583,7 @@ GEM
       redic
     stamp (0.6.0)
     temple (0.7.7)
-    terminal-table (1.5.2)
+    terminal-table (1.6.0)
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.5)
