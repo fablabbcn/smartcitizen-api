@@ -161,11 +161,13 @@ RSpec.describe Device, :type => :model do
         name: 'awesome',
         description: 'amazing',
         city: 'paris',
-        country_code: 'FR'
+        country_code: 'FR',
+        latitude: nil,
+        longitude: nil
       )
 
       expect(PgSearch.multisearch('test')).to be_empty
-      %w(awesome amazing paris France).each do |search_term|
+      %w(awesome Amazing PARis France).each do |search_term|
         result = PgSearch.multisearch(search_term)
         expect(result.length).to eq(1)
         expect(result.first.searchable_id).to eq(device.id)
@@ -182,6 +184,15 @@ RSpec.describe Device, :type => :model do
       expect(berlin.country.to_s).to eq("Germany")
       expect(berlin.country_name).to eq("Germany")
       expect(berlin.country_code).to eq("DE")
+    end
+
+    it "reverse geocodes on update" do
+      berlin = create(:device, latitude: 52.4850463, longitude: 13.489651)
+      berlin.update_attributes(latitude: 48.8582606, longitude: 2.2923184)
+      expect(berlin.city).to eq("Paris")
+      expect(berlin.country.to_s).to eq("France")
+      expect(berlin.country_name).to eq("France")
+      expect(berlin.country_code).to eq("FR")
     end
 
     it "calculates geohash on save" do

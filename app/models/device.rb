@@ -261,7 +261,7 @@ class Device < ActiveRecord::Base
     end
 
     def do_geocoding
-      reverse_geocode if city.blank? and (latitude_changed? or longitude_changed?)
+      reverse_geocode if (latitude_changed? or longitude_changed?) or city.blank?
     end
 
     def nullify_other_mac_addresses
