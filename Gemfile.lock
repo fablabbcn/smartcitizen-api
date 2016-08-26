@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git://github.com/presidentbeef/brakeman.git
-  revision: e55ec3d1e2de459aea62f53d04ef44f273150b8c
+  revision: 3b2a8cca870337e5db237f5016b34acf05ea0376
   specs:
     brakeman (3.3.5)
       erubis (~> 2.6)
@@ -88,12 +88,12 @@ GEM
     arel (6.0.3)
     ast (2.3.0)
     awesome_print (1.7.0)
-    aws-sdk (2.5.5)
-      aws-sdk-resources (= 2.5.5)
-    aws-sdk-core (2.5.5)
+    aws-sdk (2.5.6)
+      aws-sdk-resources (= 2.5.6)
+    aws-sdk-core (2.5.6)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.5.5)
-      aws-sdk-core (= 2.5.5)
+    aws-sdk-resources (2.5.6)
+      aws-sdk-core (= 2.5.6)
     bcrypt (3.1.11)
     browser (1.0.1)
     builder (3.2.2)
@@ -141,7 +141,7 @@ GEM
     doorkeeper (4.2.0)
       railties (>= 4.2)
     erubis (2.7.0)
-    excon (0.51.0)
+    excon (0.52.0)
     factory_girl (4.7.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.7.0)
@@ -274,9 +274,9 @@ GEM
     fog-voxel (0.1.0)
       fog-core
       fog-xml
-    fog-vsphere (1.0.0)
+    fog-vsphere (1.0.1)
       fog-core
-      rbvmomi (~> 1.8)
+      rbvmomi (~> 1.8.0)
     fog-xenserver (0.2.3)
       fog-core
       fog-xml
@@ -366,7 +366,7 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (3.2.0)
     netrc (0.11.0)
-    newrelic_rpm (3.16.1.320)
+    newrelic_rpm (3.16.2.321)
     nido (1.0.0)
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
@@ -520,7 +520,7 @@ GEM
     rspec-mocks (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.5.0)
-    rspec-rails (3.5.1)
+    rspec-rails (3.5.2)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
