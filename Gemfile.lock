@@ -9,9 +9,9 @@ GIT
 
 GIT
   remote: git://github.com/presidentbeef/brakeman.git
-  revision: 3b2a8cca870337e5db237f5016b34acf05ea0376
+  revision: 8fa2fd13745097e0a4c4a6035d68a808b52e37ee
   specs:
-    brakeman (3.3.5)
+    brakeman (3.4.0)
       erubis (~> 2.6)
       haml (>= 3.0, < 5.0)
       highline (>= 1.6.20, < 2.0)
@@ -41,7 +41,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    CFPropertyList (2.3.2)
+    CFPropertyList (2.3.3)
     actionmailer (4.2.7.1)
       actionpack (= 4.2.7.1)
       actionview (= 4.2.7.1)
@@ -83,17 +83,17 @@ GEM
       multi_json
     ancestry (2.1.0)
       activerecord (>= 3.0.0)
-    api-pagination (4.3.0)
+    api-pagination (4.4.0)
     api_cache (0.3.0)
     arel (6.0.3)
     ast (2.3.0)
     awesome_print (1.7.0)
-    aws-sdk (2.5.6)
-      aws-sdk-resources (= 2.5.6)
-    aws-sdk-core (2.5.6)
+    aws-sdk (2.6.1)
+      aws-sdk-resources (= 2.6.1)
+    aws-sdk-core (2.6.1)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.5.6)
-      aws-sdk-core (= 2.5.6)
+    aws-sdk-resources (2.6.1)
+      aws-sdk-core (= 2.6.1)
     bcrypt (3.1.11)
     browser (1.0.1)
     builder (3.2.2)
@@ -107,7 +107,7 @@ GEM
     capistrano-bundler (1.1.4)
       capistrano (~> 3.1)
       sshkit (~> 1.2)
-    capistrano-rails (1.1.7)
+    capistrano-rails (1.1.8)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
     capistrano-rbenv (2.0.4)
@@ -136,7 +136,7 @@ GEM
     diff-lcs (1.2.5)
     diffy (3.1.0)
     docile (1.1.5)
-    domain_name (0.5.20160615)
+    domain_name (0.5.20160826)
       unf (>= 0.0.5, < 1.0.0)
     doorkeeper (4.2.0)
       railties (>= 4.2)
@@ -228,7 +228,7 @@ GEM
       multi_json (~> 1.10)
     fog-local (0.3.0)
       fog-core (~> 1.27)
-    fog-openstack (0.1.11)
+    fog-openstack (0.1.12)
       fog-core (>= 1.40)
       fog-json (>= 1.0)
       ipaddress (>= 0.8)
@@ -236,10 +236,9 @@ GEM
       fog-core (~> 1.27)
       fog-json (~> 1.0)
       fog-xml (~> 0.1)
-    fog-profitbricks (0.0.5)
-      fog-core
-      fog-xml
-      nokogiri
+    fog-profitbricks (2.0.1)
+      fog-core (~> 1.42)
+      fog-json (~> 1.0)
     fog-rackspace (0.1.1)
       fog-core (>= 1.35)
       fog-json (>= 1.0)
@@ -259,7 +258,7 @@ GEM
     fog-serverlove (0.1.2)
       fog-core
       fog-json
-    fog-softlayer (1.1.3)
+    fog-softlayer (1.1.4)
       fog-core
       fog-json
     fog-storm_on_demand (0.1.1)
@@ -274,7 +273,7 @@ GEM
     fog-voxel (0.1.0)
       fog-core
       fog-xml
-    fog-vsphere (1.0.1)
+    fog-vsphere (1.1.0)
       fog-core
       rbvmomi (~> 1.8.0)
     fog-xenserver (0.2.3)
@@ -286,7 +285,7 @@ GEM
     formatador (0.2.5)
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
-    geocoder (1.3.7)
+    geocoder (1.4.0)
     git-version-bump (0.15.1)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
@@ -321,7 +320,7 @@ GEM
       multi_json (~> 1.2)
     jmespath (1.3.1)
     json (1.8.3)
-    jwt (1.5.4)
+    jwt (1.5.5)
     kaminari (0.17.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -385,12 +384,12 @@ GEM
       nido
       redic (~> 1.5.0)
       stal
-    oj (2.17.3)
+    oj (2.17.4)
     oj_mimic_json (1.0.1)
     parallel (1.9.0)
-    parallel_tests (2.7.1)
+    parallel_tests (2.9.0)
       parallel
-    parser (2.3.1.2)
+    parser (2.3.1.3)
       ast (~> 2.2)
     pg (0.18.4)
     pg_search (1.0.6)
@@ -512,7 +511,7 @@ GEM
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
       rspec-mocks (~> 3.5.0)
-    rspec-core (3.5.2)
+    rspec-core (3.5.3)
       rspec-support (~> 3.5.0)
     rspec-expectations (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
@@ -546,11 +545,11 @@ GEM
     sass (3.4.22)
     sexp_processor (4.7.0)
     shellany (0.0.1)
-    sidekiq (4.1.4)
+    sidekiq (4.2.1)
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
+      rack-protection (~> 1.5)
       redis (~> 3.2, >= 3.2.1)
-      sinatra (>= 1.4.7)
     simplecov (0.12.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -570,7 +569,7 @@ GEM
     sprockets (3.7.0)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    sprockets-rails (3.1.1)
+    sprockets-rails (3.2.0)
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
@@ -584,7 +583,8 @@ GEM
       redic
     stamp (0.6.0)
     temple (0.7.7)
-    terminal-table (1.6.0)
+    terminal-table (1.7.2)
+      unicode-display_width (~> 1.1.1)
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.5)
@@ -595,7 +595,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.2)
-    unicode-display_width (1.1.0)
+    unicode-display_width (1.1.1)
     unicorn (5.1.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
