@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git://github.com/presidentbeef/brakeman.git
-  revision: 8fa2fd13745097e0a4c4a6035d68a808b52e37ee
+  revision: 8a3f1d6d48c78a120fdd133133e842580ab73c91
   specs:
     brakeman (3.4.0)
       erubis (~> 2.6)
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: git://github.com/seuros/capistrano-sidekiq.git
-  revision: 416d1ba6ac29e550b506468c45053b9fe65347b3
+  revision: 951995f08e1aa790fff3a2cf18b0c3a3c8bf918d
   specs:
     capistrano-sidekiq (0.5.4)
       capistrano
@@ -88,12 +88,12 @@ GEM
     arel (6.0.3)
     ast (2.3.0)
     awesome_print (1.7.0)
-    aws-sdk (2.6.1)
-      aws-sdk-resources (= 2.6.1)
-    aws-sdk-core (2.6.1)
+    aws-sdk (2.6.3)
+      aws-sdk-resources (= 2.6.3)
+    aws-sdk-core (2.6.3)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.6.1)
-      aws-sdk-core (= 2.6.1)
+    aws-sdk-resources (2.6.3)
+      aws-sdk-core (= 2.6.3)
     bcrypt (3.1.11)
     browser (1.0.1)
     builder (3.2.2)
@@ -194,7 +194,7 @@ GEM
     fog-atmos (0.1.0)
       fog-core
       fog-xml
-    fog-aws (0.11.0)
+    fog-aws (0.12.0)
       fog-core (~> 1.38)
       fog-json (~> 1.0)
       fog-xml (~> 0.1)
@@ -389,9 +389,9 @@ GEM
     parallel (1.9.0)
     parallel_tests (2.9.0)
       parallel
-    parser (2.3.1.3)
+    parser (2.3.1.4)
       ast (~> 2.2)
-    pg (0.18.4)
+    pg (0.19.0)
     pg_search (1.0.6)
       activerecord (>= 3.1)
       activesupport (>= 3.1)
@@ -426,7 +426,7 @@ GEM
     rack-test (0.6.3)
       rack (>= 1.0)
     rack-timeout (0.4.2)
-    railroady (1.5.1)
+    railroady (1.5.2)
     rails (4.2.7.1)
       actionmailer (= 4.2.7.1)
       actionpack (= 4.2.7.1)
@@ -466,7 +466,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.1.0)
     raindrops (0.17.0)
-    rake (11.2.2)
+    rake (11.3.0)
     ransack (1.8.2)
       actionpack (>= 3.0)
       activerecord (>= 3.0)
@@ -583,7 +583,7 @@ GEM
       redic
     stamp (0.6.0)
     temple (0.7.7)
-    terminal-table (1.7.2)
+    terminal-table (1.7.3)
       unicode-display_width (~> 1.1.1)
     thor (0.19.1)
     thread_safe (0.3.5)
