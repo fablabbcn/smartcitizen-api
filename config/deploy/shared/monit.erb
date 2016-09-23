@@ -65,7 +65,7 @@ check process nginx with pidfile /var/run/nginx.pid
 check process redis with pidfile /var/run/redis_<%= ENV.fetch('redis_port') %>.pid
   start program = "/etc/init.d/redis_<%= ENV.fetch('redis_port') %> start"
   stop program = "/etc/init.d/redis_<%= ENV.fetch('redis_port') %> stop"
-  if mem is greater than 1000.0 MB for 10 cycles then restart   # eating up memory?
+  if mem is greater than 5000.0 MB for 10 cycles then restart   # eating up memory?
   if cpu is greater than 80% for 5 cycles then restart      # hung process?
   if 10 restarts within 10 cycles then timeout
 
