@@ -30,6 +30,13 @@ check system <%= application %>
   if memory > 75% for 2 cycles then alert
   if cpu(user) > 75% for 2 cycles then alert
 
+check process socketio matching /home/deployer/sockets/socketio.js
+  start program = "/bin/bash -lc 'cd /home/deployer/sockets && PM2_HOME=/home/deployer/.pm2 /usr/bin/pm2 start socketio.js'"
+  stop program  = "/bin/bash -lc 'cd /home/deployer/sockets && PM2_HOME=/home/deployer/.pm2 /usr/bin/pm2 stop socketio.js'"
+  if mem is greater than 800.0 MB for 5 cycles then restart   # eating up memory?
+  if cpu is greater than 80% for 3 cycles then restart      # hung process?
+  if 10 restarts within 10 cycles then timeout
+
 # postgres
 check process postgresql with pidfile /var/run/postgresql/<%= ENV.fetch('postgres_version') %>-main.pid
   start program = "/etc/init.d/postgresql start"
@@ -58,7 +65,7 @@ check process nginx with pidfile /var/run/nginx.pid
 check process redis with pidfile /var/run/redis_<%= ENV.fetch('redis_port') %>.pid
   start program = "/etc/init.d/redis_<%= ENV.fetch('redis_port') %> start"
   stop program = "/etc/init.d/redis_<%= ENV.fetch('redis_port') %> stop"
-  if mem is greater than 800.0 MB for 5 cycles then restart   # eating up memory?
+  if mem is greater than 1000.0 MB for 10 cycles then restart   # eating up memory?
   if cpu is greater than 80% for 5 cycles then restart      # hung process?
   if 10 restarts within 10 cycles then timeout
 
