@@ -14,7 +14,8 @@ server {
 
   charset utf-8;
 
-  server_name <%= fetch(:server_name) %> httponly.smartcitizen.me data.smartcitizen.me;
+  # server_name <%= fetch(:server_name) %> httponly.smartcitizen.me data.smartcitizen.me;
+  server_name *.smartcitizen.me *.smartcitizen.xyz smartcitizen.xyz;
 
   listen   80;
   listen   [::]:80;
