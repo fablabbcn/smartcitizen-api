@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: uploads
+#
+#  id                :integer          not null, primary key
+#  type              :string
+#  original_filename :string
+#  metadata          :jsonb
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  uuid              :uuid
+#  user_id           :integer
+#  key               :string
+#
+
 # Only Avatars are uploaded right now, this is the base class that they inherit.
 # Some of its methods are specific to Avatar, this needs to be fixed.
 

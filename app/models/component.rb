@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: components
+#
+#  id               :integer          not null, primary key
+#  board_id         :integer
+#  board_type       :string
+#  sensor_id        :integer
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  uuid             :uuid
+#  equation         :text
+#  reverse_equation :text
+#
+
 # This joins a device with its sensors.
 
 class Component < ActiveRecord::Base

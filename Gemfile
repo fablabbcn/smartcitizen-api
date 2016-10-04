@@ -94,6 +94,7 @@ group :development do
   gem 'capistrano', '3.4.0'
   gem 'capistrano-rails'
   gem "rails-erd"
+  gem 'annotate'
 end
 
 group :development, :test do

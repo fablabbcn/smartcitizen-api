@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: tags
+#
+#  id          :integer          not null, primary key
+#  name        :string
+#  description :text
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  uuid        :uuid
+#
+
 # Tags can be assigned to multiple Devices. They are currently managed solely by
 # admins, this is likely to change.
 
