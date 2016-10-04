@@ -1,3 +1,33 @@
+# == Schema Information
+#
+# Table name: devices
+#
+#  id                      :integer          not null, primary key
+#  owner_id                :integer
+#  name                    :string
+#  description             :text
+#  mac_address             :macaddr
+#  latitude                :float
+#  longitude               :float
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  kit_id                  :integer
+#  latest_data             :hstore
+#  geohash                 :string
+#  last_recorded_at        :datetime
+#  meta                    :jsonb
+#  location                :jsonb
+#  data                    :jsonb
+#  old_data                :jsonb
+#  owner_username          :string
+#  uuid                    :uuid
+#  migration_data          :jsonb
+#  workflow_state          :string
+#  csv_export_requested_at :datetime
+#  old_mac_address         :macaddr
+#  state                   :string
+#
+
 # This is an SCK (referred to as a 'Kit' in the frontend).
 # It's called Device and not Kit or SCK because it's expected that the platform
 # will support different kinds of hardware in the future (phones, arduino etc).

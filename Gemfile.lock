@@ -83,6 +83,9 @@ GEM
       multi_json
     ancestry (2.1.0)
       activerecord (>= 3.0.0)
+    annotate (2.7.1)
+      activerecord (>= 3.2, < 6.0)
+      rake (>= 10.4, < 12.0)
     api-pagination (4.4.0)
     api_cache (0.3.0)
     arel (6.0.3)
@@ -615,6 +618,7 @@ PLATFORMS
 DEPENDENCIES
   airbrake (~> 4.3)
   ancestry
+  annotate
   api-pagination
   api_cache
   awesome_print
@@ -701,4 +705,4 @@ RUBY VERSION
    ruby 2.2.2p95
 
 BUNDLED WITH
-   1.13.1
+   1.13.2

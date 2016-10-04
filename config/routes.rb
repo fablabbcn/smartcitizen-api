@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     get ':api_key/me', to: 'users#show'
     get '/', to: 'static#home'
 
+    get '/onboarding', to: 'onboarding#session'
+
     get "/404" => "errors#not_found"
     get "/500" => "errors#exception"
     match "*path", to: "errors#not_found", via: :all

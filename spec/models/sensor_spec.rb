@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: sensors
+#
+#  id             :integer          not null, primary key
+#  ancestry       :string
+#  name           :string
+#  description    :text
+#  unit           :string
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  measurement_id :integer
+#  uuid           :uuid
+#
+
 require 'rails_helper'
 
 RSpec.describe Sensor, :type => :model do

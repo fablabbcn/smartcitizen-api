@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: kits
+#
+#  id          :integer          not null, primary key
+#  name        :string
+#  description :text
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  slug        :string
+#  uuid        :uuid
+#  sensor_map  :jsonb
+#
+
 # There is a naming conflict between frontend and backend. Here, a Kit is
 # a template for Device, that includes all of its sensors. Instead of every
 # Device having 9 sensors, a Device has_one Kit, and that Kit has 9 sensors.
