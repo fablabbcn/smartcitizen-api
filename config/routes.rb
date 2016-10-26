@@ -68,6 +68,13 @@ Rails.application.routes.draw do
     get "/500" => "errors#exception"
     get "/test_error" => "errors#test_error"
     match "*path", to: "errors#not_found", via: :all
+
+    # onboarding process
+    namespace :onboarding do
+      post 'device', to: 'orphan_devices#create'
+      patch 'device', to: 'orphan_devices#update'
+      post 'user', to: 'orphan_devices#find_user'
+    end
   end
 
   # get '*path', :to => redirect("/v0/%{path}")
