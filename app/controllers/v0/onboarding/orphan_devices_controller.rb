@@ -1,8 +1,6 @@
 module V0
   module Onboarding
     class OrphanDevicesController < ::ApplicationController
-      before_action :require_onboarding_session, only: [:update]
-
       rescue_from ActionController::ParameterMissing do
         render json: { error: 'Missing Params' }, status: :unprocessable_entity
       end
@@ -22,7 +20,7 @@ module V0
       end
 
       def update
-        orphan_device = OrphanDevice.find_by(device_token: device_token)
+        orphan_device = OrphanDevice.find_by(onboarding_session: onboarding_session)
 
         return device_not_found if orphan_device.nil?
 
@@ -36,20 +34,15 @@ module V0
       private
 
       def orphan_device_params
-        params.permit(:name, :description, :kit_id, :exposure,
-                      :latitude, :longitude, :user_tags)
+        params.permit(:name, :description, :kit_id, :exposure, :latitude, :longitude, :user_tags)
       end
 
-      def device_token
-        params.require(:device_token)
-      end
-
-      def require_onboarding_session
+      def onboarding_session
         params.require(:onboarding_session)
       end
 
       def device_not_found
-        render json: { error: 'Invalid device_token' }, status: :not_found
+        render json: { error: 'Invalid onboarding_session' }, status: :not_found
       end
     end
   end

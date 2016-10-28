@@ -1,7 +1,8 @@
 module V0
   module Onboarding
     class RegistrationsController < ::ApplicationController
-      before_action :require_params, :set_orphan_device
+      before_action :require_params, only: [:find_user]
+      before_action :set_orphan_device
 
       rescue_from ActionController::ParameterMissing do
         render json: { error: 'Missing Params' }, status: :unprocessable_entity
@@ -27,16 +28,15 @@ module V0
       private
 
       def require_params
-        params.permit(:email, :onboarding_session, :device_token).tap do |parameters|
+        params.permit(:email, :onboarding_session).tap do |parameters|
           parameters.require(:onboarding_session)
-          parameters.require(:device_token)
           parameters.require(:email)
         end
       end
 
       def set_orphan_device
-        @orphan_device = OrphanDevice.find_by(device_token: params[:device_token])
-        render json: { error: 'Invalid device_token' }, status: :not_found if @orphan_device.nil?
+        @orphan_device = OrphanDevice.find_by(onboarding_session: params[:onboarding_session])
+        render json: { error: 'Invalid onboarding_session' }, status: :not_found if @orphan_device.nil?
       end
     end
   end
