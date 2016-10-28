@@ -18,7 +18,7 @@ class OrphanDevice < ActiveRecord::Base
 
   def device_token_persistance
     return if device_token_was.nil? || !device_token_changed?
-    errors.add(:device_token,'device_token cannot be changed')
+    errors.add(:device_token,'cannot be changed')
   end
 
   def device_token_changed?
