@@ -1,6 +1,4 @@
 class OrphanDevice < ActiveRecord::Base
-  include ActiveModel::Dirty
-
   validates_uniqueness_of :device_token
   validate :device_token_persistance, on: :update
 
