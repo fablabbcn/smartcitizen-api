@@ -43,7 +43,6 @@ RSpec.describe V0::Onboarding::OrphanDevicesController, type: :controller do
 
       @params = {
          onboarding_session: last_response['onboarding_session'],
-         device_token: last_response['device_token'],
 
          name: 'Owner',
          user_tags: 'cloudy,outdoor',
@@ -70,24 +69,17 @@ RSpec.describe V0::Onboarding::OrphanDevicesController, type: :controller do
     end
 
     it 'requires onboarding_session' do
-      update_request()
+      update_request
 
       expect(response.status).to eq(422)
       expect(last_response['error']).to eq('Missing Params')
     end
 
-    it 'requires device_token' do
-      update_request({ onboarding_session: SecureRandom.uuid })
-
-      expect(response.status).to eq(422)
-      expect(last_response['error']).to eq('Missing Params')
-    end
-
-    it 'requires device_token of existen orphan_device' do
-      update_request({ onboarding_session: SecureRandom.uuid, device_token: '1111111' })
+    it 'requires onboarding_session of existen orphan_device' do
+      update_request({ onboarding_session: '1111111' })
 
       expect(response.status).to eq(404)
-      expect(last_response['error']).to eq('Invalid device_token')
+      expect(last_response['error']).to eq('Invalid onboarding_session')
     end
   end
 end

@@ -12,13 +12,12 @@ RSpec.describe V0::Onboarding::RegistrationsController, type: :controller do
       @user = create(:user)
       @orphan_device = create(:orphan_device)
 
-      def find_user_request(email, device_token)
+      def find_user_request(email, onboarding_session)
         headers = { 'CONTENT_TYPE' => 'application/json', 'ACCTEPT' => 'application/json' }
 
         params = {
           email: email,
-          device_token: device_token,
-          onboarding_session: @orphan_device.onboarding_session
+          onboarding_session: onboarding_session
         }
 
         post '/onboarding/user', params.to_json, headers
@@ -26,30 +25,30 @@ RSpec.describe V0::Onboarding::RegistrationsController, type: :controller do
     end
 
     it 'finds returns username if user exist' do
-      find_user_request(@user.email, @orphan_device.device_token)
+      find_user_request(@user.email, @orphan_device.onboarding_session)
 
       expect(last_response['username']).to eq(@user.username)
       expect(response.status).to eq(200)
     end
 
     it 'requires email' do
-      find_user_request(nil, @orphan_device.device_token)
+      find_user_request(nil, @orphan_device.onboarding_session)
 
       expect(last_response['error']).to eq('Missing Params')
       expect(response.status).to eq(422)
     end
 
     it 'returns not_found if user does not exist' do
-      find_user_request('new_user@email', @orphan_device.device_token)
+      find_user_request('new_user@email', @orphan_device.onboarding_session)
 
       expect(last_response['message']).to eq('not_found')
       expect(response.status).to eq(404)
     end
 
-    it 'requires valid device_token' do
+    it 'requires valid onboarding_session' do
       find_user_request('new_user@email', '1111111')
 
-      expect(last_response['error']).to eq('Invalid device_token')
+      expect(last_response['error']).to eq('Invalid onboarding_session')
       expect(response.status).to eq(404)
     end
   end
