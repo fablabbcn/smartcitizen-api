@@ -7,10 +7,13 @@ class OrphanDevice < ActiveRecord::Base
   TOKEN_ATTEMPTS = 10
 
   def device_attributes
-    attr_hash = attributes
-    attr_hash.delete(:device_token)
-    attr_hash.delete(:onboarding_session)
-    attr_hash
+    {
+      name: name,
+      description: description,
+      kit_id: kit_id,
+      # latitude: latitude,
+      # longitude: longitude
+    }
   end
 
   private

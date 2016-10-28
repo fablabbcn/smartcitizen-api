@@ -1,8 +1,6 @@
 module V0
   module Onboarding
     class OrphanDevicesController < ::V0::ApplicationController
-      skip_after_action :verify_authorized
-      
       rescue_from ActionController::ParameterMissing do
         render json: { error: 'Missing Params' }, status: :unprocessable_entity
       end

@@ -4,7 +4,9 @@ module V0
       before_action :require_params, only: [:find_user]
       before_action :set_orphan_device
 
-      skip_after_action :verify_authorized, only: [:find_user]
+      before_action :check_if_authorized!, only: [:register_device]
+
+      after_action :verify_authorized, only: :register_device
 
       rescue_from ActionController::ParameterMissing do
         render json: { error: 'Missing Params' }, status: :unprocessable_entity
@@ -22,18 +24,15 @@ module V0
       end
 
       def register_device
-        # maybe could call
-        #  ::DevicesController.new.create(@orphan_device.device_attributes)
-        puts current_user
-        # device = current_user.devices.build(@orphan_device.device_attributes)
-        #
-        # authorize device
-        #
-        # if device.save
-        #   render json: device, status: :created
-        # else
-        #   raise Smartcitizen::UnprocessableEntity.new device.errors
-        # end
+        device = current_user.devices.build(@orphan_device.device_attributes)
+
+        authorize device
+
+        if device.save
+          render json: device, status: :created
+        else
+          raise Smartcitizen::UnprocessableEntity.new device.errors
+        end
       end
 
       private
