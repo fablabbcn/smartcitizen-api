@@ -1,8 +1,10 @@
 module V0
   module Onboarding
-    class RegistrationsController < ::ApplicationController
+    class DeviceRegistrationsController < ::V0::ApplicationController
       before_action :require_params, only: [:find_user]
       before_action :set_orphan_device
+
+      skip_after_action :verify_authorized, only: [:find_user]
 
       rescue_from ActionController::ParameterMissing do
         render json: { error: 'Missing Params' }, status: :unprocessable_entity
@@ -11,7 +13,7 @@ module V0
       def find_user
         user = User.find_by(email: params[:email])
 
-        # @orphan_device.update(owner_email: params[:email]) regardless ?
+        @orphan_device.update(owner_email: params[:email])
         if user.nil?
           render json: { message: 'not_found' }, status: :not_found
         else
@@ -19,16 +21,25 @@ module V0
         end
       end
 
-      def login
-        # user authenticates
-        # create device from orphan_device
-        # add user to newly created device || add newly created device to user
+      def register_device
+        # maybe could call
+        #  ::DevicesController.new.create(@orphan_device.device_attributes)
+        puts current_user
+        # device = current_user.devices.build(@orphan_device.device_attributes)
+        #
+        # authorize device
+        #
+        # if device.save
+        #   render json: device, status: :created
+        # else
+        #   raise Smartcitizen::UnprocessableEntity.new device.errors
+        # end
       end
 
       private
 
       def require_params
-        params.permit(:email, :onboarding_session).tap do |parameters|
+        params.permit(:email, :onboarding_session, :access_token).tap do |parameters|
           parameters.require(:onboarding_session)
           parameters.require(:email)
         end

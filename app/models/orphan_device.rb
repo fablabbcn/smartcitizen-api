@@ -6,6 +6,13 @@ class OrphanDevice < ActiveRecord::Base
 
   TOKEN_ATTEMPTS = 10
 
+  def device_attributes
+    attr_hash = attributes
+    attr_hash.delete(:device_token)
+    attr_hash.delete(:onboarding_session)
+    attr_hash
+  end
+
   private
 
   def generate_device_token
