@@ -1,12 +1,11 @@
 FactoryGirl.define do
   factory :orphan_device do
-    name "MyString"
-    description "MyText"
+    name "OrphanDeviceName"
+    description "OrphanDeviceDescription"
     kit_id 1
-    exposure "MyString"
+    exposure "OrphanDeviceExposure"
     latitude 1.5
     longitude 1
-    user_tags "MyText"
-    owner_username "MyString"
+    user_tags "tag,tag2,tag3"
   end
 end

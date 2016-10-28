@@ -62,6 +62,7 @@ Rails.application.routes.draw do
     namespace :onboarding do
       post 'device', to: 'orphan_devices#create'
       patch 'device', to: 'orphan_devices#update'
+      post 'user', to: 'registrations#find_user'
     end
 
     get 'search' => 'static#search'
