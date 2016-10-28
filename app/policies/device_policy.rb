@@ -16,4 +16,7 @@ class DevicePolicy < ApplicationPolicy
     update?
   end
 
+  def register_device?
+    user
+  end
 end
