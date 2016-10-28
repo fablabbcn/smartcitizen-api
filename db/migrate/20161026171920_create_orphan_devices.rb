@@ -8,7 +8,9 @@ class CreateOrphanDevices < ActiveRecord::Migration
       t.float :latitude
       t.integer :longitude
       t.text :user_tags
-      t.string :owner_username
+      t.string :owner_email
+      t.string :device_token
+      t.string :onboarding_session
 
       t.timestamps null: false
     end

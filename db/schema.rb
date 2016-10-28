@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161026172313) do
+ActiveRecord::Schema.define(version: 20161026171920) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -193,10 +193,11 @@ ActiveRecord::Schema.define(version: 20161026172313) do
     t.float    "latitude"
     t.integer  "longitude"
     t.text     "user_tags"
-    t.string   "owner_username"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.string   "owner_email"
     t.string   "device_token"
+    t.string   "onboarding_session"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
 
   create_table "pg_search_documents", force: :cascade do |t|
