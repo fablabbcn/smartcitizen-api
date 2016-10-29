@@ -5,22 +5,17 @@ describe V0::Onboarding::DeviceRegistrationsController do
   let(:application) { create :application }
   let(:user) { create :user }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
-  let(:orphan_device) { create(:orphan_device, name: 'EasyToFind') }
+  let(:orphan_device) { create(:orphan_device) }
   let(:onboarding_session) { create(:orphan_device).onboarding_session }
 
   describe 'POST /onboarding/user' do
-    before do
-      @user = create(:user)
-      @onboarding_session = create(:orphan_device).onboarding_session
-    end
-
     it 'retunrs username if user exists' do
       j = api_post '/onboarding/user', {
-        email: @user.email,
-        onboarding_session: @onboarding_session
+        email: user.email,
+        onboarding_session: orphan_device.onboarding_session
       }
 
-      expect(j['username']).to eq(@user.username)
+      expect(j['username']).to eq(user.username)
       expect(response.status).to eq(200)
     end
 
@@ -54,19 +49,54 @@ describe V0::Onboarding::DeviceRegistrationsController do
     end
   end
 
-  describe 'POST /onboarding/user' do
+  before do
+    # workaround
+    create(:kit, id: 1) if Kit.where(id: 1).empty?
+    create(:tag, name: 'tag1') if Kit.where(name: 'tag1').empty?
+    create(:tag, name: 'tag2') if Kit.where(name: 'tag2').empty?
+  end
+
+  describe 'POST /onboarding/register' do
     it 'creates device from orphan_device and adds it to current_user' do
       j = api_post '/onboarding/register', {
         access_token: token.token,
         onboarding_session: orphan_device.onboarding_session
       }
+
+      # has created device
+      expect(response.status).to eq(201)
+      expect(Device.count).to eq(1)
+
       device = user.devices.first
 
-      expect(Device.count).to eq(1)
-      expect(response.status).to eq(201)
+      # returns correct device attributes
       expect(device.name).to eq(orphan_device.name)
       expect(j['name']).to eq(device.name)
       expect(j['owner_id']).to eq(user.id)
+
+      # adds 'user_tags'
+      expect(device.tags.count).to eq(2)
+
+      # and location
+      expect(device.location['city']).to eq('Barcelona')
+    end
+
+    it 'requires valid onboarding session' do
+      j = api_post '/onboarding/register', {
+        access_token: token.token,
+        onboarding_session: nil
+      }
+
+      expect(j['error']).to eq('Invalid onboarding_session')
+      expect(response.status).to eq(404)
+    end
+
+    it 'requires user authentication' do
+      j = api_post '/onboarding/register', {
+        onboarding_session: orphan_device.onboarding_session
+      }
+      expect(j['message']).to eq('Authorization required')
+      expect(response.status).to eq(401)
     end
   end
 end
