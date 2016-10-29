@@ -1,6 +1,9 @@
 class OrphanDevice < ActiveRecord::Base
   validates_uniqueness_of :device_token
+  validates_uniqueness_of :onboarding_session
+
   validate :device_token_persistance, on: :update
+  validates :exposure, inclusion: { in: %w(indoor outdoor) }, allow_nil: true
 
   after_create :generate_device_token
 
@@ -11,8 +14,10 @@ class OrphanDevice < ActiveRecord::Base
       name: name,
       description: description,
       kit_id: kit_id,
-      # latitude: latitude,
-      # longitude: longitude
+      user_tags: user_tags,
+      exposure: exposure,
+      latitude: latitude,
+      longitude: longitude
     }
   end
 
