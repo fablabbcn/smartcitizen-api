@@ -8,9 +8,6 @@ describe V0::Onboarding::OrphanDevicesController do
   let(:device) { create(:device) }
   let(:orphan_device) { create(:orphan_device) }
 
-  # let(:admin) { create :admin }
-  # let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
-
   describe 'POST /onboarding/device' do
     it 'returns onboarding_session and device_token of created orphan_device' do
       j = api_post '/onboarding/device', {}

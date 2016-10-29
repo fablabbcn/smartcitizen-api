@@ -1,4 +1,6 @@
 class OrphanDevice < ActiveRecord::Base
+  attr_readonly :onboarding_session
+
   validates_uniqueness_of :device_token
   validates_uniqueness_of :onboarding_session
 
@@ -6,6 +8,7 @@ class OrphanDevice < ActiveRecord::Base
   validates :exposure, inclusion: { in: %w(indoor outdoor) }, allow_nil: true
 
   after_create :generate_device_token
+  after_initialize :generate_onbarding_session
 
   TOKEN_ATTEMPTS = 10
 
@@ -23,12 +26,16 @@ class OrphanDevice < ActiveRecord::Base
 
   private
 
+  def generate_onbarding_session
+    self.onboarding_session = SecureRandom.uuid if new_record?
+  end
+
   def generate_device_token
-    update(device_token: SecureRandom.hex(3), onboarding_session: SecureRandom.uuid)
+    self.update_attributes!(device_token: SecureRandom.hex(3))
   rescue ActiveRecord::RecordNotUnique => e
     @attempts = @attempts.to_i + 1
     retry if TOKEN_ATTEMPTS > @attempts
-    raise e, 'Unique device_token assignment failed'
+    raise e, 'device_token assignment failed'
   end
 
   def device_token_persistance

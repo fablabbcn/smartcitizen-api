@@ -34,7 +34,7 @@ Method to update (slide by slide, or all at once) the still 'orphan' device.
 It only requires a valid 'onboarding_session' and returns updated 'orphan_device' (status 200) if successfully updated.
 
 Calling without 'onboarding_session' returns error "Missing Params" (422).
-Calling without an existent 'onboarding_session' returns error "Invalid onboarding_session" (402).
+Calling without an existent 'onboarding_session' returns error "Invalid onboarding_session" (404).
 ```
 payload example:
 
@@ -75,10 +75,10 @@ POST /v0/onboarding/user
 
 Method that requires params 'email' and 'onboarding_session' and returns user 'username' if email
 is associated to an existent user (status 200).
-If 'email' does not correspond to any user (402) 'not_found' is returned.
+If 'email' does not correspond to any user (404) 'not_found' is returned.
 
 Calling without either 'email' or 'onboarding_session' params results in a 422, "Missing Params".
-Calling without an existent 'onboarding_session' returns error "Invalid onboarding_session" (402).
+Calling without an existent 'onboarding_session' returns error "Invalid onboarding_session" (404).
 ```
 payload example:
 
@@ -113,7 +113,7 @@ using onboarding_session's correspondent 'orphan_device' attributes. It returns 
 'device'.
 
 If 'access_token' is not valid or missing, (401) "Authorization required" is returned.
-If 'onboarding_session' is not valid, (402) "Invalid onboarding_session".
+If 'onboarding_session' is not valid, (404) "Invalid onboarding_session".
 
 ```
 payload example:
