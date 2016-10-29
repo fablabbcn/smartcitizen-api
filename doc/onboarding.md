@@ -84,13 +84,7 @@ payload example:
 
 {
   "onboarding_session": "a71095a2-e99c-4664-82d8-b4c1c9bbc531",
-  "name": "Owner",
-  "description": "device description",
-  "kit_id": 1,
-  "exposure": "indoor",
-  "latitude": 41.3966908,
-  "longitude": 2.1921909,
-  "user_tags": "tag1,tag2"
+  "email": "user1@email.com"
 }
 ```
 
@@ -98,18 +92,7 @@ payload example:
 response example:
 
 {
-  "id" => 7,
-  "name" => "Owner",
-  "description" => "device description",
-  "kit_id" => 1,
-  "exposure" => "indoor",
-  "latitude" => 41.3966908,
-  "longitude" => 2.1921909,
-  "user_tags" => "tag1,tag2",
-  "device_token" => "e58956",
-  "onboarding_session" => "a71095a2-e99c-4664-82d8-b4c1c9bbc531",
-  "created_at" => "2016-10-29T11:55:42+02:00",
-  "updated_at" => "2016-10-29T11:55:42+02:00"
+  "username" => "user1"
 }
 ```
 
