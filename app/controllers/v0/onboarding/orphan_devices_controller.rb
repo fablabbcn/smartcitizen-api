@@ -2,6 +2,7 @@ module V0
   module Onboarding
     class OrphanDevicesController < ::V0::ApplicationController
       skip_after_action :verify_authorized
+      before_action :set_orphan_device, only: [:update]
 
       rescue_from ActionController::ParameterMissing do
         render json: { error: 'Missing Params' }, status: :unprocessable_entity
@@ -22,14 +23,10 @@ module V0
       end
 
       def update
-        orphan_device = OrphanDevice.find_by(onboarding_session: onboarding_session)
-
-        return device_not_found if orphan_device.nil?
-
-        if orphan_device.update(orphan_device_params)
-          render json: orphan_device, status: :ok
+        if @orphan_device.update(orphan_device_params)
+          render json: @orphan_device, status: :ok
         else
-          raise Smartcitizen::UnprocessableEntity.new orphan_device.errors
+          raise Smartcitizen::UnprocessableEntity.new @orphan_device.errors
         end
       end
 
@@ -43,8 +40,9 @@ module V0
         params.require(:onboarding_session)
       end
 
-      def device_not_found
-        render json: { error: 'Invalid onboarding_session' }, status: :not_found
+      def set_orphan_device
+        @orphan_device = OrphanDevice.find_by(onboarding_session: onboarding_session)
+        render json: { error: 'Invalid onboarding_session' }, status: :not_found if @orphan_device.nil?
       end
     end
   end
