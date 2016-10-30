@@ -1,13 +1,32 @@
 require 'rails_helper'
 
 RSpec.describe OrphanDevice, type: :model do
-  it { is_expected.to validate_uniqueness_of(:device_token) }
+  it { is_expected.to validate_uniqueness_of(:device_token).on(:update) }
 
   before do
     @orphan_device = create(:orphan_device)
   end
 
   describe 'device_token' do
+    describe '.generate_device_token' do
+      before do
+        allow(SecureRandom).to receive(:hex).with(3).and_return('555555')
+        create(:orphan_device)
+      end
+
+      it 'calls generate_device_token' do
+        orphan_device = build(:orphan_device)
+        expect(orphan_device).to receive(:generate_device_token).once
+        orphan_device.save
+      end
+
+      it 'attempts 10 times to assign unique device_token' do
+        orphan_device = create(:orphan_device)
+        expect(orphan_device.instance_variable_get('@attempts')).to eq(10)
+        expect(orphan_device.errors.messages[:device_token][1]).to eq('assignment failed')
+      end
+    end
+
     it 'generates 6 character device_token after_create' do
       expect(build(:orphan_device).device_token.nil?).to eq(true)
       expect(@orphan_device.device_token.nil?).to eq(false)
@@ -23,20 +42,6 @@ RSpec.describe OrphanDevice, type: :model do
       expect(@orphan_device.device_token_was).to eq(@orphan_device.device_token)
 
       expect(@orphan_device.errors.messages[:device_token][0]).to eq('cannot be changed')
-    end
-  end
-
-  describe '.generate_device_token' do
-    before do
-      allow(SecureRandom).to receive(:hex).with(3).and_return('555555')
-      create(:orphan_device) # '555555' device_token assigned
-    end
-
-    it 'it attempts 10 times to assign unique device_token' do
-      orphan_device = build(:orphan_device)
-      expect(orphan_device).to receive(:generate_device_token).once
-      # expect(orphan_device).to receive(:update_attributes).exactly(10).times
-      orphan_device.save!
     end
   end
 
