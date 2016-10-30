@@ -50,35 +50,35 @@ describe V0::Onboarding::DeviceRegistrationsController do
   end
 
   before do
-    # workaround
     create(:kit, id: 1) if Kit.where(id: 1).empty?
     create(:tag, name: 'tag1') if Kit.where(name: 'tag1').empty?
     create(:tag, name: 'tag2') if Kit.where(name: 'tag2').empty?
   end
 
   describe 'POST /onboarding/register' do
-    it 'creates device from orphan_device and adds it to current_user' do
-      j = api_post '/onboarding/register', {
-        access_token: token.token,
-        onboarding_session: orphan_device.onboarding_session
-      }
+    describe 'creates device from orphan_device and adds it to current_user' do
+      before do
+        @j = api_post '/onboarding/register', {
+          access_token: token.token,
+          onboarding_session: orphan_device.onboarding_session
+        }
+        @device = user.devices.first
+      end
 
-      # has created device
-      expect(response.status).to eq(201)
-      expect(Device.count).to eq(1)
+      it 'returns created device' do
+        expect(response.status).to eq(201)
 
-      device = user.devices.first
+        expect(@j['name']).to eq(@device.name)
+        expect(@j['owner_id']).to eq(user.id)
+      end
 
-      # returns correct device attributes
-      expect(device.name).to eq(orphan_device.name)
-      expect(j['name']).to eq(device.name)
-      expect(j['owner_id']).to eq(user.id)
-
-      # adds 'user_tags'
-      expect(device.tags.count).to eq(2)
-
-      # and location
-      expect(device.location['city']).to eq('Barcelona')
+      it 'attributes added correclty to new device' do
+        expect(@device.exposure).to eq(orphan_device.exposure)
+        expect(@device.description).to eq(orphan_device.description)
+        expect(@device.kit).to eq(Kit.first)
+        expect(@device.tags.count).to eq(2)
+        expect(@device.location['city']).to eq('Barcelona')
+      end
     end
 
     it 'requires valid onboarding session' do
