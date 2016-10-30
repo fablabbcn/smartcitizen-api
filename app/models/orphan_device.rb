@@ -4,10 +4,11 @@ class OrphanDevice < ActiveRecord::Base
   validates_uniqueness_of :device_token
   validates_uniqueness_of :onboarding_session
 
-  validate :device_token, presence: true, allow_nil: false
+  validates_presence_of :device_token, allow_nil: false
+  validates_presence_of :onboarding_session, allow_nil: false
+
   validates :exposure, inclusion: { in: %w(indoor outdoor) }, allow_nil: true
 
-  before_create :generate_device_token
   after_initialize :generate_onbarding_session
 
   TOKEN_ATTEMPTS = 10

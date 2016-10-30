@@ -1,18 +1,17 @@
 module V0
   module Onboarding
     class DeviceRegistrationsController < ::V0::ApplicationController
-      before_action :require_params, only: [:find_user]
-      before_action :set_orphan_device
+      before_action :require_params, only: :find_user
+      before_action :set_orphan_device, only: :register_device
 
-      before_action :check_if_authorized!, only: [:register_device]
-      after_action :verify_authorized, only: [:register_device]
+      skip_after_action :verify_authorized
 
       rescue_from ActionController::ParameterMissing do
         render json: { error: 'Missing Params' }, status: :unprocessable_entity
       end
 
       def find_user
-        user = User.find_by(email: params[:email])
+        user = User.find_by(email: user_email)
 
         if user.nil?
           render json: { message: 'not_found' }, status: :not_found
@@ -24,8 +23,6 @@ module V0
       def register_device
         device = current_user.devices.build(@orphan_device.device_attributes)
 
-        authorize device
-
         if device.save
           render json: device, status: :created
         else
@@ -35,15 +32,14 @@ module V0
 
       private
 
-      def require_params
-        params.permit(:email, :onboarding_session, :access_token).tap do |parameters|
-          parameters.require(:onboarding_session)
-          parameters.require(:email)
-        end
+      def user_email
+        params.require(:email)
       end
 
       def set_orphan_device
-        @orphan_device = OrphanDevice.find_by(onboarding_session: params[:onboarding_session])
+        @orphan_device = OrphanDevice.find_by(
+          onboarding_session: request.headers['HTTP_ONBOARDING_SESSION']
+        )
         render json: { error: 'Invalid onboarding_session' }, status: :not_found if @orphan_device.nil?
       end
     end
