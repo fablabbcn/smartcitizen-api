@@ -35,7 +35,7 @@ class OrphanDevice < ActiveRecord::Base
   rescue ActiveRecord::RecordInvalid => e
     @attempts = @attempts.to_i + 1
     retry if TOKEN_ATTEMPTS > @attempts
-    errors.add(:device_token, 'assignment failed')
+    raise e, 'device_token assignment failed'
   end
 
   def device_token_persistance
