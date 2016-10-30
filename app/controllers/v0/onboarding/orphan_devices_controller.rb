@@ -9,9 +9,9 @@ module V0
       end
 
       def create
-        orphan_device = OrphanDevice.new(orphan_device_params)
+        @orphan_device = OrphanDevice.new(orphan_device_params)
 
-        if orphan_device.save
+        if save_orphan_device
           render json: {
                           onboarding_session: orphan_device.onboarding_session,
                           device_token: orphan_device.device_token
@@ -43,6 +43,9 @@ module V0
       def set_orphan_device
         @orphan_device = OrphanDevice.find_by(onboarding_session: onboarding_session)
         render json: { error: 'Invalid onboarding_session' }, status: :not_found if @orphan_device.nil?
+      end
+
+      def save_orphan_device
       end
     end
   end
