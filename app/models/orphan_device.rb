@@ -31,11 +31,11 @@ class OrphanDevice < ActiveRecord::Base
   end
 
   def generate_device_token
-    self.update_attributes!(device_token: SecureRandom.hex(3))
-  rescue ActiveRecord::RecordNotUnique => e
+    self.update!(device_token: SecureRandom.hex(3))
+  rescue ActiveRecord::RecordInvalid => e
     @attempts = @attempts.to_i + 1
     retry if TOKEN_ATTEMPTS > @attempts
-    raise e, 'device_token assignment failed'
+    errors.add(:device_token, 'assignment failed')
   end
 
   def device_token_persistance
