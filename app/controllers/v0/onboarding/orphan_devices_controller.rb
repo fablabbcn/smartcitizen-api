@@ -18,7 +18,7 @@ module V0
                         },
                  status: :created
         else
-          raise Smartcitizen::UnprocessableEntity.new orphan_device.errors
+          raise Smartcitizen::UnprocessableEntity.new @orphan_device.errors
         end
       end
 
