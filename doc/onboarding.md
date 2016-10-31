@@ -33,7 +33,7 @@ response example:
 ### PATCH /v0/onboarding/device
 
 Method to update (slide by slide, or all at once) the still 'orphan' device.
-It requires using HTTP headers to pass a valid 'Onboarding-Session' in the  and returns updated 'orphan_device' (status 200) if successfully updated.
+It requires a valid 'Onboarding-Session' header and returns updated 'orphan_device' (status 200) if successfully updated.
 
 Calling without an existent 'Onboarding-Session' returns error "Invalid onboarding_session" (404).
 ```
@@ -112,6 +112,7 @@ Regardless of user is new or not authorization credentials are required and the 
 Method takes 'access_token' and adds to the current_user a new 'device' using onboarding_session's correspondent 'orphan_device' attributes. It returns newly created 'device'.
 
 If 'access_token' is not valid or missing, (401) "Authorization required" is returned.
+
 If 'Onboarding-Session' is not valid, (404) "Invalid onboarding_session".
 
 ```
