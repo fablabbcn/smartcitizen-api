@@ -102,18 +102,17 @@ response example:
 
 ## User login
 
-Before completing the 'Onboarding Process' it is required authenticate users.
-Regardless of user is new or not authorization credentials are required and the 'access_token' must be provided on the device registration.
+Before completing the 'Onboarding Process', it is required for users to login (v0/sessions). This implies for new users to 'Sign Up'.
 
 ## Register device (add a new device to user using 'orphan_device')
 
 ### POST v0/onboarding/register
 
-Method takes 'access_token' and adds to the current_user a new 'device' using onboarding_session's correspondent 'orphan_device' attributes. It returns newly created 'device'.
-
-If 'access_token' is not valid or missing, (401) "Authorization required" is returned.
+Method adds to the current_user a new 'device' using onboarding_session's correspondent 'orphan_device' attributes. It returns newly created 'device'.
 
 If 'Onboarding-Session' is not valid, (404) "Invalid onboarding_session".
+
+Requires user authentication, otherwise (401) "Authorization required" is returned.
 
 ```
 POST v0/onboarding/register request example:
@@ -126,6 +125,7 @@ Onboarding-Session: a71095a2-e99c-4664-82d8-b4c1c9bbc531
 {
   "access_token": "abd729a81160e0654482662d55cc65ead2e6f28785efd160bd089d44cd9037d2"
 }
+
 ```
 
 ```
