@@ -102,7 +102,7 @@ response example:
 
 ## User login
 
-Before completing the 'Onboarding Process', it is required for users to login (v0/sessions). This implies for new users to 'Sign Up'.
+In order to complete the 'Onboarding Process', it is required user authentication.
 
 ## Register device (add a new device to user using 'orphan_device')
 
