@@ -1,13 +1,9 @@
 module V0
   module Onboarding
-    class DeviceRegistrationsController < ::V0::ApplicationController
+    class DeviceRegistrationsController < ApplicationController
       before_action :set_orphan_device, only: :register_device
       before_action :check_if_authorized!, only: :register_device
       after_action :verify_authorized, only: :register_device
-
-      rescue_from ActionController::ParameterMissing do
-        render json: { error: 'Missing Params' }, status: :unprocessable_entity
-      end
 
       def find_user
         user = User.find_by(email: user_email)
