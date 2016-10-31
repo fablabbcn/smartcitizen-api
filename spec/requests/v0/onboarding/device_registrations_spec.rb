@@ -20,8 +20,8 @@ describe V0::Onboarding::DeviceRegistrationsController do
     it 'requires email' do
       j = api_post '/onboarding/user', {}
 
-      expect(j['error']).to eq('Missing Params')
-      expect(response.status).to eq(422)
+      expect(j['message']).to eq('param is missing or the value is empty: email')
+      expect(response.status).to eq(400)
     end
 
     it 'returns not_found if user does not exist' do
