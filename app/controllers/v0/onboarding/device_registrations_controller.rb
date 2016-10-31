@@ -1,10 +1,9 @@
 module V0
   module Onboarding
     class DeviceRegistrationsController < ::V0::ApplicationController
-      before_action :require_params, only: :find_user
       before_action :set_orphan_device, only: :register_device
-
-      skip_after_action :verify_authorized
+      before_action :check_if_authorized!, only: :register_device
+      after_action :verify_authorized, only: :register_device
 
       rescue_from ActionController::ParameterMissing do
         render json: { error: 'Missing Params' }, status: :unprocessable_entity
@@ -23,6 +22,8 @@ module V0
       def register_device
         device = current_user.devices.build(@orphan_device.device_attributes)
 
+        authorize device
+
         if device.save
           render json: device, status: :created
         else
@@ -33,7 +34,7 @@ module V0
       private
 
       def user_email
-        params.require(:email)
+        params.permit(:email).require(:email)
       end
 
       def set_orphan_device

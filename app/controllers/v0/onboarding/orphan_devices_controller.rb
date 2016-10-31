@@ -2,7 +2,7 @@ module V0
   module Onboarding
     class OrphanDevicesController < ::V0::ApplicationController
       skip_after_action :verify_authorized
-      before_action :set_orphan_device, only: [:update]
+      before_action :set_orphan_device, only: :update
 
       rescue_from ActionController::ParameterMissing do
         render json: { error: 'Missing Params' }, status: :unprocessable_entity
