@@ -6,11 +6,11 @@ describe V0::Onboarding::OrphanDevicesController do
   let(:user) { create :user }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
   let(:device) { create(:device) }
-  let(:orphan_device) { create(:orphan_device) }
+  let(:orphan_device) { create(:orphan_device, device_token: 'aA1234') }
 
   describe 'POST /onboarding/device' do
     it 'returns onboarding_session and device_token of created orphan_device' do
-      j = api_post '/onboarding/device', {}
+      j = api_post '/onboarding/device'
 
       orphan_device = OrphanDevice.first
       expect(response.status).to eq(201)
@@ -30,19 +30,13 @@ describe V0::Onboarding::OrphanDevicesController do
   end
 
   describe 'PATCH /onboarding/device' do
-    before do
-      @orphan_device = create(:orphan_device)
-    end
-
-    it 'updates orphan_device with passed onboarding_session' do
+    it 'updates orphan_device' do
 
       j = api_put '/onboarding/device', {
-        onboarding_session: @orphan_device.onboarding_session,
-
         name: 'Owner',
         user_tags: 'cloudy,outdoor',
         description: 'device description'
-      }
+      }, '0', { 'HTTP_ONBOARDING_SESSION' => orphan_device.onboarding_session }
 
       expect(response.status).to eq(200)
       orphan_device = OrphanDevice.first
@@ -52,15 +46,10 @@ describe V0::Onboarding::OrphanDevicesController do
       expect(orphan_device.description).to eq('device description')
     end
 
-    it 'requires onboarding_session' do
-      j = api_put '/onboarding/device', {}
-
-      expect(response.status).to eq(422)
-      expect(j['error']).to eq('Missing Params')
-    end
-
     it 'requires onboarding_session of existen orphan_device' do
-      j = api_put '/onboarding/device', { onboarding_session: '1111111' }
+      j = api_put '/onboarding/device', {},'0', {
+        'HTTP_ONBOARDING_SESSION' => 'invalid onboarding session'
+      }
 
       expect(response.status).to eq(404)
       expect(j['error']).to eq('Invalid onboarding_session')
