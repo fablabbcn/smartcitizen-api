@@ -48,11 +48,11 @@ describe V0::Onboarding::OrphanDevicesController do
 
     it 'requires onboarding_session of existen orphan_device' do
       j = api_put '/onboarding/device', {},'0', {
-        'HTTP_ONBOARDING_SESSION' => 'invalid onboarding session'
+        'OnboardingSession' => 'invalid onboarding session'
       }
 
       expect(response.status).to eq(404)
-      expect(j['error']).to eq('Invalid onboarding_session')
+      expect(j['error']).to eq('Invalid OnboardingSession')
     end
   end
 end

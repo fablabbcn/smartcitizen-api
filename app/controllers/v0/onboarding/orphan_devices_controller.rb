@@ -36,7 +36,7 @@ module V0
         @orphan_device = OrphanDevice.find_by(
           onboarding_session: request.headers['HTTP_ONBOARDINGSESSION']
         )
-        render json: { error: 'Invalid onboarding_session' }, status: :not_found if @orphan_device.nil?
+        render json: { error: 'Invalid OnboardingSession' }, status: :not_found if @orphan_device.nil?
       end
 
       def save_orphan_device

@@ -56,9 +56,11 @@ describe V0::Onboarding::DeviceRegistrationsController do
 
         expect(@j['name']).to eq(@device.name)
         expect(@j['owner_id']).to eq(user.id)
+        expect(@j['device_token']).to eq(orphan_device.device_token)
       end
 
       it 'attributes added correclty to new device' do
+        expect(@device.device_token).to eq(orphan_device.device_token)
         expect(@device.exposure).to eq(orphan_device.exposure)
         expect(@device.description).to eq(orphan_device.description)
         expect(@device.kit).to eq(Kit.first)
@@ -74,7 +76,7 @@ describe V0::Onboarding::DeviceRegistrationsController do
         '0',
         { 'OnboardingSession' => 'invalid' }
       )
-      expect(j['error']).to eq('Invalid onboarding_session')
+      expect(j['error']).to eq('Invalid OnboardingSession')
       expect(response.status).to eq(404)
     end
 
