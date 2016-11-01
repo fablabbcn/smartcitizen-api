@@ -193,11 +193,13 @@ ActiveRecord::Schema.define(version: 20161026171920) do
     t.float    "latitude"
     t.float    "longitude"
     t.text     "user_tags"
-    t.string   "device_token"
+    t.string   "device_token",       null: false
     t.string   "onboarding_session"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
   end
+
+  add_index "orphan_devices", ["device_token"], name: "index_orphan_devices_on_device_token", unique: true, using: :btree
 
   create_table "pg_search_documents", force: :cascade do |t|
     t.text     "content"
