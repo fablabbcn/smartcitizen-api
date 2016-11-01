@@ -28,6 +28,8 @@ class Device < ActiveRecord::Base
   validates_presence_of :name, :owner, on: :create
   validates_uniqueness_of :name, scope: :owner_id, on: :create
 
+  validates_uniqueness_of :device_token, allow_nil: true
+
   validates_format_of :mac_address,
     with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
 
