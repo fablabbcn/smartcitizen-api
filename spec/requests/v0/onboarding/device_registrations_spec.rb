@@ -45,7 +45,7 @@ describe V0::Onboarding::DeviceRegistrationsController do
           '/onboarding/register',
           { access_token: token.token },
           '0',
-          { 'HTTP_ONBOARDING_SESSION' => onboarding_session }
+          { 'OnboardingSession' => onboarding_session }
         )
 
         @device = user.devices.first
@@ -72,14 +72,14 @@ describe V0::Onboarding::DeviceRegistrationsController do
         '/onboarding/register',
         { access_token: token.token },
         '0',
-        { 'HTTP_ONBOARDING_SESSION' => 'invalid' }
+        { 'OnboardingSession' => 'invalid' }
       )
       expect(j['error']).to eq('Invalid onboarding_session')
       expect(response.status).to eq(404)
     end
 
     it 'requires user authentication' do
-      j = api_post '/onboarding/register', {}, '0', { 'HTTP_ONBOARDING_SESSION' => onboarding_session }
+      j = api_post '/onboarding/register', {}, '0', { 'OnboardingSession' => onboarding_session }
 
       expect(j['message']).to eq('Authorization required')
       expect(response.status).to eq(401)
