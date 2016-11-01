@@ -23,7 +23,7 @@ class OrphanDevice < ActiveRecord::Base
     }
   end
 
-  def generate_token
+  def generate_token!
     self.device_token = SecureRandom.hex(3)
   end
 

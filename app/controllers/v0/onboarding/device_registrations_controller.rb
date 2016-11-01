@@ -18,7 +18,7 @@ module V0
       def register_device
         device = current_user.devices.build(@orphan_device.device_attributes)
 
-        authorize device
+        authorize device, :create?
 
         if device.save
           render json: device, status: :created
