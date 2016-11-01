@@ -15,8 +15,4 @@ class DevicePolicy < ApplicationPolicy
   def destroy?
     update?
   end
-
-  def register_device?
-    user
-  end
 end
