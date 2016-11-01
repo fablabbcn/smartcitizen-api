@@ -19,7 +19,8 @@ class OrphanDevice < ActiveRecord::Base
       user_tags: user_tags,
       exposure: exposure,
       latitude: latitude,
-      longitude: longitude
+      longitude: longitude,
+      device_token: device_token
     }
   end
 

@@ -33,7 +33,6 @@ RSpec.describe OrphanDevice, type: :model do
   end
 
   describe 'onboarding_session' do
-    it { is_expected.to validate_uniqueness_of(:onboarding_session) }
     it { is_expected.not_to allow_value(nil).for(:onboarding_session) }
 
     it 'generates uuid onboarding_session after_initialize' do
@@ -54,7 +53,7 @@ RSpec.describe OrphanDevice, type: :model do
     it 'attributes hash without device_token and onboarding_session' do
       device_attributes_hash = orphan_device.device_attributes
 
-      expect(device_attributes_hash.length).to eq(7)
+      expect(device_attributes_hash.length).to eq(8)
       expect(device_attributes_hash.key?(:name)).to eq(true)
       expect(device_attributes_hash.key?(:kit_id)).to eq(true)
       expect(device_attributes_hash.key?(:description)).to eq(true)
@@ -62,6 +61,7 @@ RSpec.describe OrphanDevice, type: :model do
       expect(device_attributes_hash.key?(:longitude)).to eq(true)
       expect(device_attributes_hash.key?(:latitude)).to eq(true)
       expect(device_attributes_hash.key?(:exposure)).to eq(true)
+      expect(device_attributes_hash.key?(:device_token)).to eq(true)
     end
   end
 end
