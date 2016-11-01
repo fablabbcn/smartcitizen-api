@@ -15,5 +15,8 @@ class CreateOrphanDevices < ActiveRecord::Migration
     end
 
     add_index :orphan_devices, [:device_token], unique: true
+
+    add_column :devices, :device_token, :string
+    add_index :devices, [:device_token], unique: true
   end
 end

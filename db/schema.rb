@@ -90,8 +90,10 @@ ActiveRecord::Schema.define(version: 20161026171920) do
     t.datetime "csv_export_requested_at"
     t.macaddr  "old_mac_address"
     t.string   "state"
+    t.string   "device_token"
   end
 
+  add_index "devices", ["device_token"], name: "index_devices_on_device_token", unique: true, using: :btree
   add_index "devices", ["geohash"], name: "index_devices_on_geohash", using: :btree
   add_index "devices", ["kit_id"], name: "index_devices_on_kit_id", using: :btree
   add_index "devices", ["last_recorded_at"], name: "index_devices_on_last_recorded_at", using: :btree
