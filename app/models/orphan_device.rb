@@ -11,8 +11,6 @@ class OrphanDevice < ActiveRecord::Base
 
   after_initialize :generate_onbarding_session
 
-  TOKEN_ATTEMPTS = 10
-
   def device_attributes
     {
       name: name,
@@ -25,7 +23,7 @@ class OrphanDevice < ActiveRecord::Base
     }
   end
 
-  def generate_device_token
+  def generate_token
     self.device_token = SecureRandom.hex(3)
   end
 

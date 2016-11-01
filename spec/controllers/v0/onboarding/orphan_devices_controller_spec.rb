@@ -9,16 +9,13 @@ RSpec.describe V0::Onboarding::OrphanDevicesController, type: :controller do
       @controller = V0::Onboarding::OrphanDevicesController.new
       @controller.params = ActionController::Parameters.new
 
-      allow(SecureRandom).to receive(:hex).with(3).and_return('123123')
-      create(:orphan_device, device_token: '123123')
+      allow_any_instance_of(OrphanDevice).to receive(:generate_token).and_raise(ActiveRecord::RecordInvalid.new(OrphanDevice.new))
     end
 
     it 'tries 10 times generating_token & saving it' do
-      expect(@controller).to receive(:raise)
+      expect(@controller).to receive(:raise).with(Smartcitizen::UnprocessableEntity.new)
+      expect_any_instance_of(OrphanDevice).to receive(:generate_token).exactly(10).times
       @controller.send(:create)
-      expect(@controller.instance_variable_get('@attempts')).to eq(10)
-      orphan_dev = controller.instance_variable_get('@orphan_device')
-      expect(orphan_dev.errors.messages[:device_token][0]).to eq('has already been taken')
     end
   end
 end

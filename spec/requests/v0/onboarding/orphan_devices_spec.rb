@@ -36,7 +36,7 @@ describe V0::Onboarding::OrphanDevicesController do
         name: 'Owner',
         user_tags: 'cloudy,outdoor',
         description: 'device description'
-      }, '0', { 'HTTP_ONBOARDING_SESSION' => orphan_device.onboarding_session }
+      }, '0', { 'OnboardingSession' => orphan_device.onboarding_session }
 
       expect(response.status).to eq(200)
       orphan_device = OrphanDevice.first
