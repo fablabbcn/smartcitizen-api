@@ -4,12 +4,12 @@ RSpec.describe OrphanDevice, type: :model do
   let(:orphan_device) { create(:orphan_device, device_token: 'aA5555') }
 
   describe 'device_token' do
-    describe '.generate_device_token' do
+    describe '.generate_token!' do
       it 'generates random 6 character device_token' do
         orphan_dev = build(:orphan_device)
 
         expect(orphan_dev.device_token).to eq(nil)
-        orphan_dev.generate_device_token
+        orphan_dev.generate_token!
         expect(orphan_dev.device_token.nil?).to eq(false)
         expect(orphan_dev.device_token.length).to eq(6)
       end

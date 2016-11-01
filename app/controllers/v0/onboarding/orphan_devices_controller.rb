@@ -40,7 +40,7 @@ module V0
       end
 
       def save_orphan_device
-        @orphan_device.generate_token
+        @orphan_device.generate_token!
         return false unless @orphan_device.valid?
         @orphan_device.save!
       rescue ActiveRecord::RecordInvalid => e
