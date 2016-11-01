@@ -41,7 +41,7 @@ request example:
 --------------------------------------------------------
 Content-Type: application/json
 Accept: application/json
-Onboarding-Session: a71095a2-e99c-4664-82d8-b4c1c9bbc531
+OnboardingSession: a71095a2-e99c-4664-82d8-b4c1c9bbc531
 --------------------------------------------------------
 {
   "name": "Owner",
@@ -120,11 +120,9 @@ POST v0/onboarding/register request example:
 --------------------------------------------------------
 Content-Type: application/json
 Accept: application/json
-Onboarding-Session: a71095a2-e99c-4664-82d8-b4c1c9bbc531
+OnboardingSession: a71095a2-e99c-4664-82d8-b4c1c9bbc531
 --------------------------------------------------------
-{
-  "access_token": "abd729a81160e0654482662d55cc65ead2e6f28785efd160bd089d44cd9037d2"
-}
+{}
 
 ```
 
