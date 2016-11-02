@@ -15,5 +15,4 @@ class DevicePolicy < ApplicationPolicy
   def destroy?
     update?
   end
-
 end

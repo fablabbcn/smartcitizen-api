@@ -15,6 +15,7 @@ RSpec.describe Device, :type => :model do
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_presence_of(:owner) }
   it { is_expected.to validate_uniqueness_of(:name).scoped_to(:owner_id) }
+  it { is_expected.to validate_uniqueness_of(:device_token) }
 
   it "does not allow banned names" do
     puts Smartcitizen::Application.config.banned_words
@@ -294,4 +295,21 @@ RSpec.describe Device, :type => :model do
     expect(Device.near(london_coordinates, 5000)).to eq([old_trafford, paris, barcelona])
   end
 
+  describe "device_token" do
+    it 'validates uniqueness' do
+      dev1 = create(:device, device_token: '123123')
+      dev2 = build(:device, device_token: dev1.device_token)
+
+      expect(dev2.save).to eq(false)
+      expect(dev2.errors.messages[:device_token][0]).to eq('has already been taken')
+    end
+
+    it 'does not validate uniqueness when nil' do
+      dev1 = create(:device)
+      dev2 = build(:device)
+
+      expect(dev2.save).to eq(true)
+      expect(dev2.errors.messages[:device_token].nil?).to eq(true)
+    end
+  end
 end
