@@ -41,13 +41,6 @@ check process socketio matching /home/<%= fetch(:deploy_user) %>/sockets/socketi
   if cpu is greater than 80% for 3 cycles then restart      # hung process?
   if 10 restarts within 10 cycles then timeout
 
-# postgres
-check process postgresql with pidfile /var/run/postgresql/<%= ENV.fetch('postgres_version') %>-main.pid
-  start program = "/etc/init.d/postgresql start"
-  stop program = "/etc/init.d/postgresql stop"
-  if failed host localhost port <%= ENV.fetch('postgres_port') %> protocol pgsql then restart
-  if 10 restarts within 10 cycles then timeout
-
 # nginx
 check process nginx with pidfile /var/run/nginx.pid
   start program = "/etc/init.d/nginx start" # as uid "<%= fetch(:deploy_user) %>"
