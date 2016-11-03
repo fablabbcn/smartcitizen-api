@@ -7,6 +7,8 @@ class Storer
     # identifier = version.split('-').first
     # device.set_version_if_required!(identifier)
 
+    readings = {}
+
     parsed_ts = Time.parse(reading['recorded_at'])
     raise "timestamp error" if parsed_ts > 1.day.from_now or parsed_ts < 3.years.ago
     ts = parsed_ts.to_i * 1000
@@ -39,6 +41,9 @@ class Storer
 
       sql_data["#{sensor_id}_raw"] = value
       sql_data[sensor_id] = component.calibrated_value(value)
+
+      # sensor_key? sensor.name?
+      readings[sensor_key] = [sensor_id, value, sql_data[sensor_id]]
     end
 
     Kairos.http_post_to("/datapoints", _data)
@@ -46,6 +51,20 @@ class Storer
 
     if parsed_ts > (device.last_recorded_at || Time.at(0))
       device.update_columns(last_recorded_at: parsed_ts, data: sql_data, state: 'has_published')
+    end
+
+    if Rails.env.production? and device
+      begin
+        Redis.current.publish("data-received", {
+          device_id: device.id,
+          device: JSON.parse(device.to_json(only: [:id, :name, :location])),
+          timestamp: ts,
+          readings: readings,
+          stored: nil, ### needed? true?/false? based on? published sure thing
+          data: JSON.parse(ActionController::Base.new.view_context.render( partial: "v0/devices/device", locals: {device: device, current_user: nil}))
+        }.to_json)
+      rescue
+      end
     end
 
   end
