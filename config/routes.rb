@@ -58,6 +58,14 @@ Rails.application.routes.draw do
       delete '/' => 'me#destroy', on: :collection
     end
 
+    # onboarding process
+    namespace :onboarding do
+      post 'device', to: 'orphan_devices#create'
+      patch 'device', to: 'orphan_devices#update'
+      post 'user', to: 'device_registrations#find_user'
+      post 'register', to: 'device_registrations#register_device'
+    end
+
     get 'search' => 'static#search'
     get 'metrics' => 'static#metrics'
     # use_doorkeeper
@@ -68,6 +76,7 @@ Rails.application.routes.draw do
     get "/500" => "errors#exception"
     get "/test_error" => "errors#test_error"
     match "*path", to: "errors#not_found", via: :all
+
   end
 
   # get '*path', :to => redirect("/v0/%{path}")

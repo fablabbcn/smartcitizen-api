@@ -69,6 +69,5 @@ private
       false
       # request.host.match /api.smartcitizen.me/
     end
-
   end
 end

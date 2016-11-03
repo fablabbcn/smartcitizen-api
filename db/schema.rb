@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160607101112) do
+ActiveRecord::Schema.define(version: 20161026171920) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,8 +90,10 @@ ActiveRecord::Schema.define(version: 20160607101112) do
     t.datetime "csv_export_requested_at"
     t.macaddr  "old_mac_address"
     t.string   "state"
+    t.string   "device_token"
   end
 
+  add_index "devices", ["device_token"], name: "index_devices_on_device_token", unique: true, using: :btree
   add_index "devices", ["geohash"], name: "index_devices_on_geohash", using: :btree
   add_index "devices", ["kit_id"], name: "index_devices_on_kit_id", using: :btree
   add_index "devices", ["last_recorded_at"], name: "index_devices_on_last_recorded_at", using: :btree
@@ -184,6 +186,22 @@ ActiveRecord::Schema.define(version: 20160607101112) do
 
   add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
+
+  create_table "orphan_devices", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "kit_id"
+    t.string   "exposure"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.text     "user_tags"
+    t.string   "device_token",       null: false
+    t.string   "onboarding_session"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "orphan_devices", ["device_token"], name: "index_orphan_devices_on_device_token", unique: true, using: :btree
 
   create_table "pg_search_documents", force: :cascade do |t|
     t.text     "content"
