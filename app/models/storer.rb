@@ -1,8 +1,7 @@
 class Storer
 
   def initialize device_id, reading
-    stored = false
-
+    stored = true
     begin
 
       device = Device.includes(:components).find(device_id)
@@ -53,7 +52,7 @@ class Storer
         device.update_columns(last_recorded_at: parsed_ts, data: sql_data, state: 'has_published')
       end
 
-    rescue
+    rescue => exception
       stored = false
     end
 
@@ -70,6 +69,8 @@ class Storer
       rescue
       end
     end
+
+    raise exception if exception
 
   end
 
