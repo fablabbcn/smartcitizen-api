@@ -3,7 +3,6 @@ class Storer
   def initialize device_id, reading
     stored = true
     begin
-
       device = Device.includes(:components).find(device_id)
 
       # identifier = version.split('-').first
@@ -14,7 +13,7 @@ class Storer
       ts = parsed_ts.to_i * 1000
 
       _data = []
-      sql_data = {"" => parsed_ts}
+      sql_data = {"" => parsed_ts} ## HEY
 
       reading['sensors'].each do |sensor|
 
@@ -44,6 +43,7 @@ class Storer
 
         reading[sensor_key] = [sensor_id, value, sql_data[sensor_id]]
       end
+      puts reading.except!('recorded_at', 'sensors')
 
       Kairos.http_post_to("/datapoints", _data)
       Minuteman.add("rest_readings")
@@ -63,7 +63,7 @@ class Storer
           device: JSON.parse(device.to_json(only: [:id, :name, :location])),
           timestamp: ts,
           readings: reading.except!('recorded_at', 'sensors'),
-          stored: stored
+          stored: stored,
           data: JSON.parse(ActionController::Base.new.view_context.render( partial: "v0/devices/device", locals: {device: device, current_user: nil}))
         }.to_json)
       rescue
