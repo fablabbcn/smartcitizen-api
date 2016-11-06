@@ -43,7 +43,6 @@ class Storer
 
         reading[sensor_key] = [sensor_id, value, sql_data[sensor_id]]
       end
-      puts reading.except!('recorded_at', 'sensors')
 
       Kairos.http_post_to("/datapoints", _data)
       Minuteman.add("rest_readings")

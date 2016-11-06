@@ -42,9 +42,9 @@ RSpec.describe Storer, type: :model do
 		# ensuring hash keys sorting matches between expectations and results
 		allow_any_instance_of(Device).to receive(:to_json).and_return(device.to_json(only: [:id, :name, :location]))
 
-		double = ActionController::Base.new.view_context
-		allow_any_instance_of(ActionController::Base).to receive(:view_context).and_return(double)
-		allow(double).to receive(:render).and_return(ActionController::Base.new.view_context.render( partial: "v0/devices/device", locals: {device: device, current_user: nil}))
+		view = ActionController::Base.new.view_context
+		allow_any_instance_of(ActionController::Base).to receive(:view_context).and_return(view)
+		allow(view).to receive(:render).and_return(ActionController::Base.new.view_context.render( partial: "v0/devices/device", locals: {device: device, current_user: nil}))
 	end
 
 	it 'publishes using redis' do
