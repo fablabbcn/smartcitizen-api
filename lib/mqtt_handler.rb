@@ -1,13 +1,4 @@
 module MqttHandler
-  # sets clean_session flag as false, sets client_id
-  class ClientConnection < EventMachine::MQTT::ClientConnection
-    def initialize(args={})
-      super
-      @client_id = "smartcitizen_1"
-      @clean_session = false
-    end
-  end
-
   class ReadingsPacket
     # takes a packet and stores data
     def self.store(packet)
