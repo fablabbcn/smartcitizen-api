@@ -1,12 +1,3 @@
-application_yml = '127.0.0.1'
-
-if Rails.env.production?
-  Figaro.require_keys('mqqt_host')
-else
-  Figaro.env.mqqt_host_key == '127.0.0.1' unless Figaro.env.mqqt_host_key?
-end
-
-
 Thread.new do
   EventMachine::error_handler { |e| puts "#{e}: #{e.backtrace.first}" }
 
