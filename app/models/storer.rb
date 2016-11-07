@@ -68,7 +68,7 @@ class Storer
       rescue
       end
     end
-    #
+
     raise e unless e.nil?
 
   end

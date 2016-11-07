@@ -1,5 +1,5 @@
 Thread.new do
-  EventMachine::error_handler { |e| puts "#{e}: #{e.backtrace.first}" }
+  EventMachine::error_handler { |e| Airbrake.notify(e) }
 
   EventMachine.run do
     EventMachine::MQTT::ClientConnection.connect(host: ENV['mqqt_host'], clean_session: true) do |c|

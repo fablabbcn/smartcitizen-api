@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe MqttHandler::ReadingsPacket do
   let(:device) { create(:device, device_token: 'aA1234') }
   let(:component) { create(:component, board: create(:kit), sensor: create(:sensor, id: 1)) }
-
   before do
     device.components << component
 
@@ -17,6 +16,11 @@ RSpec.describe MqttHandler::ReadingsPacket do
 
     @packet = MQTT::Packet::Publish.new(
       topic: "device/sck/#{device.device_token}/readings",
+      payload: '{"data": [{"recorded_at": "2016-06-08 10:30:00","sensors": [{"id": 1,"value": 21}]}]}'
+    )
+
+    @invalid_packet = MQTT::Packet::Publish.new(
+      topic: "device/sck/invalid_device_token/readings",
       payload: '{"data": [{"recorded_at": "2016-06-08 10:30:00","sensors": [{"id": 1,"value": 21}]}]}'
     )
   end
@@ -47,9 +51,20 @@ RSpec.describe MqttHandler::ReadingsPacket do
         }
       }]
     end
-    it 'stores data from packet to correct device' do
-      expect(Kairos).to receive(:http_post_to).with("/datapoints", @data_array)
-      MqttHandler::ReadingsPacket.store(@packet)
+    context 'valid reading packet' do
+      it 'queues reading data in order to be stored' do
+        expect(Kairos).to receive(:http_post_to).with("/datapoints", @data_array)
+        MqttHandler::ReadingsPacket.store(@packet)
+      end
     end
+
+    context 'invalid packet' do
+      it 'it notifies Airbrake' do
+        expect(Kairos).not_to receive(:http_post_to)
+        expect(Airbrake).to receive(:notify).with(RuntimeError) # 'device not found'
+        MqttHandler::ReadingsPacket.store(@invalid_packet)
+      end
+    end
+
   end
 end

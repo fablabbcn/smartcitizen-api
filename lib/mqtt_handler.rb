@@ -4,14 +4,13 @@ module MqttHandler
     def self.store(packet)
       device = Device.find_by(device_token: self.device_token(packet))
 
-      return if device.nil?
+      raise 'device not found' if device.nil?
 
       self.data(packet).each do |reading|
         Storer.new(device.id, reading)
       end
     rescue Exception => e
-      puts e
-      # Airbrake.notify(e)
+      Airbrake.notify(e)
     end
 
     # takes a packet and returns 'device token' from topic

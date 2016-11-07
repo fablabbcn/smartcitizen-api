@@ -52,8 +52,6 @@ RSpec.describe Storer, type: :model do
 	before do
 		allow(Rails.env).to receive(:production?).and_return(true)
 		allow(Kairos).to receive(:http_post_to).with("/datapoints", anything)
-
-		# ensuring hash keys sorting matches between expectations and results
 		allow_any_instance_of(Device).to receive(:to_json).and_return(device.to_json(only: [:id, :name, :location]))
 
 		view = ActionController::Base.new.view_context
