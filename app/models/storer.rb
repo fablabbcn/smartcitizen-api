@@ -56,7 +56,6 @@ class Storer
 
     end
     if Rails.env.production? and device
-      puts 'hola'
       begin
         Redis.current.publish("data-received", {
           device_id: device.id,
