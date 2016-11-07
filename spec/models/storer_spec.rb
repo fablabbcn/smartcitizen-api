@@ -24,6 +24,16 @@ RSpec.describe Storer, type: :model do
 		}
 	}
 
+	let(:bad_data) {
+		{
+			'recorded_at'=> 'string',
+			'sensors'=> [{
+				'id'=>'string',
+				'value'=>'string'
+				}]
+		}
+	}
+
 	let(:expected_json) {
 		{
 			device_id: device.id,
@@ -47,8 +57,20 @@ RSpec.describe Storer, type: :model do
 		allow(view).to receive(:render).and_return(ActionController::Base.new.view_context.render( partial: "v0/devices/device", locals: {device: device, current_user: nil}))
 	end
 
-	it 'publishes using redis' do
-		expect(Redis.current).to receive(:publish).with('data-received', expected_json)
-		Storer.new(device.id, data)
+	context 'when receiving good data' do
+		it 'redis publish' do
+			expect(Redis.current).to receive(:publish).with('data-received', expected_json)
+			Storer.new(device.id, data)
+		end
+	end
+
+	context 'when receiveng bad data' do
+		it 'throws an exception' do
+			expect(Storer.new(device.id, bad_data)).to raise_error
+		end
+		it 'does redis publish anyway' do
+			expect(Redis.current).to receive(:publish).with('data-received', anything)
+			Storer.new(device.id, bad_data)
+		end
 	end
 end
