@@ -28,7 +28,17 @@ RSpec.describe Storer, type: :model do
 		}
 	}
 
-	let(:expected_json) {
+	let(:karios_data_array) { [{
+		name: device.find_sensor_key_by_id(12),
+		timestamp: Time.parse(data['recorded_at']).to_i * 1000,
+		value: Component.first.normalized_value((Float(data['sensors'][0]['value']))),
+		tags: {
+			device_id: device.id,
+			method: 'REST'
+		}
+	}] }
+
+	let(:redis_json) {
 		{
 			device_id: device.id,
 			device: JSON.parse(device.to_json(only: [:id, :name, :location])),
@@ -52,15 +62,22 @@ RSpec.describe Storer, type: :model do
 	end
 
 	context 'when receiving good data' do
-		it 'redis publish' do
-			expect(Redis.current).to receive(:publish).with('data-received', expected_json)
+		after do
 			Storer.new(device.id, data)
+		end
+		it 'stores data to karios db' do
+			expect(Kairos).to receive(:http_post_to).with("/datapoints", karios_data_array)
+		end
+		it 'redis publish' do
+			expect(Redis.current).to receive(:publish).with('data-received', redis_json)
 		end
 	end
 
 	context 'when receiveng bad data' do
-		it 'does redis publish anyway but raise error' do
+		it 'does redis publish anyway and raise error' do
+			expect(Kairos).not_to receive(:http_post_to).with("/datapoints", anything)
 			expect(Redis.current).to receive(:publish).with('data-received', anything)
+
 			expect{ Storer.new(device.id, bad_data) }.to raise_error(ArgumentError)
 		end
 	end
