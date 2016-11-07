@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe MqttHandler::ReadingsPacket do
+RSpec.describe MqttReadingsHandler do
   let(:device) { create(:device, device_token: 'aA1234') }
   let(:component) { create(:component, board: create(:kit), sensor: create(:sensor, id: 1)) }
   before do
@@ -27,13 +27,13 @@ RSpec.describe MqttHandler::ReadingsPacket do
 
   describe '#device_token' do
     it 'returns device_token from topic' do
-      expect(MqttHandler::ReadingsPacket.device_token(@packet)).to eq(device.device_token)
+      expect(MqttReadingsHandler.device_token(@packet)).to eq(device.device_token)
     end
   end
 
   describe '#data' do
     it 'returns parsed data from payload' do
-      expect(MqttHandler::ReadingsPacket.data(@packet)).to match_array(@data)
+      expect(MqttReadingsHandler.data(@packet)).to match_array(@data)
     end
   end
 
@@ -54,7 +54,7 @@ RSpec.describe MqttHandler::ReadingsPacket do
     context 'valid reading packet' do
       it 'queues reading data in order to be stored' do
         expect(Kairos).to receive(:http_post_to).with("/datapoints", @data_array)
-        MqttHandler::ReadingsPacket.store(@packet)
+        MqttReadingsHandler.store(@packet)
       end
     end
 
@@ -62,7 +62,7 @@ RSpec.describe MqttHandler::ReadingsPacket do
       it 'it notifies Airbrake' do
         expect(Kairos).not_to receive(:http_post_to)
         expect(Airbrake).to receive(:notify).with(RuntimeError) # 'device not found'
-        MqttHandler::ReadingsPacket.store(@invalid_packet)
+        MqttReadingsHandler.store(@invalid_packet)
       end
     end
 
