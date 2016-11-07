@@ -8,10 +8,6 @@ RSpec.describe Storer, type: :model do
     create(:component, id: 12, board: Kit.find(3), sensor: Sensor.find(12), equation: '(175.72 / 65536.0 * x) - 53', reverse_equation: 'x')
   end
 
-  after(:all) do
-    DatabaseCleaner.clean_with(:truncation)
-  end
-
 	let(:device) { create(:device, device_token: 'aA1234', kit: Kit.find(3)) }
 
 	let(:data) {
