@@ -17,20 +17,14 @@ RSpec.describe Storer, type: :model do
 	let(:data) {
 		{
 			'recorded_at'=> '2016-06-08 10:30:00',
-			'sensors'=> [{
-				'id'=>12,
-				'value'=>21
-				}]
+			'sensors'=> [{ 'id'=>12, 'value'=>21 }]
 		}
 	}
 
 	let(:bad_data) {
 		{
-			'recorded_at'=> 'string',
-			'sensors'=> [{
-				'id'=>'string',
-				'value'=>'string'
-				}]
+			'recorded_at'=> 'not time info here',
+			'sensors'=> [{ 'id'=>12, 'value'=>21 }]
 		}
 	}
 
@@ -65,12 +59,9 @@ RSpec.describe Storer, type: :model do
 	end
 
 	context 'when receiveng bad data' do
-		it 'throws an exception' do
-			expect(Storer.new(device.id, bad_data)).to raise_error
-		end
-		it 'does redis publish anyway' do
+		it 'does redis publish anyway but raise error' do
 			expect(Redis.current).to receive(:publish).with('data-received', anything)
-			Storer.new(device.id, bad_data)
+			expect{ Storer.new(device.id, bad_data) }.to raise_error(ArgumentError)
 		end
 	end
 end

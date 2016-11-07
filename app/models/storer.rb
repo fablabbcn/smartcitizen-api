@@ -51,11 +51,12 @@ class Storer
         device.update_columns(last_recorded_at: parsed_ts, data: sql_data, state: 'has_published')
       end
 
-    rescue => exception
+    rescue Exception => e
       stored = false
-    end
 
+    end
     if Rails.env.production? and device
+      puts 'hola'
       begin
         Redis.current.publish("data-received", {
           device_id: device.id,
@@ -68,8 +69,8 @@ class Storer
       rescue
       end
     end
-
-    raise exception if exception
+    #
+    raise e unless e.nil?
 
   end
 
