@@ -5,15 +5,16 @@ class Storer
     begin
       device = Device.includes(:components).find(device_id)
 
-      timestamp = ReadingsHandler.timestamp_parse(reading['recorded_at'])
+      parsed_ts = ReadingsHandler.timestamp_parse(reading['recorded_at'])
+      ts = parsed_ts.to_i * 1000
 
       _data = []
-      sql_data = {"" => timestamp[:parsed]}
+      sql_data = {"" => parsed_ts}
 
       reading['sensors'].each do |sensor_data|
         sensor = SensorReader.new(device, sensor_data)
 
-        _data.push(sensor.data_hash(timestamp[:ts]))
+        _data.push(sensor.data_hash(ts))
 
         sql_data["#{sensor.id}_raw"] = sensor.value
         sql_data[sensor.id] = sensor.component.calibrated_value(sensor.value)
@@ -24,17 +25,13 @@ class Storer
       Kairos.http_post_to("/datapoints", _data)
       Minuteman.add("rest_readings")
 
-      ReadingsHandler.update_device(device, timestamp[:parsed], sql_data)
+      ReadingsHandler.update_device(device, parsed_ts, sql_data)
 
     rescue Exception => e
       stored = false
     end
 
-    puts 'HEEEEY'
-    readings = reading.except!('recorded_at', 'sensors')
-    puts readings
-    ReadingsHandler.redis_publish(device, readings, timestamp[:ts], stored)
-    puts 'HEEEEY'
+    ReadingsHandler.redis_publish(device, reading, ts, stored)
 
     raise e unless e.nil?
   end

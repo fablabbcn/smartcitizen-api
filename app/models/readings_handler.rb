@@ -2,10 +2,7 @@ class ReadingsHandler
   def self.timestamp_parse(timestamp)
     parsed_ts = Time.parse(timestamp)
     raise "timestamp error" if parsed_ts > 1.day.from_now or parsed_ts < 3.years.ago
-    {
-      parsed: parsed_ts,
-      ts: parsed_ts.to_i * 1000
-    }
+    parsed_ts
   end
 
   def self.redis_publish(device, readings, ts, stored)
@@ -15,7 +12,7 @@ class ReadingsHandler
         device_id: device.id,
         device: JSON.parse(device.to_json(only: [:id, :name, :location])),
         timestamp: ts,
-        readings: readings,
+        readings: readings.except!('recorded_at', 'sensors'),
         stored: stored,
         data: JSON.parse(ActionController::Base.new.view_context.render( partial: "v0/devices/device", locals: {device: @device, current_user: nil}))
       }.to_json)
