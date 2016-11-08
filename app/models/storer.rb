@@ -1,11 +1,12 @@
 class Storer
 
   def initialize device_id, reading
+    stored = true
     begin
       @device = Device.includes(:components).find(device_id)
 
       parsed_ts = parse_timestamp(reading['recorded_at'])
-      ts = parsed_ts.to_int * 1000
+      ts = parsed_ts.to_i * 1000
 
       @_data = []
       @sql_data = {"" => parsed_ts}
@@ -19,7 +20,7 @@ class Storer
         reading[sensor_data[:key]] = [sensor_data[:id], sensor_data[:value], @sql_data[sensor_data[:id]]]
       end
 
-      Kairos.http_post_to("/datapoints", _data)
+      Kairos.http_post_to("/datapoints", @_data)
       Minuteman.add("rest_readings")
 
       update_device(parsed_ts)
@@ -44,10 +45,10 @@ class Storer
   def sensor_data_hash(sensor)
     begin
       sensor_id = Integer(sensor['id'])
-      sensor_key = device.find_sensor_key_by_id(sensor_id)
+      sensor_key = @device.find_sensor_key_by_id(sensor_id)
     rescue
       sensor_key = sensor['id']
-      sensor_id = device.find_sensor_id_by_key(sensor_key)
+      sensor_id = @device.find_sensor_id_by_key(sensor_key)
     end
     component = @device.components.detect{|c|c["sensor_id"] == sensor_id}
     value = component.normalized_value( (Float(sensor['value']) rescue sensor['value']) )
@@ -73,13 +74,13 @@ class Storer
   end
 
   def append_sql_data(sensor)
-    @sql_data["#{sensor[:id]}_raw"] = value
+    @sql_data["#{sensor[:id]}_raw"] = sensor[:value]
     @sql_data[sensor[:id]] = sensor[:component].calibrated_value(sensor[:value])
   end
 
   def update_device(parsed_ts)
-    if parsed_ts > (device.last_recorded_at || Time.at(0))
-      device.update_columns(last_recorded_at: parsed_ts, data: @sql_data, state: 'has_published')
+    if parsed_ts > (@device.last_recorded_at || Time.at(0))
+      @device.update_columns(last_recorded_at: parsed_ts, data: @sql_data, state: 'has_published')
     end
   end
 
