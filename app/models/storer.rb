@@ -6,7 +6,7 @@ class Storer
     begin
       @device = Device.includes(:components).find(device_id)
 
-      parsed_reading = parse_reading(@device, reading)
+      parsed_reading = Storer.parse_reading(@device, reading)
 
       Kairos.http_post_to("/datapoints", parsed_reading[:_data])
       Minuteman.add("rest_readings")
@@ -24,14 +24,10 @@ class Storer
     raise e unless e.nil?
   end
 
-  # 'update_device' could be a method of Device model (for both Storer & RawStorer)
-
   def update_device(parsed_ts, sql_data)
     return unless parsed_ts > (@device.last_recorded_at || Time.at(0))
     @device.update_columns(last_recorded_at: parsed_ts, data: sql_data, state: 'has_published')
   end
-
-  # 'redis_publish' could be a class method (for both Storer & RawStorer)
 
   def redis_publish(readings, ts, stored)
     return unless Rails.env.production? and @device
