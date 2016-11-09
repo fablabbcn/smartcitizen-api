@@ -19,7 +19,7 @@ module DataParser
 
           _data.push(data_hash(device, sensor, ts))
 
-          sql_data["#{sensor['id']}_raw"] = sensor[:value]
+          sql_data["#{sensor[:id]}_raw"] = sensor[:value]
           sql_data[sensor[:id]] = sensor[:component].calibrated_value(sensor[:value])
 
           reading[sensor[:key]] = [sensor[:id], sensor[:value], sql_data[sensor[:id]]]

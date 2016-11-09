@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Storer, type: :model do
+RSpec.describe 'Storer', type: :model do
 
 	before(:all) do
     create(:kit, id: 3, name: 'SCK', description: "Board", slug: 'sck', sensor_map: '{"temp": 12}')
@@ -8,8 +8,6 @@ RSpec.describe Storer, type: :model do
     create(:component, id: 12, board: Kit.find(3), sensor: Sensor.find(12), equation: '(175.72 / 65536.0 * x) - 53', reverse_equation: 'x')
   end
 
-	let(:sensor) { Sensor.first }
-	let(:component) { Component.first }
 	let(:device) { create(:device, device_token: 'aA1234', kit: Kit.find(3)) }
 
 	let(:data) {
@@ -26,51 +24,41 @@ RSpec.describe Storer, type: :model do
 		}
 	}
 
-	let(:parsed_ts) { Time.parse(data['recorded_at']) }
-	let(:ts) { parsed_ts.to_i * 1000 }
-
-	let(:sensor_key) { device.find_sensor_key_by_id(sensor.id) } # 'temp'
-	let(:normalized_value) { component.normalized_value((Float(data['sensors'][0]['value']))) }
-	let(:calibrated_value) { component.calibrated_value(normalized_value)}
-
-	let(:_data) { [{
-		name: sensor_key,
-		timestamp: ts,
-		value: normalized_value,
+	let(:karios_data_array) { [{
+		name: device.find_sensor_key_by_id(12),
+		timestamp: Time.parse(data['recorded_at']).to_i * 1000,
+		value: Component.first.normalized_value((Float(data['sensors'][0]['value']))),
 		tags: {
 			device_id: device.id,
 			method: 'REST'
-		} }]
+		}
+	}] }
+
+	let(:redis_json) {
+		{
+			device_id: device.id,
+			device: JSON.parse(device.to_json(only: [:id, :name, :location])),
+			timestamp: Time.parse(data['recorded_at']).to_i * 1000,
+			readings: {"temp"=>[12, 21.0, -52.943693237304686]},
+			stored: true,
+			data: JSON.parse(ActionController::Base.new.view_context.render( partial: "v0/devices/device", locals: {device: device, current_user: nil}))
+		}.to_json
 	}
-	# sql_data["#{sensor[:id]}_raw"] = sensor[:value]
-	# sql_data[sensor[:id]] = sensor[:component].calibrated_value(sensor[:value])
-
-	let(:sql_data) { { "" => parsed_ts, "#{sensor.id}_raw" => data['sensors'][0]['value'], sensor.id => calibrated_value } }
-	let(:readings) { { sensor_key => [sensor.id, normalized_value, calibrated_value ] } }
-
-	describe '#parse_reading' do
-		it 'returns parsed data hash' do
-			expect(Storer).to receive(:timestamp_parse).with(data['recorded_at'])
-			expect(Storer.parse_reading(device, data)).to eq({
-				_data: _data,
-				sql_data: sql_data,
-				readings: readings,
-				parsed_ts: parsed_ts,
-				ts: ts
-			})
-		end
-	end
 
 	before do
 		allow(Rails.env).to receive(:production?).and_return(true)
-		allow(Kairos).to receive(:http_post_to).with("/datapoints", anything) # stubbed request
+		allow(Kairos).to receive(:http_post_to).with("/datapoints", anything)
+		allow_any_instance_of(Device).to receive(:to_json).and_return(device.to_json(only: [:id, :name, :location]))
+
+		view = ActionController::Base.new.view_context
+		allow_any_instance_of(ActionController::Base).to receive(:view_context).and_return(view)
+		allow(view).to receive(:render).and_return(ActionController::Base.new.view_context.render( partial: "v0/devices/device", locals: {device: device, current_user: nil}))
 	end
 
 	context 'when receiving good data' do
 		it 'stores data to karios & redis publish' do
-			expect(Kairos).to receive(:http_post_to).with("/datapoints", _data)
-			expect_any_instance_of(Storer).to receive(:redis_publish).with(readings, ts, true)
-      # expect(Redis.current).to receive(:publish).with('data-received', anything)
+			expect(Kairos).to receive(:http_post_to).with("/datapoints", karios_data_array)
+      expect(Redis.current).to receive(:publish).with('data-received', redis_json)
 
       Storer.new(device.id, data)
 		end
