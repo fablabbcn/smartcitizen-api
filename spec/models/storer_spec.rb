@@ -3,10 +3,10 @@ require 'rails_helper'
 RSpec.describe Storer, type: :model do
 
 	before(:all) do
-    create(:kit, id: 3, name: 'SCK', description: "Board", slug: 'sck', sensor_map: '{"temp": 12}')
-    create(:sensor, id:12, name:'HPP828E031', description: 'test')
-    create(:component, id: 12, board: Kit.find(3), sensor: Sensor.find(12), equation: '(175.72 / 65536.0 * x) - 53', reverse_equation: 'x')
-  end
+		create(:kit, id: 3, name: 'SCK', description: "Board", slug: 'sck', sensor_map: '{"temp": 12}')
+		create(:sensor, id:12, name:'HPP828E031', description: 'test')
+		create(:component, id: 12, board: Kit.find(3), sensor: Sensor.find(12), equation: '(175.72 / 65536.0 * x) - 53', reverse_equation: 'x')
+	end
 
 	let(:sensor) { Sensor.first }
 	let(:component) { Component.first }
@@ -46,20 +46,20 @@ RSpec.describe Storer, type: :model do
 			expect(Kairos).to receive(:http_post_to).with("/datapoints", @karios_data)
 			expect_any_instance_of(Storer).to receive(:redis_publish).with(@readings, @ts, true)
 
-      Storer.new(device.id, @data)
+			Storer.new(device.id, @data)
 		end
 
-    it 'updates device without touching updated_at' do
+		it 'updates device without touching updated_at' do
 			updated_at = device.updated_at
 
-      Storer.new(device.id, @data)
+			Storer.new(device.id, @data)
 
 			expect(device.reload.updated_at).to eq(updated_at)
 
 			expect(device.reload.data).not_to eq(nil)
-      expect(device.reload.last_recorded_at).not_to eq(nil)
-      expect(device.reload.state).to eq('has_published')
-    end
+			expect(device.reload.last_recorded_at).not_to eq(nil)
+			expect(device.reload.state).to eq('has_published')
+		end
 	end
 
 	context 'when receiveng bad data' do
@@ -80,11 +80,11 @@ RSpec.describe Storer, type: :model do
 		end
 
 		it 'does not update device' do
-      expect{ Storer.new(device.id, @bad_data) }.to raise_error(ArgumentError)
+			expect{ Storer.new(device.id, @bad_data) }.to raise_error(ArgumentError)
 
-      expect(device.reload.last_recorded_at).to eq(nil)
+			expect(device.reload.last_recorded_at).to eq(nil)
 			expect(device.reload.data).to eq(nil)
-      expect(device.reload.state).to eq('never_published')
-    end
+			expect(device.reload.state).to eq('never_published')
+		end
 	end
 end
