@@ -66,6 +66,9 @@ gem 'oj'
 gem 'oj_mimic_json'
 gem 'multi_json'
 
+# eventMachine MQTT handler
+gem 'em-mqtt', '~> 0.0.4'
+
 group :production do
   gem 'rails_12factor'
 end
