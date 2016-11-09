@@ -56,15 +56,19 @@ RSpec.describe Storer, type: :model do
 	end
 
 	context 'when receiving good data' do
-		after do
-			Storer.new(device.id, data)
-		end
-		it 'stores data to karios db' do
+		it 'stores data to karios & redis publish' do
 			expect(Kairos).to receive(:http_post_to).with("/datapoints", karios_data_array)
+      expect(Redis.current).to receive(:publish).with('data-received', redis_json)
+
+      Storer.new(device.id, data)
 		end
-		it 'redis publish' do
-			expect(Redis.current).to receive(:publish).with('data-received', redis_json)
-		end
+
+    it 'updates device' do
+      Storer.new(device.id, data)
+
+      expect(device.reload.last_recorded_at).not_to eq(nil)
+      expect(device.reload.state).to eq('has_published')
+    end
 	end
 
 	context 'when receiveng bad data' do
@@ -74,5 +78,11 @@ RSpec.describe Storer, type: :model do
 
 			expect{ Storer.new(device.id, bad_data) }.to raise_error(ArgumentError)
 		end
+    it 'does not update device' do
+      expect{ Storer.new(device.id, bad_data) }.to raise_error(ArgumentError)
+
+      expect(device.reload.last_recorded_at).to eq(nil)
+      expect(device.reload.state).to eq('never_published')
+    end
 	end
 end
