@@ -1,14 +1,14 @@
 class MqttMessagesHandler
   def self.handle(packet)
     if packet.topic.to_s.include?('readings')
-      self.readings(packet)
+      self.handle_readings(packet)
     else
-      self.hello(packet)
+      self.handle_hello(packet)
     end
   end
 
   # takes a packet and stores data
-  def self.readings(packet)
+  def self.handle_readings(packet)
     device = Device.find_by(device_token: self.device_token(packet))
 
     raise 'device not found' if device.nil?
@@ -22,7 +22,7 @@ class MqttMessagesHandler
     Airbrake.notify(e)
   end
 
-  def self.hello(packet)
+  def self.handle_hello(packet)
     Redis.current.publish('token_received', {
       device_token: self.device_token(packet)
     }.to_json)

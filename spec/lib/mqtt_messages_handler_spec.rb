@@ -59,7 +59,7 @@ RSpec.describe MqttMessagesHandler do
     context 'valid reading packet' do
       it 'queues reading data in order to be stored' do
         expect(Kairos).to receive(:http_post_to).with("/datapoints", @data_array)
-        MqttMessagesHandler.readings(@packet)
+        MqttMessagesHandler.handle(@packet)
       end
     end
 
@@ -67,7 +67,7 @@ RSpec.describe MqttMessagesHandler do
       it 'it notifies Airbrake' do
         expect(Kairos).not_to receive(:http_post_to)
         expect(Airbrake).to receive(:notify).with(RuntimeError) # 'device not found'
-        MqttMessagesHandler.readings(@invalid_packet)
+        MqttMessagesHandler.handle(@invalid_packet)
       end
     end
   end
@@ -77,23 +77,7 @@ RSpec.describe MqttMessagesHandler do
       expect(Redis.current).to receive(:publish).with(
         'token_received', { device_token: device.device_token }.to_json
       )
-      MqttMessagesHandler.hello(@hello_packet)
-    end
-  end
-
-  describe '#handle' do
-    context 'when receiving packet with "readings" as a topic floor' do
-      it 'calls #readings' do
-        expect(MqttMessagesHandler).to receive(:readings).with(@packet)
-        MqttMessagesHandler.handle(@packet)
-      end
-    end
-
-    context 'when receiving packet without "readings" as a topic floor' do
-      it 'forwards packet to #hello' do
-        expect(MqttMessagesHandler).to receive(:hello).with(@hello_packet)
-        MqttMessagesHandler.handle(@hello_packet)
-      end
+      MqttMessagesHandler.handle(@hello_packet)
     end
   end
 end
