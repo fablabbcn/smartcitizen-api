@@ -140,7 +140,11 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     doorkeeper (4.2.0)
       railties (>= 4.2)
+    em-mqtt (0.0.5)
+      eventmachine
+      mqtt (>= 0.3.0)
     erubis (2.7.0)
+    eventmachine (1.2.0.1)
     excon (0.52.0)
     factory_girl (4.7.0)
       activesupport (>= 3.0.0)
@@ -355,6 +359,7 @@ GEM
       ohm (~> 2.3.0)
       redic (~> 1.5.0)
     moneta (0.8.0)
+    mqtt (0.4.0)
     msgpack (0.5.12)
     multi_json (1.12.1)
     multi_xml (0.5.5)
@@ -635,6 +640,7 @@ DEPENDENCIES
   date_validator
   diffy
   doorkeeper
+  em-mqtt (~> 0.0.4)
   factory_girl_rails
   faker
   fast_blank
@@ -701,4 +707,4 @@ RUBY VERSION
    ruby 2.2.2p95
 
 BUNDLED WITH
-   1.13.1
+   1.13.6
