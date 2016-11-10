@@ -23,6 +23,11 @@ RSpec.describe MqttMessagesHandler do
       topic: "device/sck/invalid_device_token/readings",
       payload: '{"data": [{"recorded_at": "2016-06-08 10:30:00","sensors": [{"id": 1,"value": 21}]}]}'
     )
+
+    @hello_packet = MQTT::Packet::Publish.new(
+      topic: "device/sck/#{device.device_token}/hello",
+      payload: 'content ingored by MqttMessagesHandler\#hello'
+    )
   end
 
   describe '#device_token' do
@@ -68,18 +73,27 @@ RSpec.describe MqttMessagesHandler do
   end
 
   describe '#hello' do
-    before do
-      @hello_packet = MQTT::Packet::Publish.new(
-        topic: "device/sck/#{device.device_token}/hello",
-        payload: 'content ingored by MqttMessagesHandler\#hello'
-      )
-    end
-
     it 'logs device_token has been received' do
       expect(Redis.current).to receive(:publish).with(
         'token_received', { device_token: device.device_token }.to_json
       )
       MqttMessagesHandler.hello(@hello_packet)
+    end
+  end
+
+  describe '#handle' do
+    context 'when receiving packet with "readings" as a topic floor' do
+      it 'calls #readings' do
+        expect(MqttMessagesHandler).to receive(:readings).with(@packet)
+        MqttMessagesHandler.handle(@packet)
+      end
+    end
+
+    context 'when receiving packet without "readings" as a topic floor' do
+      it 'forwards packet to #hello' do
+        expect(MqttMessagesHandler).to receive(:hello).with(@hello_packet)
+        MqttMessagesHandler.handle(@hello_packet)
+      end
     end
   end
 end

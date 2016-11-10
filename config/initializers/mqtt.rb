@@ -7,7 +7,7 @@ Thread.new do
       c.subscribe('$queue/device/sck/+/hello')
 
       c.receive_callback do |packet|
-        MqttMessagesHandler.read(packet)
+        MqttMessagesHandler.handle(packet)
       end
     end
   end

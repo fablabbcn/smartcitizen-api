@@ -1,5 +1,5 @@
 class MqttMessagesHandler
-  def self.read(packet)
+  def self.handle(packet)
     if packet.topic.to_s.include?('readings')
       self.readings(packet)
     else
