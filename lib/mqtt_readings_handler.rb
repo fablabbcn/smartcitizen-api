@@ -9,6 +9,8 @@ class MqttReadingsHandler
       Storer.new(device.id, reading)
     end
   rescue Exception => e
+    Rails.logger.error("Error storing device data")
+    Rails.logger.error(e.message)
     Airbrake.notify(e)
   end
 
