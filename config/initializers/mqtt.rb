@@ -1,0 +1,14 @@
+Thread.new do
+  EventMachine::error_handler { |e| puts Airbrake.notify(e) }
+
+  EventMachine.run do
+    EventMachine::MQTT::ClientConnection.connect(host: ENV['mqqt_host'], clean_session: true) do |c|
+      c.subscribe('$queue/device/sck/+/readings')
+      c.subscribe('$queue/device/sck/+/hello')
+
+      c.receive_callback do |packet|
+        MqttMessagesHandler.read(packet)
+      end
+    end
+  end
+end
