@@ -4,8 +4,10 @@ Thread.new do
   EventMachine.run do
     EventMachine::MQTT::ClientConnection.connect(host: ENV['mqtt_host'], clean_session: true) do |c|
       c.subscribe('$queue/device/sck/+/readings')
+      c.subscribe('$queue/device/sck/+/hello')
+
       c.receive_callback do |packet|
-        MqttReadingsHandler.store(packet)
+        MqttMessagesHandler.read(packet)
       end
     end
   end
