@@ -75,7 +75,7 @@ RSpec.describe MqttMessagesHandler do
   describe '#hello' do
     it 'logs device_token has been received' do
       expect(Redis.current).to receive(:publish).with(
-        'token_received', { device_token: device.device_token }.to_json
+        'token-received', { device_token: device.device_token }.to_json
       )
       MqttMessagesHandler.handle(@hello_packet)
     end

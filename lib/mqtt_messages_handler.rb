@@ -23,7 +23,7 @@ class MqttMessagesHandler
   end
 
   def self.handle_hello(packet)
-    Redis.current.publish('token_received', {
+    Redis.current.publish('token-received', {
       device_token: self.device_token(packet)
     }.to_json)
   end
