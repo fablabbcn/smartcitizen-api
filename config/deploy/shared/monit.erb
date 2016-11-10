@@ -34,6 +34,7 @@ check system <%= application %>
   if memory > 75% for 2 cycles then alert
   if cpu(user) > 75% for 2 cycles then alert
 
+# websockets
 check process websockets matching /home/<%= fetch(:deploy_user) %>/apps/smartcitizen-push/index.js
   start program = "/bin/bash -lc 'cd /home/<%= fetch(:deploy_user) %>/apps/smartcitizen-push && PM2_HOME=/home/<%= fetch(:deploy_user) %>/.pm2 /usr/bin/pm2 start index.js'"
   stop program  = "/bin/bash -lc 'cd /home/<%= fetch(:deploy_user) %>/apps/smartcitizen-push && PM2_HOME=/home/<%= fetch(:deploy_user) %>/.pm2 /usr/bin/pm2 stop index.js'"
@@ -85,3 +86,7 @@ check process unicorn_worker_<%= (5000 + worker).to_s %>_<%= application %>_
   if cpu is greater than 80% for 30 cycles then restart
   group unicorn_workers
 <% end %>
+
+# apps on disk
+check device apps with path /home/<%= fetch(:deploy_user) %>/apps
+    if SPACE usage > 80% then alert
