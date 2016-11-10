@@ -14,7 +14,7 @@ class MqttReadingsHandler
 
   # takes a packet and returns 'device token' from topic
   def self.device_token(packet)
-    packet.topic[/device\/sck\/(.*?)\/readings/m, 1].to_s
+    packet.topic[/device\/sck\/(.*?)\//m, 1].to_s
   end
 
   # takes a packet and returns 'data' from payload
