@@ -34,9 +34,9 @@ check system <%= application %>
   if memory > 75% for 2 cycles then alert
   if cpu(user) > 75% for 2 cycles then alert
 
-check process socketio matching /home/<%= fetch(:deploy_user) %>/sockets/socketio.js
-  start program = "/bin/bash -lc 'cd /home/<%= fetch(:deploy_user) %>/sockets && PM2_HOME=/home/<%= fetch(:deploy_user) %>/.pm2 /usr/bin/pm2 start socketio.js'"
-  stop program  = "/bin/bash -lc 'cd /home/<%= fetch(:deploy_user) %>/sockets && PM2_HOME=/home/<%= fetch(:deploy_user) %>/.pm2 /usr/bin/pm2 stop socketio.js'"
+check process websockets matching /home/<%= fetch(:deploy_user) %>/apps/smartcitizen-push/index.js
+  start program = "/bin/bash -lc 'cd /home/<%= fetch(:deploy_user) %>/apps/smartcitizen-push && PM2_HOME=/home/<%= fetch(:deploy_user) %>/.pm2 /usr/bin/pm2 start index.js'"
+  stop program  = "/bin/bash -lc 'cd /home/<%= fetch(:deploy_user) %>/apps/smartcitizen-push && PM2_HOME=/home/<%= fetch(:deploy_user) %>/.pm2 /usr/bin/pm2 stop index.js'"
   if mem is greater than 800.0 MB for 5 cycles then restart   # eating up memory?
   if cpu is greater than 80% for 3 cycles then restart      # hung process?
   if 10 restarts within 10 cycles then timeout
