@@ -166,3 +166,49 @@ response example:
 }
 ```
 This is the end of the onboarding process.
+
+## Token notification
+
+This is tiggered when the platform receives the first **"Hello World"** from the Kit after the *light setup* process. 
+
+`io.connect(‘wss://smartcitizen.xyz’).on('token-received’, doSomething);``
+
+### Example:
+
+http://codepen.io/pral2a/pen/ObMWjG
+
+### Angular Integration:
+
+The SmartCitizen front-end features already a `push.service.js` that can be extended with minor changes:
+
+https://github.com/fablabbcn/smartcitizen-web/blob/2e08faca25675970d56c0b5cc090670ffff73d47/src/app/core/api/push.service.js
+
+This needs to extend as follows:
+
+```
+function devicesToken(then){
+  socket.on('token-received', then);
+}
+
+function deviceToken(tokenID, scope){
+  devicesToken(function(data){
+    if(tokenID == data.device_token) scope.$emit('token', data);
+  })
+}
+```
+
+And use as follows:
+
+`push.token(vm.kitData.token, $scope);`
+
+By including the following service we will be also able to listen notification everytime the Kit published new data:
+
+`push.device(vm.kitData.id, $scope);`
+
+
+
+
+
+
+
+
