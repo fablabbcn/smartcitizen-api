@@ -66,7 +66,8 @@ RSpec.describe MqttMessagesHandler do
     context 'invalid packet' do
       it 'it notifies Airbrake' do
         expect(Kairos).not_to receive(:http_post_to)
-        expect(Airbrake).to receive(:notify).with(RuntimeError) # 'device not found'
+        expect(Airbrake).to receive(:notify).with(RuntimeError, 'device not found - payload: '\
+          '{"data": [{"recorded_at": "2016-06-08 10:30:00","sensors": [{"id": 1,"value": 21}]}]}')
         MqttMessagesHandler.handle(@invalid_packet)
       end
     end

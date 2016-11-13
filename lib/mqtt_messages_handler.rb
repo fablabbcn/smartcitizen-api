@@ -19,7 +19,7 @@ class MqttMessagesHandler
   rescue Exception => e
     Rails.logger.error("Error storing device data")
     Rails.logger.error(e.message)
-    Airbrake.notify(e)
+    Airbrake.notify(e, e.message + " - payload: " + packet.payload)
   end
 
   def self.handle_hello(packet)
