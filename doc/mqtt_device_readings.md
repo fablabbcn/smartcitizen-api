@@ -14,7 +14,7 @@ MQTT host address is held in `config/aplication.yml` under the `ENV["mqtt_host"]
 
 ### Readings Publish
 
-Devices publish using the topic `/device/sck/device_id:/readings` and the expected payload is of the following form:
+Devices publish using the topic `device/sck/device_id:/readings` and the expected payload is of the following form:
 ```
 {
   "data": [{
