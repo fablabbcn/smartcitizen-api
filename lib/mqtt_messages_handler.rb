@@ -1,40 +1,45 @@
 class MqttMessagesHandler
   def self.handle(packet)
-    if packet.topic.to_s.include?('readings')
-      self.handle_readings(packet)
+    handle_topic(packet.topic, packet.payload)
+  end
+
+  def self.handle_topic(topic, message)
+    if topic.to_s.include?('readings')
+      self.handle_readings(topic, message)
     else
-      self.handle_hello(packet)
+      self.handle_hello(topic, message)
     end
   end
 
   # takes a packet and stores data
-  def self.handle_readings(packet)
-    device = Device.find_by(device_token: self.device_token(packet))
-
+  def self.handle_readings(topic, message)
+    device = Device.find_by(device_token: self.device_token(topic))
     raise 'device not found' if device.nil?
 
-    self.data(packet).each do |reading|
+    data = self.data(message)
+    data.each do |reading|
       Storer.new(device.id, reading)
     end
   rescue Exception => e
-    Rails.logger.error("Error storing device data")
     Rails.logger.error(e.message)
-    Airbrake.notify(e, e.message + " - payload: " + packet.payload)
+    Rails.logger.error(message)
+    Airbrake.notify(e, {payload: e.message + " - payload: " + message})
   end
 
-  def self.handle_hello(packet)
+  def self.handle_hello(topic, message)
+    device_token = self.device_token(topic)
     Redis.current.publish('token-received', {
-      device_token: self.device_token(packet)
+      device_token: device_token
     }.to_json)
   end
 
   # takes a packet and returns 'device token' from topic
-  def self.device_token(packet)
-    packet.topic[/device\/sck\/(.*?)\//m, 1].to_s
+  def self.device_token(topic)
+    topic[/device\/sck\/(.*?)\//m, 1].to_s
   end
 
   # takes a packet and returns 'data' from payload
-  def self.data(packet)
-    JSON.parse(packet.payload)['data']
+  def self.data(message)
+    JSON.parse(message)['data']
   end
 end
