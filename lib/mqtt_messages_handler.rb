@@ -23,8 +23,10 @@ class MqttMessagesHandler
   end
 
   def self.handle_hello(packet)
+    device_token = self.device_token(packet)
+    Rails.logger.info("Hello published to redis: #{device_token}")
     Redis.current.publish('token-received', {
-      device_token: self.device_token(packet)
+      device_token: device_token
     }.to_json)
   end
 
