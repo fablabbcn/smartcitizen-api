@@ -4,6 +4,7 @@ namespace :mqtt do
     Rails.logger.info("Try to connect to #{host} ...");
 
     pid_file = Rails.root.join('tmp/pids/mqtt_subscriber.pid')
+
     File.open(pid_file, 'w'){|f| f.puts Process.pid}
 
     begin
@@ -27,6 +28,7 @@ namespace :mqtt do
       end
     rescue SystemExit, Interrupt, SignalException
       File.delete pid_file
+      exit 0
     end
   end
 end
