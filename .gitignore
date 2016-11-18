@@ -33,3 +33,5 @@ README.rdoc
 doc/app
 CLEANING.rb
 .tags*
+.puppet
+.vagrant
