@@ -4,6 +4,7 @@ namespace :deploy do
     task command.to_sym do
       on roles(:app), in: :sequence, wait: 5 do
         sudo "/etc/init.d/unicorn_#{fetch(:full_app_name)} #{command}"
+        sudo "/etc/init.d/mqtt_subscriber_#{fetch(:full_app_name)} #{command}"
       end
     end
   end
