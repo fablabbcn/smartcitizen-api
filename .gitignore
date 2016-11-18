@@ -41,3 +41,4 @@ CLEANING.rb
 #vim
 *.swp
 *.swo
+.idea
