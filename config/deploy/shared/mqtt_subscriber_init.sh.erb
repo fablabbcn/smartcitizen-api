@@ -17,7 +17,7 @@ TIMEOUT=${TIMEOUT-60}
 APP_ROOT=<%= current_path %>
 PID_DIR=$APP_ROOT/tmp/pids
 PID=$PID_DIR/mqtt_subscriber.pid
-CMD="cd $APP_ROOT;  bundle exec rake mqtt:sub RAILS_ENV=<%= fetch(:rails_env)  %> > $APP_ROOT/logs/mqtt_subscriber.log 2>&1"
+CMD="cd $APP_ROOT;  bundle exec rake mqtt:sub RAILS_ENV=<%= fetch(:rails_env)  %> > $APP_ROOT/log/mqtt_subscriber.log 2>&1 &"
 AS_USER=<%= fetch(:deploy_user) %>
 set -u
 
@@ -36,7 +36,7 @@ run () {
 case "$1" in
 start)
   sig 0 && echo >&2 "Already running" && exit 0
-  run "$CMD"
+  run "$CMD & echo $! > $PID"
   ;;
 stop)
   sig QUIT && exit 0
@@ -48,7 +48,7 @@ force-stop)
   ;;
 restart|reload)
   sig QUIT
-  run "$CMD"
+  run "$CMD & echo $! > $PID"
   ;;
 *)
   echo >&2 "Usage: $0 <start|stop|restart|force-stop>"

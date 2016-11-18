@@ -88,11 +88,11 @@ set(:symlinks, [
   {
     source: "monit",
     link: "/etc/monit/conf.d/#{fetch(:full_app_name)}.conf"
-  }
+  },
   {
     source: "mqtt_subscriber_init.sh",
     link: "/etc/init.d/mqtt_subscriber_#{fetch(:full_app_name)}"
-  },
+  }
 ])
 
 

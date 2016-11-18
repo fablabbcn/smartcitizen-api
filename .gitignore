@@ -33,5 +33,11 @@ README.rdoc
 doc/app
 CLEANING.rb
 .tags*
+
+#develop vagrant
 .puppet
 .vagrant
+
+#vim
+*.swp
+*.swo
