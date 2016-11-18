@@ -58,6 +58,7 @@ set(:config_files, %w(
   log_rotation
   monit
   database.example.yml
+  mqtt_subscriber_init.sh
 ))
 #
 
@@ -65,6 +66,7 @@ set(:config_files, %w(
 # by deploy:setup_config
 set(:executable_config_files, %w(
   unicorn_init.sh
+  mqtt_subscriber_init.sh
 ))
 
 # files which need to be symlinked to other parts of the
@@ -86,6 +88,10 @@ set(:symlinks, [
   {
     source: "monit",
     link: "/etc/monit/conf.d/#{fetch(:full_app_name)}.conf"
+  },
+  {
+    source: "mqtt_subscriber_init.sh",
+    link: "/etc/init.d/mqtt_subscriber_#{fetch(:full_app_name)}"
   }
 ])
 
