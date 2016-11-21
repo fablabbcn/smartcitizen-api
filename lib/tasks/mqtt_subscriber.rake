@@ -8,7 +8,7 @@ namespace :mqtt do
     begin
       Rails.logger.info("Connecting to #{host} ...");
       MQTT::Client.connect(host: host, clean_session: true) do |client|
-        Rails.logger.info("Mqtt subscriber connected to: #{client.host}");
+        Rails.logger.info("Connected to #{client.host}");
 
         client.subscribe({
           '$queue/device/sck/+/readings' => 2,
