@@ -24,9 +24,9 @@ set mail-format { subject: <%= "[monit] #{fetch(:application)} - #{fetch(:rails_
 
 <% application = fetch(:application) %>
 
-check process mmonit with pidfile /home/<%= fetch(:deploy_user) %>/mmonit-3.5.1/logs/mmonit.pid
-   start program = "/home/<%= fetch(:deploy_user) %>/mmonit-3.5.1/bin/mmonit"
-   stop program = "/home/<%= fetch(:deploy_user) %>/mmonit-3.5.1/bin/mmonit stop"
+check process mmonit with pidfile /opt/mmonit/logs/mmonit.pid
+   start program = "/opt/mmonit/bin/mmonit"
+   stop program = "/opt/mmonit/bin/mmonit stop"
 
 # application
 check system <%= application %>
