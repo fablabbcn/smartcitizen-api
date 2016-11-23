@@ -26,7 +26,7 @@ class Device < ActiveRecord::Base
 
   validate :banned_name
   validates_presence_of :name, :owner, on: :create
-  validates_uniqueness_of :name, scope: :owner_id, on: :create
+  #validates_uniqueness_of :name, scope: :owner_id, on: :create
 
   validates_uniqueness_of :device_token, allow_nil: true
 
