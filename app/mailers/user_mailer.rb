@@ -35,7 +35,7 @@ class UserMailer < ApplicationMailer
         :public => false,
         :expires => 1.day,
         :content_type => 'text/csv',
-        :content_disposition => "attachment; filename=#{@device.id}.csv"
+        :content_disposition => "attachment; filename=#{@device.id}_#{Time.now.to_i}.csv"
       })
       file.save
       @url = file.url(1.day.from_now)
