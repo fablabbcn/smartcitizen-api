@@ -4,7 +4,7 @@ class DeviceArchive
     device = Device.find(device_id)
 
     data = {}
-    sensor_headers = []
+    sensor_headings = []
     device.kit.sensor_map.keys.each_with_index do |key, index|
       query = { metrics:[{tags:{device_id:[device_id]},name: key}], cache_time: 0, start_absolute: 1262304000000 }
       response = Kairos.http_post_to("/datapoints/query",query)
@@ -21,7 +21,7 @@ class DeviceArchive
       sensor_headers << "#{sensor.measurement.name} in #{sensor.unit} (#{sensor.name})"
     end
 
-    csv = "timestamp,#{sensor_headers.join(',')}\n"
+    csv = "timestamp,#{sensor_headings.join(',')}\n"
     csv += data.map{|d| d.join(",")}.join("\n")
   end
 
