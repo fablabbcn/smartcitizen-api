@@ -17,10 +17,10 @@ class UserMailer < ApplicationMailer
     @device = Device.find(device_id)
     @user = User.find(user_id)
 
-    keys = %w(temp bat co hum light nets no2 noise panel)
     data = {}
-    keys_length = keys.length
-    keys.each_with_index do |key, index|
+    sensor_headers = []
+    keys_length = @device.kit.sensor_map.keys.length
+    @device.kit.sensor_map.keys.each_with_index do |key, index|
       query = {metrics:[{tags:{device_id:[device_id]},name: key}], cache_time: 0, start_absolute: 1262304000000}
       response = Kairos.http_post_to("/datapoints/query",query)
       metric_id = @device.find_sensor_id_by_key(key)
@@ -32,8 +32,11 @@ class UserMailer < ApplicationMailer
           data[time][index] = component.calibrated_value(v[1])
         end
       end
+      sensor = Sensor.find(@device.kit.sensor_map[key])
+      sensor_headers << "#{sensor.measurement.name} in #{sensor.unit} (#{sensor.name})"
     end
-    csv = "timestamp,#{keys.join(',')}\n"
+
+    csv = "timestamp,#{sensor_headers.join(',')}\n"
     csv += data.map{|d| d.join(",")}.join("\n")
 
     s3 = Fog::Storage.new({
