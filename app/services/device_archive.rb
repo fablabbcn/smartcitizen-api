@@ -1,5 +1,3 @@
-require 'fog'
-
 class DeviceArchive
 
   def self.generate_csv device_id
