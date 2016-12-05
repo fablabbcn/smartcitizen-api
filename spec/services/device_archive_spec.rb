@@ -30,7 +30,7 @@ describe DeviceArchive do
   describe "#generate_csv" do
     before do
       allow(Kairos).to receive(:http_post_to).with("/datapoints/query",kairos_query('temp')).and_return(http_response)
-      allow(Kairos).to receive(:http_post_to).with("/datapoints/query",kairos_query('light')).and_return(kairos_light)
+      allow(Kairos).to receive(:http_post_to).with("/datapoints/query",kairos_query('light')).and_return(http_response)
     end
 
     it "correctly generates device archive csv" do
