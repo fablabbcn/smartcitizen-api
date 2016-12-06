@@ -11,7 +11,7 @@ class DeviceArchive
       :public => false,
       :expires => 1.day,
       :content_type => 'text/csv',
-      :content_disposition => "attachment; filename=#{device_id}_#{Time.now.iso8601}.csv"
+      :content_disposition => "attachment; filename=#{device_id}_#{(Time.now.to_f*1000).to_i}.csv"
     })
   end
 

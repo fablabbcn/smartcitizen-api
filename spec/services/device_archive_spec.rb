@@ -55,7 +55,7 @@ describe DeviceArchive do
       file = DeviceArchive.new_file(device.id)
       expect(file.body).to eq(csv)
       expect(file.key).to eq("devices/#{device.id}/csv_archive.csv")
-      expect(file.content_disposition).to eq("attachment; filename=#{device.id}_#{Time.now.iso8601}.csv")
+      expect(file.content_disposition).to eq("attachment; filename=#{device.id}_#{(Time.now.to_f * 1000).to_i}.csv")
     end
   end
 
