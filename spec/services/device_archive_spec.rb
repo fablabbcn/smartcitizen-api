@@ -27,14 +27,23 @@ describe DeviceArchive do
     RestClient::Response.new('{"queries":[{"results":[{"values":[[1364968800000,1.0],[1366351200000,1.0]]}]}]}')
   }
 
-  describe "#generate_csv" do
+  describe "#create_file" do
     before do
+      ENV['aws_access_key'] = 'test'
+      ENV['aws_secret_key'] = 'test'
+      ENV['aws_region'] = 'test'
+      ENV['s3_bucket'] = 'test'
+
+      allow(Time).to receive(:now).and_return(Time.now)
       allow(Kairos).to receive(:http_post_to).with("/datapoints/query",kairos_query('temp')).and_return(http_response)
       allow(Kairos).to receive(:http_post_to).with("/datapoints/query",kairos_query('light')).and_return(http_response)
     end
 
-    it "correctly generates device archive csv" do
-      expect(DeviceArchive.generate_csv(device.id)).to eq(csv)
+    it 'returns csv file' do
+      file = DeviceArchive.new_file(device.id)
+      expect(file.body).to eq(csv)
+      expect(file.key).to eq("devices/#{device.id}/csv_archive.csv")
+      expect(file.content_disposition).to eq("attachment; filename=#{device.id}_#{Time.now.iso8601}.csv")
     end
   end
 

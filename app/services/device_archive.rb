@@ -1,4 +1,28 @@
+require 'fog'
+
 class DeviceArchive
+  def self.new_file device_id
+    s3 = self.s3_connection
+    key = "devices/#{device_id}/csv_archive.csv"
+
+    s3.directories.new(:key => ENV['s3_bucket']).files.new({
+      :key    => key,
+      :body   => self.generate_csv(device_id),
+      :public => false,
+      :expires => 1.day,
+      :content_type => 'text/csv',
+      :content_disposition => "attachment; filename=#{device_id}_#{Time.now.iso8601}.csv"
+    })
+  end
+
+  def self.s3_connection
+    Fog::Storage.new({
+      :provider                 => 'AWS',
+      :aws_access_key_id        => ENV['aws_access_key'],
+      :aws_secret_access_key    => ENV['aws_secret_key'],
+      :region                   => ENV['aws_region'],
+    })
+  end
 
   def self.generate_csv device_id
     device = Device.find(device_id)
@@ -18,7 +42,7 @@ class DeviceArchive
         end
       end
       sensor = Sensor.find(device.kit.sensor_map[key])
-      sensor_headers << "#{sensor.measurement.name} in #{sensor.unit} (#{sensor.name})"
+      sensor_headings << "#{sensor.measurement.name} in #{sensor.unit} (#{sensor.name})"
     end
 
     csv = "timestamp,#{sensor_headings.join(',')}\n"
