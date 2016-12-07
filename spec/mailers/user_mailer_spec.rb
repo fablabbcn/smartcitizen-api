@@ -1,9 +1,8 @@
 require "rails_helper"
 
 describe UserMailer do
-
   let(:user) { create(:user) }
-  let(:device) { create(:device, owner: user)}
+  let(:device) { create(:device, owner: user) }
 
   describe "welcome" do
     let(:mail) { UserMailer.welcome(user.id) }
