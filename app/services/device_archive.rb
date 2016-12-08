@@ -10,7 +10,7 @@ class DeviceArchive
 
   def initialize device_id
     @device = Device.find(device_id)
-    @headers = []
+    @headers = ['timestamp']
     @readings_count = 0
 
     @s3_file = create_s3_file
@@ -38,28 +38,30 @@ class DeviceArchive
       :content_disposition => "attachment; filename=#{@device.id}_#{(Time.now.to_f*1000).to_i}.csv"
     })
 
-    file.save unless Rails.env.test?
+    unless Rails.env.test? # MOCK fog and remove condition
+      file.save
+    end
+
     file
   end
 
   # returns csv tempfile
   #
   # e.g.
-  # NO2 in kOhm (MiCS-4514),temp in ºC (HPP828E031),light in KΩ (BH1730FVC),light in dB (POM-3044P-R)
-  # 1367301600000,4.0,-52.98927490234375,4.0,57.333333333333336
-  # 1364968800000,1.0,-52.997318725585934,1.0,52.5
-  # 1366351200000,2.0,-52.994637451171876,2.0,55.0
-  # 1366696800000,3.0,-52.99195617675781,3.0,57.0
-  # 1367301600000,4.0,-52.98927490234375,4.0,57.333333333333336
+  # timestamp,NO2 in kOhm (MiCS-4514),temp in ºC (HPP828E031),light in KΩ (BH1730FVC),light in dB (POM-3044P-R)
+  # 2013-04-03 06:00:00 UTC,1.0,-52.997318725585934,1.0,52.5
+  # 2013-04-19 06:00:00 UTC,2.0,-52.994637451171876,2.0,55.0
+  # 2013-04-23 06:00:00 UTC,3.0,-52.99195617675781,3.0,57.0
+  # 2013-04-30 06:00:00 UTC,4.0,-52.98927490234375,4.0,57.333333333333336
 
   def csv_file
     data_file = generate_data_tempfile
 
     csv_file = Tempfile.new('csv_file')
 
-    for i in 0..@readings_count do
+    for i in 0..@readings_count-1 do
       line = []
-      CSV.foreach(data_file) { |row| line << row[i-1] }
+      CSV.foreach(data_file) { |row| line << row[i] }
 
       File.open(csv_file, 'a') do |f|
         f.puts @headers.join(",") if i == 0
@@ -76,7 +78,7 @@ class DeviceArchive
 
   # returns tempfile containing readings data (transposed)
 
-  # e.g.  [line 1: timestamps] 1364968800000,1366351200000,1366696800000,1367301600000
+  # e.g.  [line 1: timestamps] 2013-04-03 06:00:00 UTC,2013-04-19 06:00:00 UTC,2013-04-23 06:00:00 UTC,2013-04-30 06:00:00 UTC
   #       [line 2: sensor1   ] 1.0,2.0,3.0,4.0
   #       [line 3: sensor2   ] -52.997318725585934,-52.994637451171876,-52.99195617675781,-52.98927490234375
   #       [line 4: sensor3   ] 1.0,2.0,3.0,4.0
@@ -93,15 +95,15 @@ class DeviceArchive
       if component = @device.components.detect{|c| c["sensor_id"] == metric_id}
         values = JSON.parse(response.body)['queries'][0]['results'][0]['values']
         readings = []
-        timestamps = [] if index == 0                       # getting timestamps on first iteration
+        timestamps = [] if index == 0                         # getting timestamps on first iteration
         values.each do |v|
-          timestamps << v[0] if index == 0                  # getting timestamps on first iteration
+          timestamps << Time.at(v[0]/1000).utc if index == 0  # getting timestamps on first iteration
           readings << component.calibrated_value(v[1])
         end
         @readings_count = timestamps.size if index == 0
 
         File.open(tempfile, 'a') do |f|
-          f.puts timestamps.join(",") if index == 0         # writing timestamps on first iteration
+          f.puts timestamps.join(",") if index == 0           # writing timestamps on first iteration
           f.puts readings.join(",")
         end
       end

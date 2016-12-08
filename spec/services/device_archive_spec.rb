@@ -29,7 +29,7 @@ describe DeviceArchive do
     "2013-04-03 06:00:00 UTC,1.0,-52.997318725585934,1.0,52.5\n"\
     "2013-04-19 06:00:00 UTC,2.0,-52.994637451171876,2.0,55.0\n"\
     "2013-04-23 06:00:00 UTC,3.0,-52.99195617675781,3.0,57.0\n"\
-    "2013-04-30 06:00:00 UTC,4.0,-52.98927490234375,4.0,57.333333333333336"
+    "2013-04-30 06:00:00 UTC,4.0,-52.98927490234375,4.0,57.333333333333336\n"
   }
 
   let(:http_response) {
@@ -49,14 +49,17 @@ describe DeviceArchive do
       allow(Kairos).to receive(:http_post_to).with("/datapoints/query",kairos_query('light')).and_return(http_response)
       allow(Kairos).to receive(:http_post_to).with("/datapoints/query",kairos_query('noise')).and_return(http_response)
       allow(Kairos).to receive(:http_post_to).with("/datapoints/query",kairos_query('no2')).and_return(http_response)
+
+      @file = DeviceArchive.create(device.id)
+      @file_content = ""
+      IO.foreach(@file.body) { |l| @file_content << l }
     end
 
     it 'returns csv file' do
-      file = DeviceArchive.new(device.id)
-      # expect(file.body).to eq(csv)
-      # expect(file.key).to eq("devices/#{device.id}/csv_archive.csv")
-      # expect(file.content_disposition).to eq("attachment; filename=#{device.id}_#{(Time.now.to_f * 1000).to_i}.csv")
-      # puts file.url(1.day.from_now)
+      expect(@file_content).to eq(csv)
+      expect(@file.key).to eq("devices/#{device.id}/csv_archive.csv")
+      expect(@file.content_disposition).to eq("attachment; filename=#{device.id}_#{(Time.now.to_f * 1000).to_i}.csv")
+      expect(@file.url(1.day.from_now).include('test.s3-test.amazonaws.com/devices/1/csv_archive.csv?')).to eq(true)
     end
   end
 
