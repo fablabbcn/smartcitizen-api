@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'fog'
 
 def kairos_query(key)
   {metrics:[{tags:{device_id:[device.id]},name: key}], cache_time: 0, start_absolute: 1262304000000}
@@ -19,7 +20,6 @@ describe DeviceArchive do
     create(:component, id: 14, board: Kit.find(3), sensor: Sensor.find(14), equation: 'x', reverse_equation: 'x/10.0')
     create(:component, id: 15, board: Kit.find(3), sensor: Sensor.find(7), equation: 'Mathematician.table_calibration({0=>50,2=>55,3=>57,6=>58,20=>59,40=>60,60=>61,75=>62,115=>63,150=>64,180=>65,220=>66,260=>67,300=>68,375=>69,430=>70,500=>71,575=>72,660=>73,720=>74,820=>75,900=>76,975=>77,1050=>78,1125=>79,1200=>80,1275=>81,1320=>82,1375=>83,1400=>84,1430=>85,1450=>86,1480=>87,1500=>88,1525=>89,1540=>90,1560=>91,1580=>92,1600=>93,1620=>94,1640=>95,1660=>96,1680=>97,1690=>98,1700=>99,1710=>100,1720=>101,1745=>102,1770=>103,1785=>104,1800=>105,1815=>106,1830=>107,1845=>108,1860=>109,1875=>110},x)', reverse_equation: 'x')
     create(:component, id: 16, board: Kit.find(3), sensor: Sensor.find(15), equation: 'x', reverse_equation: 'x/1000.0')
-
   end
 
   let(:device) { create(:device, kit: Kit.find(3)) }
@@ -44,22 +44,19 @@ describe DeviceArchive do
       ENV['aws_region'] = 'test'
       ENV['s3_bucket'] = 'test'
 
+      Fog.mock!
       allow(Time).to receive(:now).and_return(Time.now)
-      allow(Kairos).to receive(:http_post_to).with("/datapoints/query",kairos_query('temp')).and_return(http_response)
-      allow(Kairos).to receive(:http_post_to).with("/datapoints/query",kairos_query('light')).and_return(http_response)
-      allow(Kairos).to receive(:http_post_to).with("/datapoints/query",kairos_query('noise')).and_return(http_response)
-      allow(Kairos).to receive(:http_post_to).with("/datapoints/query",kairos_query('no2')).and_return(http_response)
+      allow(Kairos).to receive(:http_post_to).with("/datapoints/query",kairos_query(anything)).and_return(http_response)
 
       @file = DeviceArchive.create(device.id)
-      @file_content = ""
-      IO.foreach(@file.body) { |l| @file_content << l }
+
+      File.open(@file.body, 'r')
     end
 
     it 'returns csv file' do
-      expect(@file_content).to eq(csv)
+      expect(@file.body.read).to eq(csv)
       expect(@file.key).to eq("devices/#{device.id}/csv_archive.csv")
       expect(@file.content_disposition).to eq("attachment; filename=#{device.id}_#{(Time.now.to_f * 1000).to_i}.csv")
-      expect(@file.url(1.day.from_now).include('test.s3-test.amazonaws.com/devices/1/csv_archive.csv?')).to eq(true)
     end
   end
 
