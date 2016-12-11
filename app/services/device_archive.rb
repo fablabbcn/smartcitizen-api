@@ -2,14 +2,20 @@ require 'fog'
 
 class DeviceArchive
   def self.create device_id
-    self.s3_connection.directories.new(:key => ENV['s3_bucket']).files.new({
+    csv = self.csv_file(device_id)
+
+    file = self.s3_connection.directories.new(:key => ENV['s3_bucket']).files.new({
       :key    => "devices/#{device_id}/csv_archive.csv",
-      :body   => self.csv_file(device_id).open,
+      :body   => csv.open,
       :public => false,
       :expires => 1.day,
       :content_type => 'text/csv',
       :content_disposition => "attachment; filename=#{device_id}_#{(Time.now.to_f*1000).to_i}.csv"
     })
+
+    file.save
+    csv.close
+    file
   end
 
   def self.s3_connection

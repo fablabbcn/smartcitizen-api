@@ -37,26 +37,39 @@ describe DeviceArchive do
       '[1366351200000,2.0],[1366696800000,3.0],[1367301600000,4.0]]}]}]}')
   }
 
+  let(:fake_s3_connection) {
+    Fog::Storage.new({
+      :provider                 => 'AWS',
+      :aws_access_key_id        => 'FakeKeyId',
+      :aws_secret_access_key    => 'FakeAccessKey',
+      :region                   => 'FakeRegion',
+    })
+  }
+
+  let(:s3_file) { DeviceArchive.create(device.id) }
+
+  let(:s3_file_content) { File.open(s3_file.body, 'r') { |f| f.read } }
+
+  let(:s3_file_url) { 'https://testbuket.s3-FakeRegion.amazonaws.com/devices/1/csv_archive.csv' }
+
   describe "#create_file" do
     before do
-      ENV['aws_access_key'] = 'test'
-      ENV['aws_secret_key'] = 'test'
-      ENV['aws_region'] = 'test'
-      ENV['s3_bucket'] = 'test'
-
       Fog.mock!
+      ENV['s3_bucket'] = 'testbuket'
+      # create fake bucket
+      fake_s3_connection.directories.create(key: 'testbuket')
+
+      allow(DeviceArchive).to receive(:s3_connection).and_return(fake_s3_connection)
       allow(Time).to receive(:now).and_return(Time.now)
       allow(Kairos).to receive(:http_post_to).with("/datapoints/query",kairos_query(anything)).and_return(http_response)
-
-      @file = DeviceArchive.create(device.id)
-
-      File.open(@file.body, 'r')
     end
 
-    it 'returns csv file' do
-      expect(@file.body.read).to eq(csv)
-      expect(@file.key).to eq("devices/#{device.id}/csv_archive.csv")
-      expect(@file.content_disposition).to eq("attachment; filename=#{device.id}_#{(Time.now.to_f * 1000).to_i}.csv")
+    it 'uploads csv device archive to s3' do
+      expect(s3_file_content).to eq(csv)
+      expect(s3_file.key).to eq("devices/#{device.id}/csv_archive.csv")
+      expect(s3_file.content_disposition).to eq("attachment; filename=#{device.id}_#{(Time.now.to_f * 1000).to_i}.csv")
+
+      expect(s3_file.url(1.day.from_now).include?(s3_file_url)).to eq(true)
     end
   end
 
