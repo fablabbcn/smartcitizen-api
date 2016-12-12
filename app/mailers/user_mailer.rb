@@ -1,5 +1,3 @@
-require 'fog'
-
 class UserMailer < ApplicationMailer
 
   def welcome user_id
