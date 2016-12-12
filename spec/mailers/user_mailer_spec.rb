@@ -5,8 +5,6 @@ describe UserMailer do
   let(:user) { create(:user) }
   let(:device) { create(:device, owner: user) }
 
-  let(:s3_file) {  }
-
   describe "welcome" do
     let(:mail) { UserMailer.welcome(user.id) }
 
