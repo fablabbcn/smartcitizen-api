@@ -50,8 +50,6 @@ describe DeviceArchive do
 
   let(:s3_file_content) { File.open(s3_file.body, 'r') { |f| f.read } }
 
-  let(:s3_file_url) { 'https://testbuket.s3-FakeRegion.amazonaws.com/devices/1/csv_archive.csv' }
-
   describe "#create_file" do
     before do
       Fog.mock!
@@ -68,8 +66,6 @@ describe DeviceArchive do
       expect(s3_file_content).to eq(csv)
       expect(s3_file.key).to eq("devices/#{device.id}/csv_archive.csv")
       expect(s3_file.content_disposition).to eq("attachment; filename=#{device.id}_#{(Time.now.to_f * 1000).to_i}.csv")
-
-      expect(s3_file.url(1.day.from_now).include?(s3_file_url)).to eq(true)
     end
   end
 
