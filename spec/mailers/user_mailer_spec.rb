@@ -1,4 +1,5 @@
 require "rails_helper"
+require 'fog'
 
 describe UserMailer do
   let(:user) { create(:user) }
@@ -32,12 +33,35 @@ describe UserMailer do
   describe "device_archive" do
     let(:mail) { UserMailer.device_archive(device.id, user.id) }
 
-    skip "sends device_archive email" do
+    let(:s3_file) {
+      Fog::Storage.new({
+        :provider => 'AWS', :aws_access_key_id => 'FakeKeyId',
+        :aws_secret_access_key => 'FakeAccessKey', :region => 'FakeRegion',
+      }).directories.create(:key => 'testbucket').files.new({
+        :key    => 'test',
+        :body   => 'test',
+        :public => false,
+        :expires => 1.day,
+        :content_type => 'text/csv',
+        :content_disposition => 'test'
+      })
+    }
+
+    let(:device_url) {
+      'https://testbucket.s3-FakeRegion.amazonaws.com/test?X-Amz-Expires='
+    }
+
+    before do
+      Fog.mock!
+      allow(DeviceArchive).to receive(:create).with(device.id).and_return(s3_file)
+    end
+
+    it "sends device_archive email" do
       expect(mail.subject).to eq("Device CSV Archive Ready")
       expect(mail.to).to eq([user.email])
       expect(mail.from).to eq(["notifications@mailbot.smartcitizen.me"])
       expect(mail.reply_to).to eq(["team@smartcitizen.me"])
-      expect(mail.body.encoded).to match('device_url')
+      expect(mail.body).to include(device_url)
     end
   end
 
