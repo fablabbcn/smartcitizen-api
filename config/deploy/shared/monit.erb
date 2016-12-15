@@ -91,6 +91,7 @@ check process unicorn_worker_<%= (5000 + worker).to_s %>_<%= application %>_
 check device apps with path /home/<%= fetch(:deploy_user) %>/apps
   if SPACE usage > 80% then alert
 
+# mqtt subscriber
 check process mqtt_subscriber_<%= application %>
   with pidfile <%= current_path %>/tmp/pids/mqtt_subscriber.pid
   start program = "/etc/init.d/mqtt_subscriber_<%= application %>_<%= fetch(:rails_env)%> start"
