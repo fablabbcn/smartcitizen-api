@@ -104,8 +104,8 @@ module V0
         h['id'] = s.searchable_id
         h['type'] = s.searchable_type
         if s.searchable.nil?
-          # multisearch out-of-sync
-          PgSearch::Multisearch.rebuild(s.searchable_type.constantize)
+          # Record not found: multisearch table out-of-sync, delete found PgSearch::Document
+          s.destroy
         else
           if s.searchable_type == 'Device'
             h['name'] = s.searchable.name
