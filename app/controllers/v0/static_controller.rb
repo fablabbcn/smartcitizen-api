@@ -103,22 +103,27 @@ module V0
         h = {}
         h['id'] = s.searchable_id
         h['type'] = s.searchable_type
-        if s.searchable_type == 'Device'
-          h['name'] = s.searchable.name
-          h['description'] = s.searchable.description
-          h['owner_id'] = s.searchable.owner_id
-          h['owner_username'] = s.searchable.owner_username
-          h['city'] = s.searchable.city
-          h['url'] = v0_device_url(s.searchable_id)
-        elsif s.searchable_type == 'User'
-          h['username'] = s.searchable.username
-          h['avatar'] = s.searchable.avatar
-          h['city'] = s.searchable.city
-          h['url'] = v0_user_url(s.searchable_id)
-        end
+        if s.searchable.nil?
+          # multisearch out-of-sync
+          PgSearch::Multisearch.rebuild(s.searchable_type.constantize)
+        else
+          if s.searchable_type == 'Device'
+            h['name'] = s.searchable.name
+            h['description'] = s.searchable.description
+            h['owner_id'] = s.searchable.owner_id
+            h['owner_username'] = s.searchable.owner_username
+            h['city'] = s.searchable.city
+            h['url'] = v0_device_url(s.searchable_id)
+          elsif s.searchable_type == 'User'
+            h['username'] = s.searchable.username
+            h['avatar'] = s.searchable.avatar
+            h['city'] = s.searchable.city
+            h['url'] = v0_user_url(s.searchable_id)
+          end
           h['country_code'] = s.searchable.country_code
           h['country'] = s.searchable.country_name
-        a << h
+          a << h
+        end
       end
 
       paginate json: a
