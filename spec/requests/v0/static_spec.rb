@@ -45,6 +45,17 @@ describe V0::StaticController do
       expect(JSON.parse(response.body)[0]["id"]).to eq(bart.id)
     end
 
+    it "deletes search document if associated record is not found" do
+      dev = create(:device, name: 'test')
+      dev.delete
+
+      expect(PgSearch.multisearch('test').includes(:searchable).length).to eq(1)
+
+      j = api_get "/search?q=test"
+      expect(j.length).to eq(0)
+      expect(PgSearch.multisearch('test').includes(:searchable).length).to eq(0)
+    end
+
   end
 
 end
