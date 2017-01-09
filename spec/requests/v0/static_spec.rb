@@ -45,6 +45,22 @@ describe V0::StaticController do
       expect(JSON.parse(response.body)[0]["id"]).to eq(bart.id)
     end
 
+    it "deletes PgSearch::Document if associated record is not found" do
+      dev = create(:device, name: 'deleted')
+      # delete record without callbacks
+      dev.delete
+
+      # PgSearch::Document present still
+      expect(PgSearch.multisearch('deleted').includes(:searchable).first['content']).to include('deleted')
+
+      j = api_get "/search?q=deleted" # does not raise NoMethodError
+
+      expect(j.length).to eq(0) # device not included in results
+
+      # out-of-sync PgSearch::Document has been removed
+      expect(PgSearch.multisearch('deleted').includes(:searchable).length).to eq(0)
+    end
+
   end
 
 end
