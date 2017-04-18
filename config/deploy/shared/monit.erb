@@ -4,23 +4,23 @@ set logfile /var/log/monit.log
 set idfile /var/lib/monit/id
 set statefile /var/lib/monit/state
 
-set alert <%= ENV.fetch('monit_email') %> only on { timeout, nonexist }
+#set alert <%= ENV.fetch('monit_email') %> only on { timeout, nonexist }
 
 set eventqueue
   basedir /var/lib/monit/events
   slots 100
 
-set mailserver <%= ENV.fetch('monit_email_server') %> port <%= ENV.fetch('monit_email_port') %>
-  username "<%= ENV.fetch('monit_email') %>" password "<%= ENV.fetch('monit_email_password') %>"
-  using tlsv1
-  with timeout 30 seconds
+#set mailserver <%= ENV.fetch('monit_email_server') %> port <%= ENV.fetch('monit_email_port') %>
+#  username "<%= ENV.fetch('monit_email') %>" password "<%= ENV.fetch('monit_email_password') %>"
+#  using tlsv1
+#  with timeout 30 seconds
 
 set httpd port <%= ENV.fetch('monit_http_port') %>
   use address 0.0.0.0
   allow 0.0.0.0/0.0.0.0
   allow <%= ENV.fetch('monit_http_username') %>:<%= ENV.fetch('monit_http_password') %>
 
-set mail-format { subject: <%= "[monit] #{fetch(:application)} - #{fetch(:rails_env)}" %> $SERVICE $EVENT at $DATE }
+#set mail-format { subject: <%= "[monit] #{fetch(:application)} - #{fetch(:rails_env)}" %> $SERVICE $EVENT at $DATE }
 
 <% application = fetch(:application) %>
 
