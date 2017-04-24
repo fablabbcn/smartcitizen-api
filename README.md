@@ -13,11 +13,11 @@
 
 ## Installing Locally
 
-### Linux (Tested on Ubuntu 16.04)
+## Linux (Tested on Ubuntu 16.04)
 
 `apt-get install libmysqlclient-dev`
 
-### Redis and Postgresql
+### Redis and Postgresql
 
 `brew tap homebrew/services`
 
@@ -27,7 +27,7 @@
 
 `brew services start postgresql`
 
-### KairosDB
+### KairosDB
 
 `wget https://github.com/kairosdb/kairosdb/releases/download/v1.0.0/kairosdb-1.0.0-1.tar.gz`
 
@@ -47,7 +47,7 @@
 
 `bundle exec rails s`
 
-### Deploying
+### Deploying
 
 `bundle exec cap production deploy` < password currently required. *Don't run this without discussing in slack or issues first*. We will be automating deployments with CI/Travis so this command will eventually be deprecated.
 
