@@ -35,8 +35,14 @@ module DataParser
       end
 
       def timestamp_parse(timestamp)
-        parsed_ts = Time.parse(timestamp)
-        raise "timestamp error" if parsed_ts > 1.day.from_now or parsed_ts < 3.years.ago
+        # TODO: What to do if timestamp is empty?
+        if timestamp
+          parsed_ts = Time.parse(timestamp)
+          raise "Timestamp error" if parsed_ts > 1.day.from_now or parsed_ts < 3.years.ago
+        else
+          raise "No timestamp"
+        end
+
         parsed_ts
       end
 
