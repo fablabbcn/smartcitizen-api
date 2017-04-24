@@ -13,6 +13,10 @@
 
 ## Installing Locally
 
+### Linux (Tested on Ubuntu 16.04)
+
+`apt-get install libmysqlclient-dev`
+
 ### Redis and Postgresql
 
 `brew tap homebrew/services`
