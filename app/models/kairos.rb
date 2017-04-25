@@ -95,7 +95,11 @@ class Kairos
 
     # puts data.to_json
 
-    j = JSON.parse(response.body)['queries'][0]
+    if response.body
+      j = JSON.parse(response.body)['queries'][0]
+    else
+      raise "No response.body"
+    end
 
     json['sample_size'] = j['sample_size']
 

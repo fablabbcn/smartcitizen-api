@@ -43,6 +43,8 @@ class MqttMessagesHandler
     # TODO: what if message is empty?
     if message
       JSON.parse(message)['data']
+    else
+      raise "No data(message)"
     end
   end
 end
