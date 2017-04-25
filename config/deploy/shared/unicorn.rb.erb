@@ -1,8 +1,8 @@
 root = "<%= current_path %>"
 working_directory root
 pid "#{root}/tmp/pids/unicorn.pid"
-stderr_path "#{root}/log/unicorn.log"
-stdout_path "#{root}/log/unicorn.log"
+stderr_path "#{root}/log/unicorn.err.log"
+stdout_path "#{root}/log/unicorn.out.log"
 
 listen "/tmp/unicorn.<%= fetch(:full_app_name) %>.sock"
 worker_processes 5<%#= fetch(:unicorn_worker_count) %>
