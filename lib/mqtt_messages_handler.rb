@@ -41,6 +41,8 @@ class MqttMessagesHandler
   # takes a packet and returns 'data' from payload
   def self.data(message)
     # TODO: what if message is empty?
-    JSON.parse(message)['data']
+    if message
+      JSON.parse(message)['data']
+    end
   end
 end
