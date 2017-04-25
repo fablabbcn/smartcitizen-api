@@ -21,7 +21,7 @@ class RawStorer
 
       ts = data['timestamp'] || data[:timestamp]
       parsed_ts = Time.parse(ts)
-      raise "timestamp error" if parsed_ts > 1.day.from_now or parsed_ts < 3.years.ago
+      raise "timestamp error (raw)" if parsed_ts > 1.day.from_now or parsed_ts < 3.years.ago
       ts = parsed_ts.to_i * 1000
 
       _data = []
