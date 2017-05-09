@@ -25,6 +25,8 @@ Rails.application.configure do
   #  :metastore   => 'file:/var/cache/rack/meta',
   #  :entitystore => 'file:/var/cache/rack/body'
 
+  config.cache_store = :redis_store, "redis://localhost:6379/2/cache", { expires_in: 90.minutes }
+
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
