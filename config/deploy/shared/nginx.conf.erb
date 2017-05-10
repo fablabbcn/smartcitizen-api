@@ -1,5 +1,9 @@
-# proxy_cache_path /tmp/nginx levels=1:2 keys_zone=smartcitizen:10m inactive=2m;
-# proxy_cache_key "$scheme$request_method$host$request_uri";
+# Notes on caching:
+#   keys_zone=smartcitizen:10m : 30m sets the caching limit in megabytes
+#   inactive=2m : means entries will be removed in 2m if not requested
+
+proxy_cache_path /tmp/nginx levels=1:2 keys_zone=smartcitizen:10m inactive=2m; 
+proxy_cache_key "$scheme$request_method$host$request_uri";
 
 upstream unicorn {
   server unix:/tmp/unicorn.<%= fetch(:full_app_name) %>.sock fail_timeout=0;
@@ -34,17 +38,14 @@ server {
     proxy_set_header Host $http_host;
     proxy_redirect off;
     proxy_pass http://unicorn;
+
+    # Reverse proxy cache
+    proxy_cache smartcitizen;
+    proxy_cache_lock on;
+    proxy_cache_use_stale updating;
   }
 
   error_page 500 502 503 504 /500.html;
   client_max_body_size 4G;
   keepalive_timeout 10;
-
-  # location /v0/devices/world_map {
-  #   proxy_cache smartcitizen;
-  #   proxy_cache_valid 1m;
-  #   add_header X-Proxy-Cache $upstream_cache_status;
-  #   include proxy_params;
-  #   proxy_pass http://172.17.0.18:9000;
-  # }
 }
