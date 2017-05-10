@@ -94,35 +94,6 @@ module V0
       render json: @devices
     end
 
-    def cache_world_map
-      unless params[:cachebuster]
-        expires_in 30.seconds, public: true # CRON cURL every 60 seconds to cache
-      end
-      Rails.cache.fetch('devices', expires_in: 1.minutes ) do
-        @devices = Device.where.not(latitude: nil).where.not(data: nil).includes(:owner,:tags).map do |device|
-          {
-            id: device.id,
-            name: device.name,
-            description: (device.description.present? ? device.description : nil),
-            owner_id: device.owner_id,
-            owner_username: device.owner_id ? device.owner_username : nil,
-            latitude: device.latitude,
-            longitude: device.longitude,
-            city: device.city,
-            country_code: device.country_code,
-            kit_id: device.kit_id,
-            state: device.state,
-            system_tags: device.system_tags,
-            user_tags: device.user_tags,
-            # exposure: device.exposure,
-            data: device.data,
-            added_at: device.added_at
-          }
-        end
-        render json: @devices
-      end
-    end
-
     def world_map
       unless params[:cachebuster]
         expires_in 30.seconds, public: true # CRON cURL every 60 seconds to cache
