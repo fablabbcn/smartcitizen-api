@@ -6,6 +6,7 @@ gem 'rails-api'
 gem 'pg'
 
 gem 'redis'#, '3.0.7'
+gem 'skylight', '~> 1.2', '>= 1.2.2'
 
 gem 'rack-timeout'
 gem 'rack-cors', require: 'rack/cors'
