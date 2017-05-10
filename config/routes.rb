@@ -30,6 +30,7 @@ Rails.application.routes.draw do
       end
       get 'world_map', on: :collection
       get 'fresh_world_map', on: :collection
+      get 'cache_world_map', on: :collection
     end
     # readings
     match "add" => "readings#legacy_create", via: [:get, :post, :patch, :put]
