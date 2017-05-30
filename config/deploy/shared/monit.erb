@@ -60,7 +60,7 @@ check process nginx with pidfile /var/run/nginx.pid
 #   if cpu is greater than 80% for 5 cycles then restart     # hung process?
 
 # redis
-check process redis with pidfile /var/run/redis-server.pid
+check process redis with pidfile /var/run/redis/redis-server.pid
   start program = "/etc/init.d/redis-server start"
   stop program = "/etc/init.d/redis-server stop"
   if mem is greater than 5000.0 MB for 10 cycles then restart   # eating up memory?
