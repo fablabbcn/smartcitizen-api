@@ -31,7 +31,7 @@ check process mmonit with pidfile /opt/mmonit/logs/mmonit.pid
 # application
 check system <%= application %>
   if loadavg(5min) > 2 for 2 cycles then alert
-  if memory > 80% for 2 cycles then alert
+  if memory > 85% for 2 cycles then alert
   if cpu(user) > 75% for 2 cycles then alert
 
 # websockets
