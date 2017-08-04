@@ -25,7 +25,8 @@ class Storer
   end
 
   def update_device(parsed_ts, sql_data)
-    return unless parsed_ts > (@device.last_recorded_at || Time.at(0))
+    return unless parsed_ts > Time.at(0)
+    sql_data = @device.data.present? ? @device.data.merge(sql_data) : sql_data
     @device.update_columns(last_recorded_at: parsed_ts, data: sql_data, state: 'has_published')
   end
 
