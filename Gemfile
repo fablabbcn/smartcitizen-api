@@ -67,6 +67,9 @@ gem 'oj'
 gem 'oj_mimic_json'
 gem 'multi_json'
 
+# Report errors to sentry.io
+gem 'sentry-raven'
+
 # eventMachine MQTT handler
 gem 'em-mqtt', '~> 0.0.4'
 
