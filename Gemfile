@@ -1,4 +1,4 @@
-ruby '2.2.2'
+ruby '2.3.3'
 source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2'
@@ -13,6 +13,7 @@ gem 'rack-cors', require: 'rack/cors'
 gem 'rack-contrib'
 gem 'rack-cache'
 gem 'moneta'
+gem 'net-telnet'
 gem 'api_cache'
 gem 'minuteman', '~> 2'
 
@@ -92,13 +93,13 @@ group :development do
   gem 'spring-commands-rspec'
   gem 'letter_opener'
   gem 'spring'
-  gem 'sshkit', '1.7.1'
+  gem 'sshkit'#, '1.7.1'
   gem 'sshkit-sudo'
   gem 'capistrano-rbenv'
   gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
   gem 'rubocop', require: false
   gem "parallel_tests"
-  gem 'capistrano', '3.4.0'
+  gem 'capistrano'#, '3.4.0'
   gem 'capistrano-rails'
   gem "rails-erd"
 end
