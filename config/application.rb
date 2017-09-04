@@ -107,9 +107,11 @@ module Smartcitizen
       g.fixture_replacement :factory_girl, dir: "spec/factories"
     end
 
-    Raven.configure do |config|
-      config.dsn = ENV['RAVEN_DSN_URL']
-      config.environments = [ 'staging', 'production' ]
+    if ENV['RAVEN_DSN_URL'].present?
+      Raven.configure do |config|
+        config.dsn = ENV['RAVEN_DSN_URL']
+        config.environments = [ 'staging', 'production' ]
+      end
     end
 
   end
