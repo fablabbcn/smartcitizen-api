@@ -3,18 +3,6 @@ class DiscourseController < ApplicationController
 
   before_action :check_if_authorized!
 
-  def check_if_authorized!
-    if current_user.nil?
-      if params[:access_token]
-        raise Smartcitizen::Unauthorized.new("Invalid OAuth2 Params")
-      else
-        raise Smartcitizen::Unauthorized.new("Authorization required")
-      end
-    end
-  end
-
-
-
   def sso
     secret = Figaro.env.discourse_sso_secret
     sso = SingleSignOn.parse(request.query_string, secret)
