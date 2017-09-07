@@ -1,6 +1,7 @@
 require "sidekiq/web"
-
 Rails.application.routes.draw do
+
+  get "discourse/sso" #TODO: should it be under /v0 ?
 
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
     username == ENV["sidekiq_username"] && password == ENV["sidekiq_password"]
