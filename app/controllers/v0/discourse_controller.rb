@@ -1,3 +1,4 @@
+module V0
 class DiscourseController < ApplicationController
 
   before_action :check_if_authorized!
@@ -35,4 +36,5 @@ class DiscourseController < ApplicationController
     #redirect_to root
   end
 
+end
 end
