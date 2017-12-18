@@ -13,6 +13,15 @@
 
 ## Installing Locally
 
+### Docker quickstart
+
+1. Start all services
+
+`docker-compose up`
+
+2. Create the database (first time only)
+`docker-compose exec app rake db:setup`
+
 ### Linux (Tested on Ubuntu 16.04)
 
 `apt-get install libmysqlclient-dev`
