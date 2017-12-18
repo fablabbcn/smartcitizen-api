@@ -78,6 +78,9 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.4.0)
+    airbrake (4.3.8)
+      builder
+      multi_json
     ancestry (2.1.0)
       activerecord (>= 3.0.0)
     api-pagination (4.4.0)
@@ -617,6 +620,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  airbrake (~> 4.3)
   ancestry
   api-pagination
   api_cache
@@ -701,9 +705,6 @@ DEPENDENCIES
   webmock
   workflow
   zonebie
-
-RUBY VERSION
-   ruby 2.2.2p95
 
 BUNDLED WITH
    1.15.4
