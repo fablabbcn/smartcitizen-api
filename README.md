@@ -19,6 +19,11 @@
 
 `docker-compose up`
 
+If you want to start the Cassandra cluster with 3 nodes do:
+
+`docker-compose -f docker-cassandra.yml up`
+
+
 2. Create the database (first time only)
 
 `docker-compose exec app rake db:setup`
