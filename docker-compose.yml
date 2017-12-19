@@ -1,4 +1,4 @@
-version: '2.2'
+version: '3.3'
 
 services:
   db:
@@ -39,7 +39,9 @@ services:
 #      - "8080:8080"
 #      - "4242:4242"
 
-  cassandra:
+# Check if cassandra cluster is working:
+# docker-compose exec cassandra-1 nodetool status
+  cassandra-1:
     image: cassandra
     ports:
       # no need to expose all ports?
@@ -48,6 +50,30 @@ services:
       - "7199:7199" # JMX
       - "9042:9042" # CQL native transport
       - "9160:9160" # Thrift client API
+    #volumes:
+      #- sck-cassandra:/var/lib/cassandra
+
+  cassandra-2:
+    image: cassandra
+    environment:
+      - CASSANDRA_SEEDS=cassandra-1 # Use IP if on different servers
+    depends_on:
+      - cassandra-1
+    #volumes:
+      #- sck-cassandra:/var/lib/cassandra
+      #
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 60; fi && /docker-entrypoint.sh cassandra -f'
+
+
+  cassandra-3:
+    image: cassandra
+    environment:
+      - CASSANDRA_SEEDS=cassandra-1 # Use IP if on different servers
+    depends_on:
+      - cassandra-1
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 120; fi && /docker-entrypoint.sh cassandra -f'
+
 
 volumes:
   sck-postgres:
+  sck-cassandra:
