@@ -1,4 +1,6 @@
 version: '3.3'
+  # Based on:
+  # https://github.com/massenz/docker-cassandra/blob/develop/docker-compose.yml
 
 services:
 #TODO: Work in progress
