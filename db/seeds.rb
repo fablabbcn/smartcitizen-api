@@ -6,6 +6,14 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+unless Rails.env.development?
+  puts "No seeds for mode: #{Rails.env}"
+  exit
+end
+
+p '------ Seeding for development environment ------'
+
+
 User.create(
   username: 'user1',
   email: 'email@example.com',
