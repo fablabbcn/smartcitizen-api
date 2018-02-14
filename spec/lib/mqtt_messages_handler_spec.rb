@@ -64,10 +64,11 @@ RSpec.describe MqttMessagesHandler do
     end
 
     context 'invalid packet' do
-      it 'it notifies Airbrake' do
+      it 'it notifies Airbrake(has been removed)' do
         expect(Kairos).not_to receive(:http_post_to)
-        expect(Airbrake).to receive(:notify).with(RuntimeError, 'device not found - payload: '\
-          '{"data": [{"recorded_at": "2016-06-08 10:30:00","sensors": [{"id": 1,"value": 21}]}]}')
+        #TODO: Do we need to disable all, after removing Airbrake?
+        #expect(Airbrake).to receive(:notify).with(RuntimeError, 'device not found - payload: '\
+          #'{"data": [{"recorded_at": "2016-06-08 10:30:00","sensors": [{"id": 1,"value": 21}]}]}')
         MqttMessagesHandler.handle(@invalid_packet)
       end
     end

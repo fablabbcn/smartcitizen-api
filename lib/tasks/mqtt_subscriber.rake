@@ -21,7 +21,7 @@ namespace :mqtt do
             MqttMessagesHandler.handle_topic topic, message
           rescue Exception => e
             Rails.logger.error(e)
-            Airbrake.notify(e)
+            #Airbrake.notify(e)
           end
         end
       end
@@ -30,7 +30,7 @@ namespace :mqtt do
       exit 0
     rescue Exception => e
       begin
-        Airbrake.notify(e)
+        #Airbrake.notify(e)
         Rails.logger.error(e)
         Rails.logger.info("Try to reconnect in 10 seconds...")
         sleep 10

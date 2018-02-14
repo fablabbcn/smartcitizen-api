@@ -23,7 +23,7 @@ class MqttMessagesHandler
   rescue Exception => e
     Rails.logger.error(e.message)
     Rails.logger.error(message)
-    Airbrake.notify(e, {payload: e.message + " - payload: " + message})
+    #Airbrake.notify(e, {payload: e.message + " - payload: " + message})
   end
 
   def self.handle_hello(topic, message)
