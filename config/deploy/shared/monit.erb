@@ -94,7 +94,7 @@ check device apps with path /home/<%= fetch(:deploy_user) %>/apps
 # mqtt subscriber
 check process mqtt_subscriber_<%= application %>
   #with pidfile <%= current_path %>/tmp/pids/mqtt_subscriber.pid
-  matching mqtt:sub
+  matching mqtt
   start program = "/etc/init.d/mqtt_subscriber_<%= application %>_<%= fetch(:rails_env)%> start"
   stop program = "/etc/init.d/mqtt_subscriber_<%= application %>_<%= fetch(:rails_env)%> stop"
 
