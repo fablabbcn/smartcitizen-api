@@ -13,7 +13,6 @@ end
 
 p '------ Seeding for development environment ------'
 
-
 User.create(
   username: 'user1',
   email: 'email@example.com',
@@ -21,13 +20,15 @@ User.create(
 )
 
 Kit.create(
-  name: 'kit',
-  description: 'my description'
+  name: Faker::Educator.campus,
+  description: Faker::Lorem.sentence(5)
 )
 
 Measurement.create(
-  name: 'my measure',
-  description: 'meas descr'
+  [
+    { name: 'air temperature',  description: 'How hot is the air' },
+    { name: 'light',  description: 'Lux is a measure' }
+  ]
 )
 
 Sensor.create(
@@ -36,8 +37,10 @@ Sensor.create(
 )
 
 Tag.create(
-  name: 'tag1',
-  description: 'tag descript'
+  [
+    { name: 'Amsterdam', description: 'SCK in Adam' },
+    { name: 'Manchester', description: 'SCK in Manchester' }
+  ]
 )
 
 #ApiToken.create(
@@ -51,16 +54,16 @@ Tag.create(
 
 #device has many sensors through components
 Device.create(
-  owner_id: User.first,
-  name: 'device1',
+  owner: User.first,
+  name: 'device2',
   description: 'device descript',
-  mac_address: 'macaddress',
-  latitude: 1.1,
-  longitude: 1.2,
-  kit_id: Kit.first
+  #mac_address: 'macaddress',
+#  latitude: 1.1,
+#  longitude: 1.2,
+  kit: Kit.first
 )
 
-DevicesTag.create(
-  device: Device.first,
-  tag: Tag.first
-)
+#DevicesTag.create(
+#  device: Device.first,
+#  tag: Tag.first
+#)
