@@ -83,7 +83,7 @@ module V0
           }
         end
       rescue Exception => e
-        notify_airbrake(e)
+        #notify_airbrake(e)
       end
 
       a.uniq!{|h| [h[:city],h[:country_code]].join }

@@ -9,7 +9,7 @@ require 'capistrano/setup'
 # Include default deployment tasks
 require 'capistrano/deploy'
 
-require 'airbrake/capistrano3'
+#require 'airbrake/capistrano3'
 
 require 'sshkit/sudo'
 

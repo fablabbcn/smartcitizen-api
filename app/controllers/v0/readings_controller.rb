@@ -23,7 +23,7 @@ module V0
         end
         render json: { id: "ok", message: "Data successfully added to ingestion queue", url: nil, errors: nil }, status: :ok
       rescue Exception => e
-        notify_airbrake(e)
+        #notify_airbrake(e)
         raise Smartcitizen::UnprocessableEntity.new "Problem(s) with the data"
       end
     end
@@ -44,11 +44,11 @@ module V0
             end
 
           rescue Exception => e
-            notify_airbrake(e)
+            #notify_airbrake(e)
           end
         end
       rescue Exception => e
-        notify_airbrake(e)
+        #notify_airbrake(e)
       end
       datetime
     end
