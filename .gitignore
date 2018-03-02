@@ -42,3 +42,5 @@ CLEANING.rb
 *.swp
 *.swo
 .idea
+
+.byebug_history

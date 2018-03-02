@@ -94,6 +94,7 @@ GEM
     bcrypt (3.1.11)
     browser (1.0.1)
     builder (3.2.2)
+    byebug (9.1.0)
     c_geohash (1.1.2)
     cane (3.0.0)
       parallel
@@ -625,6 +626,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   brakeman!
   browser (= 1.0.1)
+  byebug
   c_geohash
   cane
   capistrano (= 3.4.0)

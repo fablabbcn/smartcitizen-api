@@ -115,7 +115,7 @@ group :development, :test do
     ref: '8e68d99217fac5dedceeeba226ea1f2d9be01e1b'
   gem 'guard-rspec'
   gem 'railroady'
-  # gem 'byebug'
+  gem 'byebug'
   # gem 'web-console', '~> 2.0'
   gem 'rdoc'
 end
