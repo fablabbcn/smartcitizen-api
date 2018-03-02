@@ -8,11 +8,11 @@ describe V0::SensorsController do
 
   let(:admin) { create :admin }
   let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
+  let(:sensor1) {create :sensor}
 
   describe "GET /sensor/<id>" do
     it "returns a sensor" do
-      sensor = create(:sensor)
-      json = api_get "sensors/#{sensor.id}"
+      json = api_get "sensors/#{sensor1.id}"
       expect(response.status).to eq(200)
     end
   end
