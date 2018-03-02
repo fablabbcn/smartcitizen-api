@@ -7,6 +7,7 @@ describe V0::ComponentsController do
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
   let(:admin) { create :admin }
   let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
+  let(:component3) { create :component }
 
   describe "GET /components" do
 
@@ -27,8 +28,7 @@ describe V0::ComponentsController do
 
   describe "GET /components/<id>" do
     it "returns a component" do
-      component = create(:component)
-      json = api_get "components/#{component.id}"
+      json = api_get "components/#{component3.id}"
       expect(response.status).to eq(200)
     end
   end
