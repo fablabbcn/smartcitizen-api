@@ -66,6 +66,8 @@ module V0
       begin
         url = "http://search.mapzen.com/v1/autocomplete?api_key=#{ENV['mapzen_api_key']}&text=#{query}"
         if Rails.env.test?
+          # Overwrite url in case you have the correct ENV keys on your localhost
+          url = 'http://search.mapzen.com/v1/autocomplete?api_key=&text=manchester'
           data = JSON.parse( open(url).read ) # let VCR handle it
         else
           data = JSON.parse( APICache.get(url, cache: 5.days, valid: 1.week) )
