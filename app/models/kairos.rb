@@ -127,14 +127,14 @@ class Kairos
             next_reading = readings.pop
 
             if this_reading[1].nil?
-              tmpnum = next_reading[1]
+              bigger_num = next_reading[1]
             elsif next_reading[1].nil?
-              tmpnum = this_reading[1]
+              bigger_num = this_reading[1]
             else
-              tmpnum = [this_reading[1], next_reading[1]].max
+              bigger_num = [this_reading[1], next_reading[1]].max
             end
 
-            json['readings'] << [next_reading[0], tmpnum]
+            json['readings'] << [next_reading[0], bigger_num]
           else
             json['readings'] << this_reading
           end
