@@ -109,7 +109,7 @@ class Kairos
       readings = j['results'][0]['values'].map{|r| [Time.at(r[0]/1000).utc, component.calibrated_value(r[1]) ]}
     end
 
-    if rollup_value.send(rollup_unit) >= 10.minutes && params[:all_intervals]
+    if rollup_value.send(rollup_unit) >= 10.minutes && (params[:all_intervals].present? && params[:all_intervals] == 'true')
       # json['readings'] = readings
       distance = rollup_value.send(rollup_unit)
       percent = rollup_value.send(rollup_unit) * 0.1
@@ -125,7 +125,16 @@ class Kairos
           next_reading = readings.last
           if next_reading[0] - this_reading[0] < percent
             next_reading = readings.pop
-            json['readings'] << [next_reading[0], [this_reading[1], next_reading[1]].max_by(&:to_i)]
+
+            if this_reading[1].nil?
+              bigger_num = next_reading[1]
+            elsif next_reading[1].nil?
+              bigger_num = this_reading[1]
+            else
+              bigger_num = [this_reading[1], next_reading[1]].max
+            end
+
+            json['readings'] << [next_reading[0], bigger_num]
           else
             json['readings'] << this_reading
           end
