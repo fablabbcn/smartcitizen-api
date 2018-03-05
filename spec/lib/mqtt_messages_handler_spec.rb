@@ -32,13 +32,13 @@ RSpec.describe MqttMessagesHandler do
 
   describe '#device_token' do
     it 'returns device_token from topic' do
-      expect(MqttMessagesHandler.device_token(@packet)).to eq(device.device_token)
+      expect(MqttMessagesHandler.device_token(@packet.topic)).to eq(device.device_token)
     end
   end
 
   describe '#data' do
     it 'returns parsed data from payload' do
-      expect(MqttMessagesHandler.data(@packet)).to match_array(@data)
+      expect(MqttMessagesHandler.data(@packet.payload)).to match_array(@data)
     end
   end
 
