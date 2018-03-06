@@ -3,7 +3,11 @@ require 'rails_helper'
 describe V0::ReadingsController do
 
   let(:user) { create(:user) }
-  let(:device) { create(:device, owner: user) }
+  let(:kit) { create(:kit, sensor_map: '{"noise": 7, "temp": 12, "light": 14, "no2": 15}' ) }
+  let(:device) { create(:device, owner: user, kit: kit) }
+  let(:sensor) { create(:sensor, id: 15) }
+  let!(:component) { create(:component, board: kit, sensor: sensor)  }
+
   let(:application) { create :application }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
 
