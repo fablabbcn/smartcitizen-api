@@ -25,7 +25,8 @@ Kit.create(name: 'Making Sense WAAG #1', description: 'AQM sensor by WAAG')
 3.times do
   Kit.create(
     name: Faker::Educator.campus,
-    description: Faker::Lorem.sentence(5)
+    description: Faker::Lorem.sentence(5),
+    sensor_map: '{"noise": 7, "temp": 12, "light": 14, "no2": 15}'
   )
 end
 
@@ -53,14 +54,6 @@ Sensor.create(
   ]
 )
 
-#TODO: belongs_to :board, polymorphic: true
-Component.create(
-  # TODO: Is this correct? Is Kit a board?
-  board: Kit.first,
-  sensor: Sensor.first,
-  #board_type:
-)
-
 #device has many sensors through components
 #has_many :components, as: :board
 4.times do
@@ -77,6 +70,13 @@ Component.create(
     }
   )
 end
+
+# belongs_to :board, polymorphic: true
+# belongs_to :sensor
+# Kit and Device have many Components, as: :board
+Component.create( board: Kit.first, sensor: Sensor.first)
+Component.create( board: Device.first, sensor: Sensor.first)
+Component.create( board: Device.second, sensor: Sensor.second)
 
 Tag.create(
   [
