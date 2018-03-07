@@ -1,5 +1,7 @@
 # SmartCitizen
 
+**NOTE** This is a **private** repo! If you need to change that, you have to search ALL commits and make sure none of the private API keys are compromised. For example, our google maps API key can be fount in the git history when it was added (by mistake) to a VCR test.
+
 [![Build Status](https://travis-ci.org/fablabbcn/smartcitizen.svg?branch=master)](https://travis-ci.org/fablabbcn/smartcitizen)
 [![Code Climate](https://codeclimate.com/github/fablabbcn/smartcitizen/badges/gpa.svg)](https://codeclimate.com/github/fablabbcn/smartcitizen)
 [![Test Coverage](https://codeclimate.com/github/fablabbcn/smartcitizen/badges/coverage.svg)](https://codeclimate.com/github/fablabbcn/smartcitizen)
