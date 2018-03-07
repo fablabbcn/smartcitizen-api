@@ -1,0 +1,47 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://0.0.0.0:8080/api/v1/datapoints/query
+    body:
+      encoding: UTF-8
+      string: '{"metrics":[{"tags":{"device_id":[75]},"name":"no2"}],"cache_time":0,"start_absolute":1262304000000}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      - application/json
+      User-Agent:
+      - Ruby
+      Authorization:
+      - Basic Og==
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Pragma:
+      - no-cache
+      Cache-Control:
+      - no-cache
+      Expires:
+      - '0'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Accept-Encoding, User-Agent
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(8.1.16.v20140903)
+    body:
+      encoding: ASCII-8BIT
+      string: '{"queries":[{"sample_size":0,"results":[{"name":"no2","tags":{},"values":[]}]}]}'
+    http_version: 
+  recorded_at: Tue, 06 Mar 2018 16:54:26 GMT
+recorded_with: VCR 3.0.3

@@ -5,7 +5,8 @@ describe V0::ReadingsController do
   let(:user) { create(:user) }
   let(:kit) { create(:kit, sensor_map: '{"noise": 7, "temp": 12, "light": 14, "no2": 15}' ) }
   let(:device) { create(:device, owner: user, kit: kit) }
-  let(:sensor) { create(:sensor, id: 15) }
+  let(:measurement) { create(:measurement) }
+  let(:sensor) { create(:sensor, id: 15, measurement: measurement) }
   let!(:component) { create(:component, board: kit, sensor: sensor)  }
 
   let(:application) { create :application }
@@ -42,6 +43,7 @@ describe V0::ReadingsController do
 
   describe "csv_archive" do
 
+    # TODO: missing a valid VCR recording to replay test
     it "sends email to authenticated owner of kit", :vcr do
       j = api_get "devices/#{device.id}/readings/csv_archive?access_token=#{token.token}"
       expect(last_email.to).to eq([user.email])
