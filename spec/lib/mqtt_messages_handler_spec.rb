@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe MqttMessagesHandler do
+  DatabaseCleaner.clean_with(:truncation) # We were getting ActiveRecord::RecordNotUnique:
   let(:device) { create(:device, device_token: 'aA1234') }
-  let(:component) { create(:component, board: build(:kit), sensor: build(:sensor, id: 1)) }
+  let(:component) { build(:component, board: build(:kit), sensor: build(:sensor, id: 1)) }
   before do
     device.components << component
 

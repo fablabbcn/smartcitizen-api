@@ -11,12 +11,12 @@ describe ComponentPolicy do
   end
 
   context "for a user" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryGirl.build(:user) }
     it { is_expected.to permitz(:show) }
   end
 
   context "for an admin" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryGirl.build(:admin) }
     it { is_expected.to permitz(:show) }
   end
 
