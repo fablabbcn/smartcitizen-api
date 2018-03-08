@@ -3,7 +3,7 @@ require 'rails_helper'
 describe KitPolicy do
   subject { KitPolicy.new(user, kit) }
 
-  let(:kit) { FactoryGirl.create(:kit) }
+  let(:kit) { FactoryGirl.build(:kit) }
 
   context "for a visitor" do
     let(:user) { nil }

@@ -3,7 +3,7 @@ require 'rails_helper'
 describe ComponentPolicy do
   subject { ComponentPolicy.new(user, component) }
 
-  let(:component) { FactoryGirl.create(:component) }
+  let(:component) { FactoryGirl.build(:component) }
 
   context "for a visitor" do
     let(:user) { nil }

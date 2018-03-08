@@ -2,18 +2,18 @@ require 'rails_helper'
 
 describe V0::ReadingsController do
 
-  let(:user) { create(:user) }
-  let(:kit) { create(:kit, sensor_map: '{"noise": 7, "temp": 12, "light": 14, "no2": 15}' ) }
+  let(:user) { build(:user) }
+  let(:kit) { build(:kit, sensor_map: '{"noise": 7, "temp": 12, "light": 14, "no2": 15}' ) }
   let(:device) { create(:device, owner: user, kit: kit) }
-  let(:measurement) { create(:measurement) }
-  let(:sensor) { create(:sensor, id: 15, measurement: measurement) }
-  let!(:component) { create(:component, board: kit, sensor: sensor)  }
+  let(:measurement) { build(:measurement) }
+  let(:sensor) { build(:sensor, measurement: measurement) }
+  let(:component) { build(:component, board: kit, sensor: sensor)  }
 
-  let(:application) { create :application }
-  let(:token) { create :access_token, application: application, resource_owner_id: user.id }
+  let(:application) { build :application }
+  let(:token) { build :access_token, application: application, resource_owner_id: user.id }
 
-  let(:general_user) { create(:user) }
-  let(:general_token) { create :access_token, application: application, resource_owner_id: general_user.id }
+  let(:general_user) { build(:user) }
+  let(:general_token) { build :access_token, application: application, resource_owner_id: general_user.id }
 
   describe "GET devices/:id/readings" do
 

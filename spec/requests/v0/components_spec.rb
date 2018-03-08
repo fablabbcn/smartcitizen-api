@@ -2,12 +2,12 @@ require 'rails_helper'
 
 describe V0::ComponentsController do
 
-  let(:application) { create :application }
-  let(:user) { create :user }
-  let(:token) { create :access_token, application: application, resource_owner_id: user.id }
-  let(:admin) { create :admin }
-  let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
-  let(:component3) { create :component }
+  let(:application) { build :application }
+  let(:user) { build :user }
+  let(:token) { build :access_token, application: application, resource_owner_id: user.id }
+  let(:admin) { build :admin }
+  let(:admin_token) { build :access_token, application: application, resource_owner_id: admin.id }
+  let(:component3) { build :component }
 
   describe "GET /components" do
 

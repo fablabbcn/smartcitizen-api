@@ -249,9 +249,9 @@ RSpec.describe Device, :type => :model do
 
   context "with kit" do
 
-    let(:kit) { create(:kit) }
-    let(:sensor) { create(:sensor) }
-    let(:device) { create(:device, kit: kit) }
+    let(:kit) { build(:kit) }
+    let(:sensor) { build(:sensor) }
+    let(:device) { build(:device, kit: kit) }
 
     before(:each) do
       kit.sensors << sensor
@@ -269,10 +269,11 @@ RSpec.describe Device, :type => :model do
 
   context "without kit" do
 
-    let(:sensor) { create(:sensor) }
+    let(:sensor) { build(:sensor) }
     let(:device) { create(:device) }
 
     before(:each) do
+      DatabaseCleaner.clean_with(:truncation) # We were getting ActiveRecord::RecordNotUnique:
       device.sensors << sensor
     end
 

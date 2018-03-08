@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe MqttMessagesHandler do
   let(:device) { create(:device, device_token: 'aA1234') }
-  let(:component) { create(:component, board: create(:kit), sensor: create(:sensor, id: 1)) }
+  let(:component) { create(:component, board: build(:kit), sensor: build(:sensor, id: 1)) }
   before do
     device.components << component
 

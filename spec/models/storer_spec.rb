@@ -1,15 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Storer, type: :model do
-  before(:all) do
-    create(:kit, id: 3, name: 'SCK', description: "Board", slug: 'sck', sensor_map: '{"temp": 12}')
-    create(:sensor, id:12, name:'HPP828E031', description: 'test')
-    create(:component, id: 12, board: Kit.find(3), sensor: Sensor.find(12), equation: '(175.72 / 65536.0 * x) - 53', reverse_equation: 'x')
+  before do
+    DatabaseCleaner.clean_with(:truncation) # We were getting ActiveRecord::RecordNotUnique:
   end
 
-  let(:sensor) { Sensor.first }
-  let(:component) { Component.first }
-  let(:device) { create(:device, device_token: 'aA1234', kit: Kit.find(3)) }
+  let(:kit){       build(:kit, id: 3, name: 'SCK', description: "Board", slug: 'sck', sensor_map: '{"temp": 12}')}
+  let(:sensor){    build(:sensor, id:12, name:'HPP828E031', description: 'test')}
+  let(:component){ create(:component, id: 12, board: kit, sensor: sensor, equation: '(175.72 / 65536.0 * x) - 53', reverse_equation: 'x')}
+  let(:device) {   create(:device, device_token: 'aA1234', kit: kit) }
 
   context 'when receiving good data' do
     before do
