@@ -66,6 +66,15 @@ Sensor.create(
       latitude: Faker::Address.latitude,
       longitude: Faker::Address.longitude,
       device_token: Faker::Crypto.sha1,
+      data: {
+        7  => 50,
+        12 => -0.629348144531249,
+        13 => 131.992370605469,
+        14 => 37.8,
+        15 => 27.384,
+        16 => 275.303,
+        17 => 100
+      },
       kit: Kit.all.sample
     }
   )
