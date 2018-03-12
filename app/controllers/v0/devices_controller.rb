@@ -114,7 +114,7 @@ module V0
           system_tags: device.system_tags,
           user_tags: device.user_tags,
           # exposure: device.exposure,
-          data: device.data,
+          #data: device.data,
           added_at: device.added_at
         }
       end
