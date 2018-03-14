@@ -63,35 +63,7 @@ module V0
 
       query = CGI.escape(params[:q]).downcase.strip
 
-#      begin
-#        url = "http://search.mapzen.com/v1/autocomplete?api_key=#{ENV['mapzen_api_key']}&text=#{query}"
-#        if Rails.env.test?
-#          # Overwrite url in case you have the correct ENV keys on your localhost
-#          url = 'http://search.mapzen.com/v1/autocomplete?api_key=&text=manchester'
-#          data = JSON.parse( open(url).read ) # let VCR handle it
-#        else
-#          data = JSON.parse( APICache.get(url, cache: 5.days, valid: 1.week) )
-#        end
-#        data['features'].take(5).each do |feature|
-#          a << {
-#            type: "City",
-#            city: feature['properties']['name'],
-#            name: feature['properties']['name'],
-#            layer: feature['properties']['layer'],
-#            country_code: (ISO3166::Country.find_country_by_alpha3(feature['properties']['country_a'].downcase).alpha2 if feature['properties']['country_a']),
-#            country: feature['properties']['country'],
-#            latitude: feature['geometry']['coordinates'][1],
-#            longitude: feature['geometry']['coordinates'][0]
-#          }
-#        end
-#      rescue Exception => e
-#        #notify_airbrake(e)
-#      end
-
-
-
-      # Use Geocoder to get information
-      gc = Geocoder.search query
+      gc = Geocoder.search(query)
 
       gc.take(5).each do |item|
         a << {
