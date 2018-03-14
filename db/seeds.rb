@@ -62,6 +62,8 @@ Sensor.create(
     {
       owner: User.first,
       name: Faker::Address.city,
+      city: Faker::Address.city,
+      country_code: Faker::Address.country_code,
       description: Faker::Address.street_name,
       mac_address: Faker::Internet.mac_address,
       latitude: Faker::Address.latitude,
