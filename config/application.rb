@@ -54,10 +54,15 @@ module Smartcitizen
 
     config.middleware.insert_before 0, "HeaderCheck"
     config.middleware.insert_before(ActionDispatch::Static, "DeleteResponseHeaders")
-    config.middleware.insert_before 0, "Rack::Cors" do
-      allow do
-        origins '*'
-        resource '*', :headers => :any, :methods => [:get, :post, :put, :patch, :delete, :options]
+
+    # Enable Rails CORS only in Development.
+    # Otherwise it's done by NGINX.
+    if Rails.env.development?
+      config.middleware.insert_before 0, "Rack::Cors" do
+        allow do
+          origins '*'
+          resource '*', :headers => :any, :methods => [:get, :post, :put, :patch, :delete, :options]
+        end
       end
     end
 
