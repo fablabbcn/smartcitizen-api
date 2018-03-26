@@ -167,7 +167,7 @@ class Device < ActiveRecord::Base
   def soft_state
     if data.present?
       'has_published'
-    elsif mac_address.present?
+    elsif mac_address.present? || device_token.present?
       'never_published'
     else
       'not_configured'
