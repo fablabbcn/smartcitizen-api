@@ -133,6 +133,7 @@ private
         :latitude,
         :longitude,
         :elevation,
+        :device_token,
         :exposure,
         :meta,
         :kit_id,
