@@ -57,7 +57,7 @@ Sensor.create(
 
 #device has many sensors through components
 #has_many :components, as: :board
-4.times do
+5.times do
   Device.create(
     {
       owner: User.first,
@@ -82,6 +82,9 @@ Sensor.create(
     }
   )
 end
+
+# Make the last Device an archived one?
+Device.last.archive!
 
 # belongs_to :board, polymorphic: true
 # belongs_to :sensor

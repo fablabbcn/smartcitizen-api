@@ -6,7 +6,7 @@ module V0
       except: [:index, :world_map, :fresh_world_map]
 
     def show
-      @device = Device.unscoped.includes(
+      @device = Device.includes(
         :kit, :owner, :sensors,:tags).find(params[:id])
       authorize @device
       @device
@@ -133,6 +133,7 @@ private
         :latitude,
         :longitude,
         :elevation,
+        :device_token,
         :exposure,
         :meta,
         :kit_id,
