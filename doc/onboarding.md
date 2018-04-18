@@ -114,6 +114,8 @@ If 'Onboarding-Session' is not valid, (404) "Invalid onboarding_session".
 
 Requires user authentication, otherwise (401) "Authorization required" is returned.
 
+Requires all the `/onboarding/device` parameters to be provided (`name`, `description`, `kit_id`, `exposure`, `latitude`, `longitude`, `user_tags`), otherwise results in a 422, "Missing Params".
+
 ```
 POST v0/onboarding/register request example:
 
