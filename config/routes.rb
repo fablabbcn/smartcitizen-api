@@ -63,6 +63,7 @@ Rails.application.routes.draw do
       post 'device', to: 'orphan_devices#create'
       patch 'device', to: 'orphan_devices#update'
       post 'user', to: 'device_registrations#find_user'
+      post 'user', to: 'device_registrations#find_username'
       post 'register', to: 'device_registrations#register_device'
     end
 

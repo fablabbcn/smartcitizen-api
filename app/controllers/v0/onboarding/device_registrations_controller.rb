@@ -27,11 +27,16 @@ module V0
         end
       end
 
+      def find_username
+        render json: {message: (User.exists?(username: params.permit(:username).require(:username)) ? 'found' : 'not_found')}, status: :ok
+      end
+
       private
 
       def user_email
         params.permit(:email).require(:email)
       end
+
 
       def set_orphan_device
         @orphan_device = OrphanDevice.find_by(
