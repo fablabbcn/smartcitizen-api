@@ -12,7 +12,7 @@ describe UserMailer do
       expect(mail.subject).to eq("Welcome to SmartCitizen")
       expect(mail.to).to eq([user.email])
       expect(mail.from).to eq(["notifications@mailbot.smartcitizen.me"])
-      expect(mail.reply_to).to eq(["team@smartcitizen.me"])
+      expect(mail.reply_to).to eq(["support@smartcitizen.me"])
       expect(mail.body.encoded).to match("Welcome #{user.username}")
     end
   end
@@ -25,7 +25,7 @@ describe UserMailer do
       expect(mail.subject).to eq("Password Reset Instructions")
       expect(mail.to).to eq([user.email])
       expect(mail.from).to eq(["notifications@mailbot.smartcitizen.me"])
-      expect(mail.reply_to).to eq(["team@smartcitizen.me"])
+      expect(mail.reply_to).to eq(["support@smartcitizen.me"])
       expect(mail.body.encoded).to match('6789')
     end
   end
@@ -60,7 +60,7 @@ describe UserMailer do
       expect(mail.subject).to eq("Device CSV Archive Ready")
       expect(mail.to).to eq([user.email])
       expect(mail.from).to eq(["notifications@mailbot.smartcitizen.me"])
-      expect(mail.reply_to).to eq(["team@smartcitizen.me"])
+      expect(mail.reply_to).to eq(["support@smartcitizen.me"])
       expect(mail.body).to include(device_url)
     end
   end

@@ -127,4 +127,4 @@ namespace :socket do
 end
 
 
-# http://new-api.smartcitizen.me/v0.0.1/fd4a840132eba7bfb6911516284a0fe4b7be2e81/769/posts.json
+# http://api.smartcitizen.me/v0.0.1/fd4a840132eba7bfb6911516284a0fe4b7be2e81/769/posts.json
