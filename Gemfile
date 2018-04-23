@@ -88,6 +88,7 @@ group :test do
 end
 
 group :development do
+  gem 'pry-rails'
   gem 'quiet_assets'
   gem 'spring-commands-rspec'
   gem 'letter_opener'
