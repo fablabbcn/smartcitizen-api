@@ -3,7 +3,7 @@ require 'rails_helper'
 describe MeasurementPolicy do
   subject { MeasurementPolicy.new(user, measurement) }
 
-  let(:measurement) { FactoryGirl.create(:measurement) }
+  let(:measurement) { FactoryGirl.build(:measurement) }
 
   context "for a visitor" do
     let(:user) { nil }

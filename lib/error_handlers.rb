@@ -26,7 +26,7 @@ module ErrorHandlers
     end
 
     rescue_from Smartcitizen::Unauthorized do |exception|
-      render json: { id: "unauthorized", message: exception.message, url: "http://new-apidocs.smartcitizen.me/#authentication", errors: nil }, status: :unauthorized
+      render json: { id: "unauthorized", message: exception.message, url: "https://developer.smartcitizen.me/#authentication", errors: nil }, status: :unauthorized
     end
 
     rescue_from Smartcitizen::UnprocessableEntity do |exception|

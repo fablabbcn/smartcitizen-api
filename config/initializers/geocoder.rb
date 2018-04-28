@@ -1,6 +1,22 @@
 if Rails.env.test?
   Geocoder.configure(:lookup => :test)
 
+  # Defaul stub. Useful if you should find nothing
+  Geocoder::Lookup::Test.set_default_stub(
+    []
+  )
+
+  # /search?q=manchester
+  Geocoder::Lookup::Test.add_stub(
+    "manchester", [
+      {
+        "city"=>"Manchester",
+        "formatted_address"=>"Manchester England",
+        "types"=>["locality", "political"],
+      }
+    ]
+  )
+
   # IAAC, Barcelona, Spain
   Geocoder::Lookup::Test.add_stub(
     [41.3966908, 2.1921909], [
@@ -103,9 +119,8 @@ if Rails.env.test?
     ]
   )
 
-end
+else # prod / dev
 
-if false#Rails.env.production?
   Geocoder.configure(
     # geocoding options
       :timeout      => 3,           # geocoding service timeout (secs)

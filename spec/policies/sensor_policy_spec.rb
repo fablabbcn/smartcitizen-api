@@ -3,7 +3,7 @@ require 'rails_helper'
 describe SensorPolicy do
   subject { SensorPolicy.new(user, sensor) }
 
-  let(:sensor) { FactoryGirl.create(:sensor) }
+  let(:sensor) { FactoryGirl.build(:sensor) }
 
   context "for a visitor" do
     let(:user) { nil }

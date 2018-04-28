@@ -2,7 +2,7 @@
 # admins, this is likely to change.
 
 class Tag < ActiveRecord::Base
-  validates_uniqueness_of :name
+  validates_uniqueness_of :name, case_sensitive: false
   validates_presence_of :name
   # validates_format_of :name, with: /\A[A-Za-z]+\z/
   has_many :devices_tags, dependent: :destroy

@@ -167,7 +167,7 @@ class Device < ActiveRecord::Base
   def soft_state
     if data.present?
       'has_published'
-    elsif mac_address.present?
+    elsif mac_address.present? || device_token.present?
       'never_published'
     else
       'not_configured'
@@ -254,6 +254,10 @@ class Device < ActiveRecord::Base
         if elevation.blank? and latitude.present? and longitude.present? and
           (latitude_changed? or longitude_changed?)
             url = "https://maps.googleapis.com/maps/api/elevation/json?locations=#{latitude},#{longitude}&key=#{ENV['google_api_key']}"
+            if Rails.env.test?
+              # Overwrite url in test, in case you have the correct ENV defined
+              url = "https://maps.googleapis.com/maps/api/elevation/json?key=&locations=#{latitude},#{longitude}"
+            end
             response = open(url).read
           self.elevation = JSON.parse(response)['results'][0]['elevation'].to_i
         end

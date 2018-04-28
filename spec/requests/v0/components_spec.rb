@@ -2,11 +2,17 @@ require 'rails_helper'
 
 describe V0::ComponentsController do
 
-  let(:application) { create :application }
-  let(:user) { create :user }
-  let(:token) { create :access_token, application: application, resource_owner_id: user.id }
-  let(:admin) { create :admin }
-  let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
+  # We were SOMETIMES getting 6 records instead of 2 in GET /components
+  before do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  let(:application) { build :application }
+  let(:user) { build :user }
+  let(:token) { build :access_token, application: application, resource_owner_id: user.id }
+  let(:admin) { build :admin }
+  let(:admin_token) { build :access_token, application: application, resource_owner_id: admin.id }
+  let(:component3) { build :component }
 
   describe "GET /components" do
 
@@ -27,8 +33,7 @@ describe V0::ComponentsController do
 
   describe "GET /components/<id>" do
     it "returns a component" do
-      component = create(:component)
-      json = api_get "components/#{component.id}"
+      json = api_get "components/#{component3.id}"
       expect(response.status).to eq(200)
     end
   end

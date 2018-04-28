@@ -2,14 +2,14 @@ require 'rails_helper'
 
 describe V0::KitsController do
 
-  let(:application) { create :application }
-  let(:user) { create :user }
-  let(:token) { create :access_token, application: application, resource_owner_id: user.id }
+  let(:application) { build :application }
+  let(:user) { build :user }
+  let(:token) { build :access_token, application: application, resource_owner_id: user.id }
 
   let(:admin) { create :admin }
   let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
 
-  let(:kit) { create :kit }
+  let(:kit) { build :kit }
 
   describe "GET /kits" do
     it "returns all the kits" do

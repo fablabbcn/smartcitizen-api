@@ -3,7 +3,7 @@ require 'rails_helper'
 describe ComponentPolicy do
   subject { ComponentPolicy.new(user, component) }
 
-  let(:component) { FactoryGirl.create(:component) }
+  let(:component) { FactoryGirl.build(:component) }
 
   context "for a visitor" do
     let(:user) { nil }
@@ -11,12 +11,12 @@ describe ComponentPolicy do
   end
 
   context "for a user" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryGirl.build(:user) }
     it { is_expected.to permitz(:show) }
   end
 
   context "for an admin" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryGirl.build(:admin) }
     it { is_expected.to permitz(:show) }
   end
 

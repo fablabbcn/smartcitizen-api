@@ -2,17 +2,21 @@ require 'rails_helper'
 
 describe V0::SensorsController do
 
-  let(:application) { create :application }
-  let(:user) { create :user }
-  let(:token) { create :access_token, application: application, resource_owner_id: user.id }
+  let(:application) { build :application }
+  let(:user) { build :user }
+  let(:token) { build :access_token, application: application, resource_owner_id: user.id }
 
   let(:admin) { create :admin }
   let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
+  let(:sensor1) { build :sensor}
+
+  before(:each) do
+    DatabaseCleaner.clean_with(:truncation) # We were getting ActiveRecord::RecordNotUnique:
+  end
 
   describe "GET /sensor/<id>" do
     it "returns a sensor" do
-      sensor = create(:sensor)
-      json = api_get "sensors/#{sensor.id}"
+      json = api_get "sensors/#{sensor1.id}"
       expect(response.status).to eq(200)
     end
   end

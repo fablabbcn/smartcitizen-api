@@ -2,11 +2,15 @@ require 'rails_helper'
 
 describe V0::MeasurementsController do
 
-  let(:application) { create :application }
-  let(:user) { create :user }
+  let(:application) { build :application }
+  let(:user) { build :user }
   let(:admin) { create :admin }
-  let(:token) { create :access_token, application: application, resource_owner_id: user.id }
+  let(:token) { build :access_token, application: application, resource_owner_id: user.id }
   let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
+
+  before(:each) do
+    DatabaseCleaner.clean_with(:truncation) # We were getting ActiveRecord::RecordNotUnique:
+  end
 
   it "needs general user tests"
 

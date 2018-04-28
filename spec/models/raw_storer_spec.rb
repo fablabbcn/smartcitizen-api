@@ -7,6 +7,7 @@ end
 RSpec.describe RawStorer, :type => :model do
 
   before(:all) do
+    DatabaseCleaner.clean_with(:truncation) # We were getting ActiveRecord::RecordNotUnique:
     # yeah, this will be removed soon..
 
     Kit.create!(id: 2, name: 'SCK 1.0 - Ambient Board Goteo Board', description: "Goteo Board", slug: 'sck:1,0', sensor_map: '{"co": 9, "bat": 10, "hum": 5, "no2": 8, "nets": 21, "temp": 4, "light": 6, "noise": 7, "panel": 11}')

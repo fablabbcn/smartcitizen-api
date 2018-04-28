@@ -6,6 +6,10 @@ RSpec.describe Component, :type => :model do
   it { is_expected.to validate_presence_of(:board) }
   it { is_expected.to validate_presence_of(:sensor) }
 
+  before(:each) do
+    DatabaseCleaner.clean_with(:truncation) # We were getting ActiveRecord::RecordNotUnique:
+  end
+
   it "validates uniqueness of board to sensor" do
     component = create(:component, board: create(:kit), sensor: create(:sensor))
     expect{ create(:component, board: component.board, sensor: component.sensor) }.to raise_error(ActiveRecord::RecordInvalid)

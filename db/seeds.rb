@@ -16,30 +16,96 @@ p '------ Seeding for development environment ------'
 User.create(
   username: 'user1',
   email: 'email@example.com',
-  password: 'password'
+  password: 'password',
+  country_code: Faker::Address.country_code,
+  city: Faker::Address.city
 )
 
-Kit.create(
-  name: Faker::Educator.campus,
-  description: Faker::Lorem.sentence(5)
-)
+Kit.create(name: 'Making Sense WAAG #1', description: 'AQM sensor by WAAG', slug:'makingSenseSlug')
+3.times do
+  Kit.create(
+    name: Faker::Educator.campus,
+    description: Faker::Lorem.sentence(5),
+    slug: 'sck:1,1',
+    sensor_map: '{"noise": 7, "temp": 12, "light": 14, "no2": 15}'
+  )
+end
 
 Measurement.create(
   [
-    { name: 'air temperature',  description: 'How hot is the air' },
-    { name: 'light',  description: 'Lux is a measure' }
+    { name: 'air temperature',  description: 'How hot is the air', unit: 'C' },
+    { name: 'light',  description: 'Lux is a measure', unit: 'lux' }
   ]
 )
 
 Sensor.create(
-  name: 'sensor1',
-  description: 'sens descript'
+  [
+    {
+      name: 'My temp sensor',
+      unit: 'temperature unit',
+      measurement: Measurement.first,
+      description: 'temp sens descript'
+    },
+    {
+      name: 'My light sensor',
+      unit: 'light unit',
+      measurement: Measurement.second,
+      description: 'light sens descript'
+    }
+  ]
 )
+
+#device has many sensors through components
+#has_many :components, as: :board
+5.times do
+  Device.create(
+    {
+      owner: User.first,
+      name: Faker::Address.city,
+      city: Faker::Address.city,
+      country_code: Faker::Address.country_code,
+      description: Faker::Address.street_name,
+      mac_address: Faker::Internet.mac_address,
+      latitude: Faker::Address.latitude,
+      longitude: Faker::Address.longitude,
+      device_token: Faker::Crypto.sha1,
+      data: {
+        7  => 50,
+        12 => -0.629348144531249,
+        13 => 131.992370605469,
+        14 => 37.8,
+        15 => 27.384,
+        16 => 275.303,
+        17 => 100
+      },
+      kit: Kit.all.sample
+    }
+  )
+end
+
+# Make the last Device an archived one?
+Device.last.archive!
+
+# belongs_to :board, polymorphic: true
+# belongs_to :sensor
+# Kit and Device have many Components, as: :board
+Component.create( board: Kit.first, sensor: Sensor.first)
+Component.create( board: Device.first, sensor: Sensor.first)
+Component.create( board: Device.second, sensor: Sensor.second)
 
 Tag.create(
   [
     { name: 'Amsterdam', description: 'SCK in Adam' },
+    { name: 'Barcelona', description: 'SCK in Barcelona' },
     { name: 'Manchester', description: 'SCK in Manchester' }
+  ]
+)
+
+DevicesTag.create(
+  [
+    { device: Device.first, tag: Tag.first },
+    { device: Device.first, tag: Tag.second },
+    { device: Device.second, tag: Tag.second }
   ]
 )
 
@@ -48,22 +114,3 @@ Tag.create(
 #  token: 'random token'
 #)
 
-#Component.create(
-#  board_id: 
-#)
-
-#device has many sensors through components
-Device.create(
-  owner: User.first,
-  name: 'device2',
-  description: 'device descript',
-  #mac_address: 'macaddress',
-#  latitude: 1.1,
-#  longitude: 1.2,
-  kit: Kit.first
-)
-
-#DevicesTag.create(
-#  device: Device.first,
-#  tag: Tag.first
-#)
