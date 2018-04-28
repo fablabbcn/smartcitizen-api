@@ -12,7 +12,7 @@
 set -e
 
 dir=<%= current_path %>
-cmd="cd $dir;  bundle exec rake mqtt:sub RAILS_ENV=<%= fetch(:rails_env)  %> > $dir/log/mqtt_subscriber.log 2>&1 &"
+cmd="/home/deployer/.rbenv/shims/bundle exec rake mqtt:sub RAILS_ENV=<%= fetch(:rails_env)  %> > $dir/log/mqtt_subscriber.log 2>&1 &"
 user=<%= fetch(:deploy_user) %>
 
 name="mqtt_subscriber"
