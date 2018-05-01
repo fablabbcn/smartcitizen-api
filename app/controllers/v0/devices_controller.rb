@@ -31,7 +31,7 @@ module V0
         else
           return render json: { id: "bad_request",
             message: "Malformed near parameter",
-            url: 'https://fablabbcn.github.io/smartcitizen-api-docs/#get-all-devices',
+            url: 'https://developer.smartcitizen.me/#get-all-devices',
             errors: nil }, status: :bad_request
         end
       end
