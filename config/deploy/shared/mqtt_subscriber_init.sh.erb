@@ -12,7 +12,7 @@
 set -e
 
 dir=<%= current_path %>
-cmd="/home/deployer/.rbenv/shims/bundle exec rake mqtt:sub RAILS_ENV=<%= fetch(:rails_env)  %> > $dir/log/mqtt_subscriber.log 2>&1 &"
+cmd="/home/deployer/.rbenv/shims/bundle exec rake mqtt:sub RAILS_ENV=<%= fetch(:rails_env) %>"
 user=<%= fetch(:deploy_user) %>
 
 name="mqtt_subscriber"
@@ -38,7 +38,8 @@ case "$1" in
         if [ -z "$user" ]; then
             sudo $cmd >> "$stdout_log" 2>> "$stderr_log" &
         else
-            sudo -u "$user" $cmd >> "$stdout_log" 2>> "$stderr_log" &
+            #sudo -u "$user" $cmd >> "$stdout_log" 2>> "$stderr_log" &
+            sudo /bin/su - "$user" -c "$cmd" >> "$stdout_log" 2>> "$stderr_log" &
         fi
         echo $! > "$pid_file"
         if ! is_running; then
