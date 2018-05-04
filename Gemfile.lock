@@ -1,11 +1,11 @@
 GIT
   remote: git://github.com/bploetz/versionist.git
-  revision: f6fe218c295cb37d0eade288d655626b5a0f5224
+  revision: eb7747142f9e7aaaf7c2e47080732cf2948ce5a7
   specs:
-    versionist (1.5.0)
+    versionist (1.7.0)
       activesupport (>= 3)
       railties (>= 3)
-      yard (~> 0.7)
+      yard (~> 0.9.11)
 
 GIT
   remote: git://github.com/presidentbeef/brakeman.git
@@ -615,7 +615,7 @@ GEM
       hashdiff
     workflow (1.2.0)
     xml-simple (1.1.5)
-    yard (0.9.5)
+    yard (0.9.12)
     zonebie (0.6.1)
 
 PLATFORMS
