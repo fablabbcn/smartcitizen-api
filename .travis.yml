@@ -15,3 +15,4 @@ before_script:
 - psql -c 'create database travis_ci_test;' -U postgres
 env:
 - travis=true
+- aws_secret_key=testing
