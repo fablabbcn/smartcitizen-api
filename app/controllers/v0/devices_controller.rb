@@ -86,9 +86,9 @@ module V0
           state: device.state,
           system_tags: device.system_tags,
           user_tags: device.user_tags,
-          # exposure: device.exposure,
-          data: device.data,
-          added_at: device.added_at
+          added_at: device.added_at,
+          updated_at: device.updated_at,
+          last_reading_at: (device.last_reading_at.present? ? device.last_reading_at : nil)
         }
       end
       render json: @devices
@@ -113,8 +113,6 @@ module V0
           state: device.state,
           system_tags: device.system_tags,
           user_tags: device.user_tags,
-          # exposure: device.exposure,
-          #data: device.data,
           added_at: device.added_at,
           updated_at: device.updated_at,
           last_reading_at: (device.last_reading_at.present? ? device.last_reading_at : nil)
