@@ -14,7 +14,8 @@ MQTT host address is held in `config/aplication.yml` under the `ENV["mqtt_host"]
 
 ### Readings Publish
 
-Devices publish using the topic `device/sck/device_id:/readings` and the expected payload is of the following form:
+Devices publish using the topic `device/sck/device_token:/readings` and the expected payload is of the following form:
+
 ```
 {
   "data": [{
@@ -26,4 +27,9 @@ Devices publish using the topic `device/sck/device_id:/readings` and the expecte
   }]
 }
 ```
-Messages must be published using QoS (Quality of Service) of 1.
+
+* Each device is identified by a unique `device_token`.
+
+* Every device has sensor(s). A `sensor` is something on a device that can record data. This could be anything, some examples are - temperature, humidity, battery percentage, # wifi networks. A list of all the available sensors can be retrieve via the [API](http://developer.smartcitizen.me/#sensors).
+
+* Messages must be published using QoS (Quality of Service) of 1.
