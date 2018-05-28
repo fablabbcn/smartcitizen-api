@@ -56,7 +56,7 @@ If you want to start the Cassandra cluster with 3 nodes do:
 
 `cd smartcitizen`
 
-`get config/application.yml and config/banned_words.production.yml (check production server or contact john@bitsushi.com)`
+`get config/application.yml and config/banned_words.production.yml (check production server or contact webmasters@smartcitizen.me)`
 
 `bundle install`
 
