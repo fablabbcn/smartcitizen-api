@@ -16,7 +16,7 @@ end
 def diff path
 
   domains = [
-  "http://api.smartcitizen.me",
+    "http://api.smartcitizen.me",
   "https://new-api.smartcitizen.me"
   ]
 
