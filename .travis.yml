@@ -14,5 +14,5 @@ before_script:
 - cp config/database.travis.yml config/database.yml
 - psql -c 'create database travis_ci_test;' -U postgres
 env:
-- travis=true
+#- travis=true # Why have this? This is default
 - aws_secret_key=testing
