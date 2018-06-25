@@ -710,7 +710,7 @@ DEPENDENCIES
   zonebie
 
 RUBY VERSION
-   ruby 2.2.2p95
+   ruby 2.2.10p489
 
 BUNDLED WITH
-   1.15.4
+   1.16.2
