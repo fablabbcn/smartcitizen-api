@@ -1,4 +1,4 @@
-ruby '2.2.10'
+ruby '2.3.7'
 source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2'
@@ -30,6 +30,7 @@ gem 'versionist', github: 'bploetz/versionist'
 gem 'jbuilder'
 gem 'responders'
 gem 'newrelic_rpm'
+gem 'net-telnet'
 gem 'workflow'
 
 gem 'bcrypt', '~> 3.1.7'
