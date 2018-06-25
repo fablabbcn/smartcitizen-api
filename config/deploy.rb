@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.4.1'
+lock '3.11.0'
 
 set :application, 'smartcitizen'
 set :deploy_user, 'deployer'
@@ -16,13 +16,13 @@ set :sidekiq_concurrency, ENV.fetch('db_pool_size') { 10 }.to_i
 # set :assets_roles, [:app]
 
 # setup repo details
-set :scm, :git
+#set :scm, :git
 set :rbenv_path, "/home/#{fetch(:deploy_user)}/.rbenv"
 # set :use_sudo, false
 
 # setup rvm.
 set :rbenv_type, :system
-set :rbenv_ruby, '2.2.2'
+set :rbenv_ruby, '2.3.7'
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
 # set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 

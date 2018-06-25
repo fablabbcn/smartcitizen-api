@@ -94,7 +94,7 @@ group :development do
   gem 'spring-commands-rspec'
   gem 'letter_opener'
   gem 'spring'
-  gem 'sshkit', '1.7.1'
+  gem 'sshkit'#, '1.7.1'
   gem 'sshkit-sudo'
   gem 'capistrano-rbenv'
   gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
