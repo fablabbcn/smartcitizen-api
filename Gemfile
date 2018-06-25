@@ -39,7 +39,7 @@ gem 'aws-sdk'
 gem 'redis-rails'
 
 gem 'sinatra', '>= 1.3.0', require: nil
-gem 'sidekiq', '~> 4.0'
+gem 'sidekiq'#, '~> 4.0'
 
 gem 'fog'
 
@@ -100,7 +100,7 @@ group :development do
   gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
   gem 'rubocop', require: false
   gem "parallel_tests"
-  gem 'capistrano', '3.4.0'
+  gem 'capistrano'#, '3.4.0'
   gem 'capistrano-rails'
   gem "rails-erd"
 end
