@@ -3,7 +3,7 @@
 # describe ReadingPolicy do
 #   subject { ReadingPolicy.new(user, reading) }
 
-#   let(:reading) { FactoryGirl.create(:reading) }
+#   let(:reading) { FactoryBot.create(:reading) }
 
 #   skip "for a visitor" do
 #     let(:user) { nil }

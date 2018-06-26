@@ -111,7 +111,7 @@ group :development, :test do
   gem 'faker'
   gem 'brakeman', github: 'presidentbeef/brakeman', require: false
   gem 'rspec-rails'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'shoulda-matchers',
     github: 'thoughtbot/shoulda-matchers', require: false,
     ref: '8e68d99217fac5dedceeeba226ea1f2d9be01e1b'

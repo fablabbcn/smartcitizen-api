@@ -3,7 +3,7 @@ require 'rails_helper'
 describe UserPolicy do
   subject { UserPolicy.new(user, usermodel) }
 
-  let(:usermodel) { FactoryGirl.create(:user) }
+  let(:usermodel) { FactoryBot.create(:user) }
 
   context "for a visitor" do
     let(:user) { nil }

@@ -46,8 +46,8 @@ RSpec.describe Device, :type => :model do
   describe "mac_address" do
 
     it "takes mac_address from existing device on update" do
-      device = FactoryGirl.create(:device, mac_address: mac_address)
-      new_device = FactoryGirl.create(:device)
+      device = FactoryBot.create(:device, mac_address: mac_address)
+      new_device = FactoryBot.create(:device)
       new_device.update_attribute(:mac_address, mac_address)
       expect(new_device.mac_address).to eq(mac_address)
       expect(new_device).to be_valid
@@ -58,8 +58,8 @@ RSpec.describe Device, :type => :model do
     end
 
     it "takes mac_address from existing device on create" do
-      device = FactoryGirl.create(:device, mac_address: mac_address)
-      new_device = FactoryGirl.create(:device, mac_address: mac_address)
+      device = FactoryBot.create(:device, mac_address: mac_address)
+      new_device = FactoryBot.create(:device, mac_address: mac_address)
       expect(new_device.mac_address).to eq(mac_address)
       expect(new_device).to be_valid
       device.reload

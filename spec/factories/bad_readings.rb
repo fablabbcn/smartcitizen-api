@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :bad_reading do
     tags 1
 source_ip "MyString"

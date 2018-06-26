@@ -3,7 +3,7 @@ require 'rails_helper'
 describe PasswordResetPolicy do
   subject { PasswordResetPolicy.new(user, password_reset) }
 
-  let(:password_reset) { FactoryGirl.create(:user, password_reset_token: '12345') }
+  let(:password_reset) { FactoryBot.create(:user, password_reset_token: '12345') }
 
   context "for a visitor" do
     let(:user) { nil }
@@ -13,7 +13,7 @@ describe PasswordResetPolicy do
   end
 
   context "for a general user" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     it { is_expected.to permitz(:show)  }
     it { is_expected.to permitz(:create)  }
     it { is_expected.to_not permitz(:update)  }
