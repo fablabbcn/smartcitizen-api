@@ -14,11 +14,11 @@ gem 'rack-contrib'
 gem 'rack-cache'
 gem 'moneta'
 gem 'api_cache'
-gem 'minuteman', '~> 2'
+gem 'minuteman'#, '~> 2'
 
-gem 'browser', '1.0.1'
+gem 'browser'#, '1.0.1'
 gem 'stamp'
-gem 'listen', '~> 3.0.0'
+gem 'listen'#, '~> 3.0.0'
 #gem 'airbrake', '~> 4.3'
 gem 'premailer-rails'
 # gem 'statsample'
@@ -33,12 +33,12 @@ gem 'newrelic_rpm'
 gem 'net-telnet'
 gem 'workflow'
 
-gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt'#, '~> 3.1.7'
 gem 'aws-sdk'
 
 gem 'redis-rails'
 
-gem 'sinatra', '>= 1.3.0', require: nil
+gem 'sinatra'#, '>= 1.3.0', require: nil
 gem 'sidekiq'#, '~> 4.0'
 
 gem 'fog'
@@ -46,7 +46,7 @@ gem 'fog'
 gem 'oauth2', require: false
 gem 'doorkeeper'
 
-gem 'friendly_id', '~> 5.1.0'
+gem 'friendly_id'#, '~> 5.1.0'
 gem 'ancestry'
 gem 'pundit'
 gem 'kaminari'
@@ -72,7 +72,7 @@ gem 'multi_json'
 gem 'sentry-raven'
 
 # eventMachine MQTT handler
-gem 'em-mqtt', '~> 0.0.4'
+gem 'em-mqtt'#, '~> 0.0.4'
 
 group :production do
   gem 'rails_12factor'
