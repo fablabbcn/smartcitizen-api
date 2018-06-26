@@ -1,7 +1,7 @@
 ruby '2.3.7'
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.2'
+gem 'rails', '~> 4.2.10'
 gem 'rails-api'
 gem 'pg', '~> 0.21'
 
