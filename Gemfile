@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2'
 gem 'rails-api'
-gem 'pg'
+gem 'pg', '~> 0.21'
 
 gem 'redis'#, '3.0.7'
 #gem 'skylight', '~> 1.2', '>= 1.2.2'
