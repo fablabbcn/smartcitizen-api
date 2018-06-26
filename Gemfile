@@ -64,7 +64,7 @@ gem 'pg_search'
 gem 'mailgun_rails'
 gem 'dalli'
 gem 'fast_blank'
-gem 'oj'
+gem 'oj', '2.18.3' # 3.0.0 breaks tests:  https://github.com/ohler55/oj/blob/master/CHANGELOG.md#300---2017-04-24
 gem 'oj_mimic_json'
 gem 'multi_json'
 
