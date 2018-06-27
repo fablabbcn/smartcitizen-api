@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2.10'
 gem 'rails-api'
-gem 'pg', '~> 0.21'
+gem 'pg', '~> 0.20' # pg 1 only works on rails 5.1.5+
 
 gem 'redis'#, '3.0.7'
 #gem 'skylight', '~> 1.2', '>= 1.2.2'
