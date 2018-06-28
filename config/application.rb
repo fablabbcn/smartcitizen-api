@@ -55,6 +55,8 @@ module Smartcitizen
     config.middleware.insert_before 0, "HeaderCheck"
     config.middleware.insert_before(ActionDispatch::Static, "DeleteResponseHeaders")
 
+    config.active_job.queue_adapter = :sidekiq
+
     # Enable Rails CORS only in Development.
     # Otherwise it's done by NGINX.
     if Rails.env.development?

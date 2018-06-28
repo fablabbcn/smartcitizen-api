@@ -38,6 +38,8 @@ class User < ActiveRecord::Base
 
   before_create :generate_legacy_api_key
 
+  after_save :check_if_users_have_valid_email
+
   alias_attribute :joined_at, :created_at
 
   def archive
@@ -122,6 +124,15 @@ class User < ActiveRecord::Base
   end
 
 private
+
+  def check_if_users_have_valid_email
+    #recently_updated_users = User.where(updated_at: 14.hour.ago...Time.now)
+    User.all.each do |user|
+      if user.email.blank?
+        CheckupNotifyJob.perform_later("No email for user id #{user.id}")
+      end
+    end
+  end
 
   def generate_legacy_api_key
     generate_token(:legacy_api_key, Digest::SHA1.hexdigest(SecureRandom.uuid) )
