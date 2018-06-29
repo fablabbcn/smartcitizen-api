@@ -21,7 +21,7 @@ module V0
           # move to async method call
           Storer.new(@device.id, reading)
         end
-        render json: { id: "ok", message: "Data successfully added to ingestion queue", url: nil, errors: nil }, status: :ok
+        render json: { id: "ok", message: "Data successfully added to ingestion queue", url: "", errors: "" }, status: :ok
       rescue Exception => e
         #notify_airbrake(e)
         raise Smartcitizen::UnprocessableEntity.new "Problem(s) with the data"
@@ -63,9 +63,9 @@ module V0
       if !@device.csv_export_requested_at or (@device.csv_export_requested_at < 15.minutes.ago)
         @device.update_column(:csv_export_requested_at, Time.now.utc)
         ENV['redis'] ? UserMailer.delay.device_archive(@device.id, current_user.id) : UserMailer.device_archive(@device.id, current_user.id).deliver_now
-        render json: { id: "ok", message: "CSV Archive job added to queue", url: nil, errors: nil }, status: :ok
+        render json: { id: "ok", message: "CSV Archive job added to queue", url: "", errors: "" }, status: :ok
       else
-        render json: { id: "enhance_your_calm", message: "You can only make this request once every 6 hours, (this is rate-limited)", url: nil, errors: nil }, status: 420
+        render json: { id: "enhance_your_calm", message: "You can only make this request once every 6 hours, (this is rate-limited)", url: "", errors: "" }, status: 420
       end
     end
 
