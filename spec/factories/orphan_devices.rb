@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :orphan_device do
     name "OrphanDeviceName"
     description "OrphanDeviceDescription"

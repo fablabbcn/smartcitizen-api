@@ -70,7 +70,7 @@ RSpec.configure do |config|
   config.include ApiMacros
   config.include MailerMacros
   config.include EnvVars
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   config.infer_spec_type_from_file_location!
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

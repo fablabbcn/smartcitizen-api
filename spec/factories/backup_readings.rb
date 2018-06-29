@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :backup_reading do
     data "MyText"
 mac "MyString"

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :devices_tag do
     association :device
     association :tag

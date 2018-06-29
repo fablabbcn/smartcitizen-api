@@ -3,7 +3,7 @@ require 'rails_helper'
 describe TagPolicy do
   subject { TagPolicy.new(user, tag) }
 
-  let(:tag) { FactoryGirl.create(:tag) }
+  let(:tag) { FactoryBot.create(:tag) }
 
   context "for a visitor" do
     let(:user) { nil }
@@ -14,7 +14,7 @@ describe TagPolicy do
   end
 
   context "for a user" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     it { is_expected.to permitz(:show) }
     it { is_expected.to_not permitz(:update) }
     it { is_expected.to_not permitz(:create) }
@@ -22,7 +22,7 @@ describe TagPolicy do
   end
 
   context "for an admin" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     it { is_expected.to permitz(:show) }
     it { is_expected.to permitz(:update) }
     it { is_expected.to permitz(:create) }

@@ -3,7 +3,7 @@ require 'rails_helper'
 describe DevicePolicy do
   subject { DevicePolicy.new(user, device) }
 
-  let(:device) { FactoryGirl.create(:device) }
+  let(:device) { FactoryBot.create(:device) }
 
   context "for a visitor" do
     let(:user) { nil }
@@ -15,8 +15,8 @@ describe DevicePolicy do
 
   context "for a device owner" do
 
-    let(:user) { FactoryGirl.create(:user) }
-    let(:device) { FactoryGirl.create(:device, owner: user) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:device) { FactoryBot.create(:device, owner: user) }
 
     it { is_expected.to permitz(:show)    }
     it { is_expected.to permitz(:create)  }

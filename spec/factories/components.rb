@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :component do
     uuid { SecureRandom.uuid }
     association :board, factory: :kit

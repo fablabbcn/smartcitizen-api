@@ -3,7 +3,7 @@ require 'rails_helper'
 describe KitPolicy do
   subject { KitPolicy.new(user, kit) }
 
-  let(:kit) { FactoryGirl.build(:kit) }
+  let(:kit) { FactoryBot.build(:kit) }
 
   context "for a visitor" do
     let(:user) { nil }
@@ -13,14 +13,14 @@ describe KitPolicy do
   end
 
   context "for a user" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     it { is_expected.to permitz(:show) }
     it { is_expected.to_not permitz(:update) }
     it { is_expected.to_not permitz(:create) }
   end
 
   context "for an admin" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     it { is_expected.to permitz(:show) }
     it { is_expected.to permitz(:update) }
     it { is_expected.to permitz(:create) }

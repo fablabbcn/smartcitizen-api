@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :device do
     uuid { SecureRandom.uuid }
     association :owner, factory: :user
