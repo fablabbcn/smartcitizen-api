@@ -71,3 +71,16 @@ First get the config/application.yml env vars from the production machine.
 ### Useful commands
 
 `bundle exec cap production sidekiq:restart` < if sidekiq has a memory leak or something
+
+
+### Versioning
+
+Currently using this tool to handle versioning: https://github.com/gregorym/bump
+
+Use this command to update the VERSION file + create a git tag
+
+`bump patch --tag`
+
+Then push the git tag with:
+
+`git push --tags`
