@@ -25,6 +25,7 @@ get_pid() {
 }
 
 is_running() {
+    chown $user. $pid_file
     [ -f "$pid_file" ] && ps -p `get_pid` > /dev/null 2>&1
 }
 
