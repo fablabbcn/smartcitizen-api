@@ -27,13 +27,14 @@ Kit.create(name: 'Making Sense WAAG #1', description: 'AQM sensor by WAAG', slug
     name: Faker::Educator.campus,
     description: Faker::Lorem.sentence(5),
     slug: 'sck:1,1',
-    sensor_map: '{"noise": 7, "temp": 12, "light": 14, "no2": 15}'
+    sensor_map: '{"temp": 12, "hum": 13, "light": 14}'
   )
 end
 
 Measurement.create(
   [
     { name: 'air temperature',  description: 'How hot is the air', unit: 'C' },
+    { name: 'air humidity',  description: 'How humit is the air', unit: '% Rel' },
     { name: 'light',  description: 'Lux is a measure', unit: 'lux' }
   ]
 )
@@ -41,15 +42,24 @@ Measurement.create(
 Sensor.create(
   [
     {
+      id: 12,
       name: 'My temp sensor',
       unit: 'temperature unit',
       measurement: Measurement.first,
       description: 'temp sens descript'
     },
     {
+      id: 13,
+      name: 'My hum sensor',
+      unit: 'hum unit',
+      measurement: Measurement.second,
+      description: 'light sens descript'
+    },
+    {
+      id: 14,
       name: 'My light sensor',
       unit: 'light unit',
-      measurement: Measurement.second,
+      measurement: Measurement.third,
       description: 'light sens descript'
     }
   ]
@@ -89,9 +99,35 @@ Device.last.archive!
 # belongs_to :board, polymorphic: true
 # belongs_to :sensor
 # Kit and Device have many Components, as: :board
-Component.create( board: Kit.first, sensor: Sensor.first)
-Component.create( board: Device.first, sensor: Sensor.first)
-Component.create( board: Device.second, sensor: Sensor.second)
+
+Component.create(
+  board: Kit.first, sensor: Sensor.find(12)
+)
+Component.create(
+  board: Kit.first, sensor: Sensor.find(13)
+)
+Component.create(
+  board: Kit.first, sensor: Sensor.find(14)
+)
+Component.create(
+  board: Kit.second, sensor: Sensor.find(12)
+)
+Component.create(
+  board: Kit.second, sensor: Sensor.find(13)
+)
+Component.create(
+  board: Kit.second, sensor: Sensor.find(14)
+)
+Component.create(
+  board: Kit.third, sensor: Sensor.find(12)
+)
+Component.create(
+  board: Kit.third, sensor: Sensor.find(13)
+)
+Component.create(
+  board: Kit.third, sensor: Sensor.find(14)
+)
+
 
 Tag.create(
   [
@@ -113,4 +149,3 @@ DevicesTag.create(
 #  owner_id: User.first,
 #  token: 'random token'
 #)
-
