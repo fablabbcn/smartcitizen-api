@@ -39,7 +39,7 @@ gem 'aws-sdk'
 gem 'redis-rails'
 
 gem 'sinatra'#, '>= 1.3.0', require: nil
-gem 'sidekiq'#, '~> 4.0'
+gem 'sidekiq', '~> 4.0' # Upgrade to 5 with rails. BREAKING CHANGES
 
 gem 'fog'
 
