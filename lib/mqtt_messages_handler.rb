@@ -28,9 +28,19 @@ class MqttMessagesHandler
 
   def self.handle_hello(topic, message)
     device_token = self.device_token(topic)
-    Redis.current.publish('token-received', {
-      device_token: device_token
-    }.to_json)
+    onboarding_session = OrphanDevice.find_by(device_token: self.device_token(topic)).onboarding_session rescue nil
+    if onboarding_session
+      Redis.current.publish('token-received', {
+        device_token: device_token.downcase, #For security this will be deprecated
+        onboarding_session: onboarding_session
+      }.to_json)
+    elsif
+      device_id = Device.find_by(device_token: self.device_token(topic)).id rescue nil
+      Redis.current.publish('token-received', {
+        device_token: device_token.downcase, #For security this will be deprecated
+        device_id: device_id
+      }.to_json)
+    end
   end
 
   # takes a packet and returns 'device token' from topic
