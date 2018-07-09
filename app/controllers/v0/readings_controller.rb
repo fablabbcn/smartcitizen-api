@@ -24,6 +24,7 @@ module V0
         render json: { id: "ok", message: "Data successfully added to ingestion queue", url: "", errors: "" }, status: :ok
       rescue Exception => e
         #notify_airbrake(e)
+        Raven.capture_exception(e)
         raise Smartcitizen::UnprocessableEntity.new "Problem(s) with the data"
       end
     end
