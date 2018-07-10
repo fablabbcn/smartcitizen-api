@@ -38,6 +38,7 @@ module DataParser
         # TODO: What to do if timestamp is empty?
         if timestamp
           parsed_ts = Time.parse(timestamp)
+          # TODO: render json instead of raise
           raise "Timestamp not within range" if parsed_ts > 1.day.from_now or parsed_ts < 3.years.ago
         else
           raise "No timestamp given"

@@ -14,12 +14,14 @@ module V0
 
     def create
       check_missing_params("data")
-      @device = Device.find(params[:id])
+      #@device = Device.find
+      @device = Device.includes(:components).find(params[:id])
       authorize @device
       begin
-        params[:data].each do |reading|
+        params[:data].sort_by {|a| a['recorded_at']}.reverse.each_with_index do |reading, index|
           # move to async method call
-          Storer.new(@device.id, reading)
+          isnewest = index == 0
+          Storer.new(@device, reading, isnewest)
         end
         render json: { id: "ok", message: "Data successfully added to ingestion queue", url: "", errors: "" }, status: :ok
       rescue Exception => e

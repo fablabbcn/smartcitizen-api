@@ -18,7 +18,7 @@ class MqttMessagesHandler
 
     data = self.data(message)
     data.each do |reading|
-      Storer.new(device.id, reading)
+      Storer.new(device, reading)
     end
   rescue Exception => e
     Rails.logger.error(e.message)

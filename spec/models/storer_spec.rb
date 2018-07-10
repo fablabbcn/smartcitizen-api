@@ -45,7 +45,7 @@ RSpec.describe Storer, type: :model do
       expect(Kairos).to receive(:http_post_to).with("/datapoints", @karios_data)
       expect_any_instance_of(Storer).to receive(:redis_publish).with(@readings, @ts, true)
 
-      Storer.new(device.id, @data)
+      Storer.new(device.id, @data, false )
     end
 
     skip 'updates device without touching updated_at' do
