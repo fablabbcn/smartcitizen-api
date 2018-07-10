@@ -1,7 +1,7 @@
 class Storer
   include DataParser::Storer
 
-  def initialize device, reading, isnewest
+  def initialize device, reading, skip_update=false
     stored = true
     @device = device
     begin
@@ -12,9 +12,7 @@ class Storer
       Kairos.http_post_to("/datapoints", parsed_reading[:_data])
       Minuteman.add("rest_readings")
 
-      if isnewest
-        update_device(parsed_reading[:parsed_ts], parsed_reading[:sql_data])
-      end
+      update_device(parsed_reading[:parsed_ts], parsed_reading[:sql_data]) unless skip_update
 
       ts = parsed_reading[:ts]
       readings = parsed_reading[:readings]

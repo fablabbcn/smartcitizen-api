@@ -20,8 +20,8 @@ module V0
       begin
         params[:data].sort_by {|a| a['recorded_at']}.reverse.each_with_index do |reading, index|
           # move to async method call
-          isnewest = index == 0
-          Storer.new(@device, reading, isnewest)
+          skip_update = index == 0
+          Storer.new(@device, reading, skip_update)
         end
         render json: { id: "ok", message: "Data successfully added to ingestion queue", url: "", errors: "" }, status: :ok
       rescue Exception => e

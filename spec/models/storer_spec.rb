@@ -45,13 +45,13 @@ RSpec.describe Storer, type: :model do
       expect(Kairos).to receive(:http_post_to).with("/datapoints", @karios_data)
       expect_any_instance_of(Storer).to receive(:redis_publish).with(@readings, @ts, true)
 
-      Storer.new(device.id, @data, false )
+      Storer.new(device, @data)
     end
 
     skip 'updates device without touching updated_at' do
       updated_at = device.updated_at
 
-      Storer.new(device.id, @data)
+      Storer.new(device, @data)
 
       expect(device.reload.updated_at).to eq(updated_at)
 
@@ -61,7 +61,7 @@ RSpec.describe Storer, type: :model do
     end
   end
 
-  context 'when receiveng bad data' do
+  context 'when receiving bad data' do
     before do
       allow(Rails.env).to receive(:production?).and_return(true)
 
@@ -75,11 +75,11 @@ RSpec.describe Storer, type: :model do
       expect(Kairos).not_to receive(:http_post_to).with("/datapoints", anything)
       expect(Redis.current).to receive(:publish).with('data-received', anything)
 
-      expect{ Storer.new(device.id, @bad_data) }.to raise_error(ArgumentError)
+      expect{ Storer.new(device, @bad_data) }.to raise_error(ArgumentError)
     end
 
     it 'does not update device' do
-      expect{ Storer.new(device.id, @bad_data) }.to raise_error(ArgumentError)
+      expect{ Storer.new(device, @bad_data) }.to raise_error(ArgumentError)
 
       expect(device.reload.last_recorded_at).to eq(nil)
       expect(device.reload.data).to eq(nil)
