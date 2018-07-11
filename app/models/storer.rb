@@ -5,8 +5,6 @@ class Storer
     stored = true
     @device = device
     begin
-      #@device = Device.includes(:components).find(device_id)
-
       parsed_reading = Storer.parse_reading(@device, reading)
 
       Kairos.http_post_to("/datapoints", parsed_reading[:_data])
@@ -17,6 +15,7 @@ class Storer
       ts = parsed_reading[:ts]
       readings = parsed_reading[:readings]
     rescue Exception => e
+      Raven.capture_exception(e)
       stored = false
     end
 
