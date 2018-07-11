@@ -2,6 +2,10 @@ require 'rails_helper'
 
 describe V0::KitsController do
 
+  before(:all) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
   let(:application) { build :application }
   let(:user) { build :user }
   let(:token) { build :access_token, application: application, resource_owner_id: user.id }
