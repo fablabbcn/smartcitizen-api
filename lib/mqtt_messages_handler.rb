@@ -6,8 +6,10 @@ class MqttMessagesHandler
   def self.handle_topic(topic, message)
     if topic.to_s.include?('readings')
       self.handle_readings(topic, message)
-    else
+    elsif topic.to_s.include?('hello')
       self.handle_hello(topic, message)
+    else
+      self.handle_inventory(topic, message)
     end
   end
 
@@ -31,6 +33,10 @@ class MqttMessagesHandler
     Redis.current.publish('token-received', {
       device_token: device_token
     }.to_json)
+  end
+
+  def self.handle_inventory(topic, message)
+    DeviceInventory.create({report: (message rescue nil)})
   end
 
   # takes a packet and returns 'device token' from topic
