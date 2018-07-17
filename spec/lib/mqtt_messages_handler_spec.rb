@@ -4,6 +4,8 @@ RSpec.describe MqttMessagesHandler do
   DatabaseCleaner.clean_with(:truncation) # We were getting ActiveRecord::RecordNotUnique:
   let(:device) { create(:device, device_token: 'aA1234') }
   let(:component) { build(:component, board: build(:kit), sensor: build(:sensor, id: 1)) }
+  let(:device_inventory) { create(:device_inventory, report: '{"random_property": "random_result"}') }
+
   before do
     device.components << component
 
@@ -28,6 +30,11 @@ RSpec.describe MqttMessagesHandler do
     @hello_packet = MQTT::Packet::Publish.new(
       topic: "device/sck/#{device.device_token}/hello",
       payload: 'content ingored by MqttMessagesHandler\#hello'
+    )
+
+    @inventory_packet = MQTT::Packet::Publish.new(
+      topic: "device/sck/inventory",
+      payload: '{"random_property":"random_result"}'
     )
   end
 
@@ -81,6 +88,13 @@ RSpec.describe MqttMessagesHandler do
         'token-received', { device_token: device.device_token }.to_json
       )
       MqttMessagesHandler.handle(@hello_packet)
+    end
+  end
+
+  describe '#inventory' do
+    it 'logs inventory has been received' do
+      expect(@inventory_packet.payload).to eq((device_inventory.report.to_json))
+      MqttMessagesHandler.handle(@inventory_packet)
     end
   end
 end
