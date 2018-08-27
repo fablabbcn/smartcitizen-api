@@ -145,6 +145,10 @@ DevicesTag.create(
   ]
 )
 
+DeviceInventory.create(
+  report: '{"random_property":"random_result"}',
+)
+
 #ApiToken.create(
 #  owner_id: User.first,
 #  token: 'random token'

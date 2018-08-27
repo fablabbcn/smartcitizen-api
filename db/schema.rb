@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161026171920) do
+ActiveRecord::Schema.define(version: 20180719113808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,6 +100,11 @@ ActiveRecord::Schema.define(version: 20161026171920) do
   add_index "devices", ["owner_id"], name: "index_devices_on_owner_id", using: :btree
   add_index "devices", ["state"], name: "index_devices_on_state", using: :btree
   add_index "devices", ["workflow_state"], name: "index_devices_on_workflow_state", using: :btree
+
+  create_table "devices_inventory", force: :cascade do |t|
+    t.jsonb    "report",     default: {}
+    t.datetime "created_at"
+  end
 
   create_table "devices_tags", force: :cascade do |t|
     t.integer  "device_id"
