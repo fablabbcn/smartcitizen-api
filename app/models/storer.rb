@@ -1,21 +1,21 @@
 class Storer
   include DataParser::Storer
 
-  def initialize device_id, reading
+  def initialize device, reading, do_update = false
     stored = true
+    @device = device
     begin
-      @device = Device.includes(:components).find(device_id)
-
       parsed_reading = Storer.parse_reading(@device, reading)
 
       Kairos.http_post_to("/datapoints", parsed_reading[:_data])
       Minuteman.add("rest_readings")
 
-      update_device(parsed_reading[:parsed_ts], parsed_reading[:sql_data])
+      update_device(parsed_reading[:parsed_ts], parsed_reading[:sql_data]) if do_update
 
       ts = parsed_reading[:ts]
       readings = parsed_reading[:readings]
     rescue Exception => e
+      Raven.capture_exception(e)
       stored = false
     end
 
@@ -26,6 +26,7 @@ class Storer
 
   def update_device(parsed_ts, sql_data)
     return unless parsed_ts > Time.at(0)
+    return if parsed_ts < @device.last_recorded_at
     sql_data = @device.data.present? ? @device.data.merge(sql_data) : sql_data
     @device.update_columns(last_recorded_at: parsed_ts, data: sql_data, state: 'has_published')
   end
