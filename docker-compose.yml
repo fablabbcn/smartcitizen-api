@@ -45,7 +45,7 @@ services:
       - app
     environment:
       DOMAINS: "${MY_DOMAIN}"
-      STAGE: "${MY_STAGE}" #local or production
+      STAGE: "${MY_STAGE}" #local or production, this decides if you want a real certificate from LE, or not
     # expose the port we configured Nginx to bind to (it is ok to expose externally)
     ports:
       - 80:80
