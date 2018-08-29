@@ -38,5 +38,19 @@ services:
 #    volumes:
 #      - "./mosquitto.conf:/mosquitto/config/mosquitto.conf"
 
+  web:
+    env_file: .env
+    image: steveltn/https-portal
+    depends_on:
+      - app
+    environment:
+      DOMAINS: "${MY_DOMAIN}"
+      STAGE: "${MY_STAGE}" #local or production
+    # expose the port we configured Nginx to bind to (it is ok to expose externally)
+    ports:
+      - 80:80
+      - 443:443
+
+
 volumes:
   sck-postgres:
