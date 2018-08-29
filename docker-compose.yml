@@ -30,6 +30,13 @@ services:
       - redis
     command: bundle exec sidekiq
 
+  mqtt-task:
+    build: .
+    env_file: .env
+    depends_on:
+      - app
+    command: bundle exec rake mqtt:sub
+
   mqtt:
     image: eclipse-mosquitto
     ports:
