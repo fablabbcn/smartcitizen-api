@@ -44,7 +44,7 @@ gem 'sidekiq', '~> 4.0' # Upgrade to 5 with rails. BREAKING CHANGES
 gem 'fog'
 
 gem 'oauth2', require: false
-gem 'doorkeeper'
+gem 'doorkeeper', '~> 4'
 
 gem 'friendly_id'#, '~> 5.1.0'
 gem 'ancestry'
