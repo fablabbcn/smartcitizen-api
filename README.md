@@ -13,11 +13,15 @@
 
 ### Docker quickstart
 
+1. Copy the env.example to .env, and edit your variables, domain name, etc
+
+`cp env.example .env`
+
 1. Start all services
 
 `docker-compose up`
 
-If you want to start the Cassandra cluster with 3 nodes do:
+(NOT WORKING!) If you want to start the Cassandra cluster with 3 nodes do:
 
 `docker-compose -f docker-cassandra.yml up`
 
@@ -62,9 +66,9 @@ If you want to start the Cassandra cluster with 3 nodes do:
 
 ### Deploying
 
-First get the config/application.yml env vars from the production machine.
+First get the `config/application.yml` env vars from the production machine.
 
-`bundle exec cap production deploy` < password currently required. *Don't run this without discussing in slack or issues first*. We will be automating deployments with CI/Travis so this command will eventually be deprecated.
+`bundle exec cap production deploy` < password currently required. **Don't run this without discussing in Slack or issues first**. We will be automating deployments with CI/Travis so this command will eventually be deprecated.
 
 `bundle exec cap production deploy:setup_config` < deploy configuration (symlinks to nginx, monit, etc..)
 
@@ -75,7 +79,7 @@ First get the config/application.yml env vars from the production machine.
 
 ### Versioning
 
-Currently using this tool to handle versioning: https://github.com/gregorym/bump
+Currently using this tool to manually handle versioning: https://github.com/gregorym/bump
 
 Use this command to update the VERSION file + create a git tag
 

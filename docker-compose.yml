@@ -30,6 +30,13 @@ services:
       - redis
     command: bundle exec sidekiq
 
+  mqtt-task:
+    build: .
+    env_file: .env
+    depends_on:
+      - app
+    command: bundle exec rake mqtt:sub
+
   mqtt:
     image: eclipse-mosquitto
     ports:
@@ -37,6 +44,20 @@ services:
       - "9001:9001"
 #    volumes:
 #      - "./mosquitto.conf:/mosquitto/config/mosquitto.conf"
+
+  web:
+    env_file: .env
+    image: steveltn/https-portal
+    depends_on:
+      - app
+    environment:
+      DOMAINS: "${MY_DOMAIN}"
+      STAGE: "${MY_STAGE}" #local or production, this decides if you want a real certificate from LE, or not
+    # expose the port we configured Nginx to bind to (it is ok to expose externally)
+    ports:
+      - 80:80
+      - 443:443
+
 
 volumes:
   sck-postgres:

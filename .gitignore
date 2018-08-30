@@ -43,3 +43,4 @@ CLEANING.rb
 .idea
 
 .byebug_history
+.env
