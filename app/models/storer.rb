@@ -1,7 +1,7 @@
 class Storer
   include DataParser::Storer
 
-  def initialize device, reading, do_update = false
+  def initialize device, reading, do_update = true
     stored = true
     @device = device
     begin
