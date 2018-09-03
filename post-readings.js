@@ -11,7 +11,7 @@ function postReadings(url, deviceId, sensorId, token, length) {
 
   const body = { data:[] };
 
-  for(let j = 1; j < length; j++) {
+  for(let j = 0; j < length; j++) {
     body.data.push({"recorded_at":new Date().toISOString(),"sensors":[{"id": sensorId, "value":10 }]});
   }
   var myInit = {
