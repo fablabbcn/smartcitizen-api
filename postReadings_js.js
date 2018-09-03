@@ -5,6 +5,7 @@ function postReadings(url, deviceId, sensorId, token, length) {
   if (url == null) {
     console.log("usage:\n node postReadings_js.js url deviceId, sensorId, token, nrOfLines")
     console.log("example:\n node postReadings_js.js 'http://localhost:3000/v0' 4 12 'd0e50e139b35d646719ce2046e79b8ded8e5c48cd73ff7c9ea9ca6757a837082' 10000")
+    console.log("Get the Token by posting: curl -XPOST 'http://localhost:3000/v0/sessions?username=user1&password=password' -d ''")
     return;
   }
 
