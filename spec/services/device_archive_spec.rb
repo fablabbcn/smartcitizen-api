@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'fog'
+require 'fog-aws'
 
 def kairos_query(key)
   {metrics:[{tags:{device_id:[device.id]},name: key}], cache_time: 0, start_absolute: 1262304000000}

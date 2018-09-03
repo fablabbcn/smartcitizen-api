@@ -1,5 +1,5 @@
 require "rails_helper"
-require 'fog'
+require 'fog-aws'
 
 describe UserMailer do
   let(:user) { create(:user) }

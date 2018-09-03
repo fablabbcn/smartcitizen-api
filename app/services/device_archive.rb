@@ -1,4 +1,4 @@
-require 'fog'
+require 'fog-aws'
 
 class DeviceArchive
   def self.create device_id
