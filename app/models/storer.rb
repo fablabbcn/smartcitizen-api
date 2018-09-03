@@ -8,7 +8,8 @@ class Storer
       parsed_reading = Storer.parse_reading(@device, reading)
 
       Kairos.http_post_to("/datapoints", parsed_reading[:_data])
-      Minuteman.add("rest_readings")
+
+      Minuteman.add("rest_readings") if do_update
 
       update_device(parsed_reading[:parsed_ts], parsed_reading[:sql_data]) if do_update
 
