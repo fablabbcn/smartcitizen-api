@@ -26,7 +26,7 @@ module V0
       rescue Exception => e
         #notify_airbrake(e)
         Raven.capture_exception(e)
-        raise Smartcitizen::UnprocessableEntity.new "Problem(s) with the data"
+        raise Smartcitizen::UnprocessableEntity.new "Problem(s) with the data: #{e}"
       end
     end
 
