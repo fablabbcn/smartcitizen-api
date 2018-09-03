@@ -21,6 +21,12 @@ services:
     volumes:
       - "./:/app"
     command: rails server -p 3000 -b '0.0.0.0'
+    environment:
+      # For this to take effect, remove init/timeout, and in Gemfile, fix "rack-timeout" to not require anything.
+      RACK_TIMEOUT_SERVICE_TIMEOUT: 25
+      #RACK_TIMEOUT_WAIT_TIMEOUT: 30
+      #RACK_TIMEOUT_WAIT_OVERTIME: 60
+      #RACK_TIMEOUT_SERVICE_PAST_WAIT: false
 
   sidekiq:
     build: .

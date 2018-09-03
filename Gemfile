@@ -8,7 +8,7 @@ gem 'pg', '~> 0.20' # pg 1 only works on rails 5.1.5+
 gem 'redis'#, '3.0.7'
 #gem 'skylight', '~> 1.2', '>= 1.2.2'
 
-gem 'rack-timeout'
+gem 'rack-timeout', require: "rack/timeout/base"
 gem 'rack-cors', require: 'rack/cors'
 gem 'rack-contrib'
 gem 'rack-cache'
