@@ -58,6 +58,10 @@ services:
       - 80:80
       - 443:443
 
+  push:
+    image: smartcitizen/push
+    environment:
+      - REDIS_URL=redis://redis:6379/4
 
 volumes:
   sck-postgres:
