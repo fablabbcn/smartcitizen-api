@@ -24,8 +24,9 @@ function postReadings(url, deviceId, sensorId, token, length) {
     body: JSON.stringify(body)
   };
   fetch(`${url}/devices/${deviceId}/readings`,myInit).then(
-    res => console.log("Res:", res.status, res.statusText, res.timeout)
-  );
+    //res => console.log("Res:", res.status, res.statusText, res.timeout, res)
+    res => res.json()
+  ).then(res => console.log(res));
 
   console.log('url: ' + url);
   console.log('deviceId: ' + deviceId);
