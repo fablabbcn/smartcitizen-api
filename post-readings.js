@@ -23,16 +23,17 @@ function postReadings(url, deviceId, sensorId, token, length) {
     },
     body: JSON.stringify(body)
   };
-  fetch(`${url}/devices/${deviceId}/readings`,myInit).then(
-    //res => console.log("Res:", res.status, res.statusText, res.timeout, res)
-    res => res.json()
-  ).then(res => console.log(res));
+  fetch(`${url}/devices/${deviceId}/readings`,myInit)
+    .then(res => res.json())
+    .then(res => console.log(res));
 
+  /*
   console.log('url: ' + url);
   console.log('deviceId: ' + deviceId);
   console.log('sensorId: ' + sensorId);
   console.log('Token: ' + token);
   console.log('length: ' + length);
+  */
   console.log('----');
 }
 
