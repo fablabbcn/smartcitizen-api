@@ -7,9 +7,13 @@ services:
 # There is no official docker image for Kairos 2017-12-18
 #  kairos:
 #    image: kairos
-#    ports:
-#      - "8080:8080"
-#      - "4242:4242"
+  kairos:
+    build:
+      context: ./scripts/
+      dockerfile: Dockerfile-kairos
+    ports:
+      - 8080:8080
+      - 4242:4242 #telnet
 
 # Check if cassandra cluster is working:
 # docker-compose exec cassandra-1 nodetool status
