@@ -42,5 +42,6 @@ CLEANING.rb
 *.swo
 .idea
 
+node_modules
 .byebug_history
 .env
