@@ -1,6 +1,5 @@
 version: '3.3'
-  # Based on:
-  # https://github.com/massenz/docker-cassandra/blob/develop/docker-compose.yml
+  # https://mannekentech.com/2017/11/11/playing-with-docker-and-cassandra/
 
 services:
 #TODO: Work in progress
@@ -18,7 +17,7 @@ services:
 # Check if cassandra cluster is working:
 # docker-compose exec cassandra-1 nodetool status
   cassandra-1:
-    image: cassandra
+    image: cassandra #:3.11.3
     ports:
       # no need to expose all ports?
       - "7000:7000" # Internode, cluster communication
@@ -31,6 +30,8 @@ services:
 
   cassandra-2:
     image: cassandra
+    ports:
+      - 9142:9042
     environment:
       - CASSANDRA_SEEDS=cassandra-1 # Use IP if on different servers
     depends_on:
@@ -43,6 +44,8 @@ services:
 
   cassandra-3:
     image: cassandra
+    ports:
+      - 9242:9042
     environment:
       - CASSANDRA_SEEDS=cassandra-1 # Use IP if on different servers
     depends_on:
