@@ -15,40 +15,42 @@
 
 1. Copy the env.example to .env, and edit your variables, domain name, etc
 
-`cp env.example .env`
+   `cp env.example .env`
 
-1. Start basic services
+2. Start basic services
 
-`docker-compose up`
+   `docker-compose up`
 
-This will also start the containers:
+   This will also start the containers:
 
-* `web` container which tries to get a certificate with Lets Encrypt.
-* mqtt
-* `mqtt-task` a rake task which subscribes to the `mqtt` service
-* sidekiq
+   * `web` container which tries to get a certificate with Lets Encrypt.
+   * mqtt
+   * `mqtt-task` a rake task which subscribes to the `mqtt` service
+   * sidekiq
 
-You can also just do:
+   You can also just do:
 
-`docker-compose up app`
+   `docker-compose up app`
 
-which should only start the app, db, redis, containers.
+   which should only start the app, db, redis, containers.
 
-1. Start extra services, (Kairos + Cassandra)
+3. (OPTIONAL) Start extra services, Kairos + Cassandra
 
-If you want to start Kairos with 3 Cassandra cluster with 3 nodes do:
+   If you want to start Kairos with 3 Cassandra cluster with 3 nodes do:
 
-`docker-compose -f cassandra.yml up`
+   `docker-compose -f cassandra.yml up`
 
-If you don't have enough memory and only want 1 Cassandra, change the line in the file `scripts/conf/kairosdb.properties`
+   If you don't have enough memory and only want 1 Cassandra, edit the file `scripts/conf/kairosdb.properties`
+   
+   and change the following line:
 
-`kairosdb.datastore.cassandra.cql_host_list=cassandra-1,cassandra-2,cassandra-3`
+   `kairosdb.datastore.cassandra.cql_host_list=cassandra-1,cassandra-2,cassandra-3`
 
-to
+   to
 
-`kairosdb.datastore.cassandra.cql_host_list=cassandra-1`
+   `kairosdb.datastore.cassandra.cql_host_list=cassandra-1`
 
-2. Create the database (first time only)
+4. Create the database (first time only)
 
 `docker-compose exec app rake db:setup`
 
