@@ -49,6 +49,10 @@
    to
 
    `kairosdb.datastore.cassandra.cql_host_list=cassandra-1`
+   
+   and do:
+   
+   `docker-compose -f cassandra.yml up kairos cassandra-1`
 
 4. Create the database (first time only)
 
