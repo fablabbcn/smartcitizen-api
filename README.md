@@ -17,14 +17,36 @@
 
 `cp env.example .env`
 
-1. Start all services
+1. Start basic services
 
 `docker-compose up`
 
-(NOT WORKING!) If you want to start the Cassandra cluster with 3 nodes do:
+This will also start the containers:
+
+* `web` container which tries to get a certificate with Lets Encrypt.
+* mqtt
+* `mqtt-task` a rake task which subscribes to the `mqtt` service
+* sidekiq
+
+You can also just do:
+
+`docker-compose up app`
+
+which should only start the app, db, redis, containers.
+
+1. Start extra services, (Kairos + Cassandra)
+
+If you want to start Kairos with 3 Cassandra cluster with 3 nodes do:
 
 `docker-compose -f cassandra.yml up`
 
+If you don't have enough memory and only want 1 Cassandra, change the line in the file `scripts/conf/kairosdb.properties`
+
+`kairosdb.datastore.cassandra.cql_host_list=cassandra-1,cassandra-2,cassandra-3`
+
+to
+
+`kairosdb.datastore.cassandra.cql_host_list=cassandra-1`
 
 2. Create the database (first time only)
 
