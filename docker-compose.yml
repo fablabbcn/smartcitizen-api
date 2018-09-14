@@ -47,8 +47,8 @@ services:
     image: emqx/emqx
     ports:
       - "1883:1883"
-      #- "8083:8083" #HTTP and WebSocket
-      #- "8084:8084" #HTTPS and WSS
+      - "8083:8083" #HTTP and WebSocket
+      - "8084:8084" #HTTPS and WSS
       - "18083:18083" # Web: admin:public
       #- "11883:11883"
 
