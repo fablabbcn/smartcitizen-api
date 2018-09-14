@@ -92,7 +92,7 @@
 
 `bundle exec rails s`
 
-### Deploying
+## Deploying
 
 First get the `config/application.yml` env vars from the production machine.
 
@@ -100,12 +100,35 @@ First get the `config/application.yml` env vars from the production machine.
 
 `bundle exec cap production deploy:setup_config` < deploy configuration (symlinks to nginx, monit, etc..)
 
-### Useful commands
+If you need to restart Sidekiq:
 
-`bundle exec cap production sidekiq:restart` < if sidekiq has a memory leak or something
+`bundle exec cap production sidekiq:restart`
 
 
-### Versioning
+## Working with MQTT and WebSockets
+
+If running on Docker, there should be a EMQ Dashboard running on http://localhost:18083
+
+The following will send a message from the `app` container to the `mqtt` container:
+
+1. Subscribe to a Websocket topic called "test" in the Dashboard http://localhost:18083/#/websocket
+
+2. Access the rails console inside the `app` container:
+
+  `docker-compose exec app rails console`
+
+3. Send a message to the `test` topic:
+
+  `MQTT::Client.connect('mqtt').publish('test', 'this is the message')`
+
+
+## Tools / Scripts
+
+We supply a nodejs helper `post-readings.js` tool to test sending massive amounts of data. Just like uploading a CSV file with a lot of readings.
+
+To learn how to use it, do `./post-readings.js`
+
+## Versioning
 
 Currently using this tool to manually handle versioning: https://github.com/gregorym/bump
 

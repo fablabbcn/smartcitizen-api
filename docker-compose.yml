@@ -46,10 +46,11 @@ services:
   mqtt:
     image: emqx/emqx
     ports:
-      - "1883:1883"
-      - "8083:8083" #HTTP and WebSocket
-      - "8084:8084" #HTTPS and WSS
-      - "18083:18083" # Web: admin:public
+      - "1883:1883"   # mqtt tcp
+      - "8080:8080"   # http:management
+      - "8083:8083"   # HTTP and WebSocket
+      - "8084:8084"   # HTTPS and WSS
+      - "18083:18083" # Web dashboard: admin:public
       #- "11883:11883"
 
   web:
