@@ -44,12 +44,13 @@ services:
     command: bundle exec rake mqtt:sub
 
   mqtt:
-    image: eclipse-mosquitto
+    image: emqx/emqx
     ports:
       - "1883:1883"
-      - "9001:9001"
-#    volumes:
-#      - "./mosquitto.conf:/mosquitto/config/mosquitto.conf"
+      #- "8083:8083" #HTTP and WebSocket
+      #- "8084:8084" #HTTPS and WSS
+      - "18083:18083" # Web: admin:public
+      #- "11883:11883"
 
   web:
     env_file: .env
