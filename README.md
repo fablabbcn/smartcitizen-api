@@ -107,7 +107,7 @@ If you need to restart Sidekiq:
 
 ## Working with MQTT and WebSockets
 
-If running on Docker, there should be a EMQ Dashboard running on http://localhost:18083
+If running on Docker, there should be a EMQ Dashboard running on http://localhost:18083 (Log in with **admin:public**)
 
 The following will send a message from the `app` container to the `mqtt` container:
 
