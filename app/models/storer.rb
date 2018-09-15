@@ -7,7 +7,11 @@ class Storer
     begin
       parsed_reading = Storer.parse_reading(@device, reading)
 
-      Kairos.http_post_to("/datapoints", parsed_reading[:_data])
+      #Kairos.http_post_to("/datapoints", parsed_reading[:_data])
+
+      # TODO: send data to a Sidekiq Job
+      # That job can use Telnet / HTTP
+      Redis.current.publish('telnet_queue', parsed_reading[:_data].to_json)
 
       Minuteman.add("rest_readings") if do_update
 
