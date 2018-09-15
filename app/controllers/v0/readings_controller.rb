@@ -17,7 +17,7 @@ module V0
       @device = Device.includes(:components).find(params[:id])
       authorize @device
 
-      SendToTelnetJob.perform_later(params[:data], @device)
+      SendToTelnetJob.perform_later(params[:data], params[:id])
 
       render json: { id: "ok", message: "Data successfully sent to queue", url: "", errors: "" }, status: :ok
     end

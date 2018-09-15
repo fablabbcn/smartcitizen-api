@@ -17,13 +17,13 @@ namespace :telnet do
 #      end
     #end
 
-    p 'Starting Redis subscription..'
+    p 'Starting Redis subscription...'
     Redis.current.subscribe('telnet_queue') do |on|
       on.message do |channel, msg|
-        puts "#{channel} - #{msg}"
+        #puts "#{channel} - #{msg}"
         data = JSON.parse(msg).first
 
-        telnet_string = "put 'metric_telnet2' #{data['timestamp']} #{data['value']} device_id=#{data['tags']['device_id']} \n"
+        telnet_string = "put 'metric_telnet9' #{data['timestamp']} #{data['value']} device_id=#{data['tags']['device_id']} \n"
         localhost.print telnet_string
       end
     end
