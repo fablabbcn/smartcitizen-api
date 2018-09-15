@@ -13,7 +13,7 @@ function postReadings(url, deviceId, sensorId, token, length) {
   const body = { data:[] };
 
   for(let j = 0; j < length; j++) {
-    body.data.push({"recorded_at":new Date().toISOString(),"sensors":[{"id": sensorId, "value":10 }]});
+    body.data.push({"recorded_at":new Date(+(new Date()) - Math.floor(Math.random()*10000000)),"sensors":[{"id": sensorId, "value":(10 + Math.random()) }]});
   }
   var myInit = {
     method: 'POST',
