@@ -8,6 +8,8 @@ services:
 
   redis:
     image: redis:4
+    ports:
+      - "6379:6379"
 
   app:
     build: .
@@ -42,6 +44,14 @@ services:
     depends_on:
       - app
     command: bundle exec rake mqtt:sub
+
+  telnet-task:
+    build: .
+    env_file: .env
+    depends_on:
+      - app
+    command: bundle exec rake telnet:push
+
 
   mqtt:
     image: emqx/emqx
