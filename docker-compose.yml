@@ -53,9 +53,10 @@ services:
       - "18083:18083" # Web dashboard: admin:public
       #- "11883:11883"
 
+  # nginx + creates Lets Encrypt certificates
   web:
     env_file: .env
-    image: steveltn/https-portal
+    image: steveltn/https-portal:1
     depends_on:
       - app
     environment:
@@ -66,10 +67,59 @@ services:
       - 80:80
       - 443:443
 
+  # Websockets
   push:
     image: smartcitizen/push
     environment:
       - REDIS_URL=redis://redis:6379/4
+
+# There is no official docker image for Kairos 2017-12-18
+#  kairos:
+#    image: kairos
+  kairos:
+    build:
+      context: ./scripts/
+      dockerfile: Dockerfile-kairos
+    ports:
+      - 8080:8080
+      - 4242:4242 #telnet
+    depends_on:
+      - cassandra-1
+
+# Check if cassandra cluster is working:
+# docker-compose exec cassandra-1 nodetool status
+  cassandra-1:
+    image: cassandra #:3.11.3
+    ports:
+      # no need to expose all ports?
+      - "7000:7000" # Internode, cluster communication
+      - "7001:7001" # TLS Internode
+      - "7199:7199" # JMX
+      - "9042:9042" # CQL native transport
+      - "9160:9160" # Thrift client API
+    #volumes:
+      #- sck-cassandra:/var/lib/cassandra
+
+#  cassandra-2:
+#    image: cassandra
+#    ports:
+#      - 9142:9042
+#    environment:
+#      - CASSANDRA_SEEDS=cassandra-1 # Use IP if on different servers
+#    depends_on:
+#      - cassandra-1
+#    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 60; fi && /docker-entrypoint.sh cassandra -f'
+#
+#  cassandra-3:
+#    image: cassandra
+#    ports:
+#      - 9242:9042
+#    environment:
+#      - CASSANDRA_SEEDS=cassandra-1 # Use IP if on different servers
+#    depends_on:
+#      - cassandra-1
+#    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 120; fi && /docker-entrypoint.sh cassandra -f'
+
 
 volumes:
   sck-postgres:
