@@ -17,7 +17,10 @@ module V0
       @device = Device.includes(:components).find(params[:id])
       authorize @device
 
-      SendToTelnetJob.perform_later(params[:data], params[:id])
+      # NOTE: if we do all the checks HERE, we can return correct error codes before sending to a job
+      # Is the device valid?
+      # Are the sensors valid?
+      SendToDatastoreJob.perform_later(params[:data], params[:id])
 
       render json: { id: "ok", message: "Data successfully sent to queue", url: "", errors: "" }, status: :ok
     end
