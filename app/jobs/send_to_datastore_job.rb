@@ -1,4 +1,4 @@
-class SendToTelnetJob < ActiveJob::Base
+class SendToDatastoreJob < ActiveJob::Base
   queue_as :default
 
   def perform(the_data, device_id)

@@ -285,6 +285,8 @@ class Kairos
     request.add_field('Accept', 'application/json')
     request.body = data.to_json
     response = http.request(request)
+    # response.body can return errors from kairos such as:
+    # "{\"errors\":[\"metric[0].name may not be null.\"]}"
     return response
   end
 
