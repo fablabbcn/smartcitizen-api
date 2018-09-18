@@ -68,7 +68,7 @@ module DataParser
 
       def data_hash(device, sensor, ts)
         {
-          name: sensor[:key],
+          name: sensor[:key] || 'unnamed_sensor',
           timestamp: ts,
           value: sensor[:value],
           tags: {
