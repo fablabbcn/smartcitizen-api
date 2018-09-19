@@ -23,7 +23,7 @@ namespace :telnet do
         #puts "#{channel} - #{msg}"
         data = JSON.parse(msg).first
 
-        telnet_string = "put 'metric_telnet9' #{data['timestamp']} #{data['value']} device_id=#{data['tags']['device_id']} \n"
+        telnet_string = "put #{data['name']} #{data['timestamp']} #{data['value']} device_id=#{data['tags']['device_id']} \n"
         localhost.print telnet_string
       end
     end
