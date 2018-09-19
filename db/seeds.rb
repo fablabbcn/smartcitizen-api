@@ -21,10 +21,11 @@ User.create(
   city: Faker::Address.city
 )
 
-Kit.create(name: 'Making Sense WAAG #1', description: 'AQM sensor by WAAG', slug:'makingSenseSlug')
+#Kit.create(name: 'Making Sense WAAG #1', description: 'AQM sensor by WAAG', slug:'makingSenseSlug')
+# Kits need to have a sensor_map
 3.times do
   Kit.create(
-    name: Faker::Educator.campus,
+    name: "Kit #{Faker::Educator.campus}",
     description: Faker::Lorem.sentence(5),
     slug: 'sck:1,1',
     sensor_map: '{"temp": 12, "hum": 13, "light": 14}'
