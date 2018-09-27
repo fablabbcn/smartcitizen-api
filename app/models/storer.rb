@@ -8,6 +8,7 @@ class Storer
       parsed_reading = Storer.parse_reading(@device, reading)
 
       Kairos.http_post_to("/datapoints", parsed_reading[:_data])
+      #Influx.http_post_to("datapoints", parsed_reading[:_data])
 
       #NOTE: If you want to use the Telnet port below, make sure it is open!
       #Redis.current.publish('telnet_queue', parsed_reading[:_data].to_json)

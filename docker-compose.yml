@@ -83,6 +83,15 @@ services:
     environment:
       - REDIS_URL=redis://redis:6379/4
 
+  influx:
+    image: influxdb:latest
+    ports:
+      - 8086:8086
+    volumes:
+      - "/var/lib/influxdb:/var/lib/influxdb"
+    environment:
+      - "INFLUXDB_HTTP_AUTH_ENABLED=false"
+
 # There is no official docker image for Kairos 2017-12-18
 #  kairos:
 #    image: kairos
