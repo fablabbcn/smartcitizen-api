@@ -277,7 +277,7 @@ class Kairos
   def self.http_post_to path, data
     domain = "http://#{[ ENV['kairos_server'], ENV['kairos_port'] ].reject(&:blank?).join(':')}"
     uri = URI.parse "#{domain}/api/v1#{path}"
-    Rails.logger.info(uri)
+#    Rails.logger.info(uri)
     http = Net::HTTP.new(uri.host,uri.port)
     request = Net::HTTP::Post.new(uri.request_uri)
     request.basic_auth(ENV['kairos_http_username'], ENV['kairos_http_password'])
@@ -285,6 +285,8 @@ class Kairos
     request.add_field('Accept', 'application/json')
     request.body = data.to_json
     response = http.request(request)
+    # response.body can return errors from kairos such as:
+    # "{\"errors\":[\"metric[0].name may not be null.\"]}"
     return response
   end
 

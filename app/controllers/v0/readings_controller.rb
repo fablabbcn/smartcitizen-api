@@ -16,18 +16,13 @@ module V0
       check_missing_params("data")
       @device = Device.includes(:components).find(params[:id])
       authorize @device
-      begin
-        params[:data].sort_by {|a| a['recorded_at']}.reverse.each_with_index do |reading, index|
-          # move to async method call
-          do_update = index == 0
-          Storer.new(@device, reading, do_update)
-        end
-        render json: { id: "ok", message: "Data successfully added to ingestion queue", url: "", errors: "" }, status: :ok
-      rescue Exception => e
-        #notify_airbrake(e)
-        Raven.capture_exception(e)
-        raise Smartcitizen::UnprocessableEntity.new "Problem(s) with the data: #{e}"
-      end
+
+      # NOTE: if we do all the checks HERE, we can return correct error codes before sending to a job
+      # Is the device valid?
+      # Are the sensors valid?
+      SendToDatastoreJob.perform_later(params[:data], params[:id])
+
+      render json: { id: "ok", message: "Data successfully sent to queue", url: "", errors: "" }, status: :ok
     end
 
     def legacy_create
