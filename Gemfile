@@ -34,7 +34,7 @@ gem 'net-telnet'
 gem 'workflow'
 
 gem 'bcrypt'#, '~> 3.1.7'
-gem 'aws-sdk'
+gem 'aws-sdk-s3'
 
 gem 'redis-rails'
 

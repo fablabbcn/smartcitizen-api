@@ -1,9 +1,9 @@
 FactoryBot.define do
 
   factory :upload do
-    type "Avatar"
+    type { "Avatar" }
     association :user
-    original_filename "testing.jpg"
+    original_filename { "testing.jpg" }
   end
 
 end
