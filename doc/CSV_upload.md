@@ -9,9 +9,7 @@ We can send data in bulk with the script:
 ### Using Sidekiq on localhost (8GB RAM)
 |Data amount | HTTP (s) | Telnet (s)  |
 |-|-|-|
-|1    | 0 | 0 |
-|10   | 0 | 0 |
-|100  | 1 | 0 |
+|100  | 1 | 0.16 |
 |1000 | 3  | 3 |
 |10000| 22 | 9 |
 |20000| 38 | 18|
