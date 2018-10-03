@@ -25,3 +25,14 @@ Node script `post-readings.js` fails with > 14.000 lines of data with:
 (node:19083) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
 
 ```
+**Note that the script does not fail on localhost, indicating RAM shortage?**
+
+### Using Sidekiq on localhost (8GB RAM)
+|Data amount | HTTP (s) | Telnet (s)  |
+|-|-|-|
+|1    | 0    | 0 |
+|10   | 0.18 | 0.15 |
+|100  | 0.98 | 0 |
+|1000 | 3  |  |
+|10000| 27 |  |
+|20000| 45 | - |
