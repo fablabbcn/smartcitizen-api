@@ -36,4 +36,4 @@ Node script `post-readings.js` fails with > 14.000 lines of data with:
 |1000 | 3  | 3 |
 |10000| 22 | 9|
 |20000| 38 | 18|
-|40000| |35|
+|40000| 86 |35|
