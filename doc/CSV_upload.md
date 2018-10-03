@@ -10,13 +10,12 @@ We can send data in bulk with the script:
 ### Using Sidekiq on api-staging (2GB RAM)
 |Data amount | HTTP (s) | Telnet (s)  |
 |-|-|-|
-|1 | 0.07 | ~ |
-|10 | 0.18 | 0.15|
-|100 | 0.98 |0.675|
-|1000| 6 - 8 | 5 |
-|10000| 50 - 94 | |
-|20000| see below| |
-
+|1    | 0     | 0 |
+|10   | 0.18  | 0.15 |
+|100  | 0.98  | 0.675 |
+|1000 | 6 - 8 | 5 |
+|10000| 50 - 94 | 30 |
+|20000| see below| - |
 
 Node script `post-readings.js` fails with > 14.000 lines of data with:
 
