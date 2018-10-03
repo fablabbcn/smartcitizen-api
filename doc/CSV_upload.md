@@ -1,11 +1,22 @@
 
 We can send data in bulk with the script:
 
-`node post-readings.js 'https://api-staging.smartcitizen.me/v0' 4 12 'TOKEN' 1000`
-
+`node post-readings.js 'http://HOSTNAME/v0' 4 12 'TOKEN' 1000`
 
 
 ## Benchmarks:
+
+### Using Sidekiq on localhost (8GB RAM)
+|Data amount | HTTP (s) | Telnet (s)  |
+|-|-|-|
+|1    | 0 | 0 |
+|10   | 0 | 0 |
+|100  | 1 | 0 |
+|1000 | 3  | 3 |
+|10000| 22 | 9 |
+|20000| 38 | 18|
+|40000| 86 | 35|
+|80000| 190| 76|
 
 ### Using Sidekiq on api-staging (2GB RAM)
 |Data amount | HTTP (s) | Telnet (s)  |
@@ -27,14 +38,4 @@ Node script `post-readings.js` fails with > 14.000 lines of data with:
 ```
 **Note that the script does not fail on localhost, indicating RAM shortage?**
 
-### Using Sidekiq on localhost (8GB RAM)
-|Data amount | HTTP (s) | Telnet (s)  |
-|-|-|-|
-|1    | 0 | 0 |
-|10   | 0 | 0 |
-|100  | 1 | 0 |
-|1000 | 3  | 3 |
-|10000| 22 | 9 |
-|20000| 38 | 18|
-|40000| 86 | 35|
-|80000| 190| 76|
+
