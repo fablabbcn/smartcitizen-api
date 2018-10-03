@@ -7,11 +7,12 @@ We can send data in bulk with the script:
 
 ## Benchmarks:
 
-### Using the HTTP API
+### Using the HTTP API on api-staging (2GB RAM)
 |Data amount | seconds |
 |-|-|
 |1 | 0.07 |
 |10 | 0.18 |
 |100 | 0.98 |
-|1000| 6.2 |
-|10000| |
+|1000| 6 - 8 |
+|10000| 50 - 94 |
+|20000| ? |
