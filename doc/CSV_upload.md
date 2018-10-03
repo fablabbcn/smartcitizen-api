@@ -30,10 +30,11 @@ Node script `post-readings.js` fails with > 14.000 lines of data with:
 ### Using Sidekiq on localhost (8GB RAM)
 |Data amount | HTTP (s) | Telnet (s)  |
 |-|-|-|
-|1    | 0    | 0 |
-|10   | 0.18 | 0 |
-|100  | 0.98 | 0 |
+|1    | 0 | 0 |
+|10   | 0 | 0 |
+|100  | 1 | 0 |
 |1000 | 3  | 3 |
-|10000| 22 | 9|
+|10000| 22 | 9 |
 |20000| 38 | 18|
-|40000| 86 |35|
+|40000| 86 | 35|
+|80000| 190| 76|
