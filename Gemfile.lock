@@ -237,7 +237,6 @@ GEM
       activerecord
       kaminari-core (= 1.1.1)
     kaminari-core (1.1.1)
-    kgio (2.11.2)
     launchy (2.4.3)
       addressable (~> 2.3)
     letter_opener (1.6.0)
@@ -330,6 +329,7 @@ GEM
     pry-rails (0.3.6)
       pry (>= 0.10.4)
     public_suffix (3.0.3)
+    puma (3.12.0)
     pundit (2.0.0)
       activesupport (>= 3.0.0)
     quiet_assets (1.1.0)
@@ -384,7 +384,6 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rainbow (3.0.0)
-    raindrops (0.19.0)
     rake (12.3.1)
     ransack (1.8.9)
       actionpack (>= 3.0, <= 5.1.1)
@@ -517,9 +516,6 @@ GEM
     unf_ext (0.0.7.5)
     unicode-display_width (1.4.0)
     unicode_utils (1.4.0)
-    unicorn (5.4.1)
-      kgio (~> 2.6)
-      raindrops (~> 0.7)
     vcr (4.0.0)
     webmock (3.4.2)
       addressable (>= 2.3.6)
@@ -585,6 +581,7 @@ DEPENDENCIES
   pg_search
   premailer-rails
   pry-rails
+  puma
   pundit
   quiet_assets
   rack-cache
@@ -614,7 +611,6 @@ DEPENDENCIES
   sshkit-sudo
   stamp
   timecop
-  unicorn
   vcr
   versionist!
   webmock
@@ -625,4 +621,4 @@ RUBY VERSION
    ruby 2.3.7p456
 
 BUNDLED WITH
-   1.16.2
+   1.16.5
