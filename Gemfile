@@ -37,7 +37,7 @@ gem 'workflow'
 gem 'bcrypt'#, '~> 3.1.7'
 gem 'aws-sdk-s3'
 
-gem 'redis-rails'
+gem 'redis-rails' # not needed in rails 5.2
 
 gem 'sinatra'#, '>= 1.3.0', require: nil
 gem 'sidekiq', '~> 4.0' # Upgrade to 5 with rails. BREAKING CHANGES
