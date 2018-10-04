@@ -7,14 +7,18 @@ We can send data in bulk with the script:
 ## Benchmarks:
 
 ### Using Sidekiq on localhost (8GB RAM)
-|Data amount | HTTP (s) | Telnet (s)  |
-|-|-|-|
-|100  | 1 | 0.16 |
-|1000 | 3  | 3 |
-|10000| 22 | 9 |
-|20000| 38 | 18|
-|40000| 86 | 35|
-|80000| 190| 76|
+|Data amount | HTTP (s) | Telnet (s)  | HTTP each request (s) | HTTP / Telnet |
+|-|-|-|-|-|
+|100  | 1 | 0.16 | |
+|1000 | 3  | 3 | |
+|10000| 22 | 9 | 0.0022| 2.44|
+|20000| 38 | 18| 0.0019| 2.11|
+|40000| 86 | 35| 0.0022| 2.45|
+|80000| 190| 76| 0.0024| 2.5 |
+
+#### Conclusion:
+1. Telnet is on average ~2.5 faster then HTTP
+2. Each HTTP request always takes around ~0.0022 seconds
 
 ### Using Sidekiq on api-staging (2GB RAM)
 |Data amount | HTTP (s) | Telnet (s)  |
