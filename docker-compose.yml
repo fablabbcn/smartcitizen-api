@@ -82,6 +82,9 @@ services:
     image: smartcitizen/push
     environment:
       - REDIS_URL=redis://redis:6379/4
+        # TODO: needs SSL on ws.smartcitizen.me
+    ports:
+      - 8000:8000
 
 # There is no official docker image for Kairos 2017-12-18
 #  kairos:
