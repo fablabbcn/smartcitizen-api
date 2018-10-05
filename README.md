@@ -19,29 +19,27 @@
 
 2. Start basic services (recommended)
 
-   `docker-compose up app`
+   `docker-compose up app db`
 
-   This will only start the containers:
+   See the `docker-compose.yml` file `depends_on:` section to see which containers depend on which.
 
-   * `app`
-   * `db`
+   Available containers:
+
+   * `app` - Rails app
+   * `db` - Postgres
    * `redis`
-
-   If you want you can also start:
-
-
    * `web` container which tries to get a certificate with Lets Encrypt.
    * `mqtt` EMQ + management interface on http://localhost:18083 *admin:public*
    * `mqtt-task` a rake task which subscribes to the `mqtt` service
    * `sidekiq`
-   * `kairos`
-   * `cassandra-1`
+   * `kairos` - Time series database on Cassandra
+   * `cassandra-1` - Stores the data
 
-   Or ALL of them with:
+   Start ALL of them with:
 
    `docker-compose up`
 
-3. (OPTIONAL) Start Cassandra cluster
+3. (OPTIONAL) Start Cassandra cluster of 3 nodes
 
    If you want to start Kairos with 3 Cassandra cluster with 3 nodes:
 

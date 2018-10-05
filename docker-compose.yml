@@ -17,8 +17,13 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - db
+      # We disable some containers in production
+      #- db
       - redis
+      - sidekiq
+      - mqtt-task
+      - telnet-task
+      - push
       #- mqtt
     volumes:
       - "./:/app"
@@ -26,16 +31,10 @@ services:
     environment:
       # For this to take effect, remove init/timeout, and in Gemfile, fix "rack-timeout" to not require anything.
       RACK_TIMEOUT_SERVICE_TIMEOUT: 25
-      #RACK_TIMEOUT_WAIT_TIMEOUT: 30
-      #RACK_TIMEOUT_WAIT_OVERTIME: 60
-      #RACK_TIMEOUT_SERVICE_PAST_WAIT: false
 
   sidekiq:
     build: .
     env_file: .env
-    depends_on:
-      - app
-      - redis
     command: bundle exec sidekiq
 
   mqtt-task:
@@ -51,7 +50,6 @@ services:
     depends_on:
       - app
     command: bundle exec rake telnet:push
-
 
   mqtt:
     image: emqx/emqx
@@ -132,7 +130,6 @@ services:
 #    depends_on:
 #      - cassandra-1
 #    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 120; fi && /docker-entrypoint.sh cassandra -f'
-
 
 volumes:
   sck-postgres:
