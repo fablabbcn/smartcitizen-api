@@ -40,15 +40,11 @@ services:
   mqtt-task:
     build: .
     env_file: .env
-    depends_on:
-      - app
     command: bundle exec rake mqtt:sub
 
   telnet-task:
     build: .
     env_file: .env
-    depends_on:
-      - app
     command: bundle exec rake telnet:push
 
   mqtt:
