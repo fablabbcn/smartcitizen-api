@@ -20,9 +20,17 @@ module V0
       # NOTE: if we do all the checks HERE, we can return correct error codes before sending to a job
       # Is the device valid?
       # Are the sensors valid?
-      SendToDatastoreJob.perform_later(params[:data], params[:id])
 
-      render json: { id: "ok", message: "Data successfully sent to queue", url: "", errors: "" }, status: :ok
+      # Kairos will error if no Timestamp (recorded_at) is given.
+      # It is better to error before the job, to let the user know what is wrong
+      # TODO: Currently we fail all datapoints even if only the first out of a 100 is missing a Timestamp.
+      # Do we need to change that?
+      if params[:data].first['recorded_at'].blank?
+        render json: { id: "bad", message: "Timestamp cannot be empty!", url: "", errors: "" }, status: :ok
+      else
+        SendToDatastoreJob.perform_later(params[:data], params[:id])
+        render json: { id: "ok", message: "Data successfully sent to queue", url: "", errors: "" }, status: :ok
+      end
     end
 
     def legacy_create
