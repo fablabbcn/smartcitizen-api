@@ -71,9 +71,14 @@ services:
       - 80:80
       - 443:443
     volumes:
-      # The data.sm file can be re-used for more stages, but the filename inside the container needs to match the domain
+      # The conf files can be re-used and shared X times for X stages, but the filename inside the container in
+      # /var/lib/nginx-conf needs to match the domain
+      - ./scripts/nginx-conf/api.smartcitizen.me.conf.erb:/var/lib/nginx-conf/api.smartcitizen.me.conf.erb:ro
+      - ./scripts/nginx-conf/api.smartcitizen.me.conf.erb:/var/lib/nginx-conf/api-staging.smartcitizen.me.conf.erb:ro
       - ./scripts/nginx-conf/data.smartcitizen.me.conf.erb:/var/lib/nginx-conf/data.smartcitizen.me.conf.erb:ro
       - ./scripts/nginx-conf/data.smartcitizen.me.conf.erb:/var/lib/nginx-conf/data-staging.smartcitizen.me.conf.erb:ro
+        # The api* files above include the /etc/nginx/cors.conf inside the container
+      - ./scripts/nginx-conf/cors.conf:/etc/nginx/cors.conf
 
   # Websockets
   push:
