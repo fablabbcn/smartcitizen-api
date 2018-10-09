@@ -71,7 +71,9 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./scripts/data.smartcitizen.me.conf.erb:/var/lib/nginx-conf/data.smartcitizen.me.conf.erb:ro
+      # The data.sm file can be re-used for more stages, but the filename inside the container needs to match the domain
+      - ./scripts/nginx-conf/data.smartcitizen.me.conf.erb:/var/lib/nginx-conf/data.smartcitizen.me.conf.erb:ro
+      - ./scripts/nginx-conf/data.smartcitizen.me.conf.erb:/var/lib/nginx-conf/data-staging.smartcitizen.me.conf.erb:ro
 
   # Websockets
   push:
