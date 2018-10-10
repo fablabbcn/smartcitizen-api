@@ -67,27 +67,21 @@ RSpec.describe RawStorer, :type => :model do
   # RawStorer.new data, mac, version, ip
 
   it "will not be created with invalid past timestamp" do
-    expect(BadReading).to receive(:create)
     ts = { timestamp: to_ts(5.years.ago) }
     raw_storer = RawStorer.new( json.merge(ts), device.mac_address, "1.1-0.9.0-A", "127.0.0.1" )
   end
 
   it "will not be created with invalid future timestamp" do
-    expect(BadReading).to receive(:create)
     ts = { timestamp: to_ts(2.days.from_now) }
     raw_storer = RawStorer.new( json.merge(ts), device.mac_address, "1.1-0.9.0-A", "127.0.0.1" )
   end
 
   it "will not be created with invalid data" do
-    expect(BadReading).to receive(:create)
-    expect(BackupReading).to receive(:create)
     expect(Kairos).to_not receive(:http_post_to)
     raw_storer = RawStorer.new( {}, device.mac_address, "1.1-0.9.0-A", "127.0.0.1" )
   end
 
   it "will be created with valid data", :vcr do
-    expect(BadReading).to_not receive(:create)
-    expect(BackupReading).to receive(:create)
     expect(Kairos).to receive(:http_post_to)
     raw_storer = RawStorer.new( json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1" )
   end

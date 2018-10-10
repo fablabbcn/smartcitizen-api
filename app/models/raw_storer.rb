@@ -63,17 +63,6 @@ class RawStorer
 
       success = false
 
-      BadReading.create({
-        data: (data rescue nil),
-        remote_ip: (ip rescue nil),
-        message: (e rescue nil),
-        version: (version rescue nil),
-        device_id: ((device.id if device) rescue nil),
-        mac_address: (mac rescue nil),
-        timestamp: (parsed_ts rescue nil),
-        backtrace: (e.backtrace rescue nil)
-      })
-
     end
 
     if Rails.env.production? and device
