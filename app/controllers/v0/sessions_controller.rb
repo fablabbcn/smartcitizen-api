@@ -8,8 +8,6 @@ module V0
       authorize user, :show?
       if user && user.authenticate_with_legacy_support(params[:password])
         # $analytics.track("login:successful", user.id)
-        # Minuteman.track("login:successful", user)
-        Minuteman.add("logins")
         render json: { access_token: user.access_token!.token }, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new({

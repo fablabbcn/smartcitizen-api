@@ -37,12 +37,12 @@ module V0
           },
           readings: {
             good: {
-              today: Minuteman.count("good_readings").day.count,#$analytics.day("readings:create", Time.now.utc).length,
-              this_week: Minuteman.count("good_readings").week.count#$analytics.week("readings:create", Time.now.utc).length,
+              #today: Minuteman.count("good_readings").day.count,#$analytics.day("readings:create", Time.now.utc).length,
+              #this_week: Minuteman.count("good_readings").week.count#$analytics.week("readings:create", Time.now.utc).length,
             },
             bad: {
-              today: Minuteman.count("bad_readings").day.count,#$analytics.day("readings:create", Time.now.utc).length,
-              this_week: Minuteman.count("bad_readings").week.count#$analytics.week("readings:create", Time.now.utc).length,
+              #today: Minuteman.count("bad_readings").day.count,#$analytics.day("readings:create", Time.now.utc).length,
+              #this_week: Minuteman.count("bad_readings").week.count#$analytics.week("readings:create", Time.now.utc).length,
             },
             total: nil
           }

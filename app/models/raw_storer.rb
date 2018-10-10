@@ -63,8 +63,6 @@ class RawStorer
         end
       end
 
-      Minuteman.add("good_readings")
-
     rescue Exception => e
 
       success = false
@@ -79,8 +77,6 @@ class RawStorer
         timestamp: (parsed_ts rescue nil),
         backtrace: (e.backtrace rescue nil)
       })
-
-      Minuteman.add("bad_readings")
 
     end
 

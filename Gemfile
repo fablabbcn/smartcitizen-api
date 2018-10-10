@@ -15,7 +15,6 @@ gem 'rack-contrib'
 gem 'rack-cache'
 gem 'moneta'
 gem 'api_cache'
-gem 'minuteman'#, '~> 2'
 
 gem 'browser'#, '1.0.1'
 gem 'stamp'

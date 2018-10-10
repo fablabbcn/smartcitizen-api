@@ -82,7 +82,6 @@ RSpec.describe RawStorer, :type => :model do
     expect(BadReading).to receive(:create)
     expect(BackupReading).to receive(:create)
     expect(Kairos).to_not receive(:http_post_to)
-    expect(Minuteman).to receive(:add).with('bad_readings')
     raw_storer = RawStorer.new( {}, device.mac_address, "1.1-0.9.0-A", "127.0.0.1" )
   end
 
@@ -90,7 +89,6 @@ RSpec.describe RawStorer, :type => :model do
     expect(BadReading).to_not receive(:create)
     expect(BackupReading).to receive(:create)
     expect(Kairos).to receive(:http_post_to)
-    expect(Minuteman).to receive(:add).with('good_readings')
     raw_storer = RawStorer.new( json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1" )
   end
 

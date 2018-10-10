@@ -12,8 +12,6 @@ class Storer
       #NOTE: If you want to use the Telnet port below, make sure it is open!
       Redis.current.publish('telnet_queue', parsed_reading[:_data].to_json)
 
-      Minuteman.add("rest_readings") if do_update
-
       update_device(parsed_reading[:parsed_ts], parsed_reading[:sql_data]) if do_update
 
       ts = parsed_reading[:ts]
