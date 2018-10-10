@@ -57,10 +57,6 @@ class RawStorer
       if parsed_ts > (device.last_recorded_at || Time.at(0))
         # update without touching updated_at
         device.update_columns(last_recorded_at: parsed_ts, data: sql_data, state: 'has_published')
-        begin
-          LegacyDevice.find(device.id).update_column(:last_insert_datetime, Time.now.utc)
-        rescue
-        end
       end
 
     rescue Exception => e
@@ -79,8 +75,6 @@ class RawStorer
       })
 
     end
-
-    BackupReading.create(data: data, mac: mac, version: version, ip: ip, stored: success)
 
     if Rails.env.production? and device
       begin

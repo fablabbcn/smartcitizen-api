@@ -17,6 +17,7 @@ module DataParser
         reading['sensors'].each do |sensor_data|
           sensor = sensor_reading(device, sensor_data)
 
+          # TODO: Should we notify or log if a sensor component does not match?
           # Skip current sensor, but keep ingesting other sensors
           next if sensor.nil?
 
