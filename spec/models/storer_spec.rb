@@ -42,7 +42,8 @@ RSpec.describe Storer, type: :model do
     end
 
     it 'stores data to karios & redis publish' do
-      expect(Kairos).to receive(:http_post_to).with("/datapoints", @karios_data)
+      # model/storer.rb is not using Kairos, but Redis -> Telnet
+      # expect(Kairos).to receive(:http_post_to).with("/datapoints", @karios_data)
       expect_any_instance_of(Storer).to receive(:redis_publish).with(@readings, @ts, true)
 
       Storer.new(device, @data)

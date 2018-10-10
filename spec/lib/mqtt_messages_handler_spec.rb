@@ -66,7 +66,8 @@ RSpec.describe MqttMessagesHandler do
     end
     context 'valid reading packet' do
       it 'queues reading data in order to be stored' do
-        expect(Kairos).to receive(:http_post_to).with("/datapoints", @data_array)
+        # model/storer.rb is not using Kairos, but Redis -> Telnet
+        #expect(Kairos).to receive(:http_post_to).with("/datapoints", @data_array)
         MqttMessagesHandler.handle(@packet)
       end
     end
