@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git://github.com/presidentbeef/brakeman.git
-  revision: 6a9da1fa177132c13b264a5c13d40f4d08f0ee9f
+  revision: 73a666f85d29c5389ff764b99f975c52362ffbd8
   specs:
     brakeman (4.3.1)
       erubis (~> 2.6)
@@ -89,7 +89,7 @@ GEM
     awesome_print (1.8.0)
     aws-eventstream (1.0.1)
     aws-partitions (1.105.0)
-    aws-sdk-core (3.29.0)
+    aws-sdk-core (3.30.0)
       aws-eventstream (~> 1.0)
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.0)
@@ -97,7 +97,7 @@ GEM
     aws-sdk-kms (1.9.0)
       aws-sdk-core (~> 3, >= 3.26.0)
       aws-sigv4 (~> 1.0)
-    aws-sdk-s3 (1.20.0)
+    aws-sdk-s3 (1.21.0)
       aws-sdk-core (~> 3, >= 3.26.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.0)
@@ -267,8 +267,8 @@ GEM
     mini_portile2 (2.3.0)
     minitest (5.11.3)
     moneta (1.0.0)
-    money (6.12.0)
-      i18n (>= 0.6.4, < 1.1)
+    money (6.13.0)
+      i18n (>= 0.6.4, <= 2)
     mqtt (0.5.0)
     multi_json (1.13.1)
     multi_xml (0.6.0)
@@ -281,7 +281,7 @@ GEM
     net-telnet (0.2.0)
     netrc (0.11.0)
     newrelic_rpm (5.4.0.347)
-    nokogiri (1.8.4)
+    nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     notiffany (0.1.1)
       nenv (~> 0.1)
@@ -398,7 +398,7 @@ GEM
       redis-actionpack (>= 5.0, < 6)
       redis-activesupport (>= 5.0, < 6)
       redis-store (>= 1.2, < 2)
-    redis-store (1.5.0)
+    redis-store (1.6.0)
       redis (>= 2.2, < 5)
     request_store (1.4.1)
       rack (>= 1.4)
@@ -415,7 +415,7 @@ GEM
       rspec-mocks (~> 3.8.0)
     rspec-core (3.8.0)
       rspec-support (~> 3.8.0)
-    rspec-expectations (3.8.1)
+    rspec-expectations (3.8.2)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
     rspec-mocks (3.8.0)
