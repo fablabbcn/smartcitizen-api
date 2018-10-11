@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180903161334) do
+ActiveRecord::Schema.define(version: 20181011105345) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,28 +29,6 @@ ActiveRecord::Schema.define(version: 20180903161334) do
 
   add_index "api_tokens", ["owner_id", "token"], name: "index_api_tokens_on_owner_id_and_token", unique: true, using: :btree
   add_index "api_tokens", ["owner_id"], name: "index_api_tokens_on_owner_id", using: :btree
-
-  create_table "backup_readings", force: :cascade do |t|
-    t.jsonb    "data"
-    t.string   "mac"
-    t.string   "version"
-    t.string   "ip"
-    t.boolean  "stored"
-    t.datetime "created_at"
-  end
-
-  create_table "bad_readings", force: :cascade do |t|
-    t.integer  "tags"
-    t.string   "remote_ip"
-    t.jsonb    "data",        null: false
-    t.datetime "created_at",  null: false
-    t.string   "message"
-    t.integer  "device_id"
-    t.string   "mac_address"
-    t.string   "version"
-    t.string   "timestamp"
-    t.text     "backtrace"
-  end
 
   create_table "components", force: :cascade do |t|
     t.integer  "board_id"
