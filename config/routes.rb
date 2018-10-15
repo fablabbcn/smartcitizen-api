@@ -2,8 +2,6 @@ require "sidekiq/web"
 Rails.application.routes.draw do
 
 
-  get 'version', to: "version#index"
-
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
     username == ENV["sidekiq_username"] && password == ENV["sidekiq_password"]
   end if Rails.env.production?
@@ -74,7 +72,7 @@ Rails.application.routes.draw do
     # use_doorkeeper
     # root to: 'static#home'
     get '/', to: 'static#home'
-
+    get '/version', to: "static#version"
     get "/404" => "errors#not_found"
     get "/500" => "errors#exception"
     get "/test_error" => "errors#test_error"

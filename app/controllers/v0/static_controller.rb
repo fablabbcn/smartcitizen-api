@@ -12,14 +12,14 @@ module V0
       render json: {
         notice: "!!! This is the new API. The old API is here - http://api.smartcitizen.me/v0.0.1 !!!",
         api_documentation_url: "https://developer.smartcitizen.me",
-        current_user_url: ['https://api.smartcitizen.me', v0_me_index_path].join,
-        components_url: ['https://api.smartcitizen.me', v0_components_path].join,
-        devices_url: ['https://api.smartcitizen.me', v0_devices_path].join,
-        kits_url: ['https://api.smartcitizen.me', v0_kits_path].join,
-        measurements_url: ['https://api.smartcitizen.me', v0_measurements_path].join,
-        sensors_url: ['https://api.smartcitizen.me', v0_sensors_path].join,
-        users_url: ['https://api.smartcitizen.me', v0_users_path].join,
-        tags_url: ['https://api.smartcitizen.me', v0_tags_path].join
+        current_user_url: [request.base_url, v0_me_index_path].join,
+        components_url: [request.base_url, v0_components_path].join,
+        devices_url: [request.base_url, v0_devices_path].join,
+        kits_url: [request.base_url, v0_kits_path].join,
+        measurements_url: [request.base_url, v0_measurements_path].join,
+        sensors_url: [request.base_url, v0_sensors_path].join,
+        users_url: [request.base_url, v0_users_path].join,
+        tags_url: [request.base_url, v0_tags_path].join
       }
     end
 
@@ -119,6 +119,16 @@ module V0
       end
 
       paginate json: a
+    end
+
+    def version
+      render json: {
+        env: Rails.env,
+        revision: APP_REVISION,
+        version: VERSION,
+        ruby: RUBY_VERSION,
+        rails: Rails::VERSION::STRING
+      }
     end
 
   end
