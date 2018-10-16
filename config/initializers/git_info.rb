@@ -4,5 +4,8 @@ else
   APP_REVISION = 'REVISION file not found'
 end
 
-VERSION = File.exists?(File.join(Rails.root, 'VERSION')) ? File.open(File.join(Rails.root, 'VERSION'), 'r') { |f| GIT_VERSION = f.gets.chomp } : nil
-
+if File.exists?('VERSION')
+  VERSION_FILE = `cat VERSION`
+else
+  VERSION_FILE = 'VERSION file not found'
+end

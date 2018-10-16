@@ -125,7 +125,7 @@ module V0
       render json: {
         env: Rails.env,
         revision: APP_REVISION,
-        version: VERSION,
+        version: VERSION_FILE,
         ruby: RUBY_VERSION,
         rails: Rails::VERSION::STRING
       }
