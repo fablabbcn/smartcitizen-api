@@ -21,10 +21,12 @@ namespace :telnet do
     Redis.current.subscribe('telnet_queue') do |on|
       on.message do |channel, msg|
         #puts "#{channel} - #{msg}"
-        data = JSON.parse(msg).first
+        alldata = JSON.parse(msg)
 
-        telnet_string = "put #{data['name']} #{data['timestamp']} #{data['value']} device_id=#{data['tags']['device_id']} \n"
-        localhost.print telnet_string
+        alldata.each do |data|
+          telnet_string = "put #{data['name']} #{data['timestamp']} #{data['value']} device_id=#{data['tags']['device_id']} \n"
+          localhost.print telnet_string
+        end
       end
     end
 
