@@ -5,70 +5,55 @@ gem 'puma'
 gem 'rails', '~> 4.2.10'
 gem 'rails-api'
 gem 'pg', '~> 0.20' # pg 1 only works on rails 5.1.5+
-
-gem 'redis'#, '3.0.7'
-#gem 'skylight', '~> 1.2', '>= 1.2.2'
-
-gem 'rack-timeout', require: "rack/timeout/base"
-gem 'rack-cors', require: 'rack/cors'
-gem 'rack-contrib'
-gem 'rack-cache'
-gem 'moneta'
-gem 'api_cache'
-
-gem 'browser'#, '1.0.1'
-gem 'stamp'
-gem 'listen'#, '~> 3.0.0'
-#gem 'airbrake', '~> 4.3'
-gem 'premailer-rails'
-# gem 'statsample'
-# gem 'upsert'
-
-gem 'lograge'
-gem 'figaro'
-gem 'versionist', github: 'bploetz/versionist'
-gem 'jbuilder'
-gem 'responders'
-gem 'net-telnet'
-gem 'workflow'
-
-gem 'bcrypt'#, '~> 3.1.7'
-gem 'aws-sdk-s3'
-
-gem 'redis-rails' # not needed in rails 5.2
-
-gem 'sinatra'#, '>= 1.3.0', require: nil
-gem 'sidekiq', '~> 4.0' # Upgrade to 5 with rails. BREAKING CHANGES
-
-gem 'fog-aws'
-
-gem 'oauth2', require: false
+gem 'sidekiq', '~> 4' # Upgrade to 5 with rails. BREAKING CHANGES
 gem 'doorkeeper', '~> 4'
 
-gem 'friendly_id'#, '~> 5.1.0'
-gem 'ancestry'
-gem 'pundit'
-gem 'kaminari'
-gem 'api-pagination'
-gem 'geocoder'
-gem 'countries'
-gem 'ransack'
-gem 'c_geohash', require: false
-gem 'diffy', require: false
-gem 'awesome_print', require: false
-gem 'parallel', require: false
-
-gem 'date_validator'
-gem 'pg_search'
-gem 'mailgun_rails'
-gem 'dalli'
-gem 'fast_blank'
+gem 'redis-rails' # not needed in rails 5.2
+gem 'redis'#, '3.0.7'
 gem 'oj', '2.18.3' # 3.0.0 breaks tests:  https://github.com/ohler55/oj/blob/master/CHANGELOG.md#300---2017-04-24
-gem 'oj_mimic_json'
-gem 'multi_json'
 
-# Report errors to sentry.io
+gem 'ancestry'
+gem 'api-pagination'
+gem 'api_cache'
+gem 'awesome_print', require: false
+gem 'aws-sdk-s3'
+gem 'bcrypt'#, '~> 3.1.7'
+gem 'browser'#, '1.0.1'
+gem 'c_geohash', require: false
+gem 'countries'
+gem 'dalli'
+gem 'date_validator'
+gem 'diffy', require: false
+gem 'fast_blank'
+gem 'figaro'
+gem 'fog-aws'
+gem 'friendly_id'#, '~> 5.1.0'
+gem 'geocoder'
+gem 'jbuilder'
+gem 'kaminari'
+gem 'listen'#, '~> 3.0.0'
+gem 'lograge'
+gem 'mailgun_rails'
+gem 'moneta'
+gem 'multi_json'
+gem 'net-telnet'
+gem 'oauth2', require: false
+gem 'oj_mimic_json'
+gem 'parallel', require: false
+gem 'pg_search'
+gem 'premailer-rails'
+gem 'pundit'
+gem 'rack-cache'
+gem 'rack-contrib'
+gem 'rack-cors', require: 'rack/cors'
+gem 'rack-timeout', require: "rack/timeout/base"
+gem 'ransack'
+gem 'responders'
 gem 'sentry-raven'
+gem 'sinatra'#, '>= 1.3.0', require: nil
+gem 'stamp'
+gem 'versionist', github: 'bploetz/versionist'
+gem 'workflow'
 
 # eventMachine MQTT handler
 gem 'em-mqtt'#, '~> 0.0.4'
