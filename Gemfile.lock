@@ -280,7 +280,6 @@ GEM
     net-ssh (5.0.2)
     net-telnet (0.2.0)
     netrc (0.11.0)
-    newrelic_rpm (5.4.0.347)
     nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     notiffany (0.1.1)
@@ -555,7 +554,6 @@ DEPENDENCIES
   multi_json
   mysql
   net-telnet
-  newrelic_rpm
   oauth2
   oj (= 2.18.3)
   oj_mimic_json

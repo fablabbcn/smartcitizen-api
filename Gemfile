@@ -29,7 +29,6 @@ gem 'figaro'
 gem 'versionist', github: 'bploetz/versionist'
 gem 'jbuilder'
 gem 'responders'
-gem 'newrelic_rpm'
 gem 'net-telnet'
 gem 'workflow'
 
