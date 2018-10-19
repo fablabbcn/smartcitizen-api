@@ -7,19 +7,6 @@ Rails.application.routes.draw do
   end if Rails.env.production?
   mount Sidekiq::Web, at: "/sidekiq"
 
-  # resources :tags, except: [:new, :edit]
-  api_version(module: "V001", path: {value: "v0.0.1"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0.0.1"}, defaults: { format: :json }) do
-    get ':api_key/devices', to: 'devices#index'
-    get ':api_key/lastpost', to: 'devices#current_user_index'
-    get ':api_key/:device_id/posts', to: 'devices#show'
-    get ':api_key/me', to: 'users#show'
-    get '/', to: 'static#home'
-
-    get "/404" => "errors#not_found"
-    get "/500" => "errors#exception"
-    match "*path", to: "errors#not_found", via: :all
-  end
-
   api_version(module: "V0", path: {value: "v0"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0"}, default: true, defaults: { format: :json }) do
     # devices
     resources :devices do

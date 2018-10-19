@@ -120,8 +120,3 @@ group :development, :test do
   # gem 'web-console', '~> 2.0'
   gem 'rdoc'
 end
-
-group :development, :test, :linode do
-  gem 'mysql'
-end
-
