@@ -1,4 +1,4 @@
-ruby '2.3.7'
+ruby '2.3.8'
 source 'https://rubygems.org'
 
 gem 'puma'
