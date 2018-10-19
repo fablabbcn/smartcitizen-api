@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const fetch = require('node-fetch');
 
-function postReadings(url, deviceId, sensorId, token, length) {
+function postReadings(url, deviceId, sensorId, token, length, sensorValue = 10) {
 
   if (url == null) {
     console.log("Usage:\nnode post-readings.js url deviceId, sensorId, token, nrOfLines\n")
@@ -13,7 +13,7 @@ function postReadings(url, deviceId, sensorId, token, length) {
   const body = { data:[] };
 
   for(let j = 0; j < length; j++) {
-    body.data.push({"recorded_at":new Date(+(new Date()) - Math.floor(Math.random()*100000000)),"sensors":[{"id": sensorId, "value":(10 + Math.random()) }]});
+    body.data.push({"recorded_at":new Date(+(new Date()) - Math.floor(Math.random()*100000000)),"sensors":[{"id": sensorId, "value":parseFloat(sensorValue) + Math.random() }]});
   }
   var myInit = {
     method: 'POST',
@@ -36,7 +36,7 @@ function postReadings(url, deviceId, sensorId, token, length) {
   console.log('length: ' + length);
   */
 
-  console.log('----');
+  console.log( body.data[body.data.length -1]['sensors'][0]['value']  );
 }
 
 postReadings(...process.argv.slice(2));
