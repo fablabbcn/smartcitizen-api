@@ -1,5 +1,6 @@
 require 'active_record'
 
 class MySQL < ActiveRecord::Base
-  self.abstract_class = true
 end
+
+# TODO: remove this file. This breaks the test because the lines above are needed!
