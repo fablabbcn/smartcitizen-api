@@ -54,7 +54,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-rc1/jquery.slim.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
-    var socket = io.connect('ws://178.79.183.198:8000');
+    var socket = io.connect('wss://ws.smartcitizen.me');
     socket.on('welcome', function(data) {
       console.log(data);
     });
