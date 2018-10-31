@@ -1,7 +1,10 @@
 FROM java:8-alpine
 
 RUN apk upgrade libssl1.0 --update-cache && \
-    apk add wget ca-certificates bash
+    apk add wget \
+    ca-certificates \
+    gettext \
+    bash
 RUN wget -O /tmp/kairosdb_1.2.1-1.tar.gz \
     https://github.com/kairosdb/kairosdb/releases/download/v1.2.1/kairosdb-1.2.1-1.tar.gz
 
@@ -9,8 +12,11 @@ RUN mkdir -p /opt/ && \
     cd /opt/ && \
     tar -xvf /tmp/kairosdb*
 
-COPY conf/kairosdb.properties /opt/kairosdb/conf/kairosdb.properties
+COPY conf/kairosdb.properties /tmp/kairosdb.properties
+COPY runkairos.sh /usr/bin/runkairos.sh
+RUN chmod +x /usr/bin/runkairos.sh
 
 EXPOSE 4242 8080 2003 2004
-ENTRYPOINT [ "/opt/kairosdb/bin/kairosdb.sh"]
+ENTRYPOINT [ "/usr/bin/runkairos.sh"]
+
 CMD [ "run" ]

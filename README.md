@@ -5,7 +5,6 @@
 ### [Documentation](https://developer.smartcitizen.me)
 
 * Production API - [https://api.smartcitizen.me](https://api.smartcitizen.me)
-* Errors - [https://errors.smartcitizen.me](https://errors.smartcitizen.me)
 * Basic Map Example - [https://api.smartcitizen.me/examples/map](https://api.smartcitizen.me/examples/map) ([map](https://github.com/fablabbcn/smartcitizen/blob/master/public/examples/map.html))
 * OAuth 2.0 (Implicit Grant) Example - [http://example.smartcitizen.me](http://example.smartcitizen.me) ([smartcitizen-oauth-example](https://github.com/fablabbcn/smartcitizen-oauth-example))
 
@@ -13,7 +12,7 @@
 
 ### Docker quickstart
 
-1. Copy the env.example to .env, and edit your variables, domain name, etc
+1. Copy the environment file, and edit variables, domain name, etc
 
    `cp env.example .env`
 

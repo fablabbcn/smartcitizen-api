@@ -78,6 +78,7 @@ services:
 #  kairos:
 #    image: kairos
   kairos:
+    env_file: .env
     build:
       context: ./scripts/
       dockerfile: Dockerfile-kairos
