@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181011105345) do
+ActiveRecord::Schema.define(version: 20181105160320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -197,6 +197,16 @@ ActiveRecord::Schema.define(version: 20181011105345) do
 
   add_index "pg_search_documents", ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id", using: :btree
 
+  create_table "sensor_tags", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.integer  "sensor_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "sensor_tags", ["sensor_id"], name: "index_sensor_tags_on_sensor_id", using: :btree
+
   create_table "sensors", force: :cascade do |t|
     t.string   "ancestry"
     t.string   "name"
@@ -262,5 +272,6 @@ ActiveRecord::Schema.define(version: 20181011105345) do
   add_foreign_key "devices", "kits"
   add_foreign_key "devices_tags", "devices"
   add_foreign_key "devices_tags", "tags"
+  add_foreign_key "sensor_tags", "sensors"
   add_foreign_key "sensors", "measurements"
 end
