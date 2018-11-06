@@ -1,5 +1,4 @@
 class SensorTag < ActiveRecord::Base
-  validates_presence_of :name
-
   belongs_to :sensor
+  belongs_to :tag_sensor
 end

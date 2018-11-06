@@ -7,7 +7,10 @@ class Sensor < ActiveRecord::Base
   has_many :components
   has_many :boards, through: :components
   has_many :kits, through: :components
+
   has_many :sensor_tags
+  has_many :tag_sensors, through: :sensor_tags
+
   belongs_to :measurement
 
   attr_accessor :latest_reading
@@ -16,7 +19,7 @@ class Sensor < ActiveRecord::Base
   validates_presence_of :name, :description#, :unit
 
   def tags
-    sensor_tags.map(&:name)
+    tag_sensors.map(&:name)
   end
 
 end

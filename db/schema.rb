@@ -198,14 +198,14 @@ ActiveRecord::Schema.define(version: 20181105160320) do
   add_index "pg_search_documents", ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id", using: :btree
 
   create_table "sensor_tags", force: :cascade do |t|
-    t.string   "name"
-    t.string   "description"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.integer  "sensor_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "tag_sensor_id"
   end
 
   add_index "sensor_tags", ["sensor_id"], name: "index_sensor_tags_on_sensor_id", using: :btree
+  add_index "sensor_tags", ["tag_sensor_id"], name: "index_sensor_tags_on_tag_sensor_id", using: :btree
 
   create_table "sensors", force: :cascade do |t|
     t.string   "ancestry"
@@ -220,6 +220,13 @@ ActiveRecord::Schema.define(version: 20181105160320) do
 
   add_index "sensors", ["ancestry"], name: "index_sensors_on_ancestry", using: :btree
   add_index "sensors", ["measurement_id"], name: "index_sensors_on_measurement_id", using: :btree
+
+  create_table "tag_sensors", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "tags", force: :cascade do |t|
     t.string   "name"
@@ -272,6 +279,5 @@ ActiveRecord::Schema.define(version: 20181105160320) do
   add_foreign_key "devices", "kits"
   add_foreign_key "devices_tags", "devices"
   add_foreign_key "devices_tags", "tags"
-  add_foreign_key "sensor_tags", "sensors"
   add_foreign_key "sensors", "measurements"
 end
