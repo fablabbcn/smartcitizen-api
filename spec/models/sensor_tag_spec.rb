@@ -1,16 +1,16 @@
 require 'rails_helper'
 
-RSpec.describe SensorTag, type: :model do
+RSpec.describe TagSensor, type: :model do
 
-  let(:the_sensor) { build(:sensor_tag) }
+  let(:the_sensor) { build(:tag_sensor) }
 
   context 'SensorTag' do
-    it "has a name" do
-      expect( the_sensor.name ).to eq('SensorTag1')
-      expect( the_sensor.description ).to eq('SensorDescription1')
+    it "has a name and description from the factory" do
+      expect( the_sensor.name ).to eq('TagSensor1')
+      expect( the_sensor.description ).to eq('TagSensorDescription1')
     end
 
     it { is_expected.to validate_presence_of(:name) }
-    it { is_expected.to belong_to(:sensor) }
+    it { should have_many(:sensors).through(:sensor_tags) }
   end
 end
