@@ -1,7 +1,2 @@
-class TagSensorPolicy < ApplicationPolicy
-
-  def create?
-    user.try(:is_admin?)
-  end
-
+class TagSensorPolicy < AdminPolicy
 end
