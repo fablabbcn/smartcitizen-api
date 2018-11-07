@@ -203,7 +203,7 @@ RSpec.describe Device, :type => :model do
 
     it "calculates elevation on save", :vcr do
       barcelona = create(:device, elevation: nil)
-      expect(barcelona.elevation).to eq(4)
+      expect(barcelona.elevation).to eq(17)
     end
 
   end
