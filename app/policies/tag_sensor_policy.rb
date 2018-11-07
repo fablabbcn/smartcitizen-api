@@ -1,0 +1,2 @@
+class TagSensorPolicy < AdminPolicy
+end
