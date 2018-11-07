@@ -66,6 +66,23 @@ Sensor.create(
   ]
 )
 
+Sensor.find(14).tag_sensors.create(
+  [
+    {
+      name: 'environmental seed 1',
+      description: 'environmental sensor tag'
+    },
+    {
+      name: 'light seed',
+      description: 'Light sensor tag'
+    },
+    {
+      name: 'digital seed',
+      description: 'Digital sensor tag'
+    }
+  ]
+)
+
 #device has many sensors through components
 #has_many :components, as: :board
 5.times do
