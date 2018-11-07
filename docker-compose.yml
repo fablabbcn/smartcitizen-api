@@ -85,8 +85,9 @@ services:
     ports:
       - 8080:8080
       - 4242:4242 #telnet
-    depends_on:
-      - cassandra-1
+    # We better not start Cassandra container in production, it eats up memory
+    #depends_on:
+      #- cassandra-1
 
 # Check if cassandra cluster is working:
 # docker-compose exec cassandra-1 nodetool status
