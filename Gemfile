@@ -76,7 +76,6 @@ group :development do
   gem 'pry-rails'
   gem 'quiet_assets'
   gem 'spring-commands-rspec'
-  gem 'letter_opener'
   gem 'spring'
   gem 'sshkit'#, '1.7.1'
   gem 'sshkit-sudo'
