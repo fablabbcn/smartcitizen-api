@@ -12,7 +12,9 @@ if Rails.env.test?
       {
         "city"=>"Manchester",
         "formatted_address"=>"Manchester England",
+        "display_name"=>"Manchester England",
         "types"=>["locality", "political"],
+        "type"=>["city"]
       }
     ]
   )

@@ -69,8 +69,8 @@ module V0
         a << {
           type: "City", # or a Place
           city: item.city,
-          name: item.formatted_address,
-          layer: item.types,
+          name: item.display_name,
+          layer: item.type,
           country_code: (ISO3166::Country.find_country_by_alpha2(item.country_code.downcase).alpha2 if item.country_code.present?),
           country: item.country,
           latitude: item.latitude,
