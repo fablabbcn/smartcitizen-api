@@ -15,6 +15,8 @@ class UserMailer < ApplicationMailer
 
     @url = DeviceArchive.create(device_id).url(1.day.from_now)
 
+    @device = Device.find(device_id)
+
     mail to: @user.to_email_s, subject: 'Device CSV Archive Ready'
   end
 
