@@ -73,8 +73,6 @@ module Smartcitizen
 
     config.autoload_paths += %W(#{config.root}/lib app/models/concerns)
 
-    config.banned_words = YAML.load_file("#{Rails.root}/config/banned_words.yml").map(&:values).flatten
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

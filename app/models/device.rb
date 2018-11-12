@@ -24,7 +24,6 @@ class Device < ActiveRecord::Base
   has_many :components, as: :board
   has_many :sensors, through: :components
 
-  validate :banned_name
   validates_presence_of :name, :owner, on: :create
   #validates_uniqueness_of :name, scope: :owner_id, on: :create
 
@@ -239,13 +238,6 @@ class Device < ActiveRecord::Base
       # if latitude.changed? or longitude.changed?
       if latitude.is_a?(Float) and longitude.is_a?(Float)
         self.geohash = GeoHash.encode(latitude, longitude)
-      end
-    end
-
-    def banned_name
-      if name.present? and (Smartcitizen::Application.config.banned_words.include? name.downcase)
-        # name.split.map(&:downcase).map(&:strip)).any?
-        errors.add(:name, "is reserved")
       end
     end
 

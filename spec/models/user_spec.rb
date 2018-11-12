@@ -47,13 +47,6 @@ RSpec.describe User, :type => :model do
     expect(user.city).to eq("Barcelona")
   end
 
-  it "does not allow banned usernames" do
-    puts Smartcitizen::Application.config.banned_words
-    user = build(:user, username: "stupid guy")
-    user.valid?
-    expect(user.errors[:username]).to include('is reserved')
-  end
-
   skip "has name and to_s" do
     expect(homer.name).to eq('Homer Simpson')
     expect(homer.to_s).to eq('Homer Simpson')

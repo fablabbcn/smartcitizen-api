@@ -17,13 +17,6 @@ RSpec.describe Device, :type => :model do
   skip { is_expected.to validate_uniqueness_of(:name).scoped_to(:owner_id) }
   it { is_expected.to validate_uniqueness_of(:device_token) }
 
-  it "does not allow banned names" do
-    puts Smartcitizen::Application.config.banned_words
-    device = build(:device, name: "stupid")
-    device.valid?
-    expect(device.errors[:name]).to include('is reserved')
-  end
-
   it "has last_reading_at" do
     Timecop.freeze do
       device = create(:device, last_recorded_at: 1.minute.ago)

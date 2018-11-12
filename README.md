@@ -83,7 +83,7 @@
 
 `cd smartcitizen`
 
-`get config/application.yml and config/banned_words.production.yml (check production server or contact webmasters@smartcitizen.me)`
+`get config/application.yml (check production server or contact webmasters@smartcitizen.me)`
 
 `bundle install`
 

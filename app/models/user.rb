@@ -27,7 +27,6 @@ class User < ActiveRecord::Base
   validates :username, :email, presence: true
   validates :username, uniqueness: true, if: :username?
   validates :username, length: { in: 3..30 }, allow_nil: true
-  validate :check_for_banned_username
   validates :email, format: { with: /@/ }, uniqueness: true, if: :email?, on: :create
   validates :url, format: URI::regexp(%w(http https)), allow_nil: true, allow_blank: true, on: :create
 
@@ -139,12 +138,6 @@ private
     begin
       self[column] = token
     end while User.exists?(column => self[column])
-  end
-
-  def check_for_banned_username
-    if username.present? and (Smartcitizen::Application.config.banned_words & username.split.map(&:downcase).map(&:strip)).any?
-      errors.add(:username, "is reserved")
-    end
   end
 
 end
