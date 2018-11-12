@@ -1,11 +1,3 @@
-ActiveSupport::Logger.class_eval do
-  #monkey patching here so there aren't duplicate lines in console/server
-  def self.broadcast(logger)
-    Module.new do
-    end
-  end
-end
-
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -30,7 +22,7 @@ Rails.application.configure do
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
-  config.log_level = :debug
+  config.log_level = :info
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
