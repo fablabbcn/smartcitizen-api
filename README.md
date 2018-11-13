@@ -93,6 +93,14 @@
 
 First get the `config/application.yml` env vars from the production machine.
 
+### Using Docker
+
+  1. SSH into the server
+  2. `git pull`
+  2. `docker-compose build`
+  2. `docker-compose up -d`
+
+### Using Capistrano (not used with Docker)
 `bundle exec cap production deploy` < password currently required. **Don't run this without discussing in Slack or issues first**. We will be automating deployments with CI/Travis so this command will eventually be deprecated.
 
 `bundle exec cap production deploy:setup_config` < deploy configuration (symlinks to nginx, monit, etc..)
