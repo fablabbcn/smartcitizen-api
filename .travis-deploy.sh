@@ -7,4 +7,5 @@ eval "$(ssh-agent -s)"
 chmod 600 deploy_rsa
 ssh-add deploy_rsa
 
-ssh -p $PORT  $STAGING  "cd smartcitizen-api; ./scripts/deploy.sh"
+#ssh -p $PORT  $STAGING  "cd smartcitizen-api; ./scripts/deploy.sh"
+ssh -p$PORT $STAGING touch file.txt
