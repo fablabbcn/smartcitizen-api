@@ -1,29 +1,34 @@
 matrix:
   include:
-    - language: python
-      python: 2.7
-      services:
-        - docker
-      install:
-        - docker images
-      script:
-        - docker build -t app .
-
-    - language: ruby
-      #rvm:
-      #- 2.2.2
-      script: bundle exec rake spec
-      bundler_args: "--without=debug"
-      services:
-        - redis-server
-      addons:
-        postgresql: '9.4'
-        code_climate:
-          repo_token:
-            secure: "aeLLEEn+42UCOH2nEuuebv8WnnTRAM4js7+61720OM4jnSgTZjluGWGecufjPagIbj2tZ2ldXMEs+SQbfy6PJC9QKcHuo6/OUehg1BcTALqPCvfzKHw55nvFZbFUvW+2Oewnd0Gufmy0GmhLldk8+ElSlk2jTxnBgKuXil/xpZU="
-      before_script:
-        - cp config/database.travis.yml config/database.yml
-        - psql -c 'create database travis_ci_test;' -U postgres
-      env:
-        #- travis=true # Why have this? This is default
-        - aws_secret_key=testing
+  - language: python
+    python: 2.7
+    services:
+    - docker
+    install:
+    - docker images
+    script:
+    - docker build -t app .
+  - language: ruby
+    script: bundle exec rake spec
+    bundler_args: "--without=debug"
+    services:
+    - redis-server
+    addons:
+      postgresql: '9.4'
+      code_climate:
+        repo_token:
+          secure: aeLLEEn+42UCOH2nEuuebv8WnnTRAM4js7+61720OM4jnSgTZjluGWGecufjPagIbj2tZ2ldXMEs+SQbfy6PJC9QKcHuo6/OUehg1BcTALqPCvfzKHw55nvFZbFUvW+2Oewnd0Gufmy0GmhLldk8+ElSlk2jTxnBgKuXil/xpZU=
+    before_script:
+    - cp config/database.travis.yml config/database.yml
+    - psql -c 'create database travis_ci_test;' -U postgres
+    env:
+    - aws_secret_key=testing
+    deploy:
+    - provider: script
+      skip_cleanup: true
+      script: "./.travis-deploy.sh"
+      on:
+        branch: master
+before_install:
+- openssl aes-256-cbc -K $encrypted_7d0a84ef0065_key -iv $encrypted_7d0a84ef0065_iv
+  -in deploy_rsa.enc -out deploy_rsa -d
