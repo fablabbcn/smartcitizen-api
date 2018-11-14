@@ -10,4 +10,4 @@ ssh-add deploy_rsa
 
 echo 2
 #ssh -p $PORT  $STAGING  "cd smartcitizen-api; ./scripts/deploy.sh"
-ssh -p$PORT $SERVER touch file.txt
+#ssh -p$PORT $SERVER touch file.txt
