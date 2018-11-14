@@ -10,4 +10,4 @@ ssh-add deploy_rsa
 
 #ssh -p $PORT $STAGING  "cd smartcitizen-api; ./scripts/deploy.sh"
 ssh-keyscan -p$PORT $SERVER
-ssh -p$PORT $SERVER touch file.txt
+ssh -oStrictHostKeyChecking=no -p$PORT $SERVER touch file.txt
