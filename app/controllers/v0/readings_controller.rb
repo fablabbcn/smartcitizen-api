@@ -28,7 +28,7 @@ module V0
       if params[:data].first['recorded_at'].blank?
         render json: { id: "bad", message: "Timestamp cannot be empty!", url: "", errors: "" }, status: :ok
       else
-        SendToDatastoreJob.perform_later(params[:data], params[:id])
+        SendToDatastoreJob.perform_later(params[:data].to_json, params[:id])
         render json: { id: "ok", message: "Data successfully sent to queue", url: "", errors: "" }, status: :ok
       end
     end
