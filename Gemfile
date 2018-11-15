@@ -3,12 +3,12 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 5.0'
 gem 'pg'#, '~> 0.20' # pg 1 only works on rails 5.1.5+
-gem 'sidekiq'#, '~> 4' # Upgrade to 5 with rails. BREAKING CHANGES
+gem 'sidekiq', '~> 5' # Upgrade to 5 with rails. BREAKING CHANGES
 gem 'doorkeeper', '~> 4'
 
 gem 'redis-rails' # not needed in rails 5.2
 gem 'redis'#, '3.0.7'
-gem 'oj', '2.18.3' # 3.0.0 breaks tests:  https://github.com/ohler55/oj/blob/master/CHANGELOG.md#300---2017-04-24
+gem 'oj'#, '2.18.3' # 3.0.0 breaks tests:  https://github.com/ohler55/oj/blob/master/CHANGELOG.md#300---2017-04-24
 
 gem 'ancestry'
 gem 'api-pagination'
