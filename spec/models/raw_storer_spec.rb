@@ -81,6 +81,11 @@ RSpec.describe RawStorer, :type => :model do
     raw_storer = RawStorer.new( {}, device.mac_address, "1.1-0.9.0-A", "127.0.0.1" )
   end
 
+  it "should return a correct sensor id number" do
+    expect(device.find_sensor_id_by_key(:co)).to eq(16)
+    expect(device.find_sensor_id_by_key(:bat)).to eq(17)
+  end
+
   it "will be created with valid data", :vcr do
     expect(Kairos).to receive(:http_post_to)
     raw_storer = RawStorer.new( json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1" )
