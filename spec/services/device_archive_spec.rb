@@ -11,7 +11,7 @@ describe DeviceArchive do
     create(:measurement, id: 2, name: 'light')
     create(:measurement, id: 3, name: 'noise')
     create(:measurement, id: 4, name: 'NO2')
-    create(:kit, id: 3, name: 'SCK', description: "Board", slug: 'sck', sensor_map: '{"noise": 7, "temp": 12, "light": 14, "no2": 15}')
+    create(:kit, id: 3, name: 'SCK', description: "Board", slug: 'sck', sensor_map: {"noise": 7, "temp": 12, "light": 14, "no2": 15})
     create(:sensor, id:12, name:'HPP828E031', description: 'test', measurement_id: 1, unit: 'ºC')
     create(:sensor, id:7, name:'POM-3044P-R', description: 'test', measurement_id: 2, unit: 'dB')
     create(:sensor, id:14, name:'BH1730FVC', description: 'test', measurement_id: 2, unit: 'KΩ')

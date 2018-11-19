@@ -7,6 +7,7 @@ require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
+require "active_storage/engine"
 # require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 # require 'actionpack/action_caching'
@@ -34,6 +35,8 @@ module Smartcitizen
 
   class Application < Rails::Application
 
+    config.api_only = true
+
     # console do
     #   ActiveRecord::Base.logger = Rails.logger = Logger.new(STDOUT)
     # end
@@ -41,20 +44,20 @@ module Smartcitizen
     # config.middleware.use ActionDispatch::Flash
     # config.action_controller.allow_forgery_protection = false
 
-    config.middleware.insert_before 0, "HeaderCheck"
-    config.middleware.insert_before(ActionDispatch::Static, "DeleteResponseHeaders")
+    #config.middleware.insert_before 0, "HeaderCheck"
+    #config.middleware.insert_before(ActionDispatch::Static, "DeleteResponseHeaders")
 
     config.active_job.queue_adapter = :sidekiq
 
     # Enable Rails CORS only in Development.
     # Otherwise it's done by NGINX.
     if Rails.env.development?
-      config.middleware.insert_before 0, "Rack::Cors" do
-        allow do
-          origins '*'
-          resource '*', :headers => :any, :methods => [:get, :post, :put, :patch, :delete, :options]
-        end
-      end
+    #  config.middleware.insert_before 0, "Rack::Cors" do
+    #    allow do
+    #      origins '*'
+    #      resource '*', :headers => :any, :methods => [:get, :post, :put, :patch, :delete, :options]
+    #    end
+    #  end
     end
 
     # gzip
@@ -78,13 +81,13 @@ module Smartcitizen
     config.i18n.default_locale = :en
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
+    #config.active_record.raise_in_transactional_callbacks = true
 
     # config.cache_store = :redis_store, (ENV["REDISCLOUD_URL"] || ENV['REDIS_URL']), { expires_in: 90.minutes }
 
     config.exceptions_app = self.routes
 
-    config.assets.enabled = false
+    #config.assets.enabled = false
 
     config.generators do |g|
       g.helper false

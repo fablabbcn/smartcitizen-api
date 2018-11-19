@@ -1,22 +1,22 @@
 module ApiMacros
 
-  def api_get action, params={}, version="0", headers={}
-    get "/v#{version}/#{action}", params, headers
+  def api_get action, p={}, version="0", h={}
+    get "/v#{version}/#{action}", params:p, headers:h
     JSON.parse(response.body) rescue {}
   end
 
-  def api_post action, params={}, version="0", headers={}
-    post "/v#{version}/#{action}", params, headers
+  def api_post action, p={}, version="0", h={}
+    post "/v#{version}/#{action}", params:p, headers:h
     JSON.parse(response.body) rescue {}
   end
 
-  def api_delete action, params={}, version="0", headers={}
-    delete "/v#{version}/#{action}", params, headers
+  def api_delete action, p={}, version="0", h={}
+    delete "/v#{version}/#{action}", params:p, headers:h
     JSON.parse(response.body) rescue {}
   end
 
-  def api_put action, params={}, version="0", headers={}
-    patch "/v#{version}/#{action}", params, headers
+  def api_put action, p={}, version="0", h={}
+    patch "/v#{version}/#{action}", params:p, headers:h
     JSON.parse(response.body) rescue {}
   end
 

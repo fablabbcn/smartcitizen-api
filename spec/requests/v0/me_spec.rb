@@ -32,18 +32,18 @@ describe V0::MeController, type: :request do
 
     describe "username:password" do
       it "valid credentials" do
-        request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Basic.encode_credentials(user.username, '1234567'))
+        get '/me', params: {}, headers: {HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Basic.encode_credentials(user.username, '1234567')}
         expect(response.status).to eq(200)
       end
 
       it "invalid credentials" do
-        request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Basic.encode_credentials(user.username, '123'))
+        get '/me', params: {}, headers: {HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Basic.encode_credentials(user.username, '123')}
         expect(response.status).to eq(401)
         expect(JSON.parse(response.body)["message"]).to eq("Invalid Username/Password Combination")
       end
 
       it "(empty) invalid credentials" do
-        request_via_redirect(:get, '/me', {}, HTTP_AUTHORIZATION: "")
+        get '/me', params: {}, headers: {HTTP_AUTHORIZATION: ""}
         expect(response.status).to eq(401)
         expect(JSON.parse(response.body)["message"]).to eq("Authorization required")
       end

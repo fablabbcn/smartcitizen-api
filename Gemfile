@@ -1,16 +1,10 @@
 ruby '2.5.3'
 source 'https://rubygems.org'
 
-gem 'puma'
-gem 'rails', '~> 4.2.10'
-gem 'rails-api'
-gem 'pg', '~> 0.20' # pg 1 only works on rails 5.1.5+
-gem 'sidekiq', '~> 4' # Upgrade to 5 with rails. BREAKING CHANGES
+gem 'rails', '~> 5.0'
+gem 'sidekiq', '~> 5' # Upgrade to 5 with rails. BREAKING CHANGES
 gem 'doorkeeper', '~> 4'
-
-gem 'redis-rails' # not needed in rails 5.2
-gem 'redis'#, '3.0.7'
-gem 'oj', '2.18.3' # 3.0.0 breaks tests:  https://github.com/ohler55/oj/blob/master/CHANGELOG.md#300---2017-04-24
+gem "bootsnap", "~> 1.3"
 
 gem 'ancestry'
 gem 'api-pagination'
@@ -38,15 +32,19 @@ gem 'multi_json'
 gem 'net-telnet'
 gem 'oauth2', require: false
 gem 'oj_mimic_json'
+gem 'oj'#, '2.18.3' # 3.0.0 breaks tests:  https://github.com/ohler55/oj/blob/master/CHANGELOG.md#300---2017-04-24
 gem 'parallel', require: false
+gem 'pg'#, '~> 0.20' # pg 1 only works on rails 5.1.5+
 gem 'pg_search'
 gem 'premailer-rails'
+gem 'puma'
 gem 'pundit'
 gem 'rack-cache'
 gem 'rack-contrib'
 gem 'rack-cors', require: 'rack/cors'
 gem 'rack-timeout', require: "rack/timeout/base"
 gem 'ransack'
+gem 'redis'#, '3.0.7'
 gem 'responders'
 gem 'sentry-raven'
 gem 'sinatra'#, '>= 1.3.0', require: nil
@@ -73,17 +71,12 @@ end
 
 group :development do
   gem 'pry-rails'
-  gem 'quiet_assets'
   gem 'spring-commands-rspec'
   gem 'spring'
   gem 'sshkit'#, '1.7.1'
   gem 'sshkit-sudo'
-  gem 'capistrano-rbenv'
-  gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
   gem 'rubocop', require: false
   gem "parallel_tests"
-  gem 'capistrano'#, '3.4.0'
-  gem 'capistrano-rails'
   gem "rails-erd"
 end
 
