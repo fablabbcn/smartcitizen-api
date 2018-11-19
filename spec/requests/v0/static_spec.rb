@@ -18,6 +18,7 @@ describe V0::StaticController do
         sensors_url
         users_url
         tags_url
+        tags_sensors_url
       )
     end
   end
