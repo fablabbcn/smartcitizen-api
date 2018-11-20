@@ -42,11 +42,7 @@ module V0
             version = request.headers['X-SmartCitizenVersion']
             ip = (request.headers['X-SmartCitizenIP'] || request.remote_ip)
 
-            if ENV['redis']
-              RawStorer.delay(retry: false).new(raw_reading,mac,version,ip)
-            else
-              RawStorer.new(raw_reading,mac,version,ip)
-            end
+            RawStorer.new(raw_reading,mac,version,ip)
 
           rescue Exception => e
             #notify_airbrake(e)

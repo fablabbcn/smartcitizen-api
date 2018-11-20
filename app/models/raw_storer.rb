@@ -32,6 +32,7 @@ class RawStorer
 
         metric_id = device.find_sensor_id_by_key(metric)
         component = device.components.detect{|c|c["sensor_id"] == metric_id} #find_component_by_sensor_id(metric_id)
+        next if component.nil?
 
         value = component.normalized_value( (Float(value) rescue value) )
         # puts "\t#{metric} #{ts} #{value} device=#{device.id} identifier=#{identifier}"
@@ -52,7 +53,8 @@ class RawStorer
         readings[sensor] = [metric_id, value, sql_data[metric_id]]
       end
 
-      Kairos.http_post_to("/datapoints", _data)
+      #Kairos.http_post_to("/datapoints", _data)
+      Redis.current.publish('telnet_queue', _data.to_json)
 
       if parsed_ts > (device.last_recorded_at || Time.at(0))
         # update without touching updated_at
