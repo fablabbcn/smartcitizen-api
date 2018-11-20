@@ -34,23 +34,18 @@ module V0
     end
 
     def legacy_create
-      begin
+
+      if request.headers['X-SmartCitizenData']
         JSON.parse(request.headers['X-SmartCitizenData']).each do |raw_reading|
-          begin
 
-            mac = request.headers['X-SmartCitizenMacADDR']
-            version = request.headers['X-SmartCitizenVersion']
-            ip = (request.headers['X-SmartCitizenIP'] || request.remote_ip)
+          mac = request.headers['X-SmartCitizenMacADDR']
+          version = request.headers['X-SmartCitizenVersion']
+          ip = (request.headers['X-SmartCitizenIP'] || request.remote_ip)
 
-            RawStorer.new(raw_reading,mac,version,ip)
-
-          rescue Exception => e
-            #notify_airbrake(e)
-          end
+          RawStorer.new(raw_reading,mac,version,ip)
         end
-      rescue Exception => e
-        #notify_airbrake(e)
       end
+
       datetime
     end
 
