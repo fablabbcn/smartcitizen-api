@@ -5,7 +5,7 @@ class CheckupUserEmailBlankJob < ApplicationJob
 
     User.all.each do |user|
       if user.email.blank?
-        CheckupNotifyJob.perform_later("No email for user id #{user.id}")
+        CheckupNotifyJob.perform_now("No email for user id #{user.id}")
       end
     end
 
