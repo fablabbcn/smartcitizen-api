@@ -1,7 +1,7 @@
 Rails.application.configure do
 
   # Settings specified here will take precedence over those in config/application.rb.
-  config.log_tags = [:uuid, :remote_ip]
+  config.log_tags = [:remote_ip, :uuid]
   # Code is not reloaded between requests.
   config.cache_classes = true
 
