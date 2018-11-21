@@ -1,4 +1,4 @@
-class SendToDatastoreJob < ActiveJob::Base
+class SendToDatastoreJob < ApplicationJob
   queue_as :default
 
   def perform(data_param, device_id)

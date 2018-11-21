@@ -1,4 +1,4 @@
-class DeleteArchivedUsersJob < ActiveJob::Base
+class DeleteArchivedUsersJob < ApplicationJob
   queue_as :default
 
   def perform(*args)

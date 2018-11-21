@@ -1,4 +1,4 @@
-class CheckupUserEmailBlankJob < ActiveJob::Base
+class CheckupUserEmailBlankJob < ApplicationJob
   queue_as :default
 
   def perform(*args)
