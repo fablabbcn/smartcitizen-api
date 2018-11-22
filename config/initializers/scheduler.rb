@@ -18,6 +18,6 @@ end
 
 s.every '1d' do
   CheckupUserEmailBlankJob.perform_now
-  DeleteArchivedDevices.perform_now
-  DeleteArchivedUsers.perform_now
+  DeleteArchivedDevicesJob.perform_now
+  DeleteArchivedUsersJob.perform_now
 end
