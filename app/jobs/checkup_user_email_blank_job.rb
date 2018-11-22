@@ -3,11 +3,10 @@ class CheckupUserEmailBlankJob < ApplicationJob
 
   def perform(*args)
 
-    User.all.each do |user|
-      if user.email.blank?
-        CheckupNotifyJob.perform_now("No email for user id #{user.id}")
-      end
-    end
+    CheckupNotifyJob.perform_now("About to check for blank emails ...")
+
+    users = User.where(email: nil)
+    CheckupNotifyJob.perform_now("No email for #{users.count} users. - ids: #{users.pluck(:id)}")
 
   end
 end

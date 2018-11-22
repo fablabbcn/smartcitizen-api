@@ -3,9 +3,11 @@ class DeleteArchivedUsersJob < ApplicationJob
 
   def perform(*args)
     # Do something later
+    CheckupNotifyJob.perform_now("About to delete archived users")
+
     User.unscoped.where(workflow_state: "archived").each do |user|
       if user.created_at < 72.hours.ago
-        CheckupNotifyJob.perform_later("deleting archived user #{user.id}")
+        CheckupNotifyJob.perform_now("deleting archived user #{user.id}")
         user.destroy!
       end
     end

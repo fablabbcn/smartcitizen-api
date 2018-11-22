@@ -46,6 +46,7 @@ gem 'rack-timeout', require: "rack/timeout/base"
 gem 'ransack'
 gem 'redis'#, '3.0.7'
 gem 'responders'
+gem 'rufus-scheduler'
 gem 'sentry-raven'
 gem 'sinatra'#, '>= 1.3.0', require: nil
 gem 'stamp'
