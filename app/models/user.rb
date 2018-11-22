@@ -37,8 +37,6 @@ class User < ActiveRecord::Base
 
   before_create :generate_legacy_api_key
 
-  after_save :check_if_users_have_valid_email
-
   alias_attribute :joined_at, :created_at
 
   def archive
