@@ -16,14 +16,14 @@ unless defined?(Rails::Console) || File.split($0).last == 'rake'
   end
 
   s.every '5m' do
-    CheckBatteryLevelBelowJob.perform_now
-    CheckDeviceStoppedPublishingJob.perform_now
+    CheckBatteryLevelBelowJob.perform_later
+    CheckDeviceStoppedPublishingJob.perform_later
   end
 
   s.every '1d' do
-    CheckupUserEmailBlankJob.perform_now
-    DeleteArchivedDevicesJob.perform_now
-    DeleteArchivedUsersJob.perform_now
+    CheckupUserEmailBlankJob.perform_later
+    DeleteArchivedDevicesJob.perform_later
+    DeleteArchivedUsersJob.perform_later
   end
 
 end
