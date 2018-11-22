@@ -4,19 +4,20 @@ class CheckBatteryLevelBelowJob < ApplicationJob
   def perform(*args)
     # Do something later
 
-    checkups_log = Logger.new('log/devicebattery.log')
-    checkups_log.info("---- Checking battery level at #{Time.now}")
+    CheckupNotifyJob.perform_now("About to check battery level on devices..")
 
-    Device.all.each do |d|
+    devices = Device.where.not(data: nil)
+    CheckupNotifyJob.perform_now("About to check battery level on #{devices.count} devices..")
 
-      if d.data.present? && d.data["10"].present?
+    devices.each do |d|
+      if d.data["10"].present?
         # -1.0 means no battery connected
         if d.data["10"].to_i < 15 && d.data["10"].to_i > 1
-          checkups_log.info(d.data["10"])
-          # TODO: Send email notification
+          # TODO: Send email notification?
+          CheckupNotifyJob.perform_now("Owner: #{d.owner} - device: #{d}")
         end
       end
-
     end
+
   end
 end

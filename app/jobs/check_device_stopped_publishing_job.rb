@@ -3,9 +3,10 @@ class CheckDeviceStoppedPublishingJob < ApplicationJob
 
   def perform(*args)
     # Do something later
-    Device.all.each do |d|
+    CheckupNotifyJob.perform_now("About to check devices stopped publishing within 10 minutes..")
 
-      if d.last_recorded_at? && d.last_recorded_at < (10.minutes.ago)
+    Device.where.not(last_recorded_at: nil).each do |d|
+      if d.last_recorded_at < (10.minutes.ago)
         # TODO: Send email notification?
       end
 

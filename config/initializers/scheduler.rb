@@ -12,8 +12,8 @@ s.every '1m' do
 end
 
 s.every '5m' do
-  #CheckBatteryLevelBelowJob.perform_now
-  #CheckDeviceStoppedPublishingJob.perform_now
+  CheckBatteryLevelBelowJob.perform_now
+  CheckDeviceStoppedPublishingJob.perform_now
 end
 
 s.every '1d' do
