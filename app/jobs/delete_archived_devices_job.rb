@@ -3,7 +3,7 @@ class DeleteArchivedDevicesJob < ApplicationJob
 
   def perform(*args)
     # Device.all will only look in non-archived devices because of scope
-    CheckupNotifyJob.perform_now("About to delete archived devices")
+    CheckupNotifyJob.perform_now("Delete archived devices")
 
     Device.unscoped.where(workflow_state: "archived").each do |device|
       if device.created_at < 24.hours.ago

@@ -3,7 +3,7 @@ class CheckupUserEmailBlankJob < ApplicationJob
 
   def perform(*args)
 
-    CheckupNotifyJob.perform_now("About to check for blank emails ...")
+    CheckupNotifyJob.perform_now("Check for blank emails ...")
 
     users = User.where(email: nil)
     CheckupNotifyJob.perform_now("No email for #{users.count} users. - ids: #{users.pluck(:id)}")
