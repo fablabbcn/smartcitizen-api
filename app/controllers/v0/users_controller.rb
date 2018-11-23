@@ -19,10 +19,10 @@ module V0
       @user = User.new(user_params)
       authorize @user
       if @user.save
-        if ENV['redis']
-          UserMailer.delay.welcome(@user.id)
-        else
+        if Rails.env.test?
           UserMailer.welcome(@user.id).deliver_now
+        else
+          UserMailer.welcome(@user.id).deliver_later
         end
         render :show, status: :created
       else
