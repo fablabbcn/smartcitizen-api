@@ -72,7 +72,11 @@ class User < ActiveRecord::Base
   def send_password_reset
     generate_token(:password_reset_token)
     save!
-    ENV['redis'] ? UserMailer.delay.password_reset(id) : UserMailer.password_reset(id).deliver_now
+    if Rails.env.test?
+      UserMailer.password_reset(id).deliver_now
+    else
+      UserMailer.password_reset(id).deliver_later
+    end
   end
 
   def authenticate_with_legacy_support raw_password

@@ -64,7 +64,11 @@ module V0
 
       if !@device.csv_export_requested_at or (@device.csv_export_requested_at < 15.minutes.ago)
         @device.update_column(:csv_export_requested_at, Time.now.utc)
-        ENV['redis'] ? UserMailer.delay.device_archive(@device.id, current_user.id) : UserMailer.device_archive(@device.id, current_user.id).deliver_now
+        if Rails.env.test?
+          UserMailer.device_archive(@device.id, current_user.id).deliver_now
+        else
+          UserMailer.device_archive(@device.id, current_user.id).deliver_later
+        end
         render json: { id: "ok", message: "CSV Archive job added to queue", url: "", errors: "" }, status: :ok
       else
         render json: { id: "enhance_your_calm", message: "You can only make this request once every 6 hours, (this is rate-limited)", url: "", errors: "" }, status: 420
