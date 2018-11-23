@@ -34,6 +34,8 @@ services:
     build: .
     env_file: .env
     command: bundle exec sidekiq
+    volumes:
+      - "./log:/app/log"
 
   mqtt-task:
     build: .
