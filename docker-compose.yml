@@ -9,6 +9,12 @@ services:
   redis:
     image: redis:4
 
+  auth:
+    env_file: .env
+    image: smartcitizen/auth
+    ports:
+      - "3001:3000"
+
   app:
     build: .
     env_file: .env
@@ -17,6 +23,7 @@ services:
     depends_on:
       # We disable some containers in production
       #- db
+      #- auth
       - redis
       - sidekiq
       - mqtt-task
