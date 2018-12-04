@@ -135,7 +135,7 @@ private
         :exposure,
         :meta,
         :kit_id,
-        :user_tags
+        user_tags: []
       )
     end
 
