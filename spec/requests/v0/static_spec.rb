@@ -19,6 +19,7 @@ describe V0::StaticController do
         users_url
         tags_url
         tags_sensors_url
+        version_git
       )
     end
   end
