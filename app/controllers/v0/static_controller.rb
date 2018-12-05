@@ -20,7 +20,8 @@ module V0
         sensors_url: [request.base_url, v0_sensors_path].join,
         users_url: [request.base_url, v0_users_path].join,
         tags_url: [request.base_url, v0_tags_path].join,
-        tags_sensors_url: [request.base_url, v0_tag_sensors_path].join
+        tags_sensors_url: [request.base_url, v0_tag_sensors_path].join,
+        version_git: VERSION_FILE
       }
     end
 
