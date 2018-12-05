@@ -13,6 +13,7 @@ if Rails.env.test?
         "city"=>"Manchester",
         "formatted_address"=>"Manchester England",
         "display_name"=>"Manchester England",
+        'coordinates' => [53.4791301, -2.2441009],
         "types"=>["locality", "political"],
         "type"=>["city"]
       }
