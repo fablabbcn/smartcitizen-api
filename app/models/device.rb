@@ -33,7 +33,6 @@ class Device < ActiveRecord::Base
     with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
 
   before_save :nullify_other_mac_addresses, if: :mac_address
-  before_save :set_elevation
   before_save :calculate_geohash
   after_validation :do_geocoding
 
@@ -238,20 +237,6 @@ class Device < ActiveRecord::Base
       # if latitude.changed? or longitude.changed?
       if latitude.is_a?(Float) and longitude.is_a?(Float)
         self.geohash = GeoHash.encode(latitude, longitude)
-      end
-    end
-
-    def set_elevation
-      begin
-        if elevation.blank? and latitude.present? and longitude.present? and
-          (latitude_changed? or longitude_changed?)
-          url = "https://api.open-elevation.com/api/v1/lookup?locations=#{latitude},#{longitude}"
-
-          response = open(url).read
-          self.elevation = JSON.parse(response)['results'][0]['elevation'].to_i
-        end
-      rescue Exception => e
-        # notify_airbrake(e)
       end
     end
 

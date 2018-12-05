@@ -194,7 +194,8 @@ RSpec.describe Device, :type => :model do
       expect(barcelona.geohash).to match('sp3e9bh31y')
     end
 
-    it "calculates elevation on save", :vcr do
+    skip "calculates elevation on save", :vcr do
+      # not calculating elevation anymore
       barcelona = create(:device, elevation: nil)
       expect(barcelona.elevation).to eq(17)
     end
