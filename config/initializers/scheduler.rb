@@ -16,8 +16,8 @@ unless defined?(Rails::Console) || File.split($0).last == 'rake'
   end
 
   s.every '5m' do
-    CheckBatteryLevelBelowJob.perform_later
-    CheckDeviceStoppedPublishingJob.perform_later
+    #CheckBatteryLevelBelowJob.perform_later
+    #CheckDeviceStoppedPublishingJob.perform_later
   end
 
   s.every '1d' do
