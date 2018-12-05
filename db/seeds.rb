@@ -40,7 +40,7 @@ Measurement.create(
   ]
 )
 
-unless Sensor.find(12)
+unless Sensor.exists?(12)
   Sensor.create(
     [
       {
@@ -68,7 +68,7 @@ unless Sensor.find(12)
   )
 end
 
-unless Sensor.find(14)
+unless Sensor.exists?(14)
   Sensor.find(14).tag_sensors.create(
     [
       {
@@ -98,8 +98,9 @@ end
       country_code: Faker::Address.country_code,
       description: Faker::Address.street_name,
       mac_address: Faker::Internet.mac_address,
-      latitude: Faker::Address.latitude,
-      longitude: Faker::Address.longitude,
+      # reverse_geocode will FAIL if it receives a location at sea
+      latitude: 42.385,
+      longitude: 2.173,
       device_token: Faker::Crypto.sha1,
       data: {
         7  => 50,
@@ -159,13 +160,17 @@ Tag.create(
   ]
 )
 
-DevicesTag.create(
-  [
-    { device: Device.first, tag: Tag.first },
-    { device: Device.first, tag: Tag.second },
-    { device: Device.second, tag: Tag.second }
-  ]
-)
+begin
+  DevicesTag.create(
+    [
+      { device: Device.first, tag: Tag.first },
+      { device: Device.first, tag: Tag.second },
+      { device: Device.second, tag: Tag.second }
+    ]
+  )
+rescue
+  p 'DevicesTags already created'
+end
 
 DeviceInventory.create(
   report: '{"random_property":"random_result"}',

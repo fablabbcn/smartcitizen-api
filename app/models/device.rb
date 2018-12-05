@@ -58,6 +58,7 @@ class Device < ActiveRecord::Base
   before_save :set_state
 
   reverse_geocoded_by :latitude, :longitude do |obj, results|
+    # Nominatim has a quota of 1 req / second
     if geo = results.first
       obj.address = geo.address
       obj.city = geo.city
