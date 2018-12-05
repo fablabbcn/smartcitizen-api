@@ -11,7 +11,7 @@ unless Rails.env.development?
   exit
 end
 
-p '------ Seeding for development environment ------'
+p '---- Seeding for development environment ----'
 
 User.create(
   username: 'user1',
@@ -40,48 +40,52 @@ Measurement.create(
   ]
 )
 
-Sensor.create(
-  [
-    {
-      id: 12,
-      name: 'My temp sensor',
-      unit: 'temperature unit',
-      measurement: Measurement.first,
-      description: 'temp sens descript'
-    },
-    {
-      id: 13,
-      name: 'My hum sensor',
-      unit: 'hum unit',
-      measurement: Measurement.second,
-      description: 'light sens descript'
-    },
-    {
-      id: 14,
-      name: 'My light sensor',
-      unit: 'light unit',
-      measurement: Measurement.third,
-      description: 'light sens descript'
-    }
-  ]
-)
+unless Sensor.find(12)
+  Sensor.create(
+    [
+      {
+        id: 12,
+        name: 'My temp sensor',
+        unit: 'temperature unit',
+        measurement: Measurement.first,
+        description: 'temp sens descript'
+      },
+      {
+        id: 13,
+        name: 'My hum sensor',
+        unit: 'hum unit',
+        measurement: Measurement.second,
+        description: 'light sens descript'
+      },
+      {
+        id: 14,
+        name: 'My light sensor',
+        unit: 'light unit',
+        measurement: Measurement.third,
+        description: 'light sens descript'
+      }
+    ]
+  )
+end
 
-Sensor.find(14).tag_sensors.create(
-  [
-    {
-      name: 'environmental seed 1',
-      description: 'environmental sensor tag'
-    },
-    {
-      name: 'light seed',
-      description: 'Light sensor tag'
-    },
-    {
-      name: 'digital seed',
-      description: 'Digital sensor tag'
-    }
-  ]
-)
+unless Sensor.find(14)
+  Sensor.find(14).tag_sensors.create(
+    [
+      {
+        name: 'environmental seed 1',
+        description: 'environmental sensor tag'
+      },
+      {
+        name: 'light seed',
+        description: 'Light sensor tag'
+      },
+      {
+        name: 'digital seed',
+        description: 'Digital sensor tag'
+      }
+    ]
+  )
+end
 
 #device has many sensors through components
 #has_many :components, as: :board
