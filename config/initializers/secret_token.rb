@@ -16,4 +16,4 @@
 # Using secret_token for rails3 compatibility. Change to secret_key_base
 # to avoid deprecation warning.
 # Can be safely removed in a rails3 api-only application.
-Smartcitizen::Application.config.secret_token = 'f8e2555e3c84b6224a2f6cca8312e85f2a6cb31d8a9e3974095a63bbbadfc8bf6cec3c53dc29462fbffe2544dc61cefeb7b1c22b29c2f69a7144ef6063edbba8'
+Smartcitizen::Application.config.secret_key_base = 'f8e2555e3c84b6224a2f6cca8312e85f2a6cb31d8a9e3974095a63bbbadfc8bf6cec3c53dc29462fbffe2544dc61cefeb7b1c22b29c2f69a7144ef6063edbba8'
