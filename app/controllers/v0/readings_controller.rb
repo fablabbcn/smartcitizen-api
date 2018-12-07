@@ -25,12 +25,32 @@ module V0
       # It is better to error before the job, to let the user know what is wrong
       # TODO: Currently we fail all datapoints even if only the first out of a 100 is missing a Timestamp.
       # Do we need to change that?
-      if params[:data].first['recorded_at'].blank?
-        render json: { id: "bad", message: "Timestamp cannot be empty!", url: "", errors: "" }, status: :ok
-      else
-        SendToDatastoreJob.perform_later(params[:data].to_json, params[:id])
-        render json: { id: "ok", message: "Data successfully sent to queue", url: "", errors: "" }, status: :ok
+
+      # In order to tell the user if there is an invalid Timestamp, we perform the checks here, not in a job.
+      # We only check if the dataset is smaller then X datapoints
+      if params[:data].size < 40000
+        params[:data].each do |item|
+          if item['recorded_at'].blank?
+            render json: { id: "ok", message: "Timestamp cannot be empty!", url: "", errors: "" }, status: :ok
+            return
+          end
+          timestamp = Time.parse(item['recorded_at'])
+          if timestamp.blank?
+            render json: { id: "ok", message: "Timestamp (#{timestamp}) invalid", url: "", errors: "" }, status: :ok
+            return
+          elsif timestamp > 1.day.from_now
+            render json: { id: "ok", message: "Timestamp (#{timestamp}) cannot be in the future", url: "", errors: "" }, status: :ok
+            return
+          elsif timestamp < 3.years.ago
+            render json: { id: "ok", message: "Timestamp (#{timestamp}) is older than 3 years old", url: "", errors: "" }, status: :ok
+            return
+          end
+        end
       end
+
+      SendToDatastoreJob.perform_later(params[:data].to_json, params[:id])
+      render json: { id: "ok", message: "Data successfully sent to queue", url: "", errors: "" }, status: :ok
+
     end
 
     def legacy_create
