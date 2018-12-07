@@ -45,3 +45,4 @@ CLEANING.rb
 node_modules
 .byebug_history
 .env
+node_modules
