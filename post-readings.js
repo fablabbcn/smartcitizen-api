@@ -13,6 +13,10 @@ function postReadings(url, deviceId, sensorId, token, length, sensorValue = 10) 
   const body = { data:[] };
 
   for(let j = 0; j < length; j++) {
+    // To test out of range timestamp:
+    //body.data.push({"recorded_at":new Date(+(new Date()) - Math.floor(Math.random()*1000000000000)),"sensors":[{"id": sensorId, "value":parseFloat(sensorValue) + Math.random() }]});
+    // To test empty timestamp
+    //body.data.push({"recorded_at":"","sensors":[{"id": sensorId, "value":parseFloat(sensorValue) + Math.random() }]});
     body.data.push({"recorded_at":new Date(+(new Date()) - Math.floor(Math.random()*100000000)),"sensors":[{"id": sensorId, "value":parseFloat(sensorValue) + Math.random() }]});
   }
   var myInit = {
