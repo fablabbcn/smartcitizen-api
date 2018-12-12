@@ -39,7 +39,7 @@ RSpec.describe MqttMessagesHandler do
 
     @hardware_info_packet = MQTT::Packet::Publish.new(
       topic: "device/sck/#{device.device_token}/hardware_info",
-      payload: '{"id":47,"uuid":"7d45fead-defd-4482-bc6a-a1b711879e2d"}'
+      payload: '{"id":48,"uuid":"7d45fead-defd-4482-bc6a-a1b711879e2d"}'
     )
   end
 
@@ -105,9 +105,10 @@ RSpec.describe MqttMessagesHandler do
   end
 
   describe '#hardware_info' do
-    it 'hardware info has been received' do
-      expect(@hardware_info_packet.payload).to eq((device.hardware_info.to_json))
+    it 'hardware info has been received and id changed from 47 -> 48' do
       MqttMessagesHandler.handle(@hardware_info_packet)
+      device.reload
+      expect(@hardware_info_packet.payload).to eq((device.hardware_info.to_json))
     end
   end
 end
