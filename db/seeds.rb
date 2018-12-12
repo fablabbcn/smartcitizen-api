@@ -28,7 +28,7 @@ User.create(
     name: "Kit #{Faker::Educator.campus}",
     description: Faker::Lorem.sentence(5),
     slug: 'sck:1,1',
-    sensor_map: '{"temp": 12, "hum": 13, "light": 14}'
+    sensor_map: {"temp": 12, "hum": 13, "light": 14}
   )
 end
 
@@ -173,10 +173,11 @@ rescue
 end
 
 DeviceInventory.create(
-  report: '{"random_property":"random_result"}',
+  report: {"random_property":"random_result"},
 )
 
 #ApiToken.create(
 #  owner_id: User.first,
 #  token: 'random token'
 #)
+p '---- Seeding complete! ----'
