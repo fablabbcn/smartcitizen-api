@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_14_144407) do
+ActiveRecord::Schema.define(version: 2018_12_12_142627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 2018_11_14_144407) do
     t.macaddr "old_mac_address"
     t.string "state"
     t.string "device_token"
+    t.jsonb "hardware_info"
     t.index ["device_token"], name: "index_devices_on_device_token", unique: true
     t.index ["geohash"], name: "index_devices_on_geohash"
     t.index ["kit_id"], name: "index_devices_on_kit_id"

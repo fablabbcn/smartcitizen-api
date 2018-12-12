@@ -36,6 +36,11 @@ RSpec.describe MqttMessagesHandler do
       topic: "device/sck/inventory",
       payload: '{"random_property":"random_result"}'
     )
+
+    @hardware_info_packet = MQTT::Packet::Publish.new(
+      topic: "device/sck/#{device.device_token}/hardware_info",
+      payload: '{"id":47,"uuid":"7d45fead-defd-4482-bc6a-a1b711879e2d"}'
+    )
   end
 
   describe '#device_token' do
@@ -96,6 +101,13 @@ RSpec.describe MqttMessagesHandler do
     it 'logs inventory has been received' do
       expect(@inventory_packet.payload).to eq((device_inventory.report.to_json))
       MqttMessagesHandler.handle(@inventory_packet)
+    end
+  end
+
+  describe '#hardware_info' do
+    it 'hardware info has been received' do
+      expect(@hardware_info_packet.payload).to eq((device.hardware_info.to_json))
+      MqttMessagesHandler.handle(@hardware_info_packet)
     end
   end
 end

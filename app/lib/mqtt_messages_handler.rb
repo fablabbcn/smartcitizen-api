@@ -8,6 +8,8 @@ class MqttMessagesHandler
       self.handle_readings(topic, message)
     elsif topic.to_s.include?('hello')
       self.handle_hello(topic, message)
+    elsif topic.to_s.include?('hardware_info')
+      self.handle_hello(topic, message)
     else
       self.handle_inventory(topic, message)
     end

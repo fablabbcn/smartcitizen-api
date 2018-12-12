@@ -176,6 +176,24 @@ DeviceInventory.create(
   report: {"random_property":"random_result"},
 )
 
+Device.find(1).update_attributes(
+  hardware_info: {
+    "id": 1,
+    "uuid": "7d45fead-defd-4482-bc6a-a1b711879e2d",
+    "name": "Station Lab Unit 1",
+    "description": "iSCAPE Station Lab test unit",
+    "state": "has_published",
+    "info": {
+      "time":"2018-07-17T06:55:06Z",
+      "hw_ver":"2.0",
+      "id":"6C4C1AF4504E4B4B372E314AFF031619",
+      "sam_ver":"0.3.0-ce87e64",
+      "sam_bd":"2018-07-17T06:55:06Z",
+      "esp_ver":"0.3.0-ce87e64",
+      "esp_bd":"2018-07-17T06:55:06Z"
+    }
+  }
+)
 #ApiToken.create(
 #  owner_id: User.first,
 #  token: 'random token'
