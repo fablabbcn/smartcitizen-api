@@ -41,6 +41,7 @@ services:
     build: .
     env_file: .env
     command: bundle exec sidekiq
+    restart: always
     volumes:
       - "./log:/app/log"
 
@@ -48,11 +49,13 @@ services:
     build: .
     env_file: .env
     command: bundle exec rake mqtt:sub
+    restart: always
 
   telnet-task:
     build: .
     env_file: .env
     command: bundle exec rake telnet:push
+    restart: always
 
   mqtt:
     image: emqx/emqx
@@ -80,6 +83,7 @@ services:
     environment:
       - REDIS_URL=redis://redis:6379/4
         # TODO: needs SSL on ws.smartcitizen.me
+    restart: always
     ports:
       - 8000:8000
 
