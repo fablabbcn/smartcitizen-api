@@ -18,6 +18,11 @@ module V0
       end
     end
 
+    def profile_url
+      authorize current_user, :update?
+      render json: {'profile': url_for(current_user.profile_picture.service_url)}, status: :ok
+    end
+
     def destroy
       @user = current_user
       authorize @user
@@ -37,6 +42,7 @@ private
         :password,
         :city,
         :country_code,
+        :profile_picture,
         :url,
         :avatar,
         :avatar_url

@@ -34,6 +34,7 @@ class User < ActiveRecord::Base
   has_many :sensors, through: :devices
   has_many :uploads, dependent: :destroy
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
+  has_one_attached :profile_picture
 
   before_create :generate_legacy_api_key
 

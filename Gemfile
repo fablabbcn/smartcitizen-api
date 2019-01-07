@@ -1,6 +1,7 @@
 ruby '2.5.3'
 source 'https://rubygems.org'
 
+gem "google-cloud-storage", "~> 1.11", require: false
 gem 'rails', '~> 5.0'
 gem 'sidekiq', '~> 5' # Upgrade to 5 with rails. BREAKING CHANGES
 gem 'doorkeeper', '~> 4'
