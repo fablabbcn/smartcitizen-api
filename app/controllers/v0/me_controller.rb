@@ -20,7 +20,12 @@ module V0
 
     def profile_url
       authorize current_user, :update?
-      render json: {'profile': url_for(current_user.profile_picture.service_url)}, status: :ok
+      if current_user.profile_picture.attached?
+        img_url = url_for(current_user.profile_picture)
+      else
+        img_url = ''
+      end
+      render json: {'profile': img_url }, status: :ok
     end
 
     def destroy

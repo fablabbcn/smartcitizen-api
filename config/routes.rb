@@ -65,8 +65,12 @@ Rails.application.routes.draw do
     get "/404" => "errors#not_found"
     get "/500" => "errors#exception"
     get "/test_error" => "errors#test_error"
-    match "*path", to: "errors#not_found", via: :all
 
+    # Active storage wont display urls if we dont add this line
+    get '/rails/active_storage' => "blobs_controller#show"
+    # They will else be matched to the errors#not_found below
+
+    match "*path", to: "errors#not_found", via: :all
   end
 
   # get '*path', :to => redirect("/v0/%{path}")
