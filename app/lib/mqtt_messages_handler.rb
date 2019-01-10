@@ -18,7 +18,7 @@ class MqttMessagesHandler
   # takes a packet and stores data
   def self.handle_readings(topic, message)
     device = Device.find_by(device_token: self.device_token(topic))
-    raise 'device not found' if device.nil?
+    raise "device not found #{topic}" if device.nil?
 
     data = self.data(message)
     data.each do |reading|
