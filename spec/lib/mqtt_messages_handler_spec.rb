@@ -38,7 +38,7 @@ RSpec.describe MqttMessagesHandler do
     )
 
     @hardware_info_packet = MQTT::Packet::Publish.new(
-      topic: "device/sck/#{device.device_token}/hardware_info",
+      topic: "device/sck/#{device.device_token}/info",
       payload: '{"id":48,"uuid":"7d45fead-defd-4482-bc6a-a1b711879e2d"}'
     )
   end
