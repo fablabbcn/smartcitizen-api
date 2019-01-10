@@ -101,7 +101,7 @@ end
       # reverse_geocode will FAIL if it receives a location at sea
       latitude: 42.385,
       longitude: 2.173,
-      device_token: Faker::Crypto.sha1,
+      device_token: Faker::Crypto.sha1[0,6],
       data: {
         7  => 50,
         12 => -0.629348144531249,
