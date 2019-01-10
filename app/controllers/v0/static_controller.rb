@@ -126,10 +126,11 @@ module V0
     def version
       render json: {
         env: Rails.env,
-        revision: APP_REVISION,
         version: VERSION_FILE,
         ruby: RUBY_VERSION,
-        rails: Rails::VERSION::STRING
+        rails: Rails::VERSION::STRING,
+        branch: GIT_BRANCH,
+        revision: GIT_REVISION,
       }
     end
 
