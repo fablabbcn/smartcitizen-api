@@ -28,7 +28,8 @@ Rails.application.configure do
   end
 
   # Store uploaded files on the local file system (see config/storage.yml for options)
-  config.active_storage.service = :local
+  config.active_storage.service = :amazon
+  #config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
@@ -52,8 +53,18 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
+  # Enable Rails CORS only in Development.
+  # Otherwise it's done by NGINX.
+  config.middleware.insert_before 0, Rack::Cors do
+    allow do
+      origins '*'
+      resource '*', :headers => :any, :methods => [:get, :post, :put, :patch, :delete, :options]
+    end
+  end
 
   config.debug_exception_response_format = :api
+
+  Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 
   #Mailcatcher
   config.action_mailer.delivery_method = :smtp

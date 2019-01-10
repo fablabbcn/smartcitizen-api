@@ -4,11 +4,19 @@ json.(user,
   :role,
   :username,
   :avatar,
+  :profile_picture,
   :url,
   :location,
   :joined_at,
   :updated_at
 )
+
+if current_user and current_user.profile_picture.attached?
+  json.profile_picture Rails.application.routes.url_helpers.url_for(current_user.profile_picture)
+  #json.merge! profile_picture: url_for(current_user.profile_picture.service_url)
+else
+  json.profile_picture ''
+end
 
 if current_user and (current_user.is_admin? or current_user == user)
   json.merge! email: user.email

@@ -23,6 +23,7 @@ gem 'figaro'
 gem 'fog-aws'
 gem 'friendly_id'#, '~> 5.1.0'
 gem 'geocoder'
+#gem "google-cloud-storage", "~> 1.11", require: false
 gem 'jbuilder'
 gem 'kaminari'
 gem 'listen'#, '~> 3.0.0'

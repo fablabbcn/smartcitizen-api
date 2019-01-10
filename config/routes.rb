@@ -64,8 +64,11 @@ Rails.application.routes.draw do
     get "/404" => "errors#not_found"
     get "/500" => "errors#exception"
     get "/test_error" => "errors#test_error"
-    match "*path", to: "errors#not_found", via: :all
 
+    # Active Storage cannot show the correct url if using catchall matchers
+    # https://github.com/rails/rails/issues/31228
+    # Disable until a solution is found
+    #match "*path", to: "errors#not_found", via: :all
   end
 
   # get '*path', :to => redirect("/v0/%{path}")
