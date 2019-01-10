@@ -8,6 +8,8 @@ class MqttMessagesHandler
       self.handle_readings(topic, message)
     elsif topic.to_s.include?('hello')
       self.handle_hello(topic, message)
+    elsif topic.to_s.include?('info')
+      self.handle_hardware_info(topic, message)
     else
       self.handle_inventory(topic, message)
     end
@@ -16,7 +18,7 @@ class MqttMessagesHandler
   # takes a packet and stores data
   def self.handle_readings(topic, message)
     device = Device.find_by(device_token: self.device_token(topic))
-    raise 'device not found' if device.nil?
+    raise "device not found #{topic}" if device.nil?
 
     data = self.data(message)
     data.each do |reading|
@@ -33,6 +35,12 @@ class MqttMessagesHandler
     Redis.current.publish('token-received', {
       device_token: device_token
     }.to_json)
+  end
+
+  def self.handle_hardware_info(topic, message)
+    device_token = self.device_token(topic)
+    dev = Device.where(device_token: device_token).first
+    dev.update_attributes hardware_info: JSON.parse(message)
   end
 
   def self.handle_inventory(topic, message)
