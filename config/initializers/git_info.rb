@@ -1,5 +1,5 @@
-GIT_REVISION = `git rev-parse --short HEAD` || 'revision not found'.chomp
-GIT_BRANCH = `git rev-parse --abbrev-ref HEAD` || 'branch not found'.chomp
+GIT_REVISION = `git rev-parse --short HEAD`.chomp || 'revision not found'
+GIT_BRANCH = `git rev-parse --abbrev-ref HEAD`.chomp || 'branch not found'
 
 if File.exists?('VERSION')
   VERSION_FILE = `cat VERSION`
