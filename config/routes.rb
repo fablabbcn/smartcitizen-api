@@ -41,7 +41,6 @@ Rails.application.routes.draw do
     resources :me, only: [:index] do
       patch 'avatar' => 'uploads#create', on: :collection
       post 'avatar' => 'uploads#create', on: :collection
-      get 'profile' => 'me#profile_url', on: :collection
       patch '/' => 'me#update', on: :collection
       put '/' => 'me#update', on: :collection
       delete '/' => 'me#destroy', on: :collection

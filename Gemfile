@@ -1,7 +1,6 @@
 ruby '2.5.3'
 source 'https://rubygems.org'
 
-gem "google-cloud-storage", "~> 1.11", require: false
 gem 'rails', '~> 5.0'
 gem 'sidekiq', '~> 5' # Upgrade to 5 with rails. BREAKING CHANGES
 gem 'doorkeeper', '~> 4'
@@ -24,6 +23,7 @@ gem 'figaro'
 gem 'fog-aws'
 gem 'friendly_id'#, '~> 5.1.0'
 gem 'geocoder'
+#gem "google-cloud-storage", "~> 1.11", require: false
 gem 'jbuilder'
 gem 'kaminari'
 gem 'listen'#, '~> 3.0.0'
