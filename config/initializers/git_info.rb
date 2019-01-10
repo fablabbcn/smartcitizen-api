@@ -1,8 +1,5 @@
-if File.exists?('REVISION')
-  APP_REVISION = `cat REVISION`
-else
-  APP_REVISION = 'REVISION file not found'
-end
+GIT_REVISION = `git rev-parse --short HEAD` || 'revision not found'.chomp
+GIT_BRANCH = `git rev-parse --abbrev-ref HEAD` || 'branch not found'.chomp
 
 if File.exists?('VERSION')
   VERSION_FILE = `cat VERSION`
