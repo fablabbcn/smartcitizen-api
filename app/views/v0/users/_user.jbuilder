@@ -13,6 +13,7 @@ json.(user,
 
 if current_user and current_user.profile_picture.attached?
   json.profile_picture Rails.application.routes.url_helpers.url_for(current_user.profile_picture)
+  json.base_url request.base_url + url_for(current_user.profile_picture)
   #json.merge! profile_picture: url_for(current_user.profile_picture.service_url)
 else
   json.profile_picture ''
