@@ -64,9 +64,6 @@ Rails.application.configure do
 
   config.debug_exception_response_format = :api
 
-  # For active storage. _user.jbuilder fails without it
-  Rails.application.routes.default_url_options[:host] = ENV['DEFAULT_URL'] || 'localhost:3000'
-
   #Mailcatcher
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = { address: "localhost", port: 1025 }
