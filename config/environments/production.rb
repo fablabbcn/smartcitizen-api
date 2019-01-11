@@ -86,6 +86,9 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  # For active storage. _user.jbuilder fails without it
+  Rails.application.routes.default_url_options[:host] = ENV['DEFAULT_URL'] || 'localhost:3000'
+
   config.action_mailer.default_url_options = { host: 'smartcitizen.me' }
   config.action_mailer.delivery_method = :mailgun
   config.action_mailer.mailgun_settings = {
