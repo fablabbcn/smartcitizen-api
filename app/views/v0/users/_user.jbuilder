@@ -15,7 +15,12 @@ if user.profile_picture.attached?
   # TODO: Active Storage: dont manually splice the URLs together. Use Active Storage standard way for getting full URL
   json.profile_picture request.base_url + url_for(user.profile_picture)
 else
-  json.profile_picture 'https://smartcitizen.s3.amazonaws.com/avatars/default.svg'
+  # The angular frontend checks if this is empty.
+  # If profile_picture is empty, it will use the avatar url
+  # If the avatar is also empty, it will use default.svg
+  # So it is better to leave this empty, for now, until stop the avatar property
+  #json.profile_picture 'https://smartcitizen.s3.amazonaws.com/avatars/default.svg'
+  json.profile_picture ''
 end
 
 
