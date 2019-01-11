@@ -5,7 +5,10 @@ class UserMailerPreview < ActionMailer::Preview
   end
 
   def password_reset
-    UserMailer.with(user: User.first).welcome(User.first.id)
+    UserMailer.password_reset(User.first.id)
   end
 
+  def device_archive
+    UserMailer.device_archive(User.first.devices.first.id, User.first.id)
+  end
 end
