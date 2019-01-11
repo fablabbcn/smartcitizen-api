@@ -11,14 +11,13 @@ json.(user,
   :updated_at
 )
 
-if current_user and current_user.profile_picture.attached?
+if user.profile_picture.attached?
   # TODO: Active Storage: dont manually splice the URLs together. Use Active Storage standard way for getting full URL
-  json.profile_picture request.base_url + url_for(current_user.profile_picture)
-  #json.profile_picture Rails.application.routes.url_helpers.url_for(current_user.profile_picture)
-  #json.merge! profile_picture: url_for(current_user.profile_picture.service_url)
+  json.profile_picture request.base_url + url_for(user.profile_picture)
 else
-  json.profile_picture ''
+  json.profile_picture 'https://smartcitizen.s3.amazonaws.com/avatars/default.svg'
 end
+
 
 if current_user and (current_user.is_admin? or current_user == user)
   json.merge! email: user.email
