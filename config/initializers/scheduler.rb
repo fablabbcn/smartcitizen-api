@@ -15,7 +15,7 @@ unless defined?(Rails::Console) || File.split($0).last == 'rake'
     #Rails.logger.flush
   end
 
-  s.every '5m' do
+  s.every '30m' do
     #CheckBatteryLevelBelowJob.perform_later
     #CheckDeviceStoppedPublishingJob.perform_later
   end

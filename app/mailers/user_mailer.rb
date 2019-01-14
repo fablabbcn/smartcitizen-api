@@ -20,4 +20,10 @@ class UserMailer < ApplicationMailer
     mail to: @user.to_email_s, subject: 'Device CSV Archive Ready'
   end
 
+  def device_battery_low device_id, user_id
+    @user = User.find(user_id)
+    @device = Device.find(device_id)
+    mail to: @user.to_email_s, subject: 'Device battery Low', from: "SmartCitizen Notifications - Device <notifications@mailbot.smartcitizen.me>"
+  end
+
 end
