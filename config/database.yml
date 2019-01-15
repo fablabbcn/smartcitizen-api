@@ -85,7 +85,7 @@ production:
   database: <%= ENV['PG_DATABASE_NAME'] %>
   username: <%= ENV['PG_DATABASE_USERNAME'] %>
   password: <%= ENV['PG_DATABASE_PASSWORD'] %>
-  timeout: 4950
+  timeout: 6000
   encoding: utf8
   reconnect: false
-  pool: 10
+  pool: 20
