@@ -7,12 +7,16 @@ class CheckBatteryLevelBelowJob < ApplicationJob
     devices = Device.where.not(data: nil)
     CheckupNotifyJob.perform_now("Check battery level on #{devices.count} devices..")
 
-    devices.each do |d|
-      if d.data["10"].present?
+    devices.each do |device|
+      if device.data["10"].present?
         # -1.0 means no battery connected
-        if d.data["10"].to_i < 15 && d.data["10"].to_i > 1
+        if device.data["10"].to_i < 15 && device.data["10"].to_i > 1
           # TODO: Send email notification?
-          #p "Email: #{d.owner.email} - device: #{d}"
+          #p "Email: #{device.owner.email} - device: #{device}"
+          #
+          # device.notify_stopped_publishing
+          #
+          # device.notify_low_battery
         end
       end
     end
