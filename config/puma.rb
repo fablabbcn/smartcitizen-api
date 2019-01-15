@@ -40,3 +40,5 @@ environment ENV.fetch("RAILS_ENV") { "development" }
 plugin :tmp_restart
 
 stdout_redirect 'log/puma.log', 'log/pumaerr.log', true
+
+activate_control_app 'tcp://0.0.0.0:9191', {auth_token: ENV['PUMA_TOKEN'] || 'mytoken'}
