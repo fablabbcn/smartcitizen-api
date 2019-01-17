@@ -12,6 +12,6 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.device_archive(User.first.devices.first.id, User.first.id)
   end
   def device_battery_low
-    UserMailer.device_battery_low(User.first.devices.first.id, User.first.id)
+    UserMailer.device_battery_low(User.last.devices.first.id)
   end
 end

@@ -102,8 +102,11 @@ end
       latitude: 42.385,
       longitude: 2.173,
       device_token: Faker::Crypto.sha1[0,6],
+      notify_low_battery: true,
+      notify_low_battery_timestamp: Time.now,
       data: {
         7  => 50,
+        10 => rand(20), #battery level below 15 get emails
         12 => -0.629348144531249,
         13 => 131.992370605469,
         14 => 37.8,
