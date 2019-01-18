@@ -23,7 +23,13 @@ class UserMailer < ApplicationMailer
   def device_battery_low device_id
     @device = Device.find(device_id)
     @user = @device.owner
-    mail to: @user.to_email_s, subject: 'Device battery Low', from: "SmartCitizen Notifications - Device <notifications@mailbot.smartcitizen.me>"
+    mail to: @user.to_email_s, subject: 'Device battery low', from: "SmartCitizen Notifications - Device <notifications@mailbot.smartcitizen.me>"
+  end
+
+  def device_stopped_publishing device_id
+    @device = Device.find(device_id)
+    @user = @device.owner
+    mail to: @user.to_email_s, subject: 'Device stopped publishing', from: "SmartCitizen Notifications - Device <notifications@mailbot.smartcitizen.me>"
   end
 
 end

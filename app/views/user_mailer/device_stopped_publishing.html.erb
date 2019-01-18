@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Device Battery Low</title>
+    <title>Device stopped publishing</title>
     <%= render "email_css" %>
   </head>
 
@@ -30,7 +30,12 @@
                     </tr>
                     <tr>
                       <td class="content-block">
-                        <p class="corporate-text-color">The battery for the device '<%= @device %>', (id:<%= @device.id %>) is below the threshold.</p>
+                        <p class="corporate-text-color">Device '<%= @device %>', (id:<%= @device.id %>) has stopped publishing.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="content-block">
+                        <a href="https://kits.smartcitizen.me/kits/<%= @device.id %>/edit" class="">Manage your notifications</a>
                       </td>
                     </tr>
                     <tr>

@@ -104,6 +104,8 @@ end
       device_token: Faker::Crypto.sha1[0,6],
       notify_low_battery: [true, false].sample,
       notify_low_battery_timestamp: Time.now,
+      notify_stopped_publishing: [true, false].sample,
+      notify_stopped_publishing_timestamp: Time.now,
       data: {
         7  => 50,
         10 => rand(20), #battery level below 15 get emails

@@ -347,4 +347,49 @@ RSpec.describe Device, :type => :model do
       end
     end
   end
+
+  context "notifications for stopped publishing" do
+    describe "do not get sent" do
+      it 'when they are disabled' do
+        device = create(:device, notify_stopped_publishing: false, last_recorded_at: 24.hours.ago)
+        expect(device).to have_attributes(notify_stopped_publishing: false)
+        before_date = device.notify_stopped_publishing_timestamp
+        CheckDeviceStoppedPublishingJob.perform_now
+        # Make sure timestamp is NOT updated after running job
+        device.reload
+        expect(before_date).to eq device.notify_stopped_publishing_timestamp
+      end
+
+      it 'when they are enabled, but timestamp is too recent' do
+        device = create(:device, notify_stopped_publishing: true,
+                        last_recorded_at: 2.hours.ago,
+                        notify_stopped_publishing_timestamp: 2.hours.ago)
+        device.reload
+        expect(device).to have_attributes(notify_stopped_publishing: true)
+        expect(device.notify_stopped_publishing_timestamp).to be < (1.hours.ago)
+        before_date = device.notify_stopped_publishing_timestamp
+        CheckDeviceStoppedPublishingJob.perform_now
+        # Make sure timestamp is NOT updated after running job
+        device.reload
+        expect(before_date).to eq device.notify_stopped_publishing_timestamp
+       end
+    end
+
+    describe "do get sent" do
+       it 'when enabled, timestamp is more than 24 hours old AND last_recorded older than 10 minutes' do
+        device = create(:device, notify_stopped_publishing: true,
+                        last_recorded_at: 2.hours.ago,
+                        notify_stopped_publishing_timestamp: 25.hours.ago)
+        device.reload
+        expect(device).to have_attributes(notify_stopped_publishing: true)
+        expect(device.notify_stopped_publishing_timestamp).to be < (20.hours.ago)
+        before_date = device.notify_stopped_publishing_timestamp
+        CheckDeviceStoppedPublishingJob.perform_now
+        # Make sure timestamp is WAS updated after running job
+        device.reload
+        expect(before_date).to be < device.notify_stopped_publishing_timestamp
+      end
+    end
+  end
+
 end
