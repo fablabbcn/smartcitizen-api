@@ -102,7 +102,7 @@ end
       latitude: 42.385,
       longitude: 2.173,
       device_token: Faker::Crypto.sha1[0,6],
-      notify_low_battery: true,
+      notify_low_battery: [true, false].sample,
       notify_low_battery_timestamp: Time.now,
       data: {
         7  => 50,

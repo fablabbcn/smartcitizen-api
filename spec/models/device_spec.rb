@@ -316,12 +316,12 @@ RSpec.describe Device, :type => :model do
         expect(device).to have_attributes(notify_low_battery: false)
         before_date = device.notify_low_battery_timestamp
         CheckBatteryLevelBelowJob.perform_now
-        # Make sure timestamp is NOT updated
+        # Make sure timestamp is NOT updated after running job
         device.reload
         expect(before_date).to eq device.notify_low_battery_timestamp
       end
 
-      it 'when they are enabled and timestamp too recent' do
+      it 'when they are enabled, but timestamp is too recent' do
         device = create(:device, notify_low_battery: true, notify_low_battery_timestamp: 45.minutes.ago, data:{ 10 => 3 } )
         device.reload
         before_date = device.notify_low_battery_timestamp
