@@ -6,6 +6,10 @@ gem 'sidekiq', '~> 5' # Upgrade to 5 with rails. BREAKING CHANGES
 gem 'doorkeeper', '~> 4'
 gem "bootsnap", "~> 1.3"
 
+# To resize active storage images:
+# Revise if this is needed after Rails 6.0
+gem 'image_processing'
+
 gem 'ancestry'
 gem 'api-pagination'
 gem 'api_cache'
