@@ -132,6 +132,8 @@ private
         :longitude,
         :elevation,
         :device_token,
+        :notify_low_battery,
+        :notify_stopped_publishing,
         :exposure,
         :meta,
         :kit_id,
