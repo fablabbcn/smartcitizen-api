@@ -4,13 +4,15 @@ class CheckDeviceStoppedPublishingJob < ApplicationJob
   def perform(*args)
     # Do something later
 
-    devices = Device.where("last_recorded_at < ?", 10.minutes.ago)
-    CheckupNotifyJob.perform_now("Found #{devices.count} devices, who stopped publishing within 10 minutes..")
+    devices = Device.where(notify_stopped_publishing: true).where("last_recorded_at < ?", 10.minutes.ago)
+    CheckupNotifyJob.perform_now("Found #{devices.count} devices, who stopped publishing at least 10 minutes ago")
 
-    #devices.each do |d|
-      # TODO: Send email notification?
-      #p "#{d.id}"
-    #end
+    devices.each do |device|
+      if device.notify_stopped_publishing_timestamp < 24.hours.ago
+        device.update_attributes notify_stopped_publishing_timestamp: Time.now
+        UserMailer.device_stopped_publishing(device.id).deliver_now
+      end
+    end
 
   end
 end

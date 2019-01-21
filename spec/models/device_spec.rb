@@ -308,4 +308,88 @@ RSpec.describe Device, :type => :model do
       #expect(dev2.errors.messages[:device_token].nil?).to eq(true)
     end
   end
+
+  context "notifications for low battery" do
+    describe "do not get sent" do
+      it 'when they are disabled' do
+        device = create(:device, notify_low_battery: false)
+        expect(device).to have_attributes(notify_low_battery: false)
+        before_date = device.notify_low_battery_timestamp
+        CheckBatteryLevelBelowJob.perform_now
+        # Make sure timestamp is NOT updated after running job
+        device.reload
+        expect(before_date).to eq device.notify_low_battery_timestamp
+      end
+
+      it 'when they are enabled, but timestamp is too recent' do
+        device = create(:device, notify_low_battery: true, notify_low_battery_timestamp: 45.minutes.ago, data:{ 10 => 3 } )
+        device.reload
+        before_date = device.notify_low_battery_timestamp
+        expect(device).to have_attributes(notify_low_battery: true)
+        expect(device.notify_low_battery_timestamp).to be < (30.minutes.ago)
+        CheckBatteryLevelBelowJob.perform_now
+        device.reload
+        expect(before_date).to eq device.notify_low_battery_timestamp
+      end
+    end
+
+    describe "do get sent" do
+      it 'only when enabled, battery is low AND timestamp is more than 12 hours old' do
+        device = create(:device, notify_low_battery: true, notify_low_battery_timestamp: 2.day.ago, data:{ 10 => 3 } )
+        before_date = device.notify_low_battery_timestamp
+        expect(device).to have_attributes(notify_low_battery: true)
+        expect(device.notify_low_battery_timestamp).to be < (12.hours.ago)
+        expect(device.data["10"]).to be < (15)
+        CheckBatteryLevelBelowJob.perform_now
+        # Make sure timestamp was updated
+        device.reload
+        expect(before_date).to be < device.notify_low_battery_timestamp
+      end
+    end
+  end
+
+  context "notifications for stopped publishing" do
+    describe "do not get sent" do
+      it 'when they are disabled' do
+        device = create(:device, notify_stopped_publishing: false, last_recorded_at: 24.hours.ago)
+        expect(device).to have_attributes(notify_stopped_publishing: false)
+        before_date = device.notify_stopped_publishing_timestamp
+        CheckDeviceStoppedPublishingJob.perform_now
+        # Make sure timestamp is NOT updated after running job
+        device.reload
+        expect(before_date).to eq device.notify_stopped_publishing_timestamp
+      end
+
+      it 'when they are enabled, but timestamp is too recent' do
+        device = create(:device, notify_stopped_publishing: true,
+                        last_recorded_at: 2.hours.ago,
+                        notify_stopped_publishing_timestamp: 2.hours.ago)
+        device.reload
+        expect(device).to have_attributes(notify_stopped_publishing: true)
+        expect(device.notify_stopped_publishing_timestamp).to be < (1.hours.ago)
+        before_date = device.notify_stopped_publishing_timestamp
+        CheckDeviceStoppedPublishingJob.perform_now
+        # Make sure timestamp is NOT updated after running job
+        device.reload
+        expect(before_date).to eq device.notify_stopped_publishing_timestamp
+       end
+    end
+
+    describe "do get sent" do
+       it 'when enabled, timestamp is more than 24 hours old AND last_recorded older than 10 minutes' do
+        device = create(:device, notify_stopped_publishing: true,
+                        last_recorded_at: 2.hours.ago,
+                        notify_stopped_publishing_timestamp: 25.hours.ago)
+        device.reload
+        expect(device).to have_attributes(notify_stopped_publishing: true)
+        expect(device.notify_stopped_publishing_timestamp).to be < (20.hours.ago)
+        before_date = device.notify_stopped_publishing_timestamp
+        CheckDeviceStoppedPublishingJob.perform_now
+        # Make sure timestamp is WAS updated after running job
+        device.reload
+        expect(before_date).to be < device.notify_stopped_publishing_timestamp
+      end
+    end
+  end
+
 end

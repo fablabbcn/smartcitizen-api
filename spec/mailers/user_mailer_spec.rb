@@ -5,6 +5,14 @@ describe UserMailer do
   let(:user) { create(:user) }
   let(:device) { create(:device, owner: user) }
 
+  describe "device_battery_low" do
+    let(:mail) { UserMailer.device_battery_low(device.id) }
+    it 'sends battery low email' do
+      expect(mail.subject).to eq("Device battery low")
+      expect(mail.to).to eq([user.email])
+    end
+  end
+
   describe "welcome" do
     let(:mail) { UserMailer.welcome(user.id) }
 

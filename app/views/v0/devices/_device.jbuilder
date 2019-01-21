@@ -7,6 +7,8 @@ json.(device,
   :hardware_info,
   :system_tags,
   :user_tags,
+  :notify_low_battery,
+  :notify_stopped_publishing,
   :last_reading_at,
   :added_at,
   :updated_at
