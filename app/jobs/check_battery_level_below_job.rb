@@ -5,7 +5,7 @@ class CheckBatteryLevelBelowJob < ApplicationJob
 
     # If user has allowed us to send him notifications
     devices = Device.where(notify_low_battery: true).where.not(data: nil)
-    CheckupNotifyJob.perform_now("Check battery level on #{devices.count} devices..")
+    CheckupNotifyJob.perform_now("#{devices.count} devices with notification on: low battery. Ids: #{devices.pluck(:id)}")
 
     devices.each do |device|
       #if device.notify_low_battery_timestamp < 1.day.ago
