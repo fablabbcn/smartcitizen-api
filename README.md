@@ -55,6 +55,10 @@
 
 `docker-compose exec app rake db:setup`
 
+If you need to perfom many operations, it is better to bash into the container:
+
+`docker-compose exec app bash` and from here you can do `rails db:create db:schema:load db:seed` etc.
+
 ### Linux (Tested on Ubuntu 16.04)
 
 `apt-get install libmysqlclient-dev`
