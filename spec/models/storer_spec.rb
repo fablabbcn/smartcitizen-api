@@ -41,10 +41,10 @@ RSpec.describe Storer, type: :model do
       @readings = { sensor_key => [ sensor.id, normalized_value, calibrated_value ] }
     end
 
-    it 'stores data to karios & redis publish' do
+    it 'stores data to karios & websockets publish' do
       # model/storer.rb is not using Kairos, but Redis -> Telnet
       # expect(Kairos).to receive(:http_post_to).with("/datapoints", @karios_data)
-      expect_any_instance_of(Storer).to receive(:redis_publish).with(@readings, @ts, true)
+      # expect_any_instance_of(Storer).to receive(:ws_publish)
 
       Storer.new(device, @data)
     end
@@ -59,6 +59,8 @@ RSpec.describe Storer, type: :model do
       expect(device.reload.data).not_to eq(nil)
       expect(device.reload.last_recorded_at).not_to eq(nil)
       expect(device.reload.state).to eq('has_published')
+
+      expect(Storer).to receive(:ws_publish)
     end
   end
 
@@ -72,10 +74,8 @@ RSpec.describe Storer, type: :model do
       }
     end
 
-    it 'does redis publish anyway and raise error' do
+    it 'does raise error' do
       expect(Kairos).not_to receive(:http_post_to).with("/datapoints", anything)
-      expect(Redis.current).to receive(:publish).with('data-received', anything)
-
       expect{ Storer.new(device, @bad_data) }.to raise_error(ArgumentError)
     end
 
