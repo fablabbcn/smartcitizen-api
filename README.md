@@ -19,7 +19,7 @@
 2. Start basic services (recommended)
 
    In a new terminal window do:
-   
+
    `docker-compose up app db`
 
    See the `docker-compose.yml` file `depends_on:` section to see which containers depend on which.
@@ -55,19 +55,19 @@
 
 4. Create the database (first time only)
 
-   If you need to perfom many operations, it is better to `bash` into the container:
+   If you need to perfom many operations, it might be better to `bash` into the container:
 
-   `docker-compose exec app bash` 
+   `docker-compose exec app bash`
 
    and from here you can do
 
    `rails db:create`
-  
-   `rails db:schema:load` 
-  
+
+   `rails db:schema:load`
+
    `rails db:seed`
 
-    Note: These 3 commands are the same as: `docker-compose exec app rails db:setup` **but is not working ATM!** due to some weird bug.
+    Or you can run them all at once with: `docker-compose exec app rails db:setup`
 
 5. Removing everything
 
