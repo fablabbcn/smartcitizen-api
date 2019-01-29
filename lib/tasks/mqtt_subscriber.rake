@@ -3,7 +3,8 @@ namespace :mqtt do
     pid_file = Rails.root.join('tmp/pids/mqtt_subscriber.pid')
     File.open(pid_file, 'w'){|f| f.puts Process.pid}
 
-    host = Figaro.env.mqtt_host!
+    # Use docker container 'mqtt' if not defined
+    host = ENV['mqtt_host'] || 'mqtt'
 
     begin
       Rails.logger.info("Connecting to #{host} ...");

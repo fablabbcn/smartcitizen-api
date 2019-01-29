@@ -23,7 +23,6 @@ gem 'dalli'
 gem 'date_validator'
 gem 'diffy', require: false
 gem 'fast_blank'
-gem 'figaro'
 gem 'fog-aws'
 gem 'friendly_id'#, '~> 5.1.0'
 gem 'geocoder'
