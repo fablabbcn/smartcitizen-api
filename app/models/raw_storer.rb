@@ -67,16 +67,9 @@ class RawStorer
 
     end
 
-    if Rails.env.production? and device
+    if !Rails.env.test? and device
       begin
-        Redis.current.publish("data-received", {
-          device_id: device.id,
-          device: JSON.parse(device.to_json(only: [:id, :name, :location])),
-          timestamp: ts,
-          readings: readings,
-          stored: success,
-          data: JSON.parse(ActionController::Base.new.view_context.render( partial: "v0/devices/device", locals: {device: device, current_user: nil}))
-        }.to_json)
+        Redis.current.publish("data-received", ActionController::Base.new.view_context.render( partial: "v0/devices/device", locals: {device: @device, current_user: nil}))
       rescue
       end
     end
