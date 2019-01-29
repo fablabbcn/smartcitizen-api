@@ -55,15 +55,19 @@
 
 4. Create the database (first time only)
 
-If you need to perfom many operations, it is better to `bash` into the container:
+  If you need to perfom many operations, it is better to `bash` into the container:
 
-`docker-compose exec app bash` 
+  `docker-compose exec app bash` 
 
-and from here you can do
+  and from here you can do
 
-`rails db:create db:schema:load db:seed` etc.
+  `rails db:create`
+  
+  `rails db:schema:load` 
+  
+  `rails db:seed`
 
-`docker-compose exec app rake db:setup`
+  `docker-compose exec app rake db:setup`
 
 5. Removing everything
 
