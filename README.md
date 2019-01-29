@@ -120,16 +120,6 @@ First get the `config/application.yml` env vars from the production machine.
   2. `docker-compose build`
   2. `docker-compose up -d`
 
-### Using Capistrano (not used with Docker)
-`bundle exec cap production deploy` < password currently required. **Don't run this without discussing in Slack or issues first**. We will be automating deployments with CI/Travis so this command will eventually be deprecated.
-
-`bundle exec cap production deploy:setup_config` < deploy configuration (symlinks to nginx, monit, etc..)
-
-If you need to restart Sidekiq:
-
-`bundle exec cap production sidekiq:restart`
-
-
 ## Working with MQTT and WebSockets
 
 If running on Docker, there should be a EMQ Dashboard running on http://localhost:18083 (Log in with **admin:public**)
