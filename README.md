@@ -18,6 +18,8 @@
 
 2. Start basic services (recommended)
 
+   In a new terminal window do:
+   
    `docker-compose up app db`
 
    See the `docker-compose.yml` file `depends_on:` section to see which containers depend on which.
@@ -34,7 +36,7 @@
    * `kairos` - Time series database on Cassandra
    * `cassandra-1` - Stores the data
 
-   Start ALL of them with:
+   Start ALL of them (not recommended) with:
 
    `docker-compose up`
 
@@ -53,11 +55,21 @@
 
 4. Create the database (first time only)
 
+If you need to perfom many operations, it is better to `bash` into the container:
+
+`docker-compose exec app bash` 
+
+and from here you can do
+
+`rails db:create db:schema:load db:seed` etc.
+
 `docker-compose exec app rake db:setup`
 
-If you need to perfom many operations, it is better to bash into the container:
+5. Removing everything
 
-`docker-compose exec app bash` and from here you can do `rails db:create db:schema:load db:seed` etc.
+Remove all containers + data volumes with:
+
+`docker-compose down -v` 
 
 ### Linux (Tested on Ubuntu 16.04)
 
