@@ -37,8 +37,6 @@ development:
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
   # domain sockets, so uncomment these lines.
-  host     : <%= ENV['DEV_DB_HOST'] || "127.0.0.1" %>
-  username : <%= ENV['DEV_DB_USERNAME'] || "postgres" %>
 
   # The TCP port the server listens on. Defaults to 5432.
   # If your server runs on a different port number, change accordingly.
@@ -60,6 +58,10 @@ test:
   <<: *default
   database: smartcitizen_testing<%= ENV['TEST_ENV_NUMBER'] %>
 
+  # NOTE DATABASE_URL does not apply to test
+  # We need to define it to support both Docker and non-docker
+  host     : <%= ENV['TEST_DB_HOST'] || "127.0.0.1" %>
+  username : <%= ENV['TEST_DB_USERNAME'] || "postgres" %>
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
 # ever seen by anyone, they now have access to your database.
