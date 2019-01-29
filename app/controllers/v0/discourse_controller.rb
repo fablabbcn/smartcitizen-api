@@ -13,7 +13,7 @@ module V0
       sso.external_id = current_user.id # from devise
       sso.sso_secret = secret
 
-      redirect_to sso.to_url("#{Figaro.env.discourse_endpoint}session/sso_login")
+      redirect_to sso.to_url("#{ENV['discourse_endpoint']}session/sso_login")
     rescue => e
       Rails.logger.error(e.message)
       Rails.logger.error(e.backtrace)
