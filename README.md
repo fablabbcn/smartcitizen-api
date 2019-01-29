@@ -103,15 +103,11 @@
 
 `cd smartcitizen`
 
-`get config/application.yml (check production server or contact webmasters@smartcitizen.me)`
-
 `bundle install`
 
 `bundle exec rails s`
 
 ## Deploying
-
-First get the `config/application.yml` env vars from the production machine.
 
 ### Using Docker
 
