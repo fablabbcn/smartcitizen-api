@@ -71,9 +71,9 @@
 
 5. Removing everything
 
-  Remove all containers + data volumes with:
+   Remove all containers + data volumes with:
 
-  `docker-compose down -v` 
+   `docker-compose down -v` 
 
 ### Linux (Tested on Ubuntu 16.04)
 
