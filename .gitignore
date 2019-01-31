@@ -48,3 +48,4 @@ node_modules
 node_modules
 gcs.json
 storage
+deploy_history.txt
