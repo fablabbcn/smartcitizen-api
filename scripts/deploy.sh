@@ -10,4 +10,5 @@ docker-compose build && docker-compose up -d $@
 docker-compose exec app rake db:migrate:status
 #docker-compose exec app rake db:migrate
 
-{date; git rev-parse HEAD} >> deploy_history.txt
+date >> deploy_history.txt
+git rev-parse HEAD >> deploy_history.txt
