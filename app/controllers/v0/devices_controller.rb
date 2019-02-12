@@ -6,8 +6,8 @@ module V0
       except: [:index, :world_map, :fresh_world_map, :authenticate_mqtt, :acl]
 
     def acl
-      if params[:client_id].blank?
-        render json: 'Missing client_id', status: 401
+      if params[:clientid].blank?
+        render json: 'Missing clientid', status: 401
         return
       end
 
@@ -17,6 +17,7 @@ module V0
         render json: 'Missing topic', status: 401
         return
       end
+      p "---- topic: #{params[:topic]}"
 
       if params[:access].blank?
         # The access parameter can be 1 (subscribe) or 2 (publish) but for the moment we treat
@@ -24,26 +25,32 @@ module V0
         render json: 'Missing access', status: 401
         return
       end
+      p "---- access: #{params[:access]}"
 
       # TODO: call authenticate_mqtt ? Same code
-      @device = Device.includes( :kit, :owner, :sensors,:tags).find(params[:id])
-      if params[:client_id] == @device.device_token
+      @device = Device.includes( :kit, :owner, :sensors,:tags).where(device_token: params[:clientid]).first
+
+      if @device.present?
+        p '--- Device found'
         render json: 'OK', status: 200
       else
+        p '--- Device not found'
         render json: 'Incorrect token', status: 401
       end
 
     end
 
     def authenticate_mqtt
-      @device = Device.includes( :kit, :owner, :sensors,:tags).find(params[:id])
+      #@device = Device.includes( :kit, :owner, :sensors,:tags).find(params[:id])
 
-      if params[:client_id].blank?
-        render json: 'Missing client_id', status: 401
+      if params[:clientid].blank?
+        render json: 'Missing clientid', status: 401
         return
       end
 
-      if params[:client_id] == @device.device_token
+      @device = Device.includes(:kit, :owner, :sensors,:tags).where(device_token: params[:clientid]).first
+      if @device.present?
+        p '----- Device authenticated'
         render json: 'OK', status: 200
       else
         render json: 'Incorrect token', status: 401

@@ -9,18 +9,20 @@ Rails.application.routes.draw do
 
   api_version(module: "V0", path: {value: "v0"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0"}, default: true, defaults: { format: :json }) do
     # devices
+    scope '/devices' do
+      scope '/auth' do
+        post 'mqtt', to: 'devices#authenticate_mqtt'
+        scope '/mqtt' do
+          post 'acl', to: 'devices#acl'
+        end
+      end
+    end
     resources :devices do
-      member do
+       member do
         resources :readings, only: [:index, :create] do
           get 'csv_archive', on: :collection
         end
-        scope '/auth' do
-          post 'mqtt', to: 'devices#authenticate_mqtt'
-          scope '/mqtt' do
-            post 'acl', to: 'devices#acl'
-          end
-        end
-      end
+     end
       get 'world_map', on: :collection
       get 'fresh_world_map', on: :collection
     end
