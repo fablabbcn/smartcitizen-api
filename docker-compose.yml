@@ -70,9 +70,12 @@ services:
     environment:
       # TODO: load these via env file called `.env-mqtt`
       EMQX_LOADED_PLUGINS: "emqx_recon,emqx_retainer,emqx_management,emqx_dashboard,emqx_auth_http"
+      EMQX_AUTH__HTTP__AUTH_REQ: "https://api.smartcitizen.me/v0/devices/auth/mqtt"
+      EMQX_AUTH__HTTP__AUTH_REQ__METHOD: "post"
+      EMQX_AUTH__HTTP__AUTH_REQ__PARAMS: "clientid=%c"
       EMQX_AUTH__HTTP__ACL_REQ: "https://api.smartcitizen.me/v0/devices/auth/mqtt/acl"
-      EMQX_AUTH__HTTP__ACL_REQ__PARAMS: "access=%A,clientid=%c,topic=%t"
       EMQX_AUTH__HTTP__ACL_REQ__METHOD: "post"
+      EMQX_AUTH__HTTP__ACL_REQ__PARAMS: "access=%A,clientid=%c,topic=%t"
 
   web:
     image: nginx
