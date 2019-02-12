@@ -3,7 +3,53 @@ module V0
 
     before_action :check_if_authorized!, only: [:create]
     after_action :verify_authorized,
-      except: [:index, :world_map, :fresh_world_map]
+      except: [:index, :world_map, :fresh_world_map, :authenticate_mqtt, :acl]
+
+    def acl
+      if params[:client_id].blank?
+        render json: 'Missing client_id', status: 401
+        return
+      end
+
+      if params[:topic].blank?
+        # For the moment the topics list doesn't need its own dynamic model and we can assemble
+        # them based on /device/sck/{device_token}/readings and /device/sck/{device_token}/info
+        render json: 'Missing topic', status: 401
+        return
+      end
+
+      if params[:access].blank?
+        # The access parameter can be 1 (subscribe) or 2 (publish) but for the moment we treat
+        # them all the same and consider all the resources a device can read it can also write.
+        render json: 'Missing access', status: 401
+        return
+      end
+
+      # TODO: call authenticate_mqtt ? Same code
+      @device = Device.includes( :kit, :owner, :sensors,:tags).find(params[:id])
+      if params[:client_id] == @device.device_token
+        render json: 'OK', status: 200
+      else
+        render json: 'Incorrect token', status: 401
+      end
+
+    end
+
+    def authenticate_mqtt
+      @device = Device.includes( :kit, :owner, :sensors,:tags).find(params[:id])
+
+      if params[:client_id].blank?
+        render json: 'Missing client_id', status: 401
+        return
+      end
+
+      if params[:client_id] == @device.device_token
+        render json: 'OK', status: 200
+      else
+        render json: 'Incorrect token', status: 401
+      end
+
+    end
 
     def show
       @device = Device.includes(

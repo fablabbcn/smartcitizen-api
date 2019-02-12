@@ -14,6 +14,12 @@ Rails.application.routes.draw do
         resources :readings, only: [:index, :create] do
           get 'csv_archive', on: :collection
         end
+        scope '/auth' do
+          post 'mqtt', to: 'devices#authenticate_mqtt'
+          scope '/mqtt' do
+            post 'acl', to: 'devices#acl'
+          end
+        end
       end
       get 'world_map', on: :collection
       get 'fresh_world_map', on: :collection
