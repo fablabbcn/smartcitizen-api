@@ -154,3 +154,7 @@ Use this command to update the VERSION file + create a git tag
 Then push the git tag with:
 
 `git push --tags`
+
+## Funding
+
+This work has received funding from the European Union's Horizon 2020 research and innovation program under the grant agreement [No. 689954](https://cordis.europa.eu/project/rcn/202639_en.html)
