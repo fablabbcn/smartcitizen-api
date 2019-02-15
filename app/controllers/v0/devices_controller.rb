@@ -17,7 +17,7 @@ module V0
         render json: 'Missing topic', status: 401
         return
       end
-      p "---- topic: #{params[:topic]}"
+      #p "---- topic: #{params[:topic]}"
 
       if params[:access].blank?
         # The access parameter can be 1 (subscribe) or 2 (publish) but for the moment we treat
@@ -25,24 +25,22 @@ module V0
         render json: 'Missing access', status: 401
         return
       end
-      p "---- access: #{params[:access]}"
+      #p "---- access: #{params[:access]}"
 
       # TODO: call authenticate_mqtt ? Same code
       @device = Device.includes( :kit, :owner, :sensors,:tags).where(device_token: params[:clientid]).first
 
-      if @device.present?
-        p '--- Device found'
+      if @device.present? and params[:topic].include? params[:clientid]
+        #p '--- Device found and params include topic'
+        # TODO: do something with :topic and and :access
         render json: 'OK', status: 200
       else
-        p '--- Device not found'
+        #p '--- Device not found'
         render json: 'Incorrect token', status: 401
       end
-
     end
 
     def authenticate_mqtt
-      #@device = Device.includes( :kit, :owner, :sensors,:tags).find(params[:id])
-
       if params[:clientid].blank?
         render json: 'Missing clientid', status: 401
         return
@@ -50,7 +48,7 @@ module V0
 
       @device = Device.includes(:kit, :owner, :sensors,:tags).where(device_token: params[:clientid]).first
       if @device.present?
-        p '----- Device authenticated'
+        #p '----- Device authenticated'
         render json: 'OK', status: 200
       else
         render json: 'Incorrect token', status: 401
