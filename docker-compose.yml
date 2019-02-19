@@ -67,12 +67,6 @@ services:
       - "8084:8084"   # HTTPS and WSS
       - "18083:18083" # Web dashboard: admin:public
       #- "11883:11883"
-    environment:
-      # TODO: load these via env file called `.env-mqtt`
-      EMQX_LOADED_PLUGINS: "emqx_recon,emqx_retainer,emqx_management,emqx_dashboard,emqx_auth_http"
-      EMQX_AUTH__HTTP__ACL_REQ: "https://api.smartcitizen.me/v0/devices/auth/mqtt/acl"
-      EMQX_AUTH__HTTP__ACL_REQ__PARAMS: "access=%A,clientid=%c,topic=%t"
-      EMQX_AUTH__HTTP__ACL_REQ__METHOD: "post"
 
   web:
     image: nginx
