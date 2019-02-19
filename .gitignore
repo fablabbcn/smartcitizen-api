@@ -49,3 +49,4 @@ node_modules
 gcs.json
 storage
 deploy_history.txt
+scripts/emqt-certs
