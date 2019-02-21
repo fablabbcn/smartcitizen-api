@@ -60,8 +60,8 @@ test:
 
   # NOTE DATABASE_URL does not apply to test
   # We need to define it to support both Docker and non-docker
-  host     : <%= ENV['TEST_DB_HOST'] || "127.0.0.1" %>
-  username : <%= ENV['TEST_DB_USERNAME'] || "postgres" %>
+  host     : <%= ENV['TEST_DB_HOST'] %>
+  username : <%= ENV['TEST_DB_USERNAME'] %>
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
 # ever seen by anyone, they now have access to your database.
