@@ -24,6 +24,7 @@ unless defined?(Rails::Console) || File.split($0).last == 'rake'
     CheckupUserEmailBlankJob.perform_later
     DeleteArchivedDevicesJob.perform_later
     DeleteArchivedUsersJob.perform_later
+    DeleteOrphanedDevicesJob.perform_later
   end
 
 end

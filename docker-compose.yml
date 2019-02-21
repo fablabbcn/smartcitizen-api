@@ -67,20 +67,23 @@ services:
       - "8084:8084"   # HTTPS and WSS
       - "8883:8883"   # MQTT SSL listener port
       - "18083:18083" # Web dashboard: admin:public
+      - "18084:18084" # Web dashboard TLS
       #- "11883:11883"
     environment:
       # Enable HTTPS for Dashboard with a file:
-      EMQX_DASHBOARD__LISTENER__HTTPS__KEYFILE: "etc/certs/privkey.key"
-      EMQX_DASHBOARD__LISTENER__HTTPS__CERTFILE: "etc/certs/fullchain.key"
+      EMQX_DASHBOARD__LISTENER__HTTPS__KEYFILE: "/opt/emqx/etc/certs/mydomain.key"
+      EMQX_DASHBOARD__LISTENER__HTTPS__CERTFILE: "/opt/emqx/etc/certs/final.crt"
+      EMQX_DASHBOARD__LISTENER__HTTPS__CACERTFILE: "/opt/emqx/etc/certs/STAR_smartcitizen_me.ca-bundle"
 
-      EMQX_LISTENER__WSS__EXTERNAL_KEYFILE: "etc/certs/privkey.key"
-      EMQX_LISTENER__WSS__EXTERNAL_CERTFILE: "etc/certs/fullchain.key"
+      EMQX_LISTENER__WSS__EXTERNAL_KEYFILE: "/opt/emqx/etc/certs/mydomain.key"
+      EMQX_LISTENER__WSS__EXTERNAL_CERTFILE: "/opt/emqx/etc/certs/final.crt"
+      EMQX_LISTENER__WSS__EXTERNAL_CACERTFILE: "/opt/emqx/etc/certs/STAR_smartcitizen_me.ca-bundle"
 
-      EMQX_LISTENER__SSL__EXTERNAL__KEYFILE: "etc/certs/privkey.key"
-      EMQX_LISTENER__SSL__EXTERNAL__CERTFILE: "etc/certs/fullchain.pem"
-      #EMQX_LISTENER__SSL__EXTERNAL__CACERTFILE: "etc/certs/MyRootCA.pem"
-    volumes:
-      - "./scripts/emqt-certs/:/opt/emqx/certs/"
+      EMQX_LISTENER__SSL__EXTERNAL__KEYFILE: "/opt/emqx/etc/certs/mydomain.key"
+      EMQX_LISTENER__SSL__EXTERNAL__CERTFILE: "/opt/emqx/etc/certs/final.crt"
+      EMQX_LISTENER__SSL__EXTERNAL__CACERTFILE: "/opt/emqx/etc/certs/STAR_smartcitizen_me.ca-bundle"
+      #volumes:
+      #- "./scripts/emqt-certs/:/opt/emqx/etc/certs/"
 
   web:
     image: nginx
