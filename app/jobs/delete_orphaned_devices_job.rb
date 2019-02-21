@@ -5,7 +5,7 @@ class DeleteOrphanedDevicesJob < ApplicationJob
     CheckupNotifyJob.perform_now("Delete old orphan devices")
 
     OrphanDevice.all.each do |device|
-      if device.created_at < 24.hours.ago
+      if device.updated_at < 7.days.ago
         CheckupNotifyJob.perform_now("deleting old orphan device #{device.id}")
         device.destroy!
       end

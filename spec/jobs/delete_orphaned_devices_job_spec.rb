@@ -12,9 +12,9 @@ RSpec.describe DeleteOrphanedDevicesJob, type: :job do
     end
 
     it "should delete all orphaned devices, older than 24 hours" do
-      orp = create(:orphan_device, name: "dontDeleteMe", device_token: '123460', created_at: 1.hours.ago)
-      orp = create(:orphan_device, name: "dontDeleteMe", device_token: '123457', created_at: 72.hours.ago)
-      orp = create(:orphan_device, name: "dontDeleteMe", device_token: '123458', created_at: 71.hours.ago)
+      orp = create(:orphan_device, name: "dontDeleteMe", device_token: '123460', updated_at: 1.days.ago)
+      orp = create(:orphan_device, name: "dontDeleteMe", device_token: '123457', updated_at: 8.days.ago)
+      orp = create(:orphan_device, name: "dontDeleteMe", device_token: '123458', updated_at: 9.days.ago)
 
       expect(OrphanDevice.count).to eq 3
 
