@@ -127,7 +127,7 @@ class Device < ActiveRecord::Base
     [
       exposure, # indoor / outdoor
       ('new' if created_at > 1.week.ago), # new
-      ((last_recorded_at.present? and last_recorded_at > 10.minutes.ago) ? 'online' : 'offline') # state
+      ((last_recorded_at.present? and last_recorded_at > 60.minutes.ago) ? 'online' : 'offline') # state
     ].reject(&:blank?).sort
   end
 
