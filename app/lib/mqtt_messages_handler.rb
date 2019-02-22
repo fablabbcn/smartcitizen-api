@@ -45,6 +45,7 @@ class MqttMessagesHandler
 
     orphan_device = OrphanDevice.find_by(device_token: device_token)
     if orphan_device
+      orphan_device.update(device_handshake: true)
       payload[:onboarding_session] = orphan_device.onboarding_session
     end
 
