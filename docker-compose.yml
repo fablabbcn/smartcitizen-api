@@ -78,13 +78,14 @@ services:
       EMQX_DASHBOARD__LISTENER__HTTPS__ACCEPTORS: 2
       EMQX_DASHBOARD__LISTENER__HTTPS__MAX_CLIENTS: 512
 
-      EMQX_LISTENER__WSS__EXTERNAL_KEYFILE: "/opt/emqx/etc/certs/mydomain.key"
-      EMQX_LISTENER__WSS__EXTERNAL_CERTFILE: "/opt/emqx/etc/certs/final.crt"
-      EMQX_LISTENER__WSS__EXTERNAL_CACERTFILE: "/opt/emqx/etc/certs/STAR_smartcitizen_me.ca-bundle"
+      EMQX_LISTENER__WSS__EXTERNAL__KEYFILE: "/opt/emqx/etc/certs/mydomain.key"
+      EMQX_LISTENER__WSS__EXTERNAL__CERTFILE: "/opt/emqx/etc/certs/final.crt"
+      EMQX_LISTENER__WSS__EXTERNAL__CACERTFILE: "/opt/emqx/etc/certs/STAR_smartcitizen_me.ca-bundle"
 
       EMQX_LISTENER__SSL__EXTERNAL__KEYFILE: "/opt/emqx/etc/certs/mydomain.key"
       EMQX_LISTENER__SSL__EXTERNAL__CERTFILE: "/opt/emqx/etc/certs/final.crt"
       EMQX_LISTENER__SSL__EXTERNAL__CACERTFILE: "/opt/emqx/etc/certs/STAR_smartcitizen_me.ca-bundle"
+      #EMQX_LISTENER__SSL__EXTERNAL__REUSEADDR: "true"
     volumes:
       # emqx.conf can be overwritten with ENV vars, so next line is not needed. Rather use ENV above
       #- "./scripts/emqx-config/emqx.conf:/opt/emqx/etc/emqx.conf"
