@@ -31,10 +31,24 @@ class MqttMessagesHandler
   end
 
   def self.handle_hello(topic, message)
+    payload = {}
     device_token = self.device_token(topic)
-    Redis.current.publish('token-received', {
-      device_token: device_token
-    }.to_json)
+
+    return if device_token.blank?
+
+    device = Device.find_by(device_token: device_token)
+    if device.present?
+      payload[:device_id] = device.id
+    end
+
+    payload[:device_token] = device_token # TODO: remove after migration
+
+    orphan_device = OrphanDevice.find_by(device_token: device_token)
+    if orphan_device
+      payload[:onboarding_session] = orphan_device.onboarding_session
+    end
+
+    Redis.current.publish('token-received', payload.to_json)
   end
 
   def self.handle_hardware_info(topic, message)
