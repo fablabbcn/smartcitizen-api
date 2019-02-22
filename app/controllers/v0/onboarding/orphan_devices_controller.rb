@@ -4,6 +4,20 @@ module V0
       skip_after_action :verify_authorized
       before_action :set_orphan_device, only: :update
 
+      def show
+        @orphan_device = OrphanDevice.find_by(
+          onboarding_session: request.headers['HTTP_ONBOARDINGSESSION']
+        )
+
+        # TODO: add test using the request.headers
+        if @orphan_device.nil?
+          render json: { error: 'Invalid OnboardingSession' }, status: :not_found
+        else
+          render json: @orphan_device, status: :ok
+        end
+
+      end
+
       def create
         @orphan_device = OrphanDevice.new(orphan_device_params)
 

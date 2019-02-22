@@ -48,6 +48,7 @@ Rails.application.routes.draw do
 
     # onboarding process
     namespace :onboarding do
+      get 'device', to: 'orphan_devices#show'
       post 'device', to: 'orphan_devices#create'
       patch 'device', to: 'orphan_devices#update'
       post 'user', to: 'device_registrations#find_user'
