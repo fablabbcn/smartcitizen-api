@@ -9,5 +9,5 @@ if [ "$1" = "localhost" ]; then
   curl -s http://localhost:3000/v0/devices/4 | jq '.data.sensors[2].value'
 else
   echo "Querying staging"
-  curl -s http://staging.api.smartcitizen.me/v0/devices/4 | jq '.data.sensors[2].value'
+  curl -s http://staging-api.smartcitizen.me/v0/devices/4 | jq '.data.sensors[2].value'
 fi

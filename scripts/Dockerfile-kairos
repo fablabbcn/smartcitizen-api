@@ -5,8 +5,8 @@ RUN apk upgrade libssl1.0 --update-cache && \
     ca-certificates \
     gettext \
     bash
-RUN wget -O /tmp/kairosdb_1.2.1-1.tar.gz \
-    https://github.com/kairosdb/kairosdb/releases/download/v1.2.1/kairosdb-1.2.1-1.tar.gz
+RUN wget -O /tmp/kairosdb_1.2.2-1.tar.gz \
+    https://github.com/kairosdb/kairosdb/releases/download/v1.2.2/kairosdb-1.2.2-1.tar.gz
 
 RUN mkdir -p /opt/ && \
     cd /opt/ && \
