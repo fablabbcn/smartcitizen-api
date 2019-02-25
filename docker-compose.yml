@@ -85,6 +85,7 @@ services:
       EMQX_LISTENER__SSL__EXTERNAL__KEYFILE: "/opt/emqx/etc/certs/mydomain.key"
       EMQX_LISTENER__SSL__EXTERNAL__CERTFILE: "/opt/emqx/etc/certs/final.crt"
       EMQX_LISTENER__SSL__EXTERNAL__CACERTFILE: "/opt/emqx/etc/certs/STAR_smartcitizen_me.ca-bundle"
+      EMQX_LISTENER__SSL__EXTERNAL: 8883
       #EMQX_LISTENER__SSL__EXTERNAL__REUSEADDR: "true"
     volumes:
       # emqx.conf can be overwritten with ENV vars, so next line is not needed. Rather use ENV above
