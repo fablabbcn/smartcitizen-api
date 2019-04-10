@@ -8,7 +8,7 @@ module V0
     end
 
     def index
-      @kits = Kit.includes(:sensors)
+      @kits = Kit.includes(:sensors, sensors: [:measurement, :tag_sensors])
       @kits = paginate(@kits)
     end
 
