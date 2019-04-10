@@ -7,7 +7,7 @@ module V0
     end
 
     def index
-      @sensors = Sensor.includes(:measurement).all
+      @sensors = Sensor.includes(:measurement, :tag_sensors).all
       @sensors = paginate @sensors
     end
 
