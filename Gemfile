@@ -53,6 +53,7 @@ gem 'responders'
 gem 'rufus-scheduler'
 gem 'sentry-raven'
 gem 'sinatra'#, '>= 1.3.0', require: nil
+gem 'skylight'
 gem 'stamp'
 gem 'versionist', github: 'bploetz/versionist'
 gem 'workflow'
