@@ -7,7 +7,7 @@ require 'geohash'
 
 class Device < ActiveRecord::Base
 
-  default_scope { with_active_state.includes(:owner) }
+  default_scope { with_active_state }
 
   include Workflow
   include ArchiveWorkflow

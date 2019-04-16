@@ -21,7 +21,7 @@ module V0
       if params[:with_tags]
         @q = Device.with_user_tags(
           params[:with_tags]).includes(
-            :kit, :sensors, :components, :owner,:tags).ransack(params[:q])
+            :owner,:tags, kit: [:sensors, :components]).ransack(params[:q])
       end
 
       @devices = @q.result(distinct: true)

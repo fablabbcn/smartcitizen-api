@@ -9,7 +9,7 @@ module V0
     end
 
     def index
-      @q = User.includes(:devices).ransack(params[:q])
+      @q = User.includes(:devices, :profile_picture_attachment).ransack(params[:q])
       @q.sorts = 'id asc' if @q.sorts.empty?
       @users = @q.result(distinct: true)
       @users = paginate(@users)
