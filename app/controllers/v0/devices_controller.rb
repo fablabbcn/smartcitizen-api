@@ -13,15 +13,13 @@ module V0
     end
 
     def index
-      @q = Device.includes(
-        :owner, :tags,
-        kit: [:components, :sensors]
-      ).ransack(params[:q])
-
       if params[:with_tags]
-        @q = Device.with_user_tags(
-          params[:with_tags]).includes(
-            :owner,:tags, kit: [:sensors, :components]).ransack(params[:q])
+        @q = Device.with_user_tags(params[:with_tags])
+          .includes(:owner,:tags, kit: [:sensors, :components])
+          .ransack(params[:q])
+      else
+        @q = Device.includes(:owner, :tags, kit: [:components, :sensors])
+          .ransack(params[:q])
       end
 
       @devices = @q.result(distinct: true)
