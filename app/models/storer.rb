@@ -18,9 +18,15 @@ class Storer
   end
 
   def update_device(parsed_ts, sql_data)
-    return unless parsed_ts > Time.at(0)
-    # Next line fails if @device.last_recorded_at is nil
-    #return if parsed_ts < @device.last_recorded_at
+    return if parsed_ts <= Time.at(0)
+
+    if @device.last_recorded_at.present?
+      # Comparison errors if @device.last_recorded_at is nil (new devices).
+      # Devices can post multiple readings, in a non-sorted order.
+      # Do not update data with an older timestamp.
+      return if parsed_ts < @device.last_recorded_at
+    end
+
     sql_data = @device.data.present? ? @device.data.merge(sql_data) : sql_data
     @device.update_columns(last_recorded_at: parsed_ts, data: sql_data, state: 'has_published')
     ws_publish()
