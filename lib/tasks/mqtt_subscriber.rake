@@ -18,11 +18,11 @@ namespace :mqtt do
           '$queue/device/inventory' => 2
         })
 
-
         client.get do |topic, message|
           begin
             MqttMessagesHandler.handle_topic topic, message
           rescue Exception => e
+            Raven.capture_exception(e)
             p e
           end
         end
@@ -32,7 +32,7 @@ namespace :mqtt do
       exit 0
     rescue Exception => e
       begin
-        #Airbrake.notify(e)
+        Raven.capture_exception(e)
         p e
         p ("Try to reconnect in 10 seconds...")
         sleep 10
