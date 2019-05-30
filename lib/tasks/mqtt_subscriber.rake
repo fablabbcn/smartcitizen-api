@@ -7,9 +7,9 @@ namespace :mqtt do
     host = ENV['mqtt_host'] || 'mqtt'
 
     begin
-      Rails.logger.info("Connecting to #{host} ...");
+      p ("Connecting to #{host} ...");
       MQTT::Client.connect(host: host, clean_session: true) do |client|
-        Rails.logger.info("Connected to #{client.host}");
+        p ("Connected to #{client.host}");
 
         client.subscribe({
           '$queue/device/sck/+/readings' => 2,
@@ -23,8 +23,7 @@ namespace :mqtt do
           begin
             MqttMessagesHandler.handle_topic topic, message
           rescue Exception => e
-            Rails.logger.error(e)
-            #Airbrake.notify(e)
+            p e
           end
         end
       end
@@ -34,8 +33,8 @@ namespace :mqtt do
     rescue Exception => e
       begin
         #Airbrake.notify(e)
-        Rails.logger.error(e)
-        Rails.logger.info("Try to reconnect in 10 seconds...")
+        p e
+        p ("Try to reconnect in 10 seconds...")
         sleep 10
         retry
       rescue SystemExit, Interrupt, SignalException
