@@ -17,8 +17,8 @@ RSpec.describe Storer, type: :model do
 
       # received data
       @data = {
-        'recorded_at'=> '2016-06-08 10:30:00',
-	'sensors'=> [{ 'id'=> sensor.id, 'value'=>21 }]
+        'recorded_at'=> '2018-06-08 10:30:00',
+        'sensors'=> [{ 'id'=> sensor.id, 'value'=>21 }]
       }
 
       sensor_key = device.find_sensor_key_by_id(sensor.id)

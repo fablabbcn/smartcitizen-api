@@ -120,6 +120,11 @@
   2. `docker-compose build`
   2. `docker-compose up -d`
 
+## Backup and restore
+
+In the scripts/ folder there are backup and restore scripts for docker postgres.
+
+
 ## Working with MQTT and WebSockets
 
 If running on Docker, there should be a EMQ Dashboard running on http://localhost:18083 (Log in with **admin:public**)
