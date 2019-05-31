@@ -4,7 +4,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/2ac767745186038373f5/maintainability)](https://codeclimate.com/github/fablabbcn/smartcitizen-api/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/2ac767745186038373f5/test_coverage)](https://codeclimate.com/github/fablabbcn/smartcitizen-api/test_coverage)
 [![DOI](https://zenodo.org/badge/29865657.svg)](https://zenodo.org/badge/latestdoi/29865657)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)][![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ffablabbcn%2Fsmartcitizen-api.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Ffablabbcn%2Fsmartcitizen-api?ref=badge_shield)
+()
 
 ### [Documentation](https://developer.smartcitizen.me)
 
@@ -163,3 +164,7 @@ Then push the git tag with:
 ## Funding
 
 This work has received funding from the European Union's Horizon 2020 research and innovation program under the grant agreement [No. 689954](https://cordis.europa.eu/project/rcn/202639_en.html)
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ffablabbcn%2Fsmartcitizen-api.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Ffablabbcn%2Fsmartcitizen-api?ref=badge_large)
