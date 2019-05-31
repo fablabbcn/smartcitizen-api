@@ -25,8 +25,9 @@ class MqttMessagesHandler
       Storer.new(device, reading)
     end
   rescue Exception => e
-    Rails.logger.error(e.message)
-    Rails.logger.error(message)
+    Raven.capture_exception(e)
+    puts e.message
+    puts message
     #Airbrake.notify(e, {payload: e.message + " - payload: " + message})
   end
 

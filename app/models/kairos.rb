@@ -269,15 +269,14 @@ class Kairos
         tags: {"s":k}
       })
     end
-    Rails.logger.info(device_id)
-    Rails.logger.info(_data)
+    #puts device_id
+    #puts _data
     response = self.http_post_to("/datapoints", _data)
   end
 
   def self.http_post_to path, data
     domain = "http://#{[ ENV['kairos_server'], ENV['kairos_port'] ].reject(&:blank?).join(':')}"
     uri = URI.parse "#{domain}/api/v1#{path}"
-#    Rails.logger.info(uri)
     http = Net::HTTP.new(uri.host,uri.port)
     request = Net::HTTP::Post.new(uri.request_uri)
     request.basic_auth(ENV['kairos_http_username'], ENV['kairos_http_password'])
