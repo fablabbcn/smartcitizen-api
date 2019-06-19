@@ -23,8 +23,8 @@ services:
       - "3000:3000"
     depends_on:
       # We disable some containers in production
-      #- db
-      #- auth
+      - db
+      - auth
       - redis
       - sidekiq
       - mqtt-task
