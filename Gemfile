@@ -2,9 +2,9 @@ ruby '2.5.3'
 source 'https://rubygems.org'
 
 gem 'rails', '~> 5.0'
-gem 'sidekiq', '~> 5' # Upgrade to 5 with rails. BREAKING CHANGES
+gem 'sidekiq', '~> 5'
 gem 'doorkeeper', '~> 4'
-gem "bootsnap", "~> 1.3"
+gem "bootsnap"
 
 # To resize active storage images:
 # Revise if this is needed after Rails 6.0
