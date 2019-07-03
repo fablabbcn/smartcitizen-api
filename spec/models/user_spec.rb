@@ -86,7 +86,7 @@ RSpec.describe User, :type => :model do
       end
 
       it "authenticates legacy users" do
-        expect { legacy_user.authenticate('pass') }.to raise_error
+        expect { legacy_user.authenticate('pass') }.to raise_error(BCrypt::Errors::InvalidHash)
         expect(legacy_user.authenticate_with_legacy_support('pass')).to eq(legacy_user)
         expect(legacy_user.authenticate('pass')).to eq(legacy_user)
       end
