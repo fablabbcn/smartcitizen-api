@@ -6,6 +6,11 @@ describe V0::MeController, type: :request do
   let(:user) { create :user, username: 'barney', password: '1234567' }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
 
+  before(:each) do
+    # Prevent throttle
+    Rails.cache.clear
+  end
+
   describe "current_user" do
 
     describe "OAuth 2.0" do
