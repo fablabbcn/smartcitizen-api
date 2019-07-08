@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe 'throttle' do
   before(:each) do
+    # Prevent throttle
     Rails.cache.clear
   end
 
