@@ -97,7 +97,12 @@ class User < ActiveRecord::Base
     role == 'admin'
   end
 
+  def is_superuser?
+    role == 'superuser'
+  end
+
   def role
+    role_mask == 3 ? 'superuser' : nil
     role_mask < 5 ? 'citizen' : 'admin'
   end
 
