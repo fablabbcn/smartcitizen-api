@@ -5,7 +5,6 @@ describe V0::DevicesController do
   let(:application) { create :application }
   let(:user) { create :user }
   let(:user2) { create :user }
-  let(:admin) { create :user, is_admin: true }
   let(:token) { create :access_token, application: application, resource_owner_id: user.id }
   let(:device) { create(:device) }
   let(:admin) { create :admin }
@@ -170,29 +169,27 @@ describe V0::DevicesController do
       expect(j[0]['id']).to eq(device.id)
     end
 
-    skip 'logged in user can see his devices, even though they are private' do
-      # TODO: how to use current_user?
-      # if current_user is 'user' then he would only see 2 devices, because
-      # device2 is owned by user2
+    it 'logged in user can see his devices, even though they are private' do
       device1 = create(:device, owner: user, is_private: false)
       device2 = create(:device, owner: user, is_private: true)
       device3 = create(:device, owner: user2, is_private: true)
 
       expect(Device.count).to eq(3)
-      j = api_get "devices/"
+      j = api_get "devices/", { access_token: token.token }
       expect(j[0]['id']).to eq(device1.id)
       expect(response.status).to eq(200)
       expect(j.count).to eq(2)
     end
 
-    skip 'admin can see ALL devices' do
-      # TODO: if admin was current_user / logged in, he should see 3 devices
+    it 'admin can see ALL devices' do
       device1 = create(:device, owner: user, is_private: false)
       device2 = create(:device, owner: user, is_private: true)
       device3 = create(:device, owner: user2, is_private: true)
 
       expect(Device.count).to eq(3)
-      j = api_get "devices/"
+
+      j = api_get "devices/", {access_token: admin_token.token}
+
       expect(response.status).to eq(200)
       expect(j[0]['id']).to eq(device1.id)
       expect(j.count).to eq(3)
