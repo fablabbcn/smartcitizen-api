@@ -14,11 +14,13 @@ module V0
 
     def index
       if params[:with_tags]
-        @q = Device.with_user_tags(params[:with_tags])
+        @q = policy_scope(Device)
+          .with_user_tags(params[:with_tags])
           .includes(:owner,:tags, kit: [:sensors, :components])
           .ransack(params[:q])
       else
-        @q = Device.includes(:owner, :tags, kit: [:components, :sensors])
+        @q = policy_scope(Device)
+          .includes(:owner, :tags, kit: [:components, :sensors])
           .ransack(params[:q])
       end
 
@@ -82,6 +84,7 @@ module V0
           longitude: device.longitude,
           city: device.city,
           country_code: device.country_code,
+          is_private: device.is_private,
           kit_id: device.kit_id,
           state: device.state,
           system_tags: device.system_tags,
