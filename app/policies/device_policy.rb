@@ -1,7 +1,11 @@
 class DevicePolicy < ApplicationPolicy
 
   def show?
-    true
+    if record.is_private?
+      update?
+    else
+      true
+    end
   end
 
   def update?
