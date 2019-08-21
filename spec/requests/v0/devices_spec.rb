@@ -28,6 +28,48 @@ describe V0::DevicesController do
         hardware_info system_tags user_tags is_private notify_low_battery notify_stopped_publishing last_reading_at added_at updated_at mac_address owner data kit))
     end
 
+    describe "when not logged in" do
+      it 'does not show private devices' do
+        device = create(:device, owner: user, is_private: false)
+        device1 = create(:device, owner: user, is_private: true)
+        device2 = create(:device, owner: user, is_private: true)
+
+        expect(Device.count).to eq(3)
+        j = api_get "devices/"
+        expect(j.count).to eq(1)
+        expect(response.status).to eq(200)
+        expect(j[0]['id']).to eq(device.id)
+      end
+    end
+
+    describe "when logged in as a normal user" do
+      it 'shows the user his devices, even though they are private' do
+        device1 = create(:device, owner: user, is_private: false)
+        device2 = create(:device, owner: user, is_private: true)
+        device3 = create(:device, owner: user2, is_private: true)
+
+        expect(Device.count).to eq(3)
+        j = api_get "devices/", { access_token: token.token }
+        expect(j[0]['id']).to eq(device1.id)
+        expect(response.status).to eq(200)
+        expect(j.count).to eq(2)
+      end
+    end
+
+    describe "when logged in as an admin" do
+      it 'allows admin to see ALL devices' do
+        device1 = create(:device, owner: user, is_private: false)
+        device2 = create(:device, owner: user, is_private: true)
+        device3 = create(:device, owner: user2, is_private: true)
+
+        expect(Device.count).to eq(3)
+        j = api_get "devices/", {access_token: admin_token.token}
+        expect(response.status).to eq(200)
+        expect(j[0]['id']).to eq(device1.id)
+        expect(j.count).to eq(3)
+      end
+    end
+
     describe "world map" do
       it "returns all devices" do
         first = create(:device, data: { "": Time.now })
@@ -156,48 +198,7 @@ describe V0::DevicesController do
 
   end
 
-  describe "GET /devices" do
-    it 'does not show private devices' do
-      device = create(:device, owner: user, is_private: false)
-      device1 = create(:device, owner: user, is_private: true)
-      device2 = create(:device, owner: user, is_private: true)
-
-      expect(Device.count).to eq(3)
-      j = api_get "devices/"
-      expect(j.count).to eq(1)
-      expect(response.status).to eq(200)
-      expect(j[0]['id']).to eq(device.id)
-    end
-
-    it 'logged in user can see his devices, even though they are private' do
-      device1 = create(:device, owner: user, is_private: false)
-      device2 = create(:device, owner: user, is_private: true)
-      device3 = create(:device, owner: user2, is_private: true)
-
-      expect(Device.count).to eq(3)
-      j = api_get "devices/", { access_token: token.token }
-      expect(j[0]['id']).to eq(device1.id)
-      expect(response.status).to eq(200)
-      expect(j.count).to eq(2)
-    end
-
-    it 'admin can see ALL devices' do
-      device1 = create(:device, owner: user, is_private: false)
-      device2 = create(:device, owner: user, is_private: true)
-      device3 = create(:device, owner: user2, is_private: true)
-
-      expect(Device.count).to eq(3)
-
-      j = api_get "devices/", {access_token: admin_token.token}
-
-      expect(response.status).to eq(200)
-      expect(j[0]['id']).to eq(device1.id)
-      expect(j.count).to eq(3)
-    end
-  end
-
   describe "POST /devices" do
-
     it "creates a device" do
       api_post 'devices', {
         access_token: token.token,
