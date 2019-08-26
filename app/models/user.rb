@@ -98,7 +98,7 @@ class User < ActiveRecord::Base
   end
 
   def role
-    role_mask == 2 ? 'researcher' : nil
+    return 'researcher' if role_mask == 2
     role_mask < 5 ? 'citizen' : 'admin'
   end
 
