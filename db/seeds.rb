@@ -26,7 +26,7 @@ User.create(
 3.times do
   Kit.create(
     name: "Kit #{Faker::Educator.campus}",
-    description: Faker::Lorem.sentence(5),
+    description: Faker::Lorem.sentence,
     slug: 'sck:1,1',
     sensor_map: {"temp": 12, "hum": 13, "light": 14}
   )
@@ -89,10 +89,11 @@ end
 
 #device has many sensors through components
 #has_many :components, as: :board
-5.times do
+
+10.times do
   Device.create(
     {
-      owner: User.first,
+      owner: User.all.sample,
       name: Faker::Address.city,
       city: Faker::Address.city,
       country_code: Faker::Address.country_code,
@@ -102,6 +103,7 @@ end
       latitude: 42.385,
       longitude: 2.173,
       device_token: Faker::Crypto.sha1[0,6],
+      is_private: [true, false].sample,
       notify_low_battery: [true, false].sample,
       notify_low_battery_timestamp: Time.now,
       notify_stopped_publishing: [true, false].sample,
@@ -127,6 +129,7 @@ Device.last.archive!
 # belongs_to :board, polymorphic: true
 # belongs_to :sensor
 # Kit and Device have many Components, as: :board
+
 
 Component.create(
   board: Kit.first, sensor: Sensor.find(12)
@@ -181,7 +184,8 @@ DeviceInventory.create(
   report: {"random_property":"random_result"},
 )
 
-Device.find(1).update_attributes(
+d = Device.first
+d.update!(
   hardware_info: {
     "id": 1,
     "uuid": "7d45fead-defd-4482-bc6a-a1b711879e2d",
