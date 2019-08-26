@@ -127,7 +127,7 @@ module V0
 private
 
     def device_params
-      params.permit(
+      params_to_permit = [
         :name,
         :description,
         :mac_address,
@@ -135,13 +135,21 @@ private
         :longitude,
         :elevation,
         :device_token,
-        :is_private,
         :notify_low_battery,
         :notify_stopped_publishing,
         :exposure,
         :meta,
         :kit_id,
         :user_tags
+      ]
+
+      # Superusers + Admins can update is_private
+      if current_user.role_mask >= 3
+        params_to_permit.push(:is_private)
+      end
+
+      params.permit(
+        params_to_permit
       )
     end
 
