@@ -143,8 +143,8 @@ private
         :user_tags
       ]
 
-      # Superusers + Admins can update is_private
-      if current_user.role_mask >= 3
+      # Researchers + Admins can update is_private
+      if current_user.role_mask >= 2
         params_to_permit.push(:is_private)
       end
 
