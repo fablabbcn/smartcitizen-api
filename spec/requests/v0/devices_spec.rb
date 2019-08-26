@@ -176,6 +176,12 @@ describe V0::DevicesController do
 
     let!(:device) { create :device, owner: user }
 
+    it "cannot update a device is_private attribute" do
+      api_put "devices/#{device.id}", { is_private: true, access_token: token.token }
+      expect(response.status).to eq(200)
+      expect(Device.find(device.id).is_private).to eq(false)
+    end
+
     it "updates a device" do
       api_put "devices/#{device.id}", { name: 'new name', access_token: token.token }
       expect(response.status).to eq(200)
