@@ -36,11 +36,17 @@ end
 json.devices user.devices do |device|
   json.id device.id
   json.uuid device.uuid
+  json.is_private device.is_private
+
   if current_user and (current_user.is_admin? or (device.owner_id and current_user.id == device.owner_id))
     json.mac_address device.mac_address
   else
     json.mac_address '[FILTERED]'
+    if device.is_private?
+      next
+    end
   end
+
   json.name device.name.present? ? device.name : nil
   json.description device.description.present? ? device.description : nil
   json.location device.location
