@@ -52,7 +52,7 @@ describe V0::DevicesController do
         j = api_get "devices/", { access_token: token.token }
         expect(response.status).to eq(200)
         expect(j.count).to eq(2)
-        expect(j[0]['id']).to eq(device1.id)
+        expect(j[0]['id']).to be_in([device1.id, device2.id])
       end
     end
 
@@ -66,7 +66,7 @@ describe V0::DevicesController do
         j = api_get "devices/", {access_token: admin_token.token}
         expect(response.status).to eq(200)
         expect(j.count).to eq(3)
-        expect(j[0]['id']).to eq(device1.id)
+        expect(j[0]['id']).to be_in([device1.id, device2.id, device3.id])
       end
     end
 
