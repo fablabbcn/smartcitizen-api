@@ -33,11 +33,11 @@ describe V0::DevicesController do
         device = create(:device, owner: user, is_private: false)
         device1 = create(:device, owner: user, is_private: true)
         device2 = create(:device, owner: user, is_private: true)
-
         expect(Device.count).to eq(3)
+
         j = api_get "devices/"
-        expect(j.count).to eq(1)
         expect(response.status).to eq(200)
+        expect(j.count).to eq(1)
         expect(j[0]['id']).to eq(device.id)
       end
     end
@@ -47,13 +47,12 @@ describe V0::DevicesController do
         device1 = create(:device, owner: user, is_private: false)
         device2 = create(:device, owner: user, is_private: true)
         device3 = create(:device, owner: user2, is_private: true)
-
         expect(Device.count).to eq(3)
+
         j = api_get "devices/", { access_token: token.token }
-        expect(j.count).to eq(2)
-        expect(j[0]['id']).to eq(device1.id)
         expect(response.status).to eq(200)
         expect(j.count).to eq(2)
+        expect(j[0]['id']).to eq(device1.id)
       end
     end
 
@@ -62,12 +61,12 @@ describe V0::DevicesController do
         device1 = create(:device, owner: user, is_private: false)
         device2 = create(:device, owner: user, is_private: true)
         device3 = create(:device, owner: user2, is_private: true)
-
         expect(Device.count).to eq(3)
+
         j = api_get "devices/", {access_token: admin_token.token}
         expect(response.status).to eq(200)
-        expect(j[0]['id']).to eq(device1.id)
         expect(j.count).to eq(3)
+        expect(j[0]['id']).to eq(device1.id)
       end
     end
 
