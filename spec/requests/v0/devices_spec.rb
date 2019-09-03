@@ -50,6 +50,7 @@ describe V0::DevicesController do
 
         expect(Device.count).to eq(3)
         j = api_get "devices/", { access_token: token.token }
+        expect(j.count).to eq(2)
         expect(j[0]['id']).to eq(device1.id)
         expect(response.status).to eq(200)
         expect(j.count).to eq(2)
