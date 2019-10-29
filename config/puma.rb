@@ -4,14 +4,8 @@
 # the maximum value specified for Puma. Default is set to 5 threads for minimum
 # and maximum; this matches the default thread size of Active Record.
 #
-#threads_count = ENV.fetch("RAILS_MAX_THREADS") { 5 }
-#threads threads_count, threads_count
-
-workers ENV.fetch('PUMA_WORKERS', `nproc`).to_i
-
-max_threads = ENV.fetch('PUMA_MAX_THREADS', 16).to_i
-min_threads = ENV.fetch('PUMA_MIN_THREADS', max_threads).to_i
-threads min_threads, max_threads
+threads_count = ENV.fetch("RAILS_MAX_THREADS") { 5 }
+threads threads_count, threads_count
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 #
@@ -38,6 +32,3 @@ environment ENV.fetch("RAILS_ENV") { "development" }
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
-
-#stdout_redirect 'log/puma.log', 'log/pumaerr.log', true
-#activate_control_app 'tcp://0.0.0.0:9191', {auth_token: ENV['PUMA_TOKEN'] || 'mytoken'}
