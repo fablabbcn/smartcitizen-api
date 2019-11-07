@@ -6,7 +6,7 @@ end
 
 RSpec.describe RawStorer, :type => :model do
 
-  before(:all) do
+  before(:each) do
     DatabaseCleaner.clean_with(:truncation) # We were getting ActiveRecord::RecordNotUnique:
     # yeah, this will be removed soon..
 

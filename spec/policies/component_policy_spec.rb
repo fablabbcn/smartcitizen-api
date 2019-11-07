@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe ComponentPolicy do
   subject { ComponentPolicy.new(user, component) }
-  before(:all) do
+  before(:each) do
     DatabaseCleaner.clean_with(:truncation)
   end
 

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe V0::ReadingsController do
-  before(:all) do
+  before(:each) do
     DatabaseCleaner.clean_with(:truncation)
   end
 

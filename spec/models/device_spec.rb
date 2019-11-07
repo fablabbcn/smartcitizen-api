@@ -247,10 +247,6 @@ RSpec.describe Device, :type => :model do
     let(:sensor) { build(:sensor) }
     let(:device) { build(:device, kit: kit) }
 
-    before(:each) do
-      kit.sensors << sensor
-    end
-
     it "has the kit's sensors" do
       expect(device.sensors).to eq(kit.sensors)
     end
@@ -263,13 +259,8 @@ RSpec.describe Device, :type => :model do
 
   context "without kit" do
 
-    let(:sensor) { build(:sensor) }
-    let(:device) { create(:device) }
-
-    before(:each) do
-      DatabaseCleaner.clean_with(:truncation) # We were getting ActiveRecord::RecordNotUnique:
-      device.sensors << sensor
-    end
+    let(:sensor) { create(:sensor) }
+    let(:device) { create(:device, sensors: [sensor]) }
 
     it "has its own sensors" do
       expect(device.sensors).to eq([sensor])

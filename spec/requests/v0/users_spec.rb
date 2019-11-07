@@ -84,7 +84,7 @@ describe V0::UsersController do
     end
 
     describe "pagination" do
-      before(:all) do
+      before(:each) do
         30.times { create(:user) }
       end
 

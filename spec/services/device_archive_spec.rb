@@ -6,7 +6,7 @@ def kairos_query(key)
 end
 
 describe DeviceArchive do
-  before(:all) do
+  before(:each) do
     create(:measurement, id: 1, name: 'temp')
     create(:measurement, id: 2, name: 'light')
     create(:measurement, id: 3, name: 'noise')

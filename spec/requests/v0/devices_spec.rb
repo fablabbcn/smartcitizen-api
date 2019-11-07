@@ -271,7 +271,7 @@ describe V0::DevicesController do
 
   describe "states" do
 
-    before(:all) do
+    before(:each) do
       @not_configured = create(:device, mac_address: nil)
       @never_published = create(:device, mac_address: '2a:f3:e6:d9:76:84')
       @has_published = create(:device, mac_address: '2a:f3:e6:d9:76:86', data: {'a': 'b'})
