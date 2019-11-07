@@ -41,6 +41,11 @@ RSpec.describe MqttMessagesHandler do
       topic: "device/sck/#{device.device_token}/info",
       payload: '{"id":48,"uuid":"7d45fead-defd-4482-bc6a-a1b711879e2d"}'
     )
+
+    @hardware_info_packet_bad = MQTT::Packet::Publish.new(
+      topic: "device/sck/BAD_TOPIC/info",
+      payload: '{"id":32,"uuid":"7d45fead-defd-4482-bc6a-a1b711879e2d"}'
+    )
   end
 
   describe '#device_token' do
@@ -78,12 +83,11 @@ RSpec.describe MqttMessagesHandler do
     end
 
     context 'invalid packet' do
-      it 'it notifies Airbrake(has been removed)' do
+      it 'it notifies Raven' do
+        allow(Raven).to receive(:capture_exception)
         expect(Kairos).not_to receive(:http_post_to)
-        #TODO: Do we need to disable all, after removing Airbrake?
-        #expect(Airbrake).to receive(:notify).with(RuntimeError, 'device not found - payload: '\
-          #'{"data": [{"recorded_at": "2016-06-08 10:30:00","sensors": [{"id": 1,"value": 21}]}]}')
         MqttMessagesHandler.handle(@invalid_packet)
+        expect(Raven).to have_received(:capture_exception).with(RuntimeError)
       end
     end
   end
@@ -106,9 +110,19 @@ RSpec.describe MqttMessagesHandler do
 
   describe '#hardware_info' do
     it 'hardware info has been received and id changed from 47 -> 48' do
+      expect(device.hardware_info["id"]).to eq(47)
       MqttMessagesHandler.handle(@hardware_info_packet)
       device.reload
+      expect(device.hardware_info["id"]).to eq(48)
       expect(@hardware_info_packet.payload).to eq((device.hardware_info.to_json))
+    end
+
+    it 'does not handle bad topic' do
+      expect(device.hardware_info["id"]).to eq(47)
+      MqttMessagesHandler.handle(@hardware_info_packet_bad)
+      device.reload
+      expect(device.hardware_info["id"]).to eq(47)
+      expect(@hardware_info_packet_bad.payload).to_not eq((device.hardware_info.to_json))
     end
   end
 end

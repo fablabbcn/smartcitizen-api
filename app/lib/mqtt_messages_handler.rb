@@ -26,9 +26,8 @@ class MqttMessagesHandler
     end
   rescue Exception => e
     Raven.capture_exception(e)
-    puts e.message
-    puts message
-    #Airbrake.notify(e, {payload: e.message + " - payload: " + message})
+    #puts e.inspect
+    #puts message
   end
 
   def self.handle_hello(topic, message)
@@ -55,12 +54,9 @@ class MqttMessagesHandler
 
   def self.handle_hardware_info(topic, message)
     device_token = self.device_token(topic)
-    device = Device.where(device_token: device_token).first
-    if device.present?
-      device.update_attributes hardware_info: JSON.parse(message)
-    else
-      # Device with this device_token likely not found
-    end
+    device = Device.find_by(device_token: device_token)
+    return if device.blank?
+    device.update_attributes hardware_info: JSON.parse(message)
   end
 
   def self.handle_inventory(topic, message)
