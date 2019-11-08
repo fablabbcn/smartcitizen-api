@@ -10,10 +10,6 @@ describe V0::SensorsController do
   let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
   let(:sensor1) { build :sensor}
 
-  before(:each) do
-    DatabaseCleaner.clean_with(:truncation) # We were getting ActiveRecord::RecordNotUnique:
-  end
-
   describe "GET /sensor/<id>" do
     it "returns a sensor" do
       json = api_get "sensors/#{sensor1.id}"

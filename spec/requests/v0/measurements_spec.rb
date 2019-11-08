@@ -8,10 +8,6 @@ describe V0::MeasurementsController do
   let(:token) { build :access_token, application: application, resource_owner_id: user.id }
   let(:admin_token) { create :access_token, application: application, resource_owner_id: admin.id }
 
-  before(:each) do
-    DatabaseCleaner.clean_with(:truncation) # We were getting ActiveRecord::RecordNotUnique:
-  end
-
   it "needs general user tests"
 
   describe "GET /measurement/<id>" do

@@ -2,10 +2,6 @@ require 'rails_helper'
 
 describe ComponentPolicy do
   subject { ComponentPolicy.new(user, component) }
-  before(:each) do
-    DatabaseCleaner.clean_with(:truncation)
-  end
-
   let(:component) { FactoryBot.build(:component) }
 
   context "for a visitor" do

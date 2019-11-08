@@ -277,10 +277,6 @@ describe V0::DevicesController do
       @has_published = create(:device, mac_address: '2a:f3:e6:d9:76:86', data: {'a': 'b'})
     end
 
-    after(:each) do
-      DatabaseCleaner.clean_with(:truncation)
-    end
-
     %w(not_configured never_published has_published).each do |state|
       it "filters by q[state_eq] #{state}" do
         json = api_get "devices?q[state_eq]=#{state}"

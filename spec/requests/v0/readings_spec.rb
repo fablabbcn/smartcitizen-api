@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 describe V0::ReadingsController do
-  before(:each) do
-    DatabaseCleaner.clean_with(:truncation)
-  end
-
   let(:user) { build(:user) }
   let(:kit) { build(:kit, sensor_map: '{"noise": 7, "temp": 12, "light": 14, "no2": 15}' ) }
   let(:device) { create(:device, owner: user, kit: kit) }

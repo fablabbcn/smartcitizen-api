@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Storer, type: :model do
-  before do
-    DatabaseCleaner.clean_with(:truncation) # We were getting ActiveRecord::RecordNotUnique:
-  end
-
   let(:kit){       build(:kit, id: 3, name: 'SCK', description: "Board", slug: 'sck', sensor_map: '{"temp": 12}')}
   let(:sensor){    build(:sensor, id:12, name:'HPP828E031', description: 'test')}
   let(:component){ create(:component, id: 12, board: kit, sensor: sensor, equation: '(175.72 / 65536.0 * x) - 53', reverse_equation: 'x')}
