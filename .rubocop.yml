@@ -11,3 +11,27 @@
 
 require: rubocop-rails
 
+Metrics/LineLength:
+  Enabled: false
+  Exclude:
+    - 'db/schema.rb'
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+StringLiterals:
+  Enabled: false
+
+Layout/LeadingCommentSpace:
+  Enabled: false
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  Enabled: false
+
+Layout/TrailingBlankLines:
+  Enabled: false
+
+Layout/EmptyLines:
+  Description: "Don't use several empty lines in a row."
+  StyleGuide: '#two-or-more-empty-lines'
+  Enabled: false
+
