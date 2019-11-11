@@ -1,19 +1,19 @@
 GIT
-  remote: git://github.com/bploetz/versionist.git
-  revision: 18a9474970ba209a3bb64bfd685df971c33e1a9b
+  remote: https://github.com/bploetz/versionist.git
+  revision: 3a8e21c90bb4767f8b3e5519d1b803cb3aeeb6b5
   specs:
-    versionist (2.0.0)
+    versionist (2.0.1)
       activesupport (>= 3)
       railties (>= 3)
-      yard (~> 0.9.11)
+      yard (~> 0.9.20)
 
 GIT
-  remote: git://github.com/presidentbeef/brakeman.git
-  revision: 3915a793e84fe5c274f0320f50fc3a5d9c48c2c8
+  remote: https://github.com/presidentbeef/brakeman.git
+  revision: 72b85bd0730699229c87feae2cd1d5d68b0f5f82
   specs:
-    brakeman (4.6.1)
+    brakeman (4.7.1)
       erubis (~> 2.6)
-      haml (>= 3.0, < 5.0)
+      haml (~> 5.1)
       highline (~> 2.0)
       ruby2ruby (~> 2.4.0)
       ruby_parser (~> 3.13)
@@ -24,7 +24,7 @@ GIT
       terminal-table (~> 1.4)
 
 GIT
-  remote: git://github.com/thoughtbot/shoulda-matchers.git
+  remote: https://github.com/thoughtbot/shoulda-matchers.git
   revision: 8e68d99217fac5dedceeeba226ea1f2d9be01e1b
   ref: 8e68d99217fac5dedceeeba226ea1f2d9be01e1b
   specs:
@@ -195,10 +195,11 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
-    haml (4.0.7)
+    haml (5.1.2)
+      temple (>= 0.8.0)
       tilt
     hashdiff (1.0.0)
-    highline (2.0.2)
+    highline (2.0.3)
     htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -406,11 +407,11 @@ GEM
     ruby-progressbar (1.10.1)
     ruby-vips (2.0.14)
       ffi (~> 1.9)
-    ruby2ruby (2.4.3)
+    ruby2ruby (2.4.4)
       ruby_parser (~> 3.1)
       sexp_processor (~> 4.6)
     ruby_dep (1.5.0)
-    ruby_parser (3.13.1)
+    ruby_parser (3.14.1)
       sexp_processor (~> 4.9)
     ruby_parser-legacy (1.0.0)
       ruby_parser (~> 3.13)
@@ -419,7 +420,7 @@ GEM
     safe_yaml (1.0.5)
     sentry-raven (2.9.0)
       faraday (>= 0.7.6, < 1.0)
-    sexp_processor (4.12.1)
+    sexp_processor (4.13.0)
     shellany (0.0.1)
     sidekiq (5.2.7)
       connection_pool (~> 2.2, >= 2.2.2)
@@ -456,7 +457,7 @@ GEM
     sshkit-sudo (0.1.0)
       sshkit (~> 1.8)
     stamp (0.6.0)
-    temple (0.8.1)
+    temple (0.8.2)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thor (0.20.3)
@@ -568,4 +569,4 @@ RUBY VERSION
    ruby 2.5.3p105
 
 BUNDLED WITH
-   1.17.1
+   2.0.2
