@@ -14,6 +14,8 @@ COPY Gemfile* /app/
 
 # Speed up nokogiri install
 ENV NOKOGIRI_USE_SYSTEM_LIBRARIES 1
+ENV BUNDLER_VERSION 2.0.2
+RUN gem install bundler
 
 RUN bundle install
 
