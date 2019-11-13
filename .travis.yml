@@ -18,6 +18,8 @@ matrix:
       code_climate:
         repo_token:
           secure: aeLLEEn+42UCOH2nEuuebv8WnnTRAM4js7+61720OM4jnSgTZjluGWGecufjPagIbj2tZ2ldXMEs+SQbfy6PJC9QKcHuo6/OUehg1BcTALqPCvfzKHw55nvFZbFUvW+2Oewnd0Gufmy0GmhLldk8+ElSlk2jTxnBgKuXil/xpZU=
+    before_install:
+      - gem install bundler
     before_script:
     - cp config/database.travis.yml config/database.yml
     - psql -c 'create database travis_ci_test;' -U postgres
