@@ -32,6 +32,3 @@ matrix:
       script: "./.travis-deploy.sh"
       on:
         branch: master
-before_install:
-- openssl aes-256-cbc -K $encrypted_7d0a84ef0065_key -iv $encrypted_7d0a84ef0065_iv
-  -in deploy_rsa.enc -out deploy_rsa -d
