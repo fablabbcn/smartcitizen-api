@@ -25,6 +25,7 @@ matrix:
     - psql -c 'create database travis_ci_test;' -U postgres
     env:
     - aws_secret_key=testing
+    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     deploy:
     - provider: script
       skip_cleanup: true
