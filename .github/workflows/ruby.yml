@@ -15,6 +15,9 @@ jobs:
         ruby-version: 2.5.x
     - name: Build and test with Rake
       run: |
+        uname -a
+        cat /etc/os-release
+        apt-get install libpq-dev
         ls $RUNNER_TOOL_CACHE/Ruby
         gem install bundler
         bundle install --jobs 4 --retry 3
