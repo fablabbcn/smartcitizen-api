@@ -4,21 +4,42 @@ on: [push]
 
 jobs:
   build:
-
+    name: The Build
     runs-on: ubuntu-latest
-
+    
+    services:
+      postgres:
+        image: postgres:10
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        ports:
+          - 5432/tcp
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
     - uses: actions/checkout@v1
     - name: Set up Ruby 2.5
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.5.x
+    - name: Show available Ruby versions
+      run: ls $RUNNER_TOOL_CACHE/Ruby
+    - name: Setup PostgreSQL
+      uses: Harmon758/postgresql-action@v1.0.0
     - name: Build and test with Rake
       run: |
         uname -a
         cat /etc/os-release
         sudo apt-get install libpq-dev
-        ls $RUNNER_TOOL_CACHE/Ruby
         gem install bundler
         bundle install --jobs 4 --retry 3
         bundle exec rake
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@postgres/postgres
+        PG_PASSWORD: postgres
+        PG_HOST: postgres
+        PG_USER: postgres
+        PG_DATABASE: postgres
+        PG_PORT: ${{ job.services.postgres.ports['5432'] }}
