@@ -25,13 +25,14 @@ jobs:
       with:
         ruby-version: 2.5.x
     - name: Show available Ruby versions
-      run: ls $RUNNER_TOOL_CACHE/Ruby
+      run: |
+        ls $RUNNER_TOOL_CACHE/Ruby
+        uname -a
+        cat /etc/os-release
     - name: Setup PostgreSQL
       uses: Harmon758/postgresql-action@v1.0.0
     - name: Build and test with Rake
       run: |
-        uname -a
-        cat /etc/os-release
         sudo apt-get install libpq-dev
         gem install bundler
         bundle install --jobs 4 --retry 3
