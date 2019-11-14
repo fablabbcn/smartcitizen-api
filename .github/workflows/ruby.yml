@@ -28,6 +28,13 @@ jobs:
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.5.x
+    - name: Cache gems
+      uses: actions/cache@preview
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gem-
     - name: Show available Ruby versions
       run: |
         ls $RUNNER_TOOL_CACHE/Ruby
