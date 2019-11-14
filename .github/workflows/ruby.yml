@@ -6,7 +6,7 @@ jobs:
   build:
     name: The Build
     runs-on: ubuntu-latest
-    
+
     services:
       postgres:
         image: postgres:10
@@ -39,5 +39,6 @@ jobs:
       env:
         #Note: DATABASE_URL does not work in TEST env.
         TEST_DB_HOST: localhost
-        TEST_DB_USERNAME: postgres      
+        TEST_DB_USERNAME: postgres
+        TEST_DB_NAME: postgres
         PG_PORT: ${{ job.services.postgres.ports['5432'] }}
