@@ -11,7 +11,6 @@ jobs:
       redis:
         image: redis:4
         ports:
-          #- 6379/tcp
           - 6379:6379
       postgres:
         image: postgres:10
@@ -43,10 +42,12 @@ jobs:
         cat /etc/os-release
     - name: Setup PostgreSQL
       uses: Harmon758/postgresql-action@v1.0.0
-    - name: Build and test with Rake
+    - name: Install required packages
+      run: sudo apt-get install libpq-dev
+    - name: Bundle and test
       run: |
-        sudo apt-get install libpq-dev
         gem install bundler
+        bundle config path vendor/bundle
         bundle install --jobs 4 --retry 3
         RAILS_ENV=test bundle exec rails db:create
         RAILS_ENV=test bundle exec rails db:schema:load
