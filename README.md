@@ -5,7 +5,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/2ac767745186038373f5/test_coverage)](https://codeclimate.com/github/fablabbcn/smartcitizen-api/test_coverage)
 [![DOI](https://zenodo.org/badge/29865657.svg)](https://zenodo.org/badge/latestdoi/29865657)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
-![](https://github.com/fablabbcn/smartcitizen-api/workflows/ruby/badge.svg)
+![](https://github.com/fablabbcn/smartcitizen-api/workflows/Ruby/badge.svg)
 
 ### [Documentation](https://developer.smartcitizen.me)
 
