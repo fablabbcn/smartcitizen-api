@@ -37,9 +37,7 @@ jobs:
         bundle install --jobs 4 --retry 3
         bundle exec rake
       env:
-        DATABASE_URL: postgresql://postgres:postgres@postgres/postgres
-        PG_PASSWORD: postgres
-        PG_HOST: postgres
-        PG_USER: postgres
-        PG_DATABASE: postgres
+        #Note: DATABASE_URL does not work in TEST env.
+        TEST_DB_HOST: postgres
+        TEST_DB_USERNAME: postgres      
         PG_PORT: ${{ job.services.postgres.ports['5432'] }}
