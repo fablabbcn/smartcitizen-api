@@ -11,7 +11,8 @@ jobs:
       redis:
         image: redis:4
         ports:
-          - 6379/tcp
+          #- 6379/tcp
+          - 6379:6379
       postgres:
         image: postgres:10
         env:
