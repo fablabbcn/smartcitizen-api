@@ -8,6 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
+      redis:
+        image: redis:4
+        ports:
+          - 6379/tcp
       postgres:
         image: postgres:10
         env:
