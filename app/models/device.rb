@@ -16,7 +16,7 @@ class Device < ActiveRecord::Base
 
   multisearchable :against => [:name, :description, :city, :country_name], if: :active?
 
-  belongs_to :kit
+  belongs_to :kit, optional: :true
   belongs_to :owner, class_name: 'User'
 
   has_many :devices_tags, dependent: :destroy
