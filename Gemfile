@@ -4,7 +4,6 @@ source 'https://rubygems.org'
 gem 'rails', '~> 5.0'
 gem 'sidekiq', '~> 5'
 gem 'doorkeeper', '~> 4'
-gem "bootsnap"
 
 # To resize active storage images:
 # Revise if this is needed after Rails 6.0
@@ -15,8 +14,9 @@ gem 'api-pagination'
 gem 'api_cache'
 gem 'awesome_print', require: false
 gem 'aws-sdk-s3'
-gem 'bcrypt'#, '~> 3.1.7'
-gem 'browser'#, '1.0.1'
+gem 'bcrypt'
+gem "bootsnap"
+gem 'browser'
 gem 'c_geohash', require: false
 gem 'countries'
 gem 'dalli'
@@ -24,21 +24,21 @@ gem 'date_validator'
 gem 'diffy', require: false
 gem 'fast_blank'
 gem 'fog-aws'
-gem 'friendly_id'#, '~> 5.1.0'
+gem 'friendly_id'
 gem 'geocoder'
 #gem "google-cloud-storage", "~> 1.11", require: false
 gem 'jbuilder'
 gem 'kaminari'
-gem 'listen'#, '~> 3.0.0'
+gem 'listen'
 gem 'mailgun_rails'
 gem 'moneta'
 gem 'multi_json'
 gem 'net-telnet'
 gem 'oauth2', require: false
+gem 'oj'
 gem 'oj_mimic_json'
-gem 'oj'#, '2.18.3' # 3.0.0 breaks tests:  https://github.com/ohler55/oj/blob/master/CHANGELOG.md#300---2017-04-24
 gem 'parallel', require: false
-gem 'pg'#, '~> 0.20' # pg 1 only works on rails 5.1.5+
+gem 'pg'
 gem 'pg_search'
 gem 'premailer-rails'
 gem 'puma'
@@ -49,56 +49,57 @@ gem 'rack-contrib'
 gem 'rack-cors', require: 'rack/cors'
 gem 'rack-timeout', require: "rack/timeout/base"
 gem 'ransack'
-gem 'redis'#, '3.0.7'
+gem 'redis'
 gem 'responders'
 gem 'rufus-scheduler'
 gem 'sentry-raven'
-gem 'sinatra'#, '>= 1.3.0', require: nil
+gem 'sinatra'
 #gem 'skylight'
 gem 'stamp'
 gem 'versionist', github: 'bploetz/versionist'
 gem 'workflow'
 
 # eventMachine MQTT handler
-gem 'em-mqtt'#, '~> 0.0.4'
+gem 'em-mqtt'
 
 group :production do
   gem 'rails_12factor'
 end
 
 group :test do
-  gem 'simplecov', require: false
-  gem 'zonebie'
   gem 'codeclimate-test-reporter', require: nil
+  gem 'simplecov', require: false
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'
+  gem 'zonebie'
 end
 
 group :development do
-  gem 'pry-rails'
-  gem 'spring-commands-rspec'
-  gem 'spring'
-  gem 'sshkit'#, '1.7.1'
-  gem 'sshkit-sudo'
-  gem 'rubocop', require: false
   gem "parallel_tests"
+  gem 'pry-rails'
   gem "rails-erd"
+  gem 'rubocop', require: false
+  gem 'spring'
+  gem 'spring-commands-rspec'
+  gem 'sshkit'
+  gem 'sshkit-sudo'
 end
 
 group :development, :test do
   # gem 'rspec_api_blueprint', require: false
-  gem 'cane'
-  gem 'faker'
   gem 'brakeman', github: 'presidentbeef/brakeman', require: false
-  gem 'rspec-rails'
+  gem 'byebug'
+  gem 'cane'
   gem 'factory_bot_rails'
-  gem 'shoulda-matchers',
-    github: 'thoughtbot/shoulda-matchers', require: false,
-    ref: '8e68d99217fac5dedceeeba226ea1f2d9be01e1b'
+  gem 'faker'
   gem 'guard-rspec'
   gem 'railroady'
-  gem 'byebug'
-  # gem 'web-console', '~> 2.0'
   gem 'rdoc'
+  gem 'rspec-rails'
+  gem 'shoulda-matchers',
+      github: 'thoughtbot/shoulda-matchers',
+      require: false,
+      ref: '8e68d99217fac5dedceeeba226ea1f2d9be01e1b'
+  #gem 'web-console'
 end
