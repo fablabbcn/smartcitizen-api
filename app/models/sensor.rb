@@ -11,7 +11,7 @@ class Sensor < ActiveRecord::Base
   has_many :sensor_tags
   has_many :tag_sensors, through: :sensor_tags
 
-  belongs_to :measurement
+  belongs_to :measurement, optional: :true
 
   attr_accessor :latest_reading
 
