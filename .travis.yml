@@ -31,6 +31,7 @@ matrix:
     env:
     - aws_secret_key=testing
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+    - CC_TEST_REPORTER_ID=e497915c5dac45d97b9e51fdf3620b7932e69f59230e3034cab50bd937430590
     deploy:
     - provider: script
       skip_cleanup: true
