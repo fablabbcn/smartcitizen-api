@@ -1,30 +1,28 @@
 namespace :mqtt do
-  task :sub => :environment do
+  task sub: :environment do
     pid_file = Rails.root.join('tmp/pids/mqtt_subscriber.pid')
-    File.open(pid_file, 'w'){|f| f.puts Process.pid}
+    File.open(pid_file, 'w') { |f| f.puts Process.pid }
 
     # Use docker container 'mqtt' if not defined
     host = ENV['mqtt_host'] || 'mqtt'
 
     begin
-      p ("Connecting to #{host} ...");
+      p "Connecting to #{host} ..."
       MQTT::Client.connect(host: host, clean_session: true) do |client|
-        p ("Connected to #{client.host}");
+        p "Connected to #{client.host}"
 
-        client.subscribe({
+        client.subscribe(
           '$queue/device/sck/+/readings' => 2,
           '$queue/device/sck/+/hello' => 2,
           '$queue/device/sck/+/info' => 2,
           '$queue/device/inventory' => 2
-        })
+        )
 
         client.get do |topic, message|
-          begin
-            MqttMessagesHandler.handle_topic topic, message
-          rescue Exception => e
-            Raven.capture_exception(e)
-            p e
-          end
+          MqttMessagesHandler.handle_topic topic, message
+        rescue Exception => e
+          Raven.capture_exception(e)
+          p e
         end
       end
     rescue SystemExit, Interrupt, SignalException
@@ -34,7 +32,7 @@ namespace :mqtt do
       begin
         Raven.capture_exception(e)
         p e
-        p ("Try to reconnect in 10 seconds...")
+        p "Try to reconnect in 10 seconds..."
         sleep 10
         retry
       rescue SystemExit, Interrupt, SignalException
