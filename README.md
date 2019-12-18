@@ -1,13 +1,13 @@
-# SmartCitizen API 
+# SmartCitizen API
 
+![](https://github.com/fablabbcn/smartcitizen-api/workflows/Ruby/badge.svg)
 [![Build Status](https://travis-ci.org/fablabbcn/smartcitizen-api.svg?branch=master)](https://travis-ci.org/fablabbcn/smartcitizen-api)
 [![Maintainability](https://api.codeclimate.com/v1/badges/2ac767745186038373f5/maintainability)](https://codeclimate.com/github/fablabbcn/smartcitizen-api/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/2ac767745186038373f5/test_coverage)](https://codeclimate.com/github/fablabbcn/smartcitizen-api/test_coverage)
 [![DOI](https://zenodo.org/badge/29865657.svg)](https://zenodo.org/badge/latestdoi/29865657)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
-![](https://github.com/fablabbcn/smartcitizen-api/workflows/Ruby/badge.svg)
 
-### [Documentation](https://developer.smartcitizen.me)
+## [Documentation](https://developer.smartcitizen.me)
 
 * Production API - [https://api.smartcitizen.me](https://api.smartcitizen.me)
 * Basic Map Example - [https://api.smartcitizen.me/examples/map](https://api.smartcitizen.me/examples/map) ([map](https://github.com/fablabbcn/smartcitizen/blob/master/public/examples/map.html))
@@ -30,7 +30,6 @@
    See the `docker-compose.yml` file `depends_on:` section to see which containers depend on which.
 
    Available containers:
-
    * `app` - Rails app
    * `db` - Postgres
    * `redis`
@@ -57,7 +56,6 @@
 
      `docker-compose up kairos cassandra-1 cassandra-2 cassandra-3`
 
-
 4. Create the database (first time only)
 
    If you need to perfom many operations, it might be better to `bash` into the container:
@@ -78,7 +76,7 @@
 
    Remove all containers + data volumes with:
 
-   `docker-compose down -v` 
+   `docker-compose down -v`
 
 ### Linux (Tested on Ubuntu 16.04)
 
@@ -116,15 +114,14 @@
 
 ### Using Docker
 
-  1. SSH into the server
-  2. `git pull`
-  2. `docker-compose build`
-  2. `docker-compose up -d`
+1. SSH into the server
+1. `git pull`
+1. `docker-compose build`
+1. `docker-compose up -d`
 
 ## Backup and restore
 
 In the scripts/ folder there are backup and restore scripts for docker postgres.
-
 
 ## Working with MQTT and WebSockets
 
@@ -141,7 +138,6 @@ The following will send a message from the `app` container to the `mqtt` contain
 3. Send a message to the `test` topic:
 
   `MQTT::Client.connect('mqtt').publish('test', 'this is the message')`
-
 
 ## Tools / Scripts
 

@@ -123,8 +123,6 @@ GEM
     cane (3.0.0)
       parallel
     choice (0.2.0)
-    codeclimate-test-reporter (1.0.9)
-      simplecov (<= 0.13)
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
     connection_pool (2.2.2)
@@ -330,7 +328,8 @@ GEM
       rack (>= 0.4)
     rack-contrib (2.1.0)
       rack (~> 2.0)
-    rack-cors (1.0.3)
+    rack-cors (1.0.5)
+      rack (>= 1.6.0)
     rack-protection (2.0.5)
       rack
     rack-test (1.1.0)
@@ -518,7 +517,6 @@ DEPENDENCIES
   byebug
   c_geohash
   cane
-  codeclimate-test-reporter
   countries
   dalli
   date_validator

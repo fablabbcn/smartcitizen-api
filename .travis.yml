@@ -23,9 +23,15 @@ matrix:
     before_script:
     - cp config/database.travis.yml config/database.yml
     - psql -c 'create database travis_ci_test;' -U postgres
+    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+    - chmod +x ./cc-test-reporter
+    - ./cc-test-reporter before-build
+    after_script:
+      - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
     env:
     - aws_secret_key=testing
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+    - CC_TEST_REPORTER_ID=e497915c5dac45d97b9e51fdf3620b7932e69f59230e3034cab50bd937430590
     deploy:
     - provider: script
       skip_cleanup: true
