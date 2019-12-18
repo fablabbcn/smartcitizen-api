@@ -2,8 +2,7 @@ namespace :mqtt do
   task sub: :environment do
     pid_file = Rails.root.join('tmp/pids/mqtt_subscriber.pid')
     File.open(pid_file, 'w') { |f| f.puts Process.pid }
-    # Log rotate 5 files of 100MB
-    mqtt_log = Logger.new('log/mqtt.log', 5, 100 * 1024 * 1024)
+    mqtt_log = Logger.new('log/mqtt.log', 5, 100.megabytes)
     mqtt_log.info('MQTT TASK STARTING')
 
     # Use docker container 'mqtt' if not defined
