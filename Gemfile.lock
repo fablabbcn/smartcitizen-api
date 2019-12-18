@@ -142,7 +142,7 @@ GEM
     et-orbi (1.2.1)
       tzinfo
     eventmachine (1.2.7)
-    excon (0.64.0)
+    excon (0.71.0)
     factory_bot (5.1.1)
       activesupport (>= 4.2.0)
     factory_bot_rails (5.1.1)
