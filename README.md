@@ -64,13 +64,13 @@
 
    and from here you can do
 
-   `rails db:create`
+   `bin/rails db:create`
 
-   `rails db:schema:load`
+   `bin/rails db:schema:load`
 
-   `rails db:seed`
+   `bin/rails db:seed`
 
-    Or you can run them all at once with: `docker-compose exec app rails db:setup`
+    Or you can run them all at once with: `docker-compose exec app bin/rails db:setup`
 
 5. Removing everything
 
@@ -108,7 +108,7 @@
 
 `bundle install`
 
-`bundle exec rails s`
+`bundle exec bin/rails s`
 
 ## Deploying
 
@@ -133,7 +133,7 @@ The following will send a message from the `app` container to the `mqtt` contain
 
 2. Access the rails console inside the `app` container:
 
-  `docker-compose exec app rails console`
+  `docker-compose exec app bin/rails console`
 
 3. Send a message to the `test` topic:
 
