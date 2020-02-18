@@ -24,10 +24,12 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
     - uses: actions/checkout@v1
+
     - name: Set up Ruby
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.5.x
+
     - name: Cache gems
       uses: actions/cache@preview
       with:
@@ -35,15 +37,19 @@ jobs:
         key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-gem-
+
     - name: Show available Ruby versions
       run: |
         ls $RUNNER_TOOL_CACHE/Ruby
         uname -a
         cat /etc/os-release
+
     - name: Setup PostgreSQL
       uses: Harmon758/postgresql-action@v1.0.0
+
     - name: Install required packages
       run: sudo apt-get install libpq-dev
+
     - name: Bundle and test
       run: |
         gem install bundler
