@@ -44,17 +44,20 @@ jobs:
         uname -a
         cat /etc/os-release
 
-    - name: Setup PostgreSQL
-      uses: Harmon758/postgresql-action@v1.0.0
+        #- name: Setup PostgreSQL
+        #uses: Harmon758/postgresql-action@v1.0.0
 
     - name: Install required packages
       run: sudo apt-get install libpq-dev
 
-    - name: Bundle and test
+    - name: Bundle
       run: |
         gem install bundler
         bundle config path vendor/bundle
         bundle install --jobs 4 --retry 3
+
+    - name: Test
+      run: |
         RAILS_ENV=test bundle exec rails db:create
         RAILS_ENV=test bundle exec rails db:schema:load
         bundle exec rake
@@ -62,5 +65,6 @@ jobs:
         #Note: DATABASE_URL does not work in TEST env.
         TEST_DB_HOST: localhost
         TEST_DB_USERNAME: postgres
+        TEST_DB_PASSWORD: postgres
         TEST_DB_NAME: postgres
         PG_PORT: ${{ job.services.postgres.ports['5432'] }}
