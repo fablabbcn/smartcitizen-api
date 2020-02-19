@@ -3,6 +3,12 @@ name: Ruby
 on: [push]
 
 jobs:
+  docker_build:
+    name: Build Dockerfile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build the Dockerfile
+        run: docker build -t app .
   build:
     name: The Build
     runs-on: ubuntu-latest
