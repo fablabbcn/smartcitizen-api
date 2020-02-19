@@ -7,6 +7,7 @@ jobs:
     name: Build Dockerfile
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
       - name: Build the Dockerfile
         run: docker build -t app .
   build:
