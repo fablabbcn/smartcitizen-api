@@ -38,7 +38,7 @@ module V0
       @user = User.find_by!(password_reset_token: params[:id])
       @current_user = @user
       authorize @user, :update_password?
-      if @user.update_attributes({ password: params.require(:password), password_reset_token: nil })
+      if @user.update({ password: params.require(:password), password_reset_token: nil })
         render 'users/show', status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @user.errors

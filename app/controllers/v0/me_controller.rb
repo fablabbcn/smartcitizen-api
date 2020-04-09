@@ -11,7 +11,7 @@ module V0
     def update
       @user = current_user
       authorize @user
-      if @user.update_attributes(user_params)
+      if @user.update(user_params)
         render 'users/show', status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @user.errors

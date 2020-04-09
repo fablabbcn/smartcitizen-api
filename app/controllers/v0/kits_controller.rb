@@ -25,7 +25,7 @@ module V0
     def update
       @kit = Kit.find(params[:id])
       authorize @kit
-      if @kit.update_attributes(kit_params)
+      if @kit.update(kit_params)
         render :show, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @kit.errors

@@ -56,7 +56,7 @@ class MqttMessagesHandler
     device_token = self.device_token(topic)
     device = Device.find_by(device_token: device_token)
     return if device.blank?
-    device.update_attributes hardware_info: JSON.parse(message)
+    device.update hardware_info: JSON.parse(message)
   end
 
   def self.handle_inventory(topic, message)
