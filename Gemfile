@@ -1,7 +1,7 @@
 ruby '2.5.7'
 source 'https://rubygems.org'
 
-gem 'rails', '6.0.0'
+gem 'rails', '6.0.2.2'
 gem 'sidekiq', '~> 5'
 gem 'doorkeeper', '~> 4'
 
