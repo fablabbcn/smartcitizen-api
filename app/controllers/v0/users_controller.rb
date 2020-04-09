@@ -33,7 +33,7 @@ module V0
     def update
       @user = User.includes(:sensors).friendly.find(params[:id])
       authorize @user
-      if @user.update_attributes(user_params)
+      if @user.update(user_params)
         render :show, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @user.errors

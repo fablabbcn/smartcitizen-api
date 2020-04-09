@@ -44,7 +44,7 @@ module V0
     def update
       @device = Device.find(params[:id])
       authorize @device
-      if @device.update_attributes(device_params)
+      if @device.update(device_params)
         render :show, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @device.errors

@@ -15,9 +15,7 @@ module V0
     before_action :prepend_view_paths
     after_action :verify_authorized, except: :index
 
-    force_ssl if: :ssl_configured?
-
-protected
+    protected
 
     def check_missing_params *params_list
       missing_params = []
@@ -28,7 +26,7 @@ protected
       raise ActionController::ParameterMissing.new(missing_params.to_sentence) if missing_params.any?
     end
 
-private
+    private
 
     def prepend_view_paths
       # is this still necessary?
@@ -63,11 +61,6 @@ private
           raise Smartcitizen::Unauthorized.new("Authorization required")
         end
       end
-    end
-
-    def ssl_configured?
-      false
-      # request.host.match /api.smartcitizen.me/
     end
   end
 end
