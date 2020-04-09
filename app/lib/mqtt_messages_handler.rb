@@ -36,7 +36,6 @@ class MqttMessagesHandler
   def self.handle_hello(device, message)
     payload = {}
     payload[:device_id] = device.id
-    payload[:device_token] = device.device_token # TODO: remove after migration
 
     orphan_device = OrphanDevice.find_by(device_token: device.device_token)
     if orphan_device
