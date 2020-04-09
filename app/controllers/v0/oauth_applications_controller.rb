@@ -32,7 +32,7 @@ module V0
 
     def update
       authorize @oauth_application
-      if @oauth_application.update_attributes(oauth_application_params)
+      if @oauth_application.update(oauth_application_params)
         render :show, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @oauth_application.errors

@@ -17,7 +17,7 @@ class MqttMessagesHandler
     elsif topic.to_s.include?('hello')
       self.handle_hello(device, message)
     elsif topic.to_s.include?('info')
-      self.handle_hardware_info(device, message)
+      device.update hardware_info: JSON.parse(message)
     end
   end
 
@@ -45,10 +45,6 @@ class MqttMessagesHandler
     end
 
     Redis.current.publish('token-received', payload.to_json)
-  end
-
-  def self.handle_hardware_info(device, message)
-    device.update_attributes hardware_info: JSON.parse(message)
   end
 
   # takes a packet and returns 'device token' from topic

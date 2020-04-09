@@ -24,7 +24,7 @@ module V0
     def update
       @tag = Tag.find(params[:id])
       authorize @tag
-      if @tag.update_attributes(tag_params)
+      if @tag.update(tag_params)
         render :show, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @tag.errors

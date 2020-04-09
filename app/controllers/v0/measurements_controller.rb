@@ -24,7 +24,7 @@ module V0
 
     def update
       authorize @measurement
-      if @measurement.update_attributes(measurement_params)
+      if @measurement.update(measurement_params)
         render :show, status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @measurement.errors
