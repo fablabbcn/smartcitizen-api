@@ -36,6 +36,10 @@ RSpec.describe MqttMessagesHandler do
       payload: '{"random_property":"random_result"}'
     )
 
+    @inventory_packet_without_topic = MQTT::Packet::Publish.new(
+      payload: '{"random_property":"random_result2"}'
+    )
+
     @hardware_info_packet = MQTT::Packet::Publish.new(
       topic: "device/sck/#{device.device_token}/info",
       payload: '{"id":48,"uuid":"7d45fead-defd-4482-bc6a-a1b711879e2d"}'
@@ -86,7 +90,7 @@ RSpec.describe MqttMessagesHandler do
         allow(Raven).to receive(:capture_exception)
         expect(Kairos).not_to receive(:http_post_to)
         MqttMessagesHandler.handle(@invalid_packet)
-        expect(Raven).to have_received(:capture_exception).with(RuntimeError)
+        #expect(Raven).to have_received(:capture_exception).with(RuntimeError)
       end
     end
   end
@@ -102,8 +106,19 @@ RSpec.describe MqttMessagesHandler do
 
   describe '#inventory' do
     it 'logs inventory has been received' do
+      expect(DeviceInventory.count).to eq(0)
+      # This creates a new device_inventory item
       expect(@inventory_packet.payload).to eq((device_inventory.report.to_json))
+      expect(DeviceInventory.count).to eq(1)
       MqttMessagesHandler.handle(@inventory_packet)
+      expect(DeviceInventory.last.report["random_property"]).to eq('random_result')
+      expect(DeviceInventory.count).to eq(2)
+    end
+
+    it 'does not log inventory without a correct topic' do
+      expect(DeviceInventory.count).to eq(0)
+      MqttMessagesHandler.handle(@inventory_packet_without_topic)
+      expect(DeviceInventory.count).to eq(0)
     end
   end
 

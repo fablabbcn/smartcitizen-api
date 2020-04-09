@@ -1,25 +1,28 @@
 class MqttMessagesHandler
   def self.handle(packet)
-    handle_topic(packet.topic, packet.payload)
-  end
+    topic = packet.topic
+    message = packet.payload
+    return if topic.nil?
 
-  def self.handle_topic(topic, message)
+    # handle_inventory is the only one that does NOT need a device
+    if topic.to_s.include?('inventory')
+      DeviceInventory.create({report: (message rescue nil)})
+    end
+
+    device = Device.find_by(device_token: self.device_token(topic))
+    return if device.nil?
+
     if topic.to_s.include?('readings')
-      self.handle_readings(topic, message)
+      self.handle_readings(device, message)
     elsif topic.to_s.include?('hello')
-      self.handle_hello(topic, message)
+      self.handle_hello(device, message)
     elsif topic.to_s.include?('info')
-      self.handle_hardware_info(topic, message)
-    else
-      self.handle_inventory(topic, message)
+      self.handle_hardware_info(device, message)
     end
   end
 
   # takes a packet and stores data
-  def self.handle_readings(topic, message)
-    device = Device.find_by(device_token: self.device_token(topic))
-    raise "device not found #{topic}" if device.nil?
-
+  def self.handle_readings(device, message)
     data = self.data(message)
     data.each do |reading|
       Storer.new(device, reading)
@@ -30,20 +33,12 @@ class MqttMessagesHandler
     #puts message
   end
 
-  def self.handle_hello(topic, message)
+  def self.handle_hello(device, message)
     payload = {}
-    device_token = self.device_token(topic)
+    payload[:device_id] = device.id
+    payload[:device_token] = device.device_token # TODO: remove after migration
 
-    return if device_token.blank?
-
-    device = Device.find_by(device_token: device_token)
-    if device.present?
-      payload[:device_id] = device.id
-    end
-
-    payload[:device_token] = device_token # TODO: remove after migration
-
-    orphan_device = OrphanDevice.find_by(device_token: device_token)
+    orphan_device = OrphanDevice.find_by(device_token: device.device_token)
     if orphan_device
       orphan_device.update(device_handshake: true)
       payload[:onboarding_session] = orphan_device.onboarding_session
@@ -52,15 +47,8 @@ class MqttMessagesHandler
     Redis.current.publish('token-received', payload.to_json)
   end
 
-  def self.handle_hardware_info(topic, message)
-    device_token = self.device_token(topic)
-    device = Device.find_by(device_token: device_token)
-    return if device.blank?
+  def self.handle_hardware_info(device, message)
     device.update_attributes hardware_info: JSON.parse(message)
-  end
-
-  def self.handle_inventory(topic, message)
-    DeviceInventory.create({report: (message rescue nil)})
   end
 
   # takes a packet and returns 'device token' from topic
