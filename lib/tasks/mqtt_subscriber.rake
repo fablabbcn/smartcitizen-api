@@ -23,7 +23,7 @@ namespace :mqtt do
         client.get do |topic, message|
           MqttMessagesHandler.handle_topic topic, message
         rescue Exception => e
-          mqtt_log e
+          mqtt_log.info e
           Raven.capture_exception(e)
         end
       end
