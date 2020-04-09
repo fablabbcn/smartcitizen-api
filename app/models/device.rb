@@ -136,12 +136,12 @@ class Device < ActiveRecord::Base
   end
 
   def archive
-    update_attributes({mac_address: nil, old_mac_address: mac_address})
+    update({mac_address: nil, old_mac_address: mac_address})
   end
 
   def unarchive
     unless Device.unscoped.where(mac_address: old_mac_address).exists?
-      update_attributes({mac_address: old_mac_address, old_mac_address: nil})
+      update({mac_address: old_mac_address, old_mac_address: nil})
     end
   end
 
@@ -224,7 +224,7 @@ class Device < ActiveRecord::Base
   end
 
   def remove_mac_address_for_newly_registered_device!
-    update_attributes(old_mac_address: mac_address, mac_address: nil)
+    update(old_mac_address: mac_address, mac_address: nil)
   end
 
   private

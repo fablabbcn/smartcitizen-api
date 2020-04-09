@@ -182,7 +182,7 @@ RSpec.describe Device, :type => :model do
 
     it "reverse geocodes on update" do
       berlin = create(:device, latitude: 52.4850463, longitude: 13.489651)
-      berlin.update_attributes(latitude: 48.8582606, longitude: 2.2923184)
+      berlin.update(latitude: 48.8582606, longitude: 2.2923184)
       expect(berlin.city).to eq("Paris")
       expect(berlin.country.to_s).to eq("France")
       expect(berlin.country_name).to eq("France")
