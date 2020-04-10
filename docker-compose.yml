@@ -37,6 +37,10 @@ services:
     environment:
       # For this to take effect, remove init/timeout, and in Gemfile, fix "rack-timeout" to not require anything.
       RACK_TIMEOUT_SERVICE_TIMEOUT: 25
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
 
   sidekiq:
     build: .
@@ -53,6 +57,10 @@ services:
     restart: always
     volumes:
       - "./log:/app/log"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
 
   telnet-task:
     build: .
