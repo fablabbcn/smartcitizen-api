@@ -1,7 +1,5 @@
 class MqttMessagesHandler
-  def self.handle(packet)
-    topic = packet.topic
-    message = packet.payload
+  def self.handle_topic(topic, message)
     return if topic.nil?
 
     # handle_inventory is the only one that does NOT need a device

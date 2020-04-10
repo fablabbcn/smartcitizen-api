@@ -36,10 +36,6 @@ RSpec.describe MqttMessagesHandler do
       payload: '{"random_property":"random_result"}'
     )
 
-    @inventory_packet_without_topic = MQTT::Packet::Publish.new(
-      payload: '{"random_property":"random_result2"}'
-    )
-
     @hardware_info_packet = MQTT::Packet::Publish.new(
       topic: "device/sck/#{device.device_token}/info",
       payload: '{"id":48,"uuid":"7d45fead-defd-4482-bc6a-a1b711879e2d"}'
@@ -81,7 +77,7 @@ RSpec.describe MqttMessagesHandler do
       it 'queues reading data in order to be stored' do
         # model/storer.rb is not using Kairos, but Redis -> Telnet
         #expect(Kairos).to receive(:http_post_to).with("/datapoints", @data_array)
-        MqttMessagesHandler.handle(@packet)
+        MqttMessagesHandler.handle_topic(@packet.topic, @packet.payload)
       end
     end
 
@@ -89,7 +85,7 @@ RSpec.describe MqttMessagesHandler do
       it 'it notifies Raven' do
         allow(Raven).to receive(:capture_exception)
         expect(Kairos).not_to receive(:http_post_to)
-        MqttMessagesHandler.handle(@invalid_packet)
+        MqttMessagesHandler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
         #expect(Raven).to have_received(:capture_exception).with(RuntimeError)
       end
     end
@@ -100,7 +96,7 @@ RSpec.describe MqttMessagesHandler do
       expect(Redis.current).to receive(:publish).with(
         'token-received', { device_id: device.id }.to_json
       )
-      MqttMessagesHandler.handle(@hello_packet)
+      MqttMessagesHandler.handle_topic(@hello_packet.topic, @hello_packet.payload)
     end
   end
 
@@ -110,14 +106,15 @@ RSpec.describe MqttMessagesHandler do
       # This creates a new device_inventory item
       expect(@inventory_packet.payload).to eq((device_inventory.report.to_json))
       expect(DeviceInventory.count).to eq(1)
-      MqttMessagesHandler.handle(@inventory_packet)
+      MqttMessagesHandler.handle_topic(@inventory_packet.topic, @inventory_packet.payload)
       expect(DeviceInventory.last.report["random_property"]).to eq('random_result')
       expect(DeviceInventory.count).to eq(2)
     end
 
-    it 'does not log inventory without a correct topic' do
+    it 'does not log inventory with an incorrect / nil topic' do
       expect(DeviceInventory.count).to eq(0)
-      MqttMessagesHandler.handle(@inventory_packet_without_topic)
+      MqttMessagesHandler.handle_topic('invenxxx','{"random_property":"random_result2"}')
+      MqttMessagesHandler.handle_topic(nil,'{"random_property":"random_result2"}')
       expect(DeviceInventory.count).to eq(0)
     end
   end
@@ -125,7 +122,7 @@ RSpec.describe MqttMessagesHandler do
   describe '#hardware_info' do
     it 'hardware info has been received and id changed from 47 -> 48' do
       expect(device.hardware_info["id"]).to eq(47)
-      MqttMessagesHandler.handle(@hardware_info_packet)
+      MqttMessagesHandler.handle_topic(@hardware_info_packet.topic, @hardware_info_packet.payload)
       device.reload
       expect(device.hardware_info["id"]).to eq(48)
       expect(@hardware_info_packet.payload).to eq((device.hardware_info.to_json))
@@ -133,7 +130,7 @@ RSpec.describe MqttMessagesHandler do
 
     it 'does not handle bad topic' do
       expect(device.hardware_info["id"]).to eq(47)
-      MqttMessagesHandler.handle(@hardware_info_packet_bad)
+      MqttMessagesHandler.handle_topic(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
       device.reload
       expect(device.hardware_info["id"]).to eq(47)
       expect(@hardware_info_packet_bad.payload).to_not eq((device.hardware_info.to_json))
