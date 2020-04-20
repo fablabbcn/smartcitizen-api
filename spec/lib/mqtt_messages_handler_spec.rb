@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe MqttMessagesHandler do
   let(:device) { create(:device, device_token: 'aA1234') }
+  let(:orphan_device) { create(:orphan_device, device_token: 'xX9876') }
   let(:component) { build(:component, board: build(:kit), sensor: build(:sensor, id: 1)) }
   let(:device_inventory) { create(:device_inventory, report: '{"random_property": "random_result"}') }
 
@@ -24,11 +25,6 @@ RSpec.describe MqttMessagesHandler do
     @invalid_packet = MQTT::Packet::Publish.new(
       topic: "device/sck/invalid_device_token/readings",
       payload: '{"data": [{"recorded_at": "2016-06-08 10:30:00","sensors": [{"id": 1,"value": 21}]}]}'
-    )
-
-    @hello_packet = MQTT::Packet::Publish.new(
-      topic: "device/sck/#{device.device_token}/hello",
-      payload: 'content ingored by MqttMessagesHandler\#hello'
     )
 
     @inventory_packet = MQTT::Packet::Publish.new(
@@ -91,12 +87,16 @@ RSpec.describe MqttMessagesHandler do
     end
   end
 
-  describe '#hello' do
+  describe '#handle_hello' do
     it 'logs device_token has been received' do
       expect(Redis.current).to receive(:publish).with(
-        'token-received', { device_id: device.id }.to_json
+       'token-received', { onboarding_session: orphan_device.onboarding_session }.to_json
+       #'token-received', { device_id: orphan_device.id }.to_json
       )
-      MqttMessagesHandler.handle_topic(@hello_packet.topic, @hello_packet.payload)
+      MqttMessagesHandler.handle_topic(
+        "device/sck/#{orphan_device.device_token}/hello",
+        'content ingored by MqttMessagesHandler\#hello'
+      )
     end
   end
 
