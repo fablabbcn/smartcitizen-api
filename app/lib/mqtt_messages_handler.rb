@@ -7,13 +7,17 @@ class MqttMessagesHandler
       DeviceInventory.create({report: (message rescue nil)})
     end
 
+    if topic.to_s.include?('hello')
+      device = OrphanDevice.find_by(device_token: self.device_token(topic))
+      return if device.nil?
+      self.handle_hello(device, message)
+    end
+
     device = Device.find_by(device_token: self.device_token(topic))
     return if device.nil?
 
     if topic.to_s.include?('readings')
       self.handle_readings(device, message)
-    elsif topic.to_s.include?('hello')
-      self.handle_hello(device, message)
     elsif topic.to_s.include?('info')
       device.update hardware_info: JSON.parse(message)
     end
@@ -31,11 +35,9 @@ class MqttMessagesHandler
     #puts message
   end
 
-  def self.handle_hello(device, message)
+  def self.handle_hello(orphan_device, message)
     payload = {}
-    payload[:device_id] = device.id
 
-    orphan_device = OrphanDevice.find_by(device_token: device.device_token)
     if orphan_device
       orphan_device.update(device_handshake: true)
       payload[:onboarding_session] = orphan_device.onboarding_session
