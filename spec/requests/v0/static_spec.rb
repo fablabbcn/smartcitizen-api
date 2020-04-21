@@ -37,6 +37,12 @@ describe V0::StaticController do
       expect(j[0]["city"]).to eq("Manchester")
     end
 
+    it "handles searches without q parameter" do
+      api_get "/search"
+      expect(response.status).to eq(200)
+      expect(JSON.parse(response.body).first[0]).to eq('Warning')
+    end
+
     it "can search by user's first_name" do
       marge = create(:user, username: 'marge')
       bart = create(:user, username: 'bart')

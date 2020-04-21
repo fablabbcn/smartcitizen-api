@@ -60,6 +60,11 @@ module V0
     end
 
     def search
+      unless params[:q]
+        render json: {'Warning':'No query parameter. Use: /search?q=london'}
+        return
+      end
+
       expires_in 5.seconds, public: true
       @results = PgSearch.multisearch(params[:q]).includes(:searchable)#.map(&:searchable)
       a = []
