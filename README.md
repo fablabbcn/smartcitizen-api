@@ -129,15 +129,15 @@ In the scripts/ folder there are backup and restore scripts for docker postgres.
 
 2. Subscribe to a topic (useful for debugging):
 
-  `mosquitto_sub --topic '$queue/device/sck/abcdef/hello'`
+   `mosquitto_sub --topic '$queue/device/sck/abcdef/hello'`
 
 3. Start the mqtt rake task:
 
-  `bundle exec rake mqtt:sub mqtt_host=localhost`
+   `bundle exec rake mqtt:sub mqtt_host=localhost`
 
 4. Publish a packet
 
-  `mosquitto_pub --message abcdef  --topic '$queue/device/sck/abcdef/hello'`
+   `mosquitto_pub --message abcdef  --topic '$queue/device/sck/abcdef/hello'`
 
 ## Working with MQTT and WebSockets via Docker
 
@@ -149,11 +149,11 @@ The following will send a message from the `app` container to the `mqtt` contain
 
 2. Access the rails console inside the `app` container:
 
-  `docker-compose exec app bin/rails console`
+   `docker-compose exec app bin/rails console`
 
 3. Send a message to the `test` topic:
 
-  `MQTT::Client.connect('mqtt').publish('test', 'this is the message')`
+   `MQTT::Client.connect('mqtt').publish('test', 'this is the message')`
 
 ## Tools / Scripts
 
