@@ -8,7 +8,7 @@ EMQ [Documentation](http://emqttd-docs.readthedocs.io/en/latest/index.html)
 
 The new system makes use of EMQ Shared Subscription system with Load balancing. This ensures messages distribution among currently active subscribers of a 'shared' topic.
 
-MQTT host address is held in `config/aplication.yml` under the `ENV["mqtt_host"]` variable. Although it must be provided for `'production'`, `127.0.0.1` is set by default on `'test'` and `'development'` environments if not specified.
+MQTT host address is held in `.env` under the `ENV["mqtt_host"]` variable. Although it must be provided for `'production'`, `127.0.0.1` is set by default on `'test'` and `'development'` environments if not specified.
 
 > NOTE: It is required defining `ENV["mqtt_host"]` for `production` as an exception will be thrown at server startup otherwise.
 

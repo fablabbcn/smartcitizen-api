@@ -123,7 +123,23 @@
 
 In the scripts/ folder there are backup and restore scripts for docker postgres.
 
-## Working with MQTT and WebSockets
+## Working with MQTT locally (no Docker)
+
+1. Start an mqtt server like mosquitto
+
+2. Subscribe to a topic (useful for debugging):
+
+  `mosquitto_sub --topic '$queue/device/sck/abcdef/hello'`
+
+3. Start the mqtt rake task:
+
+  `bundle exec rake mqtt:sub mqtt_host=localhost`
+
+4. Publish a packet
+
+  `mosquitto_pub --message abcdef  --topic '$queue/device/sck/abcdef/hello'`
+
+## Working with MQTT and WebSockets via Docker
 
 If running on Docker, there should be a EMQ Dashboard running on http://localhost:18083 (Log in with **admin:public**)
 
