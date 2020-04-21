@@ -2,15 +2,13 @@ class MqttMessagesHandler
   def self.handle_topic(topic, message)
     return if topic.nil?
 
-    # handle_inventory is the only one that does NOT need a device
+    # The following do NOT need a device
     if topic.to_s.include?('inventory')
       DeviceInventory.create({report: (message rescue nil)})
-    end
-
-    if topic.to_s.include?('hello')
-      device = OrphanDevice.find_by(device_token: self.device_token(topic))
-      return if device.nil?
-      self.handle_hello(device, message)
+    elsif topic.to_s.include?('hello')
+      orphan_device = OrphanDevice.find_by(device_token: self.device_token(topic))
+      return if orphan_device.nil?
+      self.handle_hello(orphan_device)
     end
 
     device = Device.find_by(device_token: self.device_token(topic))
@@ -35,14 +33,10 @@ class MqttMessagesHandler
     #puts message
   end
 
-  def self.handle_hello(orphan_device, message)
+  def self.handle_hello(orphan_device)
     payload = {}
-
-    if orphan_device
-      orphan_device.update(device_handshake: true)
-      payload[:onboarding_session] = orphan_device.onboarding_session
-    end
-
+    orphan_device.update(device_handshake: true)
+    payload[:onboarding_session] = orphan_device.onboarding_session
     Redis.current.publish('token-received', payload.to_json)
   end
 

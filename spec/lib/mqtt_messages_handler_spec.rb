@@ -89,13 +89,15 @@ RSpec.describe MqttMessagesHandler do
 
   describe '#handle_hello' do
     it 'logs device_token has been received' do
+      expect(orphan_device.device_handshake).to be false
       expect(Redis.current).to receive(:publish).with(
        'token-received', { onboarding_session: orphan_device.onboarding_session }.to_json
       )
       MqttMessagesHandler.handle_topic(
         "device/sck/#{orphan_device.device_token}/hello",
-        'content ingored by MqttMessagesHandler\#hello'
+        'content ignored by MqttMessagesHandler\#hello'
       )
+      expect(orphan_device.reload.device_handshake).to be true
     end
   end
 
