@@ -10,7 +10,7 @@ namespace :mqtt do
 
     begin
       mqtt_log.info "Connecting to #{host} ..."
-      MQTT::Client.connect(host: host, clean_session: true) do |client|
+      MQTT::Client.connect(host: host, clean_session: false) do |client|
         mqtt_log.info "Connected to #{client.host}"
 
         client.subscribe(
