@@ -69,7 +69,8 @@ services:
     restart: always
 
   mqtt:
-    image: emqx/emqx
+    #image: emqx/emqx:v2.4.7 # This is currently on mqtt server #2020-05-05
+    image: emqx/emqx:v3.0.0 # last known working version on docker
     ports:
       - "1883:1883"   # mqtt tcp
       #- "8080:8080"   # http:management - can clash with Kairos
