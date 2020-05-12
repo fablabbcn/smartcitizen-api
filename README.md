@@ -119,6 +119,11 @@
 1. `docker-compose build`
 1. `docker-compose up -d`
 
+## Cassandra
+
+Documentation and scripts to deploy and operate cassandra in
+production are available on [scripts/cassandra](scripts/cassandra).
+
 ## Backup and restore
 
 In the scripts/ folder there are backup and restore scripts for docker postgres.

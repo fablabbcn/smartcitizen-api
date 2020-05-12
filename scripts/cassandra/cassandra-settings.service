@@ -1,0 +1,17 @@
+[Unit]
+Description=Cassandra Recommended Settings
+DefaultDependencies=no
+After=sysinit.target local-fs.target
+Before=cassandra.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'echo never > /sys/kernel/mm/transparent_hugepage/defrag && \
+echo mq-deadline > /sys/block/sda/queue/scheduler && \
+echo 0 > /sys/class/block/sda/queue/rotational && \
+echo 8 > /sys/class/block/sda/queue/read_ahead_kb && \
+echo 0 > /proc/sys/vm/zone_reclaim_mode && \
+echo 32 > /sys/block/sda/queue/nr_requests'
+
+[Install]
+WantedBy=basic.target
