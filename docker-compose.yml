@@ -69,6 +69,10 @@ services:
     restart: always
 
   mqtt:
+    # NOTE: This cannot be fully dockerized in production yet because MQTT also needs port 80
+    # The MQTT server hax iptables rules that 80 -> 1883 and 443 -> 8883
+    # This was done in the past to allow kits to post mqtt over 80 to prevent firewall issues.
+    #
     #image: emqx/emqx:v2.4.7 # This is currently on mqtt server #2020-05-05
     image: emqx/emqx:v3.0.0 # last known working version on docker
     ports:
