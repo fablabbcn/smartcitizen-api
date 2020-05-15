@@ -78,38 +78,6 @@
 
    `docker-compose down -v`
 
-### Linux (Tested on Ubuntu 16.04)
-
-`apt-get install libmysqlclient-dev`
-
-### Redis and Postgresql
-
-`brew tap homebrew/services`
-
-`brew install redis postgresql`
-
-`brew services start redis`
-
-`brew services start postgresql`
-
-### KairosDB
-
-`wget https://github.com/kairosdb/kairosdb/releases/download/v1.0.0/kairosdb-1.0.0-1.tar.gz`
-
-`tar -zxvf kairosdb-1.0.0-1.tar.gz`
-
-`./kairosdb/bin/kairosdb.sh run`
-
-### SmartCitizen
-
-`git clone https://github.com/fablabbcn/smartcitizen`
-
-`cd smartcitizen`
-
-`bundle install`
-
-`bundle exec bin/rails s`
-
 ## Deploying
 
 ### Using Docker
@@ -123,43 +91,13 @@
 
 In the scripts/ folder there are backup and restore scripts for docker postgres.
 
-## Working with MQTT locally (no Docker)
-
-1. Start an mqtt server like mosquitto
-
-2. Subscribe to a topic (useful for debugging):
-
-   `mosquitto_sub --topic '$queue/device/sck/abcdef/hello'`
-
-3. Start the mqtt rake task:
-
-   `bundle exec rake mqtt:sub mqtt_host=localhost`
-
-4. Publish a packet
-
-   `mosquitto_pub --message abcdef  --topic '$queue/device/sck/abcdef/hello'`
-
-## Working with MQTT and WebSockets via Docker
-
-If running on Docker, there should be a EMQ Dashboard running on http://localhost:18083 (Log in with **admin:public**)
-
-The following will send a message from the `app` container to the `mqtt` container:
-
-1. Subscribe to a Websocket topic called "test" in the Dashboard http://localhost:18083/#/websocket
-
-2. Access the rails console inside the `app` container:
-
-   `docker-compose exec app bin/rails console`
-
-3. Send a message to the `test` topic:
-
-   `MQTT::Client.connect('mqtt').publish('test', 'this is the message')`
-
-## Tools / Scripts
+## Tools and scripts
 
 We supply a nodejs helper `post-readings.js` tool to test sending massive amounts of data. Just like uploading a CSV file with a lot of readings.
 
-To learn how to use it, do `./post-readings.js`
+To learn how to use it, do `scripts/dev-tools/post-readings.js`
+
+You can also read more about the platform on `docs/`
 
 ## Versioning
 
