@@ -101,27 +101,8 @@ module V0
       unless params[:cachebuster]
         expires_in 30.seconds, public: true # CRON cURL every 60 seconds to cache
       end
-      @devices = Device.where.not(latitude: nil).where.not(data: nil).includes(:owner,:tags).map do |device|
-        {
-          id: device.id,
-          name: device.name,
-          description: (device.description.present? ? device.description : nil),
-          owner_id: device.owner_id,
-          owner_username: device.owner_id ? device.owner_username : nil,
-          latitude: device.latitude,
-          longitude: device.longitude,
-          city: device.city,
-          country_code: device.country_code,
-          kit_id: device.kit_id,
-          state: device.state,
-          system_tags: device.system_tags,
-          user_tags: device.user_tags,
-          added_at: device.added_at,
-          updated_at: device.updated_at,
-          last_reading_at: (device.last_reading_at.present? ? device.last_reading_at : nil)
-        }
-      end
-      render json: @devices
+
+      render json: Device.for_world_map
     end
 
 private

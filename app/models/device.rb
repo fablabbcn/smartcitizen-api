@@ -223,6 +223,31 @@ class Device < ActiveRecord::Base
     end
   end
 
+  def self.for_world_map
+    Rails.cache.fetch("world_map", expires_in: 10.seconds) do
+      where.not(latitude: nil).where.not(data: nil).includes(:owner,:tags).map do |device|
+        {
+          id: device.id,
+          name: device.name,
+          description: (device.description.present? ? device.description : nil),
+          owner_id: device.owner_id,
+          owner_username: device.owner_id ? device.owner_username : nil,
+          latitude: device.latitude,
+          longitude: device.longitude,
+          city: device.city,
+          country_code: device.country_code,
+          kit_id: device.kit_id,
+          state: device.state,
+          system_tags: device.system_tags,
+          user_tags: device.user_tags,
+          added_at: device.added_at,
+          updated_at: device.updated_at,
+          last_reading_at: (device.last_reading_at.present? ? device.last_reading_at : nil)
+        }
+      end
+    end
+  end
+
   def remove_mac_address_for_newly_registered_device!
     update(old_mac_address: mac_address, mac_address: nil)
   end
