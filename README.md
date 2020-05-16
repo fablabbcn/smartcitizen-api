@@ -97,7 +97,7 @@ We supply a nodejs helper `post-readings.js` tool to test sending massive amount
 
 To learn how to use it, do `scripts/dev-tools/post-readings.js`
 
-You can also read more about the platform on `docs/`
+You can also read more about the platform on [docs/](docs/)
 
 ## Versioning
 
