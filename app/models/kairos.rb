@@ -101,7 +101,7 @@ class Kairos
       # {"queries":[{"sample_size":1,"results":[{"name":"temp","group_by":[{"name":"type","type":"number"}],"tags":{"device_id":["9739"]},"values":[[1590421758000,19]]}]}]}
       j_body = JSON.parse(response.body)
 
-      if j_body['queries'][0]
+      if j_body['queries'] && j_body['queries'][0]
         j = j_body['queries'][0]
       elsif j_body['errors']
         raise j_body['errors']
