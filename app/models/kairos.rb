@@ -96,7 +96,18 @@ class Kairos
     # puts data.to_json
 
     if response.body
-      j = JSON.parse(response.body)['queries'][0]
+      # Response examples:
+      # {"errors":["com.datastax.driver.core.exceptions.NoHostAvailableException: All host(s) tried for query failed (no host was tried)"]}
+      # {"queries":[{"sample_size":1,"results":[{"name":"temp","group_by":[{"name":"type","type":"number"}],"tags":{"device_id":["9739"]},"values":[[1590421758000,19]]}]}]}
+      j_body = JSON.parse(response.body)
+
+      if j_body['queries'][0]
+        j = j_body['queries'][0]
+      elsif j_body['errors']
+        raise j_body['errors']
+      else
+        raise "No queries in response.body"
+      end
     else
       raise "No response.body"
     end
