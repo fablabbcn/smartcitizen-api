@@ -10,9 +10,9 @@ EMQ [Documentation](http://emqttd-docs.readthedocs.io/en/latest/index.html)
 
 The new system makes use of EMQ Shared Subscription system with Load balancing. This ensures messages distribution among currently active subscribers of a 'shared' topic.
 
-MQTT host address is held in `.env` under the `ENV["mqtt_host"]` variable. Although it must be provided for `'production'`, `127.0.0.1` is set by default on `'test'` and `'development'` environments if not specified.
+MQTT host address is held in `.env` under the `ENV["MQTT_HOST"]` variable. Although it must be provided for `'production'`, `127.0.0.1` is set by default on `'test'` and `'development'` environments if not specified.
 
-> NOTE: It is required defining `ENV["mqtt_host"]` and `ENV["mqtt_client"]` for `production` as an exception will be thrown at server startup otherwise. 
+> NOTE: It is required defining `ENV["MQTT_HOST"]` and `ENV["MQTT_CLIENT"]` for `production` as an exception will be thrown at server startup otherwise. 
 
 ## End-points
 
@@ -58,7 +58,7 @@ Devices publish using the topic `device/sck/device_token:/readings` and the expe
 
 3. Start the mqtt rake task:
 
-   `bundle exec rake mqtt:sub mqtt_host=localhost`
+   `bundle exec rake mqtt:sub MQTT_HOST=localhost`
 
 4. Publish a packet
 

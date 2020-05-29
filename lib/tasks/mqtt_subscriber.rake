@@ -6,11 +6,11 @@ namespace :mqtt do
     mqtt_log.info('MQTT TASK STARTING')
     mqtt_log.info("clean_session: #{ENV['MQTT_CLEAN_SESSION'] || true}")
     mqtt_log.info("client_id: #{ENV['MQTT_CLIENT_ID'] || nil}")
+    mqtt_log.info("host: #{ENV['MQTT_HOST'] || 'mqtt'}")
 
     begin
-      mqtt_log.info "Connecting to #{host} ..."
       MQTT::Client.connect(
-        host: ENV['mqtt_host'] || 'mqtt',
+        host: ENV['MQTT_HOST'] || 'mqtt',
         clean_session: ENV['MQTT_CLEAN_SESSION'] || true,
         client_id: ENV['MQTT_CLIENT_ID'] || nil
       ) do |client|
