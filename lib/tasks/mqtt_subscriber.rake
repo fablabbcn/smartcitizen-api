@@ -4,13 +4,16 @@ namespace :mqtt do
     File.open(pid_file, 'w') { |f| f.puts Process.pid }
     mqtt_log = Logger.new('log/mqtt.log', 5, 100.megabytes)
     mqtt_log.info('MQTT TASK STARTING')
-
-    # Use docker container 'mqtt' if not defined
-    host = ENV['mqtt_host'] || 'mqtt'
+    mqtt_log.info("clean_session: #{ENV['MQTT_CLEAN_SESSION'] || true}")
+    mqtt_log.info("client_id: #{ENV['MQTT_CLIENT_ID'] || nil}")
 
     begin
       mqtt_log.info "Connecting to #{host} ..."
-      MQTT::Client.connect(host: host, clean_session: true) do |client|
+      MQTT::Client.connect(
+        host: ENV['mqtt_host'] || 'mqtt',
+        clean_session: ENV['MQTT_CLEAN_SESSION'] || true,
+        client_id: ENV['MQTT_CLIENT_ID'] || nil
+      ) do |client|
         mqtt_log.info "Connected to #{client.host}"
 
         client.subscribe(
