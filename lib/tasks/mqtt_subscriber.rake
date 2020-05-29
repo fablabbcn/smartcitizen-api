@@ -7,11 +7,10 @@ namespace :mqtt do
 
     # Use docker container 'mqtt' if not defined
     host = ENV['mqtt_host'] || 'mqtt'
-    client_id = ENV['mqtt_client'] || 'demo'
 
     begin
       mqtt_log.info "Connecting to #{host} ..."
-      MQTT::Client.connect(host: host, clean_session: false, client_id: client_id) do |client|
+      MQTT::Client.connect(host: host, clean_session: false, client_id: 'test') do |client|
         mqtt_log.info "Connected to #{client.host}"
 
         client.subscribe(
