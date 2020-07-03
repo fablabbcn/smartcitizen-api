@@ -9,6 +9,7 @@ FactoryBot.define do
     longitude { 2.1921909 }
     elevation { 100 }
     hardware_info { { "id":47,"uuid":"7d45fead-defd-4482-bc6a-a1b711879e2d" } }
+    postprocessing_info { { "a":3, "b":"test" } }
   end
 
 end

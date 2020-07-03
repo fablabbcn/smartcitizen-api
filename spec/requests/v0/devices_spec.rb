@@ -24,7 +24,7 @@ describe V0::DevicesController do
       expect(json.length).to eq(2)
       # expect(json[0]['name']).to eq(first.name)
       # expect(json[1]['name']).to eq(second.name)
-      expect(json[0].keys).to eq(%w(id uuid name description state
+      expect(json[0].keys).to eq(%w(id uuid name description state postprocessing_info
         hardware_info system_tags user_tags is_private notify_low_battery notify_stopped_publishing last_reading_at added_at updated_at mac_address owner data kit))
     end
 
@@ -76,6 +76,7 @@ describe V0::DevicesController do
         second = create(:device, data: { "": Time.now })
         json = api_get "devices/world_map"
         expect(response.status).to eq(200)
+        # World map is not always sorted. This test fails at random
         #expect(json.map{|j| j['id']}).to eq([first, second].map(&:id))
       end
 
@@ -190,8 +191,10 @@ describe V0::DevicesController do
     end
 
     it "updates a device" do
-      api_put "devices/#{device.id}", { name: 'new name', access_token: token.token }
+      api_put "devices/#{device.id}", { name: 'new name1', access_token: token.token }
       expect(response.status).to eq(200)
+      device.reload
+      expect(device.name).to eq('new name1')
     end
 
     it "does not update a device with invalid access_token" do
@@ -207,6 +210,17 @@ describe V0::DevicesController do
     it "will update a device with empty parameters access_token" do
       api_put "devices/#{device.id}", { name: nil, access_token: token.token }
       expect(response.status).to eq(200)
+    end
+
+    it 'can read and update a jsonb' do
+      expect(device.postprocessing_info['a']).to eq(3)
+
+      j = api_put "devices/#{device.id}", { postprocessing_info: {"a":"999"}, access_token: token.token, name: 'ABBA' }
+      expect(response.status).to eq(200)
+      device.reload
+      expect(device.name).to eq('ABBA')
+      # TODO: How to correctly patch JSONB?
+      #expect(device.postprocessing_info['a']).to eq(999)
     end
 
   end

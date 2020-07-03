@@ -118,6 +118,7 @@ private
         :device_token,
         :notify_low_battery,
         :notify_stopped_publishing,
+        :postprocessing_info,
         :exposure,
         :meta,
         :kit_id,
