@@ -5,6 +5,8 @@ class CheckBatteryLevelBelowJob < ApplicationJob
 
     # If user has allowed us to send him notifications
     devices = Device.where(notify_low_battery: true).where.not(data: nil)
+    # we can also query data['10'] (battery) directly with:
+      #.where("data->> '10' <= '15' ")
     CheckupNotifyJob.perform_now("#{devices.count} devices with notification on: low battery. Ids: #{devices.pluck(:id)}")
 
     devices.each do |device|
@@ -16,7 +18,7 @@ class CheckBatteryLevelBelowJob < ApplicationJob
           if device.data["10"].to_i < 15 && device.data["10"].to_i > 1
             #p "Sending email to: #{device.owner.email} - device: #{device}"
 
-            device.update notify_low_battery_timestamp: Time.now
+            device.update(notify_low_battery_timestamp: Time.now)
 
             UserMailer.device_battery_low(device.id).deliver_now
           end
