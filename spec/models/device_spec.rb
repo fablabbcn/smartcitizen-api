@@ -312,15 +312,37 @@ RSpec.describe Device, :type => :model do
         expect(before_date).to eq device.notify_low_battery_timestamp
       end
 
-      it 'when they are enabled, but timestamp is too recent' do
-        device = create(:device, notify_low_battery: true, notify_low_battery_timestamp: 45.minutes.ago, data:{ 10 => 3 } )
-        device.reload
-        before_date = device.notify_low_battery_timestamp
-        expect(device).to have_attributes(notify_low_battery: true)
-        expect(device.notify_low_battery_timestamp).to be < (30.minutes.ago)
-        CheckBatteryLevelBelowJob.perform_now
-        device.reload
-        expect(before_date).to eq device.notify_low_battery_timestamp
+      describe 'when enabled, but' do
+        it 'timestamp is too recent' do
+          device = create(:device, notify_low_battery: true, notify_low_battery_timestamp: 45.minutes.ago, data: { 10 => 3 } )
+          device.reload
+          before_date = device.notify_low_battery_timestamp
+          expect(device).to have_attributes(notify_low_battery: true)
+          expect(device.notify_low_battery_timestamp).to be < (30.minutes.ago)
+          CheckBatteryLevelBelowJob.perform_now
+          device.reload
+          expect(before_date).to eq device.notify_low_battery_timestamp
+        end
+
+        it 'battery is charging' do
+          device = create(:device, notify_low_battery: true, notify_low_battery_timestamp: 5.days.ago, data: { 10 => -1 } )
+          expect(device.notify_low_battery_timestamp).to be < (3.days.ago)
+          device.reload
+          before_date = device.notify_low_battery_timestamp
+          CheckBatteryLevelBelowJob.perform_now
+          device.reload
+          expect(before_date).to eq device.notify_low_battery_timestamp
+        end
+
+        it 'battery is full' do
+          device = create(:device, notify_low_battery: true, notify_low_battery_timestamp: 5.days.ago, data: { 10 => 99 } )
+          expect(device.notify_low_battery_timestamp).to be < (3.days.ago)
+          device.reload
+          before_date = device.notify_low_battery_timestamp
+          CheckBatteryLevelBelowJob.perform_now
+          device.reload
+          expect(before_date).to eq device.notify_low_battery_timestamp
+        end
       end
     end
 
