@@ -49,7 +49,11 @@ class MqttMessagesHandler
   def self.data(message)
     # TODO: what if message is empty?
     if message
-      JSON.parse(message)['data']
+      begin
+        JSON.parse(message)['data']
+      rescue JSON::ParserError
+        # Handle error
+      end
     else
       raise "No data(message)"
     end
