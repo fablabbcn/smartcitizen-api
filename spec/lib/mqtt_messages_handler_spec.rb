@@ -76,32 +76,30 @@ RSpec.describe MqttMessagesHandler do
         #expect(Storer).to receive(:initialize).with('a', 'b')
         expect(Redis.current).to receive(:publish).with(
           'telnet_queue', [{
-              name: nil,
-              timestamp: 1465374600000,
-              value: 21.0,
-              tags: {
-                device_id: device.id,
-                method: 'REST'
-              }
+            name: nil,
+            timestamp: 1465374600000,
+            value: 21.0,
+            tags: {
+              device_id: device.id,
+              method: 'REST'
+            }
           }].to_json
         )
-
         MqttMessagesHandler.handle_topic(@packet.topic, @packet.payload)
       end
 
       it 'does not queue when there is no data' do
         expect(Redis.current).not_to receive(:publish).with(
           'telnet_queue', [{
-              name: nil,
-              timestamp: 1465374600000,
-              value: 21.0,
-              tags: {
-                device_id: device.id,
-                method: 'REST'
-              }
+            name: nil,
+            timestamp: 1465374600000,
+            value: 21.0,
+            tags: {
+              device_id: device.id,
+              method: 'REST'
+            }
           }].to_json
         )
-
         MqttMessagesHandler.handle_topic(@packet.topic, @hardware_info_packet.payload)
       end
 
