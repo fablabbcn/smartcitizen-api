@@ -24,6 +24,8 @@ class MqttMessagesHandler
   # takes a packet and stores data
   def self.handle_readings(device, message)
     data = self.data(message)
+    return if data.empty?
+
     data.each do |reading|
       Storer.new(device, reading)
     end

@@ -88,6 +88,23 @@ RSpec.describe MqttMessagesHandler do
 
         MqttMessagesHandler.handle_topic(@packet.topic, @packet.payload)
       end
+
+      it 'does not queue when there is no data' do
+        expect(Redis.current).not_to receive(:publish).with(
+          'telnet_queue', [{
+              name: nil,
+              timestamp: 1465374600000,
+              value: 21.0,
+              tags: {
+                device_id: device.id,
+                method: 'REST'
+              }
+          }].to_json
+        )
+
+        MqttMessagesHandler.handle_topic(@packet.topic, @hardware_info_packet.payload)
+      end
+
     end
 
     context 'invalid packet' do
