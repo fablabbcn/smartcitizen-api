@@ -9,7 +9,7 @@
 #
 # See https://github.com/rubocop-hq/rubocop/blob/master/manual/configuration.md
 
-require: rubocop-rails
+#require: rubocop-rails
 
 Metrics/LineLength:
   Enabled: false
@@ -27,7 +27,7 @@ Layout/LeadingCommentSpace:
 Layout/SpaceAroundEqualsInParameterDefault:
   Enabled: false
 
-Layout/TrailingBlankLines:
+Layout/TrailingEmptyLines:
   Enabled: false
 
 Layout/EmptyLines:
