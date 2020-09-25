@@ -21,6 +21,9 @@ Style/FrozenStringLiteralComment:
 StringLiterals:
   Enabled: false
 
+Documentation:
+  Enabled: false
+
 Layout/LeadingCommentSpace:
   Enabled: false
 
