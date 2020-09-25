@@ -4,18 +4,19 @@ class MqttMessagesHandler
 
     # The following do NOT need a device
     if topic.to_s.include?('inventory')
-      DeviceInventory.create({report: (message rescue nil)})
+      DeviceInventory.create({ report: (message rescue nil) })
     elsif topic.to_s.include?('hello')
-      orphan_device = OrphanDevice.find_by(device_token: self.device_token(topic))
+      orphan_device = OrphanDevice.find_by(device_token: device_token(topic))
       return if orphan_device.nil?
-      self.handle_hello(orphan_device)
+
+      handle_hello(orphan_device)
     end
 
-    device = Device.find_by(device_token: self.device_token(topic))
+    device = Device.find_by(device_token: device_token(topic))
     return if device.nil?
 
     if topic.to_s.include?('readings')
-      self.handle_readings(device, message)
+      handle_readings(device, message)
     elsif topic.to_s.include?('info')
       device.update hardware_info: JSON.parse(message)
     end
@@ -24,7 +25,7 @@ class MqttMessagesHandler
   # takes a packet and stores data
   def self.handle_readings(device, message)
     data = self.data(message)
-    return if data.empty?
+    return if data.nil? or data&.empty?
 
     data.each do |reading|
       Storer.new(device, reading)
