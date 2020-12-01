@@ -44,7 +44,7 @@ class MqttMessagesHandler
     clean_tm = message[1..-2].split(",")[0][2..-1]
     raw_readings = message[1..-2].split(",")[1..-1]
 
-    reading = "{\"recorded at\": \"#{clean_tm}\", \"sensors\": ["
+    reading = "{\"recorded_at\": \"#{clean_tm}\", \"sensors\": ["
 
     raw_readings.each do |raw_read|
       raw_id = raw_read.split(":")[0]
