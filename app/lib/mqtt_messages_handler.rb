@@ -15,7 +15,9 @@ class MqttMessagesHandler
     device = Device.find_by(device_token: device_token(topic))
     return if device.nil?
 
-    if topic.to_s.include?('readings')
+    if topic.to_s.include?('raw')
+      handle_raw_readings(device, message)
+    elsif topic.to_s.include?('readings')
       handle_readings(device, message)
     elsif topic.to_s.include?('info')
       device.update hardware_info: JSON.parse(message)
@@ -30,6 +32,30 @@ class MqttMessagesHandler
     data.each do |reading|
       Storer.new(device, reading)
     end
+  rescue Exception => e
+    Raven.capture_exception(e)
+    #puts e.inspect
+    #puts message
+  end
+
+  # takes a raw packet and stores data
+  def self.handle_raw_readings(device, message)
+
+    clean_tm = message[1..-2].split(",")[0][2..-1]
+    raw_readings = message[1..-2].split(",")[1..-1]
+
+    reading = "{\"recorded at\": \"#{clean_tm}\", \"sensors\": ["
+
+    raw_readings.each do |raw_read|
+      raw_id = raw_read.split(":")[0]
+      raw_value = raw_read.split(":")[1]
+      reading = "#{reading} { \"id\": #{raw_id}, \"value\": #{raw_value} },"
+    end
+
+    reading = "#{reading[0..-2]}]}"
+
+    Storer.new(device, reading)
+
   rescue Exception => e
     Raven.capture_exception(e)
     #puts e.inspect

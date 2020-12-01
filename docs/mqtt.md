@@ -21,6 +21,7 @@ As on [mqtt_messages_handler.rb](https://github.com/fablabbcn/smartcitizen-api/b
 * `device/sck/%s/info` used by a device to publish hardware related info periodically, mostly daily
 * `device/sck/%s/hello` used by a device to notify it is alive under an specific device-token
 * `device/sck/%s/readings` used by a device to publish one or multiple sensor readings
+* `device/sck/%s/readings/raw` used by a device to publish sensor readings in "raw" form
 * `device/inventory` used by a device to publish information during the factory test procedure
 
 
@@ -37,6 +38,16 @@ Devices publish using the topic `device/sck/device_token:/readings` and the expe
     "recorded_at": "2016-06-08 10:35:00",
     "sensors": [{ "id": 1, "value": 22 }]
   }]
+}
+```
+
+Devices can also publish to the topic `device/sck/device_token:/readings/raw` with a different (shorter) payload format:
+
+```
+{
+  t:2017-03-24T13:35:14Z,
+  1:21,
+  13:66,
 }
 ```
 
