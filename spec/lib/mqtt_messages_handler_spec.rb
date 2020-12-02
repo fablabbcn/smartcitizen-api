@@ -119,6 +119,28 @@ RSpec.describe MqttMessagesHandler do
     end
   end
 
+  describe '#handle_raw' do
+    it 'processes raw data' do
+      the_data = "{ t:2017-03-24T13:35:14Z, 29:48.45, 13:66, 12:28, 10:4.45 }"
+
+      expect(Redis.current).to receive(:publish).with(
+        'telnet_queue', [{
+          name: nil,
+          timestamp: 1465374600000,
+          value: 99.0,
+          tags: {
+            device_id: device.id,
+            method: 'REST'
+          }
+        }].to_json
+      )
+      MqttMessagesHandler.handle_raw_readings(device, the_data)
+
+      # TODO: we should expect that a new Storer object should contain the correct, processed readings
+      #expect(Storer).to receive(:new)
+    end
+  end
+
   describe '#handle_hello' do
     it 'logs device_token has been received' do
       expect(orphan_device.device_handshake).to be false
@@ -132,16 +154,6 @@ RSpec.describe MqttMessagesHandler do
         'content ignored by MqttMessagesHandler\#hello'
       )
       expect(orphan_device.reload.device_handshake).to be true
-    end
-  end
-
-  describe '#handle_raw' do
-    it 'processes raw data' do
-      the_data = "{ t:2017-03-24T13:35:14Z, 29:48.45, 13:66, 12:28, 10:4.45 }"
-
-      # TODO: we should expect that a new Storer object should contain the correct, processed readings
-      expect(Storer).to receive(:new)
-      MqttMessagesHandler.handle_raw_readings(device, the_data)
     end
   end
 

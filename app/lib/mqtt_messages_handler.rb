@@ -40,19 +40,16 @@ class MqttMessagesHandler
 
   # takes a raw packet and stores data
   def self.handle_raw_readings(device, message)
-
     clean_tm = message[1..-2].split(",")[0].gsub("t:", "").strip()
     raw_readings = message[1..-2].split(",")[1..-1]
 
-    reading = "{\"recorded_at\": \"#{clean_tm}\", \"sensors\": ["
+    reading = { 'recorded_at' => clean_tm, 'sensors' => [] }
 
     raw_readings.each do |raw_read|
-      raw_id = raw_read.split(":")[0].strip()
-      raw_value = raw_read.split(":")[1].strip()
-      reading = "#{reading}{ \"id\": #{raw_id}, \"value\": #{raw_value} }, "
+      raw_id = raw_read.split(":")[0].strip
+      raw_value = raw_read.split(":")[1].strip
+      reading['sensors'] << { 'id' => raw_id, 'value' => raw_value }
     end
-
-    reading = "#{reading.strip()[0..-2]}]}"
 
     Storer.new(device, reading)
 
