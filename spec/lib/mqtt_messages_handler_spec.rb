@@ -69,24 +69,27 @@ RSpec.describe MqttMessagesHandler do
         }
       }]
     end
+
     context 'valid reading packet' do
       # TODO this fails on GitHub Actions, but not locally! Why?
-      skip 'queues reading data in order to be stored' do
-        # model/storer.rb is not using Kairos, but Redis -> Telnet
-        #expect(Kairos).to receive(:http_post_to).with("/datapoints", @data_array)
-        #expect(Storer).to receive(:initialize).with('a', 'b')
-        expect(Redis.current).to receive(:publish).with(
-          'telnet_queue', [{
-            name: nil,
-            timestamp: 1465374600000,
-            value: 21.0,
-            tags: {
-              device_id: device.id,
-              method: 'REST'
-            }
-          }].to_json
-        )
-        MqttMessagesHandler.handle_topic(@packet.topic, @packet.payload)
+      if ENV['GITHUB_ACTIONS'].blank?
+        it 'queues reading data in order to be stored' do
+          # model/storer.rb is not using Kairos, but Redis -> Telnet
+          #expect(Kairos).to receive(:http_post_to).with("/datapoints", @data_array)
+          #expect(Storer).to receive(:initialize).with('a', 'b')
+          expect(Redis.current).to receive(:publish).with(
+            'telnet_queue', [{
+              name: nil,
+              timestamp: 1465374600000,
+              value: 21.0,
+              tags: {
+                device_id: device.id,
+                method: 'REST'
+              }
+            }].to_json
+          )
+          MqttMessagesHandler.handle_topic(@packet.topic, @packet.payload)
+        end
       end
 
       it 'does not queue when there is no data' do
