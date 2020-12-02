@@ -121,7 +121,7 @@ RSpec.describe MqttMessagesHandler do
 
   describe '#handle_raw' do
     it 'processes raw data' do
-      the_data = "{ t:2017-03-24T13:35:14Z, 29:48.45, 13:66, 12:28, 10:4.45 }"
+      the_data = "{ t:2017-03-24T13:35:14Z, 1:48.45, 13:66, 12:28, 10:4.45 }"
 
       expect(Redis.current).to receive(:publish).with(
         'telnet_queue', [{
