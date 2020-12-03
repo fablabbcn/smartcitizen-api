@@ -51,12 +51,7 @@ class MqttMessagesHandler
       reading['sensors'] << { 'id' => raw_id, 'value' => raw_value }
     end
 
-    Storer.new(device, reading)
-
-  rescue Exception => e
-    Raven.capture_exception(e)
-    #puts e.inspect
-    #puts message
+    self.handle_readings(device, reading)
   end
 
   def self.handle_hello(orphan_device)
