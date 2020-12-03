@@ -43,15 +43,14 @@ class MqttMessagesHandler
     clean_tm = message[1..-2].split(",")[0].gsub("t:", "").strip()
     raw_readings = message[1..-2].split(",")[1..-1]
 
-    reading = { 'recorded_at' => clean_tm, 'sensors' => [] }
+    reading = { 'data' => ['recorded_at' => clean_tm, 'sensors' => [] ] }
 
     raw_readings.each do |raw_read|
       raw_id = raw_read.split(":")[0].strip
       raw_value = raw_read.split(":")[1].strip
-      reading['sensors'] << { 'id' => raw_id, 'value' => raw_value }
+      reading['data'].first['sensors'] << { 'id' => raw_id, 'value' => raw_value }
     end
-
-    self.handle_readings(device, reading)
+    self.handle_readings(device, JSON[reading])
   end
 
   def self.handle_hello(orphan_device)

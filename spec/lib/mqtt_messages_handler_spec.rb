@@ -106,7 +106,6 @@ RSpec.describe MqttMessagesHandler do
         )
         MqttMessagesHandler.handle_topic(@packet.topic, @hardware_info_packet.payload)
       end
-
     end
 
     context 'invalid packet' do
@@ -123,15 +122,13 @@ RSpec.describe MqttMessagesHandler do
     it 'processes raw data' do
       the_data = "{ t:2017-03-24T13:35:14Z, 1:48.45, 13:66, 12:28, 10:4.45 }"
 
-        p '--------BBBBB'
-        sleep 1
       # TODO this fails on GitHub Actions, but not locally! Why?
       if ENV['GITHUB_ACTIONS'].blank?
         expect(Redis.current).to receive(:publish).with(
           'telnet_queue', [{
             name: nil,
             timestamp: 1490362514000,
-            value: 99,
+            value: 48.45,
             tags: {
               device_id: device.id,
               method: 'REST'
