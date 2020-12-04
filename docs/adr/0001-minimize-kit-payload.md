@@ -1,3 +1,11 @@
+- Deciders: vicobarberan
+- Date: 2020-12-03
+
+## Why?
+
+- Try do reduce the payload that gets sent from a device to the API by ~35%.
+- Instead, the API will convert the new data type into JSON.
+
 
 New payload example:
 - https://github.com/fablabbcn/smartcitizen-kit-21/commit/f195dbc010c8cddc419cb4357875c9de942aab48#diff-f978f2d74f7bc8854e6bb019c93369fa30b05808be6de85f5571b5cc804db18fR414
