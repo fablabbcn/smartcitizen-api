@@ -1,8 +1,9 @@
 # Use Markdown Architectural Decision Records
 
-We are trying to use ADR - in order to document WHY we make decisions.
+- Status: trial
+- Deciders: viktorsmari
+- Date: 2020-12-03
 
-Inspired by:
-- https://adr.github.io/
-- https://github.com/joelparkerhenderson/architecture_decision_record
-- https://github.com/island-is/handbook/blob/master/docs/adr/
+## Why?
+
+Sometimes we forget why we made architectural changes, and finding the correct git commit which explains the 'why' can be difficult.
