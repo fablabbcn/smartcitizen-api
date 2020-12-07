@@ -118,11 +118,11 @@ private
         :device_token,
         :notify_low_battery,
         :notify_stopped_publishing,
-        :postprocessing_info,
         :exposure,
         :meta,
         :kit_id,
-        :user_tags
+        :user_tags,
+        postprocessing_info: [:updated_at, :blueprint_url, :hardware_url, :latest_postprocessing]
       ]
 
       # Researchers + Admins can update is_private
