@@ -1,11 +1,6 @@
-if ENV['travis']
-  #require "codeclimate-test-reporter"
-  #CodeClimate::TestReporter.start
-else
-  require 'simplecov'
-  SimpleCov.start 'rails' do
-    add_filter '/app/helpers/'
-  end
+require 'simplecov'
+SimpleCov.start 'rails' do
+  add_filter '/app/helpers/'
 end
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
