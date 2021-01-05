@@ -5,6 +5,7 @@
 
 - We have multiple 'test' devices that we create internally while developing features / testing sensors etc.
 - We don't want these devices to show up on the World Map, because they are clutter / noise.
+- The `is_test` field can also be used to quickly delete all test devices.
 
 ## Solution
 
