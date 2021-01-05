@@ -127,6 +127,7 @@ class Device < ActiveRecord::Base
     [
       exposure, # indoor / outdoor
       ('new' if created_at > 1.week.ago), # new
+      ('test_device' if is_test?),
       ((last_recorded_at.present? and last_recorded_at > 60.minutes.ago) ? 'online' : 'offline') # state
     ].reject(&:blank?).sort
   end
@@ -225,7 +226,12 @@ class Device < ActiveRecord::Base
 
   def self.for_world_map
     Rails.cache.fetch("world_map", expires_in: 10.seconds) do
-      where.not(latitude: nil).where.not(data: nil).includes(:owner,:tags).map do |device|
+      where
+        .not(latitude: nil)
+        .where.not(data: nil)
+        .where(is_test: false)
+        .includes(:owner,:tags)
+        .map do |device|
         {
           id: device.id,
           name: device.name,

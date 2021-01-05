@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_03_144927) do
+ActiveRecord::Schema.define(version: 2021_01_05_123052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(version: 2020_07_03_144927) do
     t.boolean "notify_stopped_publishing", default: false
     t.boolean "is_private", default: false
     t.jsonb "postprocessing_info"
+    t.boolean "is_test", default: false, null: false
     t.index ["device_token"], name: "index_devices_on_device_token", unique: true
     t.index ["geohash"], name: "index_devices_on_geohash"
     t.index ["kit_id"], name: "index_devices_on_kit_id"
