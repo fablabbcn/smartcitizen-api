@@ -14,6 +14,19 @@
 
 ## Installing Locally
 
+To get the whole environment up locally (without Docker), you need to install and configure multiple technologies like:
+- Ruby on Rails
+- Postgres
+- Redis
+- Kairos
+- Cassandra
+- Nodejs
+
+It is complex, that is why we recommend using Docker.
+
+For developing a feature, you really only need Ruby on Rails and Postgres.
+We recommend using `rbenv`.
+
 ### Docker quickstart
 
 1. Copy the environment file, and edit variables, domain name, etc

@@ -10,7 +10,7 @@
 
 - Add a boolean field `is_private` to devices, that can be used to hide their data.
 
-Who can see the a private device data?
+Who can see a private device data?
 - The data is only visible to the owner + admins
 
 What about the World Map?
