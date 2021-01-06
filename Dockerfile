@@ -14,6 +14,8 @@ COPY Gemfile* /app/
 
 RUN gem install bundler
 
+# Skip installing development / test gems, saves 20s build time
+ENV BUNDLE_WITHOUT development test
 RUN bundle install
 
 # Copy the Rails application into place
