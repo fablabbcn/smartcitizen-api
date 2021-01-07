@@ -136,7 +136,8 @@ RSpec.describe MqttMessagesHandler do
           }].to_json
         )
       end
-      MqttMessagesHandler.handle_raw_readings(device, the_data)
+
+      MqttMessagesHandler.handle_topic("device/sck/#{device.device_token}/readings/raw", the_data)
 
       # TODO: we should expect that a new Storer object should contain the correct, processed readings
       #expect(Storer).to receive(:new)

@@ -16,7 +16,7 @@ class MqttMessagesHandler
     return if device.nil?
 
     if topic.to_s.include?('raw')
-      handle_raw_readings(device, message)
+      handle_readings(device, parse_raw_readings(message))
     elsif topic.to_s.include?('readings')
       handle_readings(device, message)
     elsif topic.to_s.include?('info')
@@ -38,8 +38,8 @@ class MqttMessagesHandler
     #puts message
   end
 
-  # takes a raw packet and stores data
-  def self.handle_raw_readings(device, message)
+  # takes a raw packet and converts into JSON
+  def self.parse_raw_readings(message)
     clean_tm = message[1..-2].split(",")[0].gsub("t:", "").strip
     raw_readings = message[1..-2].split(",")[1..]
 
@@ -51,7 +51,7 @@ class MqttMessagesHandler
       reading['data'].first['sensors'] << { 'id' => raw_id, 'value' => raw_value }
     end
 
-    handle_readings(device, JSON[reading])
+    JSON[reading]
   end
 
   def self.handle_hello(orphan_device)
