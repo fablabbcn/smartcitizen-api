@@ -47,7 +47,7 @@ class MqttMessagesHandler
 
     raw_readings.each do |raw_read|
       raw_id = raw_read.split(":")[0].strip
-      raw_value = raw_read.split(":")[1].strip
+      raw_value = raw_read.split(":")[1]&.strip
       reading['data'].first['sensors'] << { 'id' => raw_id, 'value' => raw_value }
     end
 
