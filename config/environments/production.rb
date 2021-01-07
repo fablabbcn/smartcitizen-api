@@ -78,6 +78,9 @@ Rails.application.configure do
     config.logger = ActiveSupport::Logger.new('log/production.log', 5, 20.megabytes)
   end
 
+  # Throttling
+  config.middleware.use Rack::Attack
+
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
