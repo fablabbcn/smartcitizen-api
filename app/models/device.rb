@@ -96,10 +96,6 @@ class Device < ActiveRecord::Base
     end
   end
 
-  def self.with_user_tags(tag_name)
-    Tag.find_by!(name: tag_name.split('|').map(&:strip)).devices
-  end
-
   # temporary kit getter/setter
   def kit_version
     if self.kit_id

@@ -15,9 +15,8 @@ module V0
     def index
       if params[:with_tags]
         @q = policy_scope(Device)
-          .with_user_tags(params[:with_tags])
-          .includes(:owner,:tags, kit: [:sensors, :components])
-          .ransack(params[:q])
+          .includes(:owner, :tags, kit: [:components, :sensors])
+          .ransack(tags_name_in: params[:with_tags].split('|'))
       else
         @q = policy_scope(Device)
           .includes(:owner, :tags, kit: [:components, :sensors])
