@@ -15,7 +15,7 @@ module V0
     def index
       @q = policy_scope(Device)
         .includes(:owner, :tags, kit: [:components, :sensors])
-        .ransack(params[:q])
+        .ransack(params[:q], auth_object: (current_user&.is_admin? ? :admin : nil))
 
       # We are here customly adding multiple tags into the Ransack query.
       # Ransack supports this, but how do we add multiple tag names in URL string? Which separator to use?

@@ -254,6 +254,16 @@ class Device < ActiveRecord::Base
     update(old_mac_address: mac_address, mac_address: nil)
   end
 
+  def self.ransackable_attributes(auth_object = nil)
+    if auth_object == :admin
+      # admin can ransack on every attribute
+      super
+    else
+      # normal users can NOT ransack on device_token
+      column_names - ['device_token'] + _ransackers.keys
+    end
+  end
+
   private
 
     def set_state

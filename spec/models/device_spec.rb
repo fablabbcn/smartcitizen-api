@@ -290,6 +290,18 @@ RSpec.describe Device, :type => :model do
       expect(dev2.errors.messages[:device_token][0]).to eq('has already been taken')
     end
 
+    it 'can be ransacked if admin' do
+      # Ransacking
+      create(:device, device_token: '123123')
+      create(:device, device_token: '999999')
+      create(:device, device_token: '000000')
+      expect(Device.count).to eq(3)
+      # Admins can ransack on device_token_contains
+      expect(Device.ransack({device_token_cont: '123'}, auth_object: :admin).result.count).to eq(1)
+      # Normal users get all deviecs returned. They cannot ransack on device_token
+      expect(Device.ransack({device_token_cont: '123'}).result.count).to eq(3)
+    end
+
     it 'does not validate uniqueness when nil' do
       dev1 = create(:device)
       dev2 = build(:device)
