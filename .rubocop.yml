@@ -27,6 +27,10 @@ StringLiterals:
 Documentation:
   Enabled: false
 
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+  Enabled: false
+
 Layout/LeadingCommentSpace:
   Enabled: false
 

@@ -74,3 +74,16 @@ jobs:
         TEST_DB_PASSWORD: postgres
         TEST_DB_NAME: postgres
         PG_PORT: ${{ job.services.postgres.ports['5432'] }}
+
+    - name: Deploy to server via SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        username: ${{ secrets.USERNAME }}
+        script: |
+          cd smartcitizen-api
+          pwd
+          ./scripts/deploy.sh
+      if: github.ref == 'refs/heads/master' && job.status == 'success'

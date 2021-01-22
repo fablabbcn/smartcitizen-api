@@ -38,6 +38,7 @@ services:
     volumes:
       - "./:/app"
     #command: rails server -p 3000 -b '0.0.0.0'
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     environment:
       # For this to take effect, remove init/timeout, and in Gemfile, fix "rack-timeout" to not require anything.
       RACK_TIMEOUT_SERVICE_TIMEOUT: 25

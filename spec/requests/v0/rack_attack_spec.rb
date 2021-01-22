@@ -4,9 +4,10 @@ describe 'throttle' do
   before(:each) do
     # Prevent throttle
     Rails.cache.clear
+    Rack::Attack.enabled = true
   end
 
-  let(:limit) { 100 } # Should be the same as limit: in init/rack_attack
+  let(:limit) { ENV.fetch('THROTTLE_LIMIT', 150).to_i } # Should be the same as limit: in init/rack_attack
 
   context "number of requests is lower than the limit" do
     it "does not change the request status" do

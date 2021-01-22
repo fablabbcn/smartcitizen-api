@@ -50,9 +50,6 @@ module Smartcitizen
 
     config.active_job.queue_adapter = :sidekiq
 
-    # Throttling
-    config.middleware.use Rack::Attack
-
     config.time_zone = "UTC"
     config.active_record.default_timezone = :utc
 

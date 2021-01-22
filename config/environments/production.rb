@@ -29,7 +29,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
-  # Store uploaded files on the local file system (see config/storage.yml for options)
+  # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :amazon
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
@@ -46,7 +46,7 @@ Rails.application.configure do
   # config.cache_store = :mem_cache_store
 
   config.cache_store = :redis_cache_store, {url: ENV['REDIS_STORE'] || "redis://localhost:6379/2/cache", expires_in: 90.minutes }
-  # Use a real queuing backend for Active Job (and separate queues per environment)
+  # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "smartcitizen_#{Rails.env}"
 
@@ -77,6 +77,9 @@ Rails.application.configure do
   else
     config.logger = ActiveSupport::Logger.new('log/production.log', 5, 20.megabytes)
   end
+
+  # Throttling
+  config.middleware.use Rack::Attack
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false

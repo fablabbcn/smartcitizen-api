@@ -13,15 +13,17 @@ module V0
     end
 
     def index
+      @q = policy_scope(Device)
+        .includes(:owner, :tags, kit: [:components, :sensors])
+        .ransack(params[:q], auth_object: (current_user&.is_admin? ? :admin : nil))
+
+      # We are here customly adding multiple tags into the Ransack query.
+      # Ransack supports this, but how do we add multiple tag names in URL string? Which separator to use?
+      # See Issue #186 https://github.com/fablabbcn/smartcitizen-api/issues/186
+      # If we figure it out, we can remove the next 3 lines, but remember to document in:
+      # https://developer.smartcitizen.me/#basic-searching
       if params[:with_tags]
-        @q = policy_scope(Device)
-          .with_user_tags(params[:with_tags])
-          .includes(:owner,:tags, kit: [:sensors, :components])
-          .ransack(params[:q])
-      else
-        @q = policy_scope(Device)
-          .includes(:owner, :tags, kit: [:components, :sensors])
-          .ransack(params[:q])
+        @q.tags_name_in = params[:with_tags].split('|')
       end
 
       @devices = @q.result(distinct: true)
@@ -121,12 +123,13 @@ private
         :exposure,
         :meta,
         :kit_id,
-        :user_tags
+        :user_tags,
+        postprocessing_info: [:updated_at, :blueprint_url, :hardware_url, :latest_postprocessing]
       ]
 
       # Researchers + Admins can update is_private
       if current_user.role_mask >= 2
-        params_to_permit.push(:is_private)
+        params_to_permit.push(:is_private, :is_test)
       end
 
       params.permit(

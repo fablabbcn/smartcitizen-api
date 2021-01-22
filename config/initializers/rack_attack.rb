@@ -7,7 +7,7 @@ class Rack::Attack
     Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
   end
 
-  throttle('Throttle by IP', limit: 100, period: 1.minute) do |request|
+  throttle('Throttle by IP', limit: ENV.fetch('THROTTLE_LIMIT', 150).to_i, period: 1.minute) do |request|
     request.ip
   end
 

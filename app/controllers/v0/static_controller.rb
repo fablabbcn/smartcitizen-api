@@ -30,6 +30,7 @@ module V0
         devices: {
           total: Device.count,
           private: Device.where(is_private: true).count,
+          test: Device.where(is_test: true).count,
           online: {
             now: Device.where('last_recorded_at > ?', 10.minutes.ago).count,
             last_hour: Device.where('last_recorded_at > ?', 1.hour.ago).count,

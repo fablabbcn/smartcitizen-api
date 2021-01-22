@@ -96,10 +96,6 @@ class Device < ActiveRecord::Base
     end
   end
 
-  def self.with_user_tags(tag_name)
-    Tag.find_by!(name: tag_name.split('|').map(&:strip)).devices
-  end
-
   # temporary kit getter/setter
   def kit_version
     if self.kit_id
@@ -127,6 +123,7 @@ class Device < ActiveRecord::Base
     [
       exposure, # indoor / outdoor
       ('new' if created_at > 1.week.ago), # new
+      ('test_device' if is_test?),
       ((last_recorded_at.present? and last_recorded_at > 60.minutes.ago) ? 'online' : 'offline') # state
     ].reject(&:blank?).sort
   end
@@ -225,7 +222,12 @@ class Device < ActiveRecord::Base
 
   def self.for_world_map
     Rails.cache.fetch("world_map", expires_in: 10.seconds) do
-      where.not(latitude: nil).where.not(data: nil).includes(:owner,:tags).map do |device|
+      where
+        .not(latitude: nil)
+        .where.not(data: nil)
+        .where(is_test: false)
+        .includes(:owner,:tags)
+        .map do |device|
         {
           id: device.id,
           name: device.name,
@@ -250,6 +252,16 @@ class Device < ActiveRecord::Base
 
   def remove_mac_address_for_newly_registered_device!
     update(old_mac_address: mac_address, mac_address: nil)
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    if auth_object == :admin
+      # admin can ransack on every attribute
+      super
+    else
+      # normal users can NOT ransack on device_token
+      column_names - ['device_token'] + _ransackers.keys
+    end
   end
 
   private

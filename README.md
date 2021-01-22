@@ -1,7 +1,6 @@
 # SmartCitizen API
 
 ![](https://github.com/fablabbcn/smartcitizen-api/workflows/Ruby/badge.svg)
-[![Build Status](https://travis-ci.org/fablabbcn/smartcitizen-api.svg?branch=master)](https://travis-ci.org/fablabbcn/smartcitizen-api)
 [![Maintainability](https://api.codeclimate.com/v1/badges/2ac767745186038373f5/maintainability)](https://codeclimate.com/github/fablabbcn/smartcitizen-api/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/2ac767745186038373f5/test_coverage)](https://codeclimate.com/github/fablabbcn/smartcitizen-api/test_coverage)
 [![DOI](https://zenodo.org/badge/29865657.svg)](https://zenodo.org/badge/latestdoi/29865657)
@@ -14,6 +13,19 @@
 * OAuth 2.0 (Implicit Grant) Example - [http://example.smartcitizen.me](http://example.smartcitizen.me) ([smartcitizen-oauth-example](https://github.com/fablabbcn/smartcitizen-oauth-example))
 
 ## Installing Locally
+
+To get the whole environment up locally (without Docker), you need to install and configure multiple technologies like:
+- Ruby on Rails
+- Postgres
+- Redis
+- Kairos
+- Cassandra
+- Nodejs
+
+It is complex, that is why we recommend using Docker.
+
+For developing a feature, you really only need Ruby on Rails and Postgres.
+We recommend using `rbenv`.
 
 ### Docker quickstart
 

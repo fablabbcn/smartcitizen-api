@@ -18,6 +18,7 @@ namespace :mqtt do
 
         client.subscribe(
           '$queue/device/sck/+/readings' => 2,
+          '$queue/device/sck/+/readings/raw' => 2,
           '$queue/device/sck/+/hello' => 2,
           '$queue/device/sck/+/info' => 2,
           '$queue/device/inventory' => 2

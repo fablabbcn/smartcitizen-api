@@ -12,11 +12,10 @@ WORKDIR /app
 # Copy Gemfile and Gemfile.lock
 COPY Gemfile* /app/
 
-# Speed up nokogiri install
-ENV NOKOGIRI_USE_SYSTEM_LIBRARIES 1
-ENV BUNDLER_VERSION 2.0.2
 RUN gem install bundler
 
+# Skip installing development / test gems, saves 20s build time
+ENV BUNDLE_WITHOUT development test
 RUN bundle install
 
 # Copy the Rails application into place
