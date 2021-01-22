@@ -11,8 +11,8 @@ RailsAdmin.config do |config|
   config.authenticate_with do
     authenticate_or_request_with_http_basic('Login required') do |username, password|
       user = User.where(username: username).first
-      if user
-        user.authenticate(password).is_admin?
+      if user && user.authenticate(password)
+        user.is_admin?
       else
         false
       end
