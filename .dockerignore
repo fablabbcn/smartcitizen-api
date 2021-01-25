@@ -2,4 +2,4 @@
 capybara-*.html
 /log/*.log*
 coverage
-tmp
+tmp/cache
