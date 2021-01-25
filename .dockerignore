@@ -1,5 +1,5 @@
 .gitignore
 capybara-*.html
-log
+/log/*.log*
 coverage
 tmp
