@@ -9,6 +9,7 @@ gem 'doorkeeper', '~> 4'
 # Revise if this is needed after Rails 6.0
 gem 'image_processing'
 
+gem 'rails_admin'
 gem 'ancestry'
 gem 'api-pagination'
 gem 'api_cache'

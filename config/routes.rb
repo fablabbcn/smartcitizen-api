@@ -1,10 +1,13 @@
 require "sidekiq/web"
 Rails.application.routes.draw do
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+
   if Rails.env.production?
     Sidekiq::Web.use Rack::Auth::Basic do |username, password|
       username == ENV["sidekiq_username"] && password == ENV["sidekiq_password"]
     end
   end
+
   mount Sidekiq::Web, at: "/sidekiq"
 
   api_version(module: "V0", path: {value: "v0"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0"}, default: true, defaults: { format: :json }) do
