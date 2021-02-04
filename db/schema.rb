@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_05_123052) do
+ActiveRecord::Schema.define(version: 2021_02_04_124227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -94,7 +94,6 @@ ActiveRecord::Schema.define(version: 2021_01_05_123052) do
     t.boolean "notify_low_battery", default: false
     t.boolean "notify_stopped_publishing", default: false
     t.boolean "is_private", default: false
-    t.jsonb "postprocessing_info"
     t.boolean "is_test", default: false, null: false
     t.index ["device_token"], name: "index_devices_on_device_token", unique: true
     t.index ["geohash"], name: "index_devices_on_geohash"
@@ -216,6 +215,18 @@ ActiveRecord::Schema.define(version: 2021_01_05_123052) do
     t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"
   end
 
+  create_table "postprocessings", force: :cascade do |t|
+    t.string "blueprint_url"
+    t.string "hardware_url"
+    t.bigint "device_id", null: false
+    t.jsonb "forwarding_params"
+    t.jsonb "meta"
+    t.datetime "latest_postprocessing"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["device_id"], name: "index_postprocessings_on_device_id"
+  end
+
   create_table "sensor_tags", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -294,6 +305,7 @@ ActiveRecord::Schema.define(version: 2021_01_05_123052) do
   add_foreign_key "devices", "kits"
   add_foreign_key "devices_tags", "devices"
   add_foreign_key "devices_tags", "tags"
+  add_foreign_key "postprocessings", "devices"
   add_foreign_key "sensors", "measurements"
   add_foreign_key "uploads", "users"
 end

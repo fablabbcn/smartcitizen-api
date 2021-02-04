@@ -23,6 +23,9 @@ class Device < ActiveRecord::Base
   has_many :tags, through: :devices_tags
   has_many :components, as: :board
   has_many :sensors, through: :components
+  has_one :postprocessing
+
+  accepts_nested_attributes_for :postprocessing, update_only: true
 
   validates_presence_of :name, :owner, on: :create
   #validates_uniqueness_of :name, scope: :owner_id, on: :create

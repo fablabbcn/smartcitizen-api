@@ -1,10 +1,11 @@
-json.(device,
+json.(
+  device,
   :id,
   :uuid,
   :name,
   :description,
   :state,
-  :postprocessing_info,
+  :postprocessing,
   :hardware_info,
   :system_tags,
   :user_tags,

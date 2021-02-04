@@ -24,7 +24,7 @@ describe V0::DevicesController do
       expect(json.length).to eq(2)
       # expect(json[0]['name']).to eq(first.name)
       # expect(json[1]['name']).to eq(second.name)
-      expect(json[0].keys).to eq(%w(id uuid name description state postprocessing_info
+      expect(json[0].keys).to eq(%w(id uuid name description state postprocessing
         hardware_info system_tags user_tags is_private notify_low_battery notify_stopped_publishing last_reading_at added_at updated_at mac_address owner data kit))
     end
 
@@ -213,16 +213,14 @@ describe V0::DevicesController do
     end
 
     it 'can read and update a jsonb' do
-      expect(device.postprocessing_info['blueprint_url']).to eq(3)
-
-      j = api_put "devices/#{device.id}", { postprocessing_info: {"blueprint_url":"999"}, access_token: token.token, name: 'ABBA' }
+      expect(device.postprocessing).to be_nil
+      j = api_put "devices/#{device.id}", { postprocessing_attributes: {"blueprint_url":"999"}, access_token: token.token, name: 'ABBA' }
       expect(response.status).to eq(200)
       device.reload
+      expect(device.postprocessing.blueprint_url).to eq("999")
+      expect(device.postprocessing.updated_at).to be_truthy
       expect(device.name).to eq('ABBA')
-      # TODO: How to correctly patch JSONB?
-      expect(device.postprocessing_info['blueprint_url']).to eq("999")
     end
-
   end
 
   describe "POST /devices" do

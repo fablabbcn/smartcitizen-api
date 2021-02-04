@@ -124,7 +124,7 @@ private
         :meta,
         :kit_id,
         :user_tags,
-        postprocessing_info: [:updated_at, :blueprint_url, :hardware_url, :latest_postprocessing]
+        postprocessing_attributes: [:blueprint_url, :hardware_url, :latest_postprocessing, :meta, :forwarding_params],
       ]
 
       # Researchers + Admins can update is_private
