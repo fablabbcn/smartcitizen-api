@@ -103,7 +103,7 @@ class Kairos
 
       if j_body['queries'] && j_body['queries'][0]
         j = j_body['queries'][0]
-      elsif j_body['errors']
+      elsif j_body['errors'] && j_body['errors'][0]
         raise j_body['errors'][0].to_s
       else
         raise "No queries in response.body"
