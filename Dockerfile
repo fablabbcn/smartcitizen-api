@@ -14,12 +14,19 @@ COPY Gemfile* /app/
 
 RUN gem install bundler
 
-# Skip installing development / test gems, saves 20s build time
-ENV BUNDLE_WITHOUT development test
+ARG BUNDLE_WITHOUT
+ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 RUN bundle install
 
 # Copy the Rails application into place
 COPY . /app
 
+# Add a script to be executed every time the container starts.
+# TODO: use the entryscript to WAIT for the other containers, so the app survives restart?
+# Right now we have to start containers in correct order and wait for services to be ready
+COPY entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
+EXPOSE 3000
+
 CMD [ "bin/rails", "server", "-p", "3000", "-b", "0.0.0.0" ]
-#CMD [ "bundle", "exec", "puma" ]
