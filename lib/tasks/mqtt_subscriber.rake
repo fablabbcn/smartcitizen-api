@@ -28,7 +28,7 @@ namespace :mqtt do
           MqttMessagesHandler.handle_topic(topic, message)
         rescue Exception => e
           mqtt_log.info e
-          Raven.capture_exception(e)
+          Sentry.capture_exception(e)
         end
       end
     rescue SystemExit, Interrupt, SignalException
@@ -36,7 +36,7 @@ namespace :mqtt do
       exit 0
     rescue Exception => e
       begin
-        Raven.capture_exception(e)
+        Sentry.capture_exception(e)
         mqtt_log.info e
         mqtt_log.info "Try to reconnect in 10 seconds..."
         sleep 10

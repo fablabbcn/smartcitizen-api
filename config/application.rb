@@ -71,13 +71,6 @@ module Smartcitizen
         request_specs: false
     end
 
-    if ENV['RAVEN_DSN_URL'].present?
-      Raven.configure do |config|
-        config.dsn = ENV['RAVEN_DSN_URL']
-        config.environments = [ 'staging', 'production' ]
-      end
-    end
-
     config.api_only = true
   end
 end

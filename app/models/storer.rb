@@ -11,7 +11,7 @@ class Storer
       update_device(parsed_reading[:parsed_ts], parsed_reading[:sql_data]) if do_update
 
     rescue Exception => e
-      Raven.capture_exception(e)
+      Sentry.capture_exception(e)
     end
 
     raise e unless e.nil?

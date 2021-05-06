@@ -109,11 +109,11 @@ RSpec.describe MqttMessagesHandler do
     end
 
     context 'invalid packet' do
-      it 'it notifies Raven' do
-        allow(Raven).to receive(:capture_exception)
+      it 'it notifies Sentry' do
+        allow(Sentry).to receive(:capture_exception)
         expect(Kairos).not_to receive(:http_post_to)
         MqttMessagesHandler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
-        #expect(Raven).to have_received(:capture_exception).with(RuntimeError)
+        #expect(Sentry).to have_received(:capture_exception).with(RuntimeError)
       end
     end
   end

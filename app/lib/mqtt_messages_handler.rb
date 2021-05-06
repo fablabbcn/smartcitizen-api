@@ -33,7 +33,7 @@ class MqttMessagesHandler
       Storer.new(device, reading)
     end
   rescue Exception => e
-    Raven.capture_exception(e)
+    Sentry.capture_exception(e)
     #puts e.inspect
     #puts message
   end
