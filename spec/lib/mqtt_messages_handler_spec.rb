@@ -10,7 +10,7 @@ RSpec.describe MqttMessagesHandler do
     device.components << component
 
     @data = [{
-      "recorded_at"=>"2016-06-08 10:30:00",
+      "recorded_at"=>"2016-06-08 10:30:00Z",
       "sensors"=>[{
         "id"=>1,
         "value"=>21
@@ -19,12 +19,12 @@ RSpec.describe MqttMessagesHandler do
 
     @packet = MQTT::Packet::Publish.new(
       topic: "device/sck/#{device.device_token}/readings",
-      payload: '{"data": [{"recorded_at": "2016-06-08 10:30:00","sensors": [{"id": 1,"value": 21}]}]}'
+      payload: '{"data": [{"recorded_at": "2016-06-08 10:30:00Z","sensors": [{"id": 1,"value": 21}]}]}'
     )
 
     @invalid_packet = MQTT::Packet::Publish.new(
       topic: "device/sck/invalid_device_token/readings",
-      payload: '{"data": [{"recorded_at": "2016-06-08 10:30:00","sensors": [{"id": 1,"value": 21}]}]}'
+      payload: '{"data": [{"recorded_at": "2016-06-08 10:30:00Z","sensors": [{"id": 1,"value": 21}]}]}'
     )
 
     @inventory_packet = MQTT::Packet::Publish.new(
@@ -71,32 +71,30 @@ RSpec.describe MqttMessagesHandler do
     end
 
     context 'valid reading packet' do
-      # TODO this fails on GitHub Actions, but not locally! Why?
-      if ENV['GITHUB_ACTIONS'].blank?
-        it 'queues reading data in order to be stored' do
-          # model/storer.rb is not using Kairos, but Redis -> Telnet
-          #expect(Kairos).to receive(:http_post_to).with("/datapoints", @data_array)
-          #expect(Storer).to receive(:initialize).with('a', 'b')
-          expect(Redis.current).to receive(:publish).with(
-            'telnet_queue', [{
-              name: nil,
-              timestamp: 1465374600000,
-              value: 21.0,
-              tags: {
-                device_id: device.id,
-                method: 'REST'
-              }
-            }].to_json
-          )
-          MqttMessagesHandler.handle_topic(@packet.topic, @packet.payload)
-        end
+
+      it 'queues reading data in order to be stored' do
+        # model/storer.rb is not using Kairos, but Redis -> Telnet
+        #expect(Kairos).to receive(:http_post_to).with("/datapoints", @data_array)
+        #expect(Storer).to receive(:initialize).with('a', 'b')
+        expect(Redis.current).to receive(:publish).with(
+          'telnet_queue', [{
+            name: nil,
+            timestamp: 1465381800000,
+            value: 21.0,
+            tags: {
+              device_id: device.id,
+              method: 'REST'
+            }
+          }].to_json
+        )
+        MqttMessagesHandler.handle_topic(@packet.topic, @packet.payload)
       end
 
       it 'does not queue when there is no data' do
         expect(Redis.current).not_to receive(:publish).with(
           'telnet_queue', [{
             name: nil,
-            timestamp: 1465374600000,
+            timestamp: 1465381800000,
             value: 33.0,
             tags: {
               device_id: device.id,
@@ -122,20 +120,17 @@ RSpec.describe MqttMessagesHandler do
     it 'processes raw data' do
       the_data = "{ t:2017-03-24T13:35:14Z, 1:48.45, 13:66, 12:28, 10:4.45 }"
 
-      # TODO this fails on GitHub Actions, but not locally! Why?
-      if ENV['GITHUB_ACTIONS'].blank?
-        expect(Redis.current).to receive(:publish).with(
-          'telnet_queue', [{
-            name: nil,
-            timestamp: 1490362514000,
-            value: 48.45,
-            tags: {
-              device_id: device.id,
-              method: 'REST'
-            }
-          }].to_json
-        )
-      end
+      expect(Redis.current).to receive(:publish).with(
+        'telnet_queue', [{
+          name: nil,
+          timestamp: 1490362514000,
+          value: 48.45,
+          tags: {
+            device_id: device.id,
+            method: 'REST'
+          }
+        }].to_json
+      )
 
       MqttMessagesHandler.handle_topic("device/sck/#{device.device_token}/readings/raw", the_data)
 
