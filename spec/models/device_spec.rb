@@ -417,4 +417,16 @@ RSpec.describe Device, :type => :model do
     end
   end
 
+  context "deletion" do
+    it "deletes the associated postprocessing info" do
+      device = create(:device)
+      device.create_postprocessing!
+      expect {
+        device.destroy!
+      }.not_to raise_error
+      expect(Postprocessing.count).to eq(0)
+      expect(Device.count).to eq(0)
+    end
+  end
+
 end

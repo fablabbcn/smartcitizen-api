@@ -23,7 +23,7 @@ class Device < ActiveRecord::Base
   has_many :tags, through: :devices_tags
   has_many :components, as: :board
   has_many :sensors, through: :components
-  has_one :postprocessing
+  has_one :postprocessing, dependent: :destroy
 
   accepts_nested_attributes_for :postprocessing, update_only: true
 
