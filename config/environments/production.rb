@@ -1,3 +1,5 @@
+require "middleware/authentication"
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -78,8 +80,12 @@ Rails.application.configure do
     config.logger = ActiveSupport::Logger.new('log/production.log', 5, 20.megabytes)
   end
 
+  # Authentication
+  config.middleware.use Middleware::Authentication
+
   # Throttling
-  config.middleware.use Rack::Attack
+  require "rack/attack"
+  config.middleware.insert_after Middleware::Authentication, Rack::Attack
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false

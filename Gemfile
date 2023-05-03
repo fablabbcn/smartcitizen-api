@@ -43,7 +43,9 @@ gem 'pg_search'
 gem 'premailer-rails'
 gem 'puma'
 gem 'pundit'
-gem 'rack-attack'
+gem 'rack-attack', require: false # We need to include this explicitly after
+                                  # the auth middleware,
+                                  # so don't want to require it just yet.
 gem 'rack-cache'
 gem 'rack-contrib'
 gem 'rack-cors', require: 'rack/cors'

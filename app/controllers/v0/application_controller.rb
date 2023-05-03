@@ -34,23 +34,14 @@ module V0
     end
 
     def current_user
+      @current_user ||= request.env["current_user"]
       if @current_user.nil?
-        if doorkeeper_token
-          # return render text: 'abc'
-          @current_user = User.find(doorkeeper_token.resource_owner_id)
-        elsif ActionController::HttpAuthentication::Basic.has_basic_credentials?(request) # username and password
-          authenticate_with_http_basic do |username, password|
-            if user = User.find_by(username: username) and user.authenticate_with_legacy_support(password)
-              @current_user = user
-            else
-              self.headers["WWW-Authenticate"] = %(Basic realm="Application", Token realm="Application")
-              raise Smartcitizen::Unauthorized.new "Invalid Username/Password Combination"
-            end
-          end
-        end
+        self.headers["WWW-Authenticate"] = %(Basic realm="Application", Token realm="Application")
+        raise Smartcitizen::Unauthorized.new "Invalid Username/Password Combination"
       end
       @current_user
     end
+
     helper_method :current_user
 
     def check_if_authorized!
