@@ -93,6 +93,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def is_admin_or_researcher?
+    is_admin? || is_researcher?
+  end
+
+  def is_researcher?
+    role == "researcher"
+  end
+
   def is_admin?
     role == 'admin'
   end
