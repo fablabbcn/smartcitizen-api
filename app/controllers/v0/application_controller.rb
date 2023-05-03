@@ -13,6 +13,7 @@ module V0
     respond_to :json
 
     before_action :prepend_view_paths
+    before_action :set_rate_limit_whitelist
     after_action :verify_authorized, except: :index
 
     protected
@@ -33,7 +34,13 @@ module V0
       prepend_view_path "app/views/v0"
     end
 
-    def current_user
+    def set_rate_limit_whitelist
+      if current_user(false)&.is_admin_or_researcher?
+        Rack::Attack.cache.store.write("throttle_whitelist_#{request.ip}", true, expires_in: 5.minutes)
+      end
+    end
+
+    def current_user(fail_unauthorized=true)
       if @current_user.nil?
         if doorkeeper_token
           # return render text: 'abc'
@@ -42,7 +49,7 @@ module V0
           authenticate_with_http_basic do |username, password|
             if user = User.find_by(username: username) and user.authenticate_with_legacy_support(password)
               @current_user = user
-            else
+            elsif fail_unauthorized
               self.headers["WWW-Authenticate"] = %(Basic realm="Application", Token realm="Application")
               raise Smartcitizen::Unauthorized.new "Invalid Username/Password Combination"
             end
