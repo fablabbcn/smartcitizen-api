@@ -6,7 +6,7 @@ class DeleteArchivedDevicesJob < ApplicationJob
     CheckupNotifyJob.perform_now("Delete archived devices")
 
     Device.unscoped.where(workflow_state: "archived").each do |device|
-      if device.created_at < 24.hours.ago
+      if device.archived_at < 24.hours.ago
         CheckupNotifyJob.perform_now("deleting archived device #{device.id}")
         device.destroy!
       end

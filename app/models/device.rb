@@ -136,13 +136,15 @@ class Device < ActiveRecord::Base
   end
 
   def archive
-    update({mac_address: nil, old_mac_address: mac_address})
+    update({mac_address: nil, old_mac_address: mac_address, archived_at: Time.now})
   end
 
   def unarchive
+    updates = { archived_at: nil }
     unless Device.unscoped.where(mac_address: old_mac_address).exists?
-      update({mac_address: old_mac_address, old_mac_address: nil})
+      updates.merge!({mac_address: old_mac_address, old_mac_address: nil})
     end
+    update(updates)
   end
 
   def firmware

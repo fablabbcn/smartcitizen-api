@@ -10,13 +10,19 @@ RSpec.describe DeleteArchivedDevicesJob, type: :job do
       }.to have_enqueued_job
     end
 
-    it "should delete all archived devices, created_at at least 24 hours ago" do
-      deviceNormal = create(:device, name: "dontDeleteMe")
-      deviceArchived = create(:device, name: "deleteMe", workflow_state: "archived", created_at: 10.days.ago)
-      deviceArchivedToday = create(:device, name: "dontDeleteMe", workflow_state: "archived")
+    it "should delete all archived devices, archived_at at least 24 hours ago" do
+      deviceNormal = create(:device, name: "dontDeleteMe", created_at: 6.weeks.ago)
+      deviceArchived = create(:device, name: "deleteMe", created_at: 1.month.ago)
+      deviceArchivedToday = create(:device, name: "dontDeleteMe", created_at: 2.months.ago)
+      deviceArchived.archive!
+      deviceArchivedToday.archive!
+      deviceArchived.update!({archived_at: 2.days.ago})
       expect {
         DeleteArchivedDevicesJob.perform_now
       }.to change(Device.unscoped, :count).by(-1)
+      expect(Device.unscoped).to include(deviceNormal)
+      expect(Device.unscoped).not_to include(deviceArchived)
+      expect(Device.unscoped).to include(deviceArchivedToday)
     end
   end
 end
