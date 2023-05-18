@@ -31,21 +31,21 @@ class DeviceArchive
     device = Device.find(device_id)
     return if device.nil?
 
-    data = self.data_hash(device)
+    data = self.data_array(device)
     csv_file = Tempfile.new("#{device.id}_csv_temp")
 
     File.open(csv_file, 'w') do |csv|
-      data.each_pair do |key, values|
-        csv.puts "#{key},#{values.join(',')}"
+      data.each do |values|
+        csv.puts values.join(',')
       end
     end
 
     csv_file
   end
 
-  def self.data_hash device
+  def self.data_array device
     data = {}
-    data['timestamp'] = Array.new(device.kit.sensor_map.keys.length)
+    keys = Array.new(device.kit.sensor_map.keys.length)
     device.kit.sensor_map.keys.each_with_index do |key, index|
       metric_id = device.find_sensor_id_by_key(key)
 
@@ -57,9 +57,9 @@ class DeviceArchive
         data[time][index] = component.calibrated_value(v[1])
       end
       sensor = Sensor.find(device.kit.sensor_map[key])
-      data['timestamp'][index] = "#{sensor.measurement.name} in #{sensor.unit} (#{sensor.name})"
+      keys[index] = "#{sensor.measurement.name} in #{sensor.unit} (#{sensor.name})"
     end
-    data
+    return [["timestamp"] + keys] + data.sort_by { |k, _| k.to_i }
   end
 
   def self.sensor_data device, sensor_key
