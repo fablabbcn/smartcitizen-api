@@ -23,7 +23,7 @@ class Device < ActiveRecord::Base
   has_many :tags, through: :devices_tags
   has_many :components, as: :board
   has_many :sensors, through: :components
-  has_one :postprocessing
+  has_one :postprocessing, dependent: :destroy
 
   accepts_nested_attributes_for :postprocessing, update_only: true
 
@@ -136,13 +136,15 @@ class Device < ActiveRecord::Base
   end
 
   def archive
-    update({mac_address: nil, old_mac_address: mac_address})
+    update({mac_address: nil, old_mac_address: mac_address, archived_at: Time.now})
   end
 
   def unarchive
+    updates = { archived_at: nil }
     unless Device.unscoped.where(mac_address: old_mac_address).exists?
-      update({mac_address: old_mac_address, old_mac_address: nil})
+      updates.merge!({mac_address: old_mac_address, old_mac_address: nil})
     end
+    update(updates)
   end
 
   def firmware
