@@ -79,7 +79,8 @@ Rails.application.configure do
   end
 
   # Throttling
-  config.middleware.use Rack::Attack
+  config.middleware.insert_after ActionDispatch::RemoteIp, Rack::Attack
+
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false

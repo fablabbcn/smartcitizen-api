@@ -36,7 +36,7 @@ module V0
 
     def set_rate_limit_whitelist
       if current_user(false)&.is_admin_or_researcher?
-        Rack::Attack.cache.store.write("throttle_whitelist_#{request.ip}", true, expires_in: 5.minutes)
+        Rack::Attack.cache.store.write("throttle_whitelist_#{request.remote_ip}", true, expires_in: 5.minutes)
       end
     end
 

@@ -1,4 +1,14 @@
 class Rack::Attack
+  class Request < ::Rack::Request
+    def remote_ip
+      @remote_ip ||= cloudflare_ip || ActionDispatch::Request.new(env).remote_ip
+    end
+
+    def cloudflare_ip
+      env["HTTP_CF_CONNECTING_IP"]
+    end
+
+  end
 
   if Rails.env.development?
     # In environments/development.rb, config.cache_store = :null_store
@@ -8,12 +18,12 @@ class Rack::Attack
   end
 
   limit_proc = ->(req) {
-    user_is_whitelisted = Rack::Attack.cache.store.fetch("throttle_whitelist_#{req.ip}")
-    user_is_whitelisted ? Float::INFINITY : ENV.fetch("THROTTLE_LIMIT", 150)
+    user_is_whitelisted = Rack::Attack.cache.store.fetch("throttle_whitelist_#{req.remote_ip}")
+    user_is_whitelisted ? Float::INFINITY : ENV.fetch("THROTTLE_LIMIT", 150).to_i
   }
 
   throttle('Throttle by IP', limit: limit_proc, period: 1.minute) do |request|
-    request.ip
+    request.remote_ip
   end
 
 end
