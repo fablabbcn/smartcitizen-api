@@ -6,7 +6,7 @@ module V0
     include ActionController::Helpers
     include ActionController::ImplicitRender
 
-    include Pundit
+    include Pundit::Authorization
     include PrettyJSON
     include ErrorHandlers
 

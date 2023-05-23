@@ -10,8 +10,9 @@ class Device < ActiveRecord::Base
   default_scope { with_active_state }
 
   include Workflow
+  include WorkflowActiverecord
   include ArchiveWorkflow
-  include PgSearch
+  include PgSearch::Model
   include CountryMethods
 
   multisearchable :against => [:name, :description, :city, :country_name], if: :active?
@@ -70,6 +71,14 @@ class Device < ActiveRecord::Base
       obj.state_code = geo.state_code
       obj.country_code = geo.country_code
     end
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    [
+      "components", "devices_tags", "kit", "owner",
+      "pg_search_document" , "postprocessing", "sensors",
+       "tags"
+    ]
   end
 
   def sensor_keys

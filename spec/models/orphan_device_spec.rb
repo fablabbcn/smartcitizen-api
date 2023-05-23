@@ -17,9 +17,13 @@ RSpec.describe OrphanDevice, type: :model do
       before do
         allow(SecureRandom).to receive(:hex).with(3).and_return('aA5555')
       end
-
-      it { is_expected.to validate_uniqueness_of(:device_token) }
-      it { is_expected.not_to allow_value(nil).for(:device_token) }
+      describe "validations" do
+        subject {
+          orphan_device.tap(&:generate_token!)
+        }
+        it { is_expected.to validate_uniqueness_of(:device_token) }
+        it { is_expected.not_to allow_value(nil).for(:device_token) }
+      end
     end
 
     it 'is readonly' do

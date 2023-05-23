@@ -5,7 +5,7 @@ RSpec.describe Device, :type => :model do
   let(:mac_address) { "10:9a:dd:63:c0:10" }
   let(:device) { create(:device, mac_address: mac_address) }
 
-  it { is_expected.to belong_to(:kit) }
+  it { is_expected.to belong_to(:kit).without_validating_presence }
   it { is_expected.to belong_to(:owner) }
   it { is_expected.to have_many(:devices_tags) }
   it { is_expected.to have_many(:tags).through(:devices_tags) }
