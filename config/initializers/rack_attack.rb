@@ -1,13 +1,8 @@
 class Rack::Attack
   class Request < ::Rack::Request
     def remote_ip
-      @remote_ip ||= cloudflare_ip || ActionDispatch::Request.new(env).remote_ip
+      @remote_ip ||= ActionDispatch::Request.new(env).remote_ip
     end
-
-    def cloudflare_ip
-      env["HTTP_CF_CONNECTING_IP"]
-    end
-
   end
 
   if Rails.env.development?
