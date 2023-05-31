@@ -1,36 +1,107 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe 'throttle' do
+describe "throttle" do
   before(:each) do
     # Prevent throttle
     Rails.cache.clear
     Rack::Attack.enabled = true
+    Rack::Attack.reset!
   end
 
-  let(:limit) { ENV.fetch('THROTTLE_LIMIT', 150).to_i } # Should be the same as limit: in init/rack_attack
+  let(:limit) { ENV.fetch("THROTTLE_LIMIT", 150).to_i } # Should be the same as limit: in init/rack_attack
 
-  context "number of requests is lower than the limit" do
+  shared_examples_for "does not throttle requests" do
     it "does not change the request status" do
-      limit.times do
-        get "/", params: {}, headers:{"REMOTE_ADDR" => "1.2.3.4"}
+      (n_requests).times do
+        get "/", params: {}, headers: { "REMOTE_ADDR" => "1.2.3.4", "Authorization" => authorization_header }.compact
         expect(response.status).to_not eq(429)
       end
     end
   end
 
-  context "number of requests is higher than the limit" do
+  shared_examples_for "throttles requests" do
     it "changes the request status to 429" do
-      (limit + 5).times do |i|
-        get "/", params: {}, headers:{ "REMOTE_ADDR" => "1.2.3.5"}
-
-        #p "#{i} - #{limit}"
+      (n_requests).times do |i|
+        get "/", params: {}, headers: { "REMOTE_ADDR" => "1.2.3.5", "Authorization:" => authorization_header }.compact
         if i >= limit
-          #over the limit, being throttled
           expect(response.status).to eq(429)
         else
           expect(response.status).to eq(200)
         end
       end
+    end
+  end
+
+  let(:username) { "testuser" }
+  let(:password) { "password1234" }
+  let(:user) { nil }
+
+  let(:authorization_header) {
+    if user
+      ActionController::HttpAuthentication::Basic.encode_credentials(
+        username,
+        password
+      )
+    end
+  }
+
+  context "no user is logged in" do
+    context "number of requests is lower than the limit" do
+      let(:n_requests) { limit }
+      it_should_behave_like "does not throttle requests"
+    end
+
+    context "number of requests is higher than the limit" do
+      let(:n_requests) { limit + 5 }
+      it_should_behave_like "throttles requests"
+    end
+  end
+
+  context "a user with role 'citizen' is logged in" do
+    let(:user) {
+      FactoryBot.create(:user, username: username, password: password)
+    }
+
+    context "number of requests is lower than the limit" do
+      let(:n_requests) { limit }
+      it_should_behave_like "does not throttle requests"
+    end
+
+    context "number of requests is higher than the limit" do
+      let(:n_requests) { limit + 5 }
+      it_should_behave_like "throttles requests"
+    end
+  end
+
+  context "a user with role 'researcher' is logged in" do
+    let(:user) {
+      FactoryBot.create(:researcher, username: username, password: password)
+    }
+
+    context "number of requests is lower than the limit" do
+      let(:n_requests) { limit }
+      it_should_behave_like "does not throttle requests"
+    end
+
+    context "number of requests is higher than the limit" do
+      let(:n_requests) { limit + 5 }
+      it_should_behave_like "does not throttle requests"
+    end
+  end
+
+  context "a user with role 'admin' is logged in" do
+    let(:user) {
+      FactoryBot.create(:admin, username: username, password: password)
+    }
+
+    context "number of requests is lower than the limit" do
+      let(:n_requests) { limit }
+      it_should_behave_like "does not throttle requests"
+    end
+
+    context "number of requests is higher than the limit" do
+      let(:n_requests) { limit + 5 }
+      it_should_behave_like "does not throttle requests"
     end
   end
 end
