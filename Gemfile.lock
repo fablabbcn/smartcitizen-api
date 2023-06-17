@@ -369,11 +369,6 @@ GEM
       ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.5.0)
       loofah (~> 2.19, >= 2.19.1)
-    rails_12factor (0.0.3)
-      rails_serve_static_assets
-      rails_stdout_logging
-    rails_serve_static_assets (0.0.5)
-    rails_stdout_logging (0.0.5)
     railties (6.1.7.3)
       actionpack (= 6.1.7.3)
       activesupport (= 6.1.7.3)
@@ -588,7 +583,6 @@ DEPENDENCIES
   railroady
   rails (= 6.1.7.3)
   rails-erd
-  rails_12factor
   ransack
   rdoc
   redis

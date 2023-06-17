@@ -66,10 +66,6 @@ gem 'workflow-activerecord'
 # eventMachine MQTT handler
 gem 'em-mqtt'
 
-group :production do
-  gem 'rails_12factor'
-end
-
 group :test do
   gem 'simplecov', require: false
   gem 'timecop'
