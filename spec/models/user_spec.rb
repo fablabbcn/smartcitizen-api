@@ -98,6 +98,26 @@ RSpec.describe User, :type => :model do
 
   end
 
+  describe "roles" do
+    it "is a 'citizen' when the role_mask is < 2" do
+      (0..1).each do |mask|
+        expect(build_stubbed(:user, role_mask: mask).role).to eq('citizen')
+      end
+    end
+
+    it "is a 'researcher' when the role_mask is < 5" do
+      (2..4).each do |mask|
+        expect(build_stubbed(:user, role_mask: mask).role).to eq('researcher')
+      end
+    end
+
+    it "is an 'admin' when the role_mask is >= 5" do
+      (5..8).each do |mask|
+        expect(build_stubbed(:user, role_mask: mask).role).to eq('admin')
+      end
+    end
+  end
+
   describe "states" do
     it "has a default active state" do
       expect(user.workflow_state).to eq('active')
