@@ -33,9 +33,8 @@ describe V0::Onboarding::DeviceRegistrationsController do
   end
 
   before do
-    create(:kit, id: 1) if Kit.where(id: 1).empty?
-    create(:tag, name: 'tag1') if Kit.where(name: 'tag1').empty?
-    create(:tag, name: 'tag2') if Kit.where(name: 'tag2').empty?
+    create(:tag, name: 'tag1')
+    create(:tag, name: 'tag2')
   end
 
   describe 'POST /onboarding/register' do
@@ -63,7 +62,6 @@ describe V0::Onboarding::DeviceRegistrationsController do
         expect(@device.device_token).to eq(orphan_device.device_token)
         expect(@device.exposure).to eq(orphan_device.exposure)
         expect(@device.description).to eq(orphan_device.description)
-        expect(@device.kit).to eq(Kit.first)
         expect(@device.tags.count).to eq(2)
         expect(@device.location['city']).to eq('Barcelona')
       end

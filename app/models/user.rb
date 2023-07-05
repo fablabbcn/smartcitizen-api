@@ -39,8 +39,6 @@ class User < ActiveRecord::Base
 
   before_create :generate_legacy_api_key
 
-  alias_attribute :joined_at, :created_at
-
   def self.ransackable_attributes(auth_object = nil)
     [ "city", "country_code", "id", "username", "uuid", "created_at", "updated_at"]
   end

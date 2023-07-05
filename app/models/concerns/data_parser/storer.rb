@@ -61,11 +61,8 @@ module DataParser
           key = sensor['id']
           id = device.find_sensor_id_by_key(key)
         end
-        component = device.components.detect{ |c| c["sensor_id"] == id }
-
-        #raise "This component does not have sensor_id: #{id}" if component.nil?
+        component = device.find_or_create_component_by_sensor_id(id)
         return nil if component.nil?
-
         value = component.normalized_value( (Float(sensor['value']) rescue sensor['value']) )
         {
           id: id,

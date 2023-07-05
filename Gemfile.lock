@@ -572,6 +572,7 @@ DEPENDENCIES
   pg
   pg_search
   premailer-rails
+  pry
   pry-rails
   puma
   pundit

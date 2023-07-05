@@ -55,6 +55,7 @@ class MqttMessagesHandler
     end
   rescue Exception => e
     Sentry.capture_exception(e)
+    raise e if Rails.env.test?
     #puts e.inspect
     #puts message
   end

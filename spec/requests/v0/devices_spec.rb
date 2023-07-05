@@ -25,7 +25,7 @@ describe V0::DevicesController do
       # expect(json[0]['name']).to eq(first.name)
       # expect(json[1]['name']).to eq(second.name)
       expect(json[0].keys).to eq(%w(id uuid name description state postprocessing
-        hardware_info system_tags user_tags is_private notify_low_battery notify_stopped_publishing last_reading_at added_at updated_at mac_address device_token owner data kit))
+        hardware_info system_tags user_tags is_private notify_low_battery notify_stopped_publishing last_reading_at created_at updated_at mac_address device_token owner data))
     end
 
     describe "when not logged in" do
@@ -139,8 +139,8 @@ describe V0::DevicesController do
         expect(response.status).to eq(200)
       end
 
-      it "allows searching by last_recorded_at" do
-        json = api_get "devices?q[last_recorded_at_lt]=2023-09-26"
+      it "allows searching by last_reading_at" do
+        json = api_get "devices?q[last_reading_at_lt]=2023-09-26"
         expect(response.status).to eq(200)
       end
 

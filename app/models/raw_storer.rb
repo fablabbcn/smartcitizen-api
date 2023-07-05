@@ -4,7 +4,7 @@
 
 class RawStorer
 
-  def initialize data, mac, version, ip
+  def initialize data, mac, version, ip, raise_errors=false
 
     success = true
 
@@ -16,8 +16,6 @@ class RawStorer
       device = Device.includes(:components).where(mac_address: mac).last
 
       identifier = version.split('-').first
-
-      device.set_version_if_required!(identifier)
 
       ts = data['timestamp'] || data[:timestamp]
       parsed_ts = Time.parse(ts)
@@ -31,7 +29,7 @@ class RawStorer
         metric = sensor
 
         metric_id = device.find_sensor_id_by_key(metric)
-        component = device.components.detect{|c|c["sensor_id"] == metric_id} #find_component_by_sensor_id(metric_id)
+        component = device.find_or_create_component_by_sensor_id(metric_id)
         next if component.nil?
 
         value = component.normalized_value( (Float(value) rescue value) )
@@ -56,15 +54,18 @@ class RawStorer
       #Kairos.http_post_to("/datapoints", _data)
       Redis.current.publish('telnet_queue', _data.to_json)
 
-      if parsed_ts > (device.last_recorded_at || Time.at(0))
+      sensor_ids = sql_data.select {|k, v| k.is_a?(Integer) }.keys.compact.uniq
+      device.update_component_timestamps(parsed_ts, sensor_ids)
+
+      if parsed_ts > (device.last_reading_at || Time.at(0))
         # update without touching updated_at
-        device.update_columns(last_recorded_at: parsed_ts, data: sql_data, state: 'has_published')
+        device.update_columns(last_reading_at: parsed_ts, data: sql_data, state: 'has_published')
       end
 
     rescue Exception => e
 
       success = false
-
+      raise e if raise_errors
     end
 
     if !Rails.env.test? and device

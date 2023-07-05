@@ -45,18 +45,18 @@ class DeviceArchive
 
   def self.data_array device
     data = {}
-    keys = Array.new(device.kit.sensor_map.keys.length)
-    device.kit.sensor_map.keys.each_with_index do |key, index|
+    keys = Array.new(device.sensor_map.keys.length)
+    device.sensor_map.keys.each_with_index do |key, index|
       metric_id = device.find_sensor_id_by_key(key)
 
       return unless component = device.components.detect{ |c| c["sensor_id"] == metric_id }
       values = self.sensor_data(device, key)
       values.each do |v|
         time = Time.at(v[0]/1000).utc
-        data[time] ||= Array.new(device.kit.sensor_map.keys.length)
+        data[time] ||= Array.new(device.sensor_map.keys.length)
         data[time][index] = component.calibrated_value(v[1])
       end
-      sensor = Sensor.find(device.kit.sensor_map[key])
+      sensor = Sensor.find(device.sensor_map[key])
       keys[index] = "#{sensor.measurement.name} in #{sensor.unit} (#{sensor.name})"
     end
     return [["timestamp"] + keys] + data.sort_by { |k, _| k.to_i }

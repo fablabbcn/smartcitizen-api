@@ -21,7 +21,7 @@ describe V0::ComponentsController do
       expect(json.length).to eq(2)
       expect(json[0]['uuid']).to eq(component1.uuid)
       expect(json[0].keys).to eq(
-        %w(id uuid board_id board_type sensor_id created_at updated_at)
+        %w(id uuid device_id sensor_id created_at updated_at)
       )
     end
   end

@@ -4,7 +4,7 @@ class CheckDeviceStoppedPublishingJob < ApplicationJob
   def perform(*args)
     # Do something later
 
-    devices = Device.where(notify_stopped_publishing: true).where("last_recorded_at < ?", 60.minutes.ago)
+    devices = Device.where(notify_stopped_publishing: true).where("last_reading_at < ?", 60.minutes.ago)
     CheckupNotifyJob.perform_now("#{devices.count} devices with notification on: stopped_publishing at least an hour ago. Ids: #{devices.pluck(:id)}")
 
     devices.each do |device|
