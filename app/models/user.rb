@@ -106,8 +106,11 @@ class User < ActiveRecord::Base
   end
 
   def role
-    return 'researcher' if role_mask == 2
-    role_mask < 5 ? 'citizen' : 'admin'
+    case role_mask
+    when (2..4) then 'researcher'
+    when (5..) then 'admin'
+    else 'citizen'
+    end
   end
 
   def location

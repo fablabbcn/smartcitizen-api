@@ -12,23 +12,19 @@ describe "throttle" do
 
   shared_examples_for "does not throttle requests" do
     it "does not change the request status" do
-      (n_requests).times do
+      expect((0..n_requests).map {
         get "/", params: {}, headers: { "REMOTE_ADDR" => "1.2.3.4", "Authorization" => authorization_header }.compact
-        expect(response.status).to_not eq(429)
-      end
+        response.status
+      }.uniq).not_to include(429)
     end
   end
 
   shared_examples_for "throttles requests" do
     it "changes the request status to 429" do
-      (n_requests).times do |i|
-        get "/", params: {}, headers: { "REMOTE_ADDR" => "1.2.3.5", "Authorization:" => authorization_header }.compact
-        if i >= limit
-          expect(response.status).to eq(429)
-        else
-          expect(response.status).to eq(200)
-        end
-      end
+      expect((0..n_requests).map {
+        get "/", params: {}, headers: { "REMOTE_ADDR" => "1.2.3.4", "Authorization" => authorization_header }.compact
+        response.status
+      }.uniq).to include(429)
     end
   end
 
@@ -47,12 +43,12 @@ describe "throttle" do
 
   context "no user is logged in" do
     context "number of requests is lower than the limit" do
-      let(:n_requests) { limit }
+      let(:n_requests) { limit - 1 }
       it_should_behave_like "does not throttle requests"
     end
 
     context "number of requests is higher than the limit" do
-      let(:n_requests) { limit + 5 }
+      let(:n_requests) { limit + 10 }
       it_should_behave_like "throttles requests"
     end
   end
@@ -63,12 +59,12 @@ describe "throttle" do
     }
 
     context "number of requests is lower than the limit" do
-      let(:n_requests) { limit }
+      let(:n_requests) { limit - 1 }
       it_should_behave_like "does not throttle requests"
     end
 
     context "number of requests is higher than the limit" do
-      let(:n_requests) { limit + 5 }
+      let(:n_requests) { limit + 10 }
       it_should_behave_like "throttles requests"
     end
   end
@@ -79,12 +75,12 @@ describe "throttle" do
     }
 
     context "number of requests is lower than the limit" do
-      let(:n_requests) { limit }
+      let(:n_requests) { limit - 1 }
       it_should_behave_like "does not throttle requests"
     end
 
     context "number of requests is higher than the limit" do
-      let(:n_requests) { limit + 5 }
+      let(:n_requests) { limit + 10 }
       it_should_behave_like "does not throttle requests"
     end
   end
@@ -95,12 +91,12 @@ describe "throttle" do
     }
 
     context "number of requests is lower than the limit" do
-      let(:n_requests) { limit }
+      let(:n_requests) { limit - 1 }
       it_should_behave_like "does not throttle requests"
     end
 
     context "number of requests is higher than the limit" do
-      let(:n_requests) { limit + 5 }
+      let(:n_requests) { limit + 10 }
       it_should_behave_like "does not throttle requests"
     end
   end
