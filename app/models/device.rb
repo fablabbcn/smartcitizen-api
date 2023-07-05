@@ -17,12 +17,11 @@ class Device < ActiveRecord::Base
 
   multisearchable :against => [:name, :description, :city, :country_name], if: :active?
 
-  belongs_to :kit, optional: :true
   belongs_to :owner, class_name: 'User'
 
   has_many :devices_tags, dependent: :destroy
   has_many :tags, through: :devices_tags
-  has_many :components, as: :board
+  has_many :components
   has_many :sensors, through: :components
   has_one :postprocessing, dependent: :destroy
 
@@ -56,9 +55,6 @@ class Device < ActiveRecord::Base
     :debug_push,
     :enclosure_type
 
-  alias_attribute :added_at, :created_at
-  alias_attribute :last_reading_at, :last_recorded_at
-
   before_save :set_state
 
   reverse_geocoded_by :latitude, :longitude do |obj, results|
@@ -78,13 +74,13 @@ class Device < ActiveRecord::Base
       # admin can ransack on every attribute
       self.authorizable_ransackable_attributes
     else
-      ["id", "name", "description", "created_at", "updated_at", "last_recorded_at", "state","geohash", "uuid", "kit_id"]
+      ["id", "name", "description", "created_at", "updated_at", "last_reading_at", "state","geohash", "uuid", "kit_id"]
     end
   end
 
   def self.ransackable_associations(auth_object = nil)
     [
-      "components", "devices_tags", "kit", "owner",
+      "components", "devices_tags", "owner",
       "pg_search_document" , "postprocessing", "sensors",
        "tags"
     ]
@@ -95,16 +91,21 @@ class Device < ActiveRecord::Base
     %w(temp bat co hum light nets no2 noise panel)
   end
 
-  def find_component_by_sensor_id sensor_id
-    components.where(sensor_id: sensor_id).first
+  def sensor_map
+    components.map { |c| [c.key || c.sensor.key, c.sensor.id]}.to_h
+  end
+
+  def find_or_create_component_by_sensor_id sensor_id
+    return nil if sensor_id.nil? || !Sensor.exists?(id: sensor_id)
+    components.find_or_create_by(sensor_id: sensor_id)
   end
 
   def find_sensor_id_by_key sensor_key
-    kit.sensor_map[sensor_key.to_s] rescue nil
+    sensor_map[sensor_key.to_s] rescue nil
   end
 
   def find_sensor_key_by_id sensor_id
-    kit.sensor_map.invert[sensor_id] rescue nil
+    sensor_map.invert[sensor_id] rescue nil
   end
 
   def user_tags
@@ -117,25 +118,6 @@ class Device < ActiveRecord::Base
     end
   end
 
-  # temporary kit getter/setter
-  def kit_version
-    if self.kit_id
-      if self.kit_id == 2
-        "1.0"
-      elsif self.kit_id == 3
-        "1.1"
-      end
-    end
-  end
-
-  def kit_version=(kv)
-    if kv == "1.0"
-      self.kit_id = 2
-    elsif kv == "1.1"
-      self.kit_id = 3
-    end
-  end
-
   def owner_username
     owner.username if owner
   end
@@ -145,7 +127,7 @@ class Device < ActiveRecord::Base
       exposure, # indoor / outdoor
       ('new' if created_at > 1.week.ago), # new
       ('test_device' if is_test?),
-      ((last_recorded_at.present? and last_recorded_at > 60.minutes.ago) ? 'online' : 'offline') # state
+      ((last_reading_at.present? and last_reading_at > 60.minutes.ago) ? 'online' : 'offline') # state
     ].reject(&:blank?).sort
   end
 
@@ -171,14 +153,6 @@ class Device < ActiveRecord::Base
     end
   end
 
-  def components
-    kit ? kit.components : super
-  end
-
-  def sensors
-    kit ? kit.sensors : super
-  end
-
   def status
     data.present? ? state : 'new'
   end
@@ -195,9 +169,6 @@ class Device < ActiveRecord::Base
 
   def formatted_data
     s = {
-      recorded_at: last_recorded_at,
-      added_at: last_recorded_at,
-      # calibrated_at: updated_at,
       location: {
         ip: nil,
         exposure: exposure,
@@ -212,13 +183,13 @@ class Device < ActiveRecord::Base
       sensors: []
     }
 
-    sensors.sort_by(&:name).each do |sensor|
-      sa = sensor.attributes
+    components.sort_by {|c| c.sensor.name }.each do |component|
+      sensor = component.sensor
+      sa = sensor.attributes.except(*%w{key equation reverse_equation})
       sa = sa.merge(
         value: (data ? data["#{sensor.id}"] : nil),
-        raw_value: (data ? data["#{sensor.id}_raw"] : nil),
         prev_value: (old_data ? old_data["#{sensor.id}"] : nil),
-        prev_raw_value: (old_data ? old_data["#{sensor.id}_raw"] : nil)
+        last_reading_at: component.last_reading_at
       )
       s[:sensors] << sa
     end
@@ -231,15 +202,6 @@ class Device < ActiveRecord::Base
       device.reverse_geocode
       device.save validate: false
       sleep(1)
-    end
-  end
-
-  def set_version_if_required! identifier
-    if identifier and (identifier == "1.1" or identifier == "1.0") # and !device.kit_id
-      if self.kit_version.blank? or self.kit_version != identifier
-        self.kit_version = identifier
-        self.save validate: false
-      end
     end
   end
 
@@ -261,11 +223,9 @@ class Device < ActiveRecord::Base
           longitude: device.longitude,
           city: device.city,
           country_code: device.country_code,
-          kit_id: device.kit_id,
           state: device.state,
           system_tags: device.system_tags,
           user_tags: device.user_tags,
-          added_at: device.added_at,
           updated_at: device.updated_at,
           last_reading_at: (device.last_reading_at.present? ? device.last_reading_at : nil)
         }
@@ -275,6 +235,12 @@ class Device < ActiveRecord::Base
 
   def remove_mac_address_for_newly_registered_device!
     update(old_mac_address: mac_address, mac_address: nil)
+  end
+
+  def update_component_timestamps(timestamp, sensor_ids)
+    components.select {|c| sensor_ids.include?(c.sensor_id) }.each do |component|
+      component.update(last_reading_at: timestamp)
+    end
   end
 
   private

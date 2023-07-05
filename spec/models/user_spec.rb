@@ -34,12 +34,6 @@ RSpec.describe User, :type => :model do
     expect(build(:user, avatar: 'http://i.imgur.com/SZD8ADL.JPEG')).to be_valid
   end
 
-  it "has joined_at"do
-    Timecop.freeze do
-      expect(create(:user).joined_at).to eq(Time.current.utc)
-    end
-  end
-
   it "has a location" do
     user = create(:user, country_code: 'es', city: 'Barcelona')
     expect(user.country.to_s).to eq("Spain")

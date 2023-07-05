@@ -24,7 +24,6 @@ json.devices user.devices.filter { |d|
   !d.is_private? || current_user == user || current_user&.is_admin?
 }.map do |device|
   json.partial! "devices/device", device: device, with_data: false, with_owner: false
-  json.merge!(kit_id: device.kit_id)
   if current_user == user || current_user&.is_admin?
     json.merge!(
       location: device.location,
