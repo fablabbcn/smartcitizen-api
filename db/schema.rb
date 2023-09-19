@@ -96,8 +96,8 @@ ActiveRecord::Schema.define(version: 2023_06_16_151555) do
     t.string "state"
     t.string "device_token"
     t.jsonb "hardware_info"
-    t.datetime "notify_stopped_publishing_timestamp", default: "2019-01-16 16:19:35"
-    t.datetime "notify_low_battery_timestamp", default: "2019-01-16 16:19:35"
+    t.datetime "notify_stopped_publishing_timestamp", default: "2019-01-21 16:07:41"
+    t.datetime "notify_low_battery_timestamp", default: "2019-01-21 16:07:41"
     t.boolean "notify_low_battery", default: false
     t.boolean "notify_stopped_publishing", default: false
     t.boolean "is_private", default: false
