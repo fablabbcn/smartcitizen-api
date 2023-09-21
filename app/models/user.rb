@@ -13,9 +13,10 @@ class User < ActiveRecord::Base
 
   include Workflow
   include ArchiveWorkflow
+  include WorkflowActiverecord
   include CountryMethods
 
-  include PgSearch
+  include PgSearch::Model
   multisearchable :against => [:username, :city, :country_name], if: :active?
 
   extend FriendlyId
@@ -39,6 +40,14 @@ class User < ActiveRecord::Base
   before_create :generate_legacy_api_key
 
   alias_attribute :joined_at, :created_at
+
+  def self.ransackable_attributes(auth_object = nil)
+    [ "city", "country_code", "email", "id", "url", "username", "uuid", "created_at", "joined_at", "updated_at"]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["devices", "sensors", "uploads"]
+  end
 
   def archive
     devices.map{ |d| d.archive! rescue nil }

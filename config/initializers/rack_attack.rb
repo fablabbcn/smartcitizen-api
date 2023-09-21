@@ -13,7 +13,7 @@ class Rack::Attack
   end
 
   limit_proc = ->(req) {
-    user_is_whitelisted = Rack::Attack.cache.store.fetch("throttle_whitelist_#{req.remote_ip}")
+    user_is_whitelisted = Rack::Attack.cache.read("throttle_whitelist_#{req.remote_ip}")
     user_is_whitelisted ? Float::INFINITY : ENV.fetch("THROTTLE_LIMIT", 150).to_i
   }
 

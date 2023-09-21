@@ -56,7 +56,7 @@ describe UserMailer do
     }
 
     let(:device_url) {
-      'https://testbucket.s3-FakeRegion.amazonaws.com/test?X-Amz-Expires='
+      'https://testbucket.s3.FakeRegion.amazonaws.com/test?X-Amz-Expires='
     }
 
     before do

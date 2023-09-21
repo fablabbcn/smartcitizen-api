@@ -3,6 +3,10 @@
 module ArchiveWorkflow
 
   def self.included(base)
+
+    base.scope :with_active_state, -> { where(workflow_state: :active) }
+    base.scope :with_archived_state, -> { where(workflow_state: :archived) }
+
     base.workflow do
       state :active do
         event :archive, :transitions_to => :archived

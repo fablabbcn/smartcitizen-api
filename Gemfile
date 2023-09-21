@@ -1,9 +1,9 @@
-ruby '2.6.8'
+ruby '3.0.6'
 source 'https://rubygems.org'
 
-gem 'rails', '6.0.3.3'
-gem 'sidekiq', '~> 5'
-gem 'doorkeeper', '~> 4'
+gem 'rails', '6.1.7.3'
+gem 'sidekiq', '~> 6'
+gem 'doorkeeper', '~> 5'
 
 # To resize active storage images:
 # Revise if this is needed after Rails 6.0
@@ -15,7 +15,7 @@ gem 'api_cache'
 gem 'awesome_print', require: false
 gem 'aws-sdk-s3'
 gem 'bcrypt'
-gem "bootsnap"
+gem "bootsnap", '~> 1.9.4'
 gem 'browser'
 gem 'c_geohash', require: false
 gem 'countries'
@@ -23,7 +23,7 @@ gem 'dalli'
 gem 'date_validator'
 gem 'diffy', require: false
 gem 'fast_blank'
-gem 'fog-aws'
+gem 'fog-aws', '~> 3.19.0'
 gem 'friendly_id'
 gem 'geocoder'
 #gem "google-cloud-storage", "~> 1.11", require: false
@@ -59,14 +59,12 @@ gem 'sinatra'
 #gem 'skylight'
 gem 'stamp'
 gem 'versionist', github: 'bploetz/versionist'
+gem 'webrick'
 gem 'workflow'
+gem 'workflow-activerecord'
 
 # eventMachine MQTT handler
 gem 'em-mqtt'
-
-group :production do
-  gem 'rails_12factor'
-end
 
 group :test do
   gem 'simplecov', require: false
@@ -98,9 +96,6 @@ group :development, :test do
   gem 'railroady'
   gem 'rdoc'
   gem 'rspec-rails'
-  gem 'shoulda-matchers',
-      github: 'thoughtbot/shoulda-matchers',
-      require: false,
-      ref: '8e68d99217fac5dedceeeba226ea1f2d9be01e1b'
+  gem 'shoulda-matchers', require: false
   #gem 'web-console'
 end
