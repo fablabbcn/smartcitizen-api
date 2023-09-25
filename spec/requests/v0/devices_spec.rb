@@ -114,6 +114,11 @@ describe V0::DevicesController do
         expect(response.status).to eq(400)
       end
 
+      it "allows searching by presence of postprocessing" do
+        json = api_get "devices?q[postprocessing_id_not_null]=1"
+        expect(response.status).to eq(200)
+      end
+
     end
   end
 
