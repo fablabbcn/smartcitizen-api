@@ -42,6 +42,54 @@ describe V0::UsersController do
       expect(j['email']).to eq(user.email)
     end
 
+    describe "smoke tests for ransack" do
+      it "does not allow searching by first name" do
+        expect {
+          api_get "users?q[first_name_eq]=Tim"
+        }.to raise_error(ActionController::BadRequest)
+      end
+
+      it "allows searching by city" do
+        json = api_get "users?q[city_eq]=Barcelona"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by country code" do
+        json = api_get "users?q[country_code_eq]=es"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by id" do
+        json = api_get "users?q[id_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by username" do
+        json = api_get "users?q[username_eq]=mistertim"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by uuid" do
+        json = api_get "users?q[uuid_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by created_at" do
+        json = api_get "users?q[created_at_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by updated_at" do
+        json = api_get "users?q[updated_at_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "does not allow searching on disallowed parameters" do
+        expect {
+          api_get "users?q[disallowed_eq]=1"
+        }.to raise_error(ActionController::BadRequest)
+      end
+    end
   end
 
   # index

@@ -298,8 +298,10 @@ RSpec.describe Device, :type => :model do
       expect(Device.count).to eq(3)
       # Admins can ransack on device_token_contains
       expect(Device.ransack({device_token_cont: '123'}, auth_object: :admin).result.count).to eq(1)
-      # Normal users get all deviecs returned. They cannot ransack on device_token
-      expect(Device.ransack({device_token_cont: '123'}).result.count).to eq(3)
+      # Normal users cannot ransack on device_token
+      expect {
+        Device.ransack({device_token_cont: '123'})
+      }.to raise_error(ArgumentError)
     end
 
     it 'does not validate uniqueness when nil' do

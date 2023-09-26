@@ -13,10 +13,11 @@ module V0
     end
 
     def index
-      @q = policy_scope(Device)
-        .includes(:owner, :tags, kit: [:components, :sensors])
-        .ransack(params[:q], auth_object: (current_user&.is_admin? ? :admin : nil))
-
+      raise_ransack_errors_as_bad_request do
+        @q = policy_scope(Device)
+          .includes(:owner, :tags, kit: [:components, :sensors])
+          .ransack(params[:q], auth_object: (current_user&.is_admin? ? :admin : nil))
+      end
       # We are here customly adding multiple tags into the Ransack query.
       # Ransack supports this, but how do we add multiple tag names in URL string? Which separator to use?
       # See Issue #186 https://github.com/fablabbcn/smartcitizen-api/issues/186

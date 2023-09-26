@@ -10,4 +10,12 @@ class Tag < ActiveRecord::Base
 
   extend FriendlyId
   friendly_id :name
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["created_at", "description", "id", "name", "updated_at", "uuid"]
+  end
+
+  def ransackable_associations(auth_object = nil)
+    []
+  end
 end
