@@ -1,4 +1,4 @@
-FROM java:8-alpine
+FROM openjdk:8-jdk-alpine
 
 RUN apk upgrade libssl1.0 --update-cache && \
     apk add wget \
