@@ -20,7 +20,13 @@ class MqttMessagesHandler
     elsif topic.to_s.include?('readings')
       handle_readings(device, message)
     elsif topic.to_s.include?('info')
-      device.update hardware_info: JSON.parse(message)
+      begin
+        json_info = JSON.parse(message)
+      rescue Exception => e
+        e.message << "\nmessage: #{message}"
+        raise e
+      end
+      device.update hardware_info: json_info
     end
   end
 
@@ -51,7 +57,12 @@ class MqttMessagesHandler
       reading['data'].first['sensors'] << { 'id' => raw_id, 'value' => raw_value }
     end
 
-    JSON[reading]
+    begin
+      JSON[reading]
+    rescue Exception => e
+      e.message << "\nreading: #{reading}"
+      raise e
+    end
   end
 
   def self.handle_hello(orphan_device)
