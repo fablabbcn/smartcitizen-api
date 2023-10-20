@@ -1,5 +1,3 @@
-version: '3.3'
-
 services:
   db:
     image: postgres:10
@@ -41,6 +39,10 @@ services:
       - push
       #- mqtt
     restart: always
+      deploy:
+        resources:
+          limits:
+            memory: 2gb
     volumes:
       - "./:/app"
     #command: rails server -p 3000 -b '0.0.0.0'
@@ -150,6 +152,11 @@ services:
     build:
       context: ./scripts/
       dockerfile: Dockerfile-kairos
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+        window: 120s
     ports:
       - 8080:8080
       - 4242:4242 #telnet
