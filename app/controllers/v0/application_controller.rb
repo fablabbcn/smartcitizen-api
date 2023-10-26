@@ -29,6 +29,14 @@ module V0
 
     private
 
+    def raise_ransack_errors_as_bad_request(&block)
+      begin
+        block.call
+      rescue ArgumentError => e
+        render json: { message: e.message, status: 400 }, status: 400
+      end
+    end
+
     def prepend_view_paths
       # is this still necessary?
       prepend_view_path "app/views/v0"

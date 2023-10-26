@@ -114,11 +114,92 @@ describe V0::DevicesController do
         expect(response.status).to eq(400)
       end
 
+      it "allows searching by id" do
+        json = api_get "devices?q[id_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by name" do
+        json = api_get "devices?q[name_eq]=Name"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by description" do
+        json = api_get "devices?q[description_eq]=Desc"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by created_at" do
+        json = api_get "devices?q[created_at_lt]=2023-09-26"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by updated_at" do
+        json = api_get "devices?q[updated_at_lt]=2023-09-26"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by last_recorded_at" do
+        json = api_get "devices?q[last_recorded_at_lt]=2023-09-26"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by state" do
+        json = api_get "devices?q[state_eq]=state"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by geohash" do
+        json = api_get "devices?q[geohash_eq]=geohash"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by uuid" do
+        json = api_get "devices?q[uuid_eq]=uuid"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by owner id" do
+        json = api_get "devices?q[owner_id_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by owner username" do
+        json = api_get "devices?q[owner_username_eq]=test"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by tag name" do
+        json = api_get "devices?q[tags_name_eq]=test"
+        expect(response.status).to eq(200)
+      end
+
       it "allows searching by presence of postprocessing" do
         json = api_get "devices?q[postprocessing_id_not_null]=1"
         expect(response.status).to eq(200)
       end
 
+      it "allows searching by postprocessing id" do
+        json = api_get "devices?q[postprocessing_id_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by mac address by admins" do
+        json = api_get "devices?q[mac_address_eq]=00:00:00:00:00:00&access_token=#{admin_token.token}"
+        expect(response.status).to eq(200)
+      end
+
+      it "does not allow searching by mac address by non-admins" do
+        json = api_get "devices?q[mac_address_eq]=00:00:00:00:00:00"
+        expect(response.status).to eq(400)
+        expect(json["status"]).to eq(400)
+      end
+
+      it "does not allow searching on disallowed parameters" do
+        json = api_get "devices?q[disallowed_eq]=1"
+        expect(response.status).to eq(400)
+        expect(json["status"]).to eq(400)
+      end
     end
   end
 

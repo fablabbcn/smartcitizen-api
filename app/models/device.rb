@@ -73,6 +73,15 @@ class Device < ActiveRecord::Base
     end
   end
 
+  def self.ransackable_attributes(auth_object = nil)
+    if auth_object == :admin
+      # admin can ransack on every attribute
+      self.authorizable_ransackable_attributes
+    else
+      ["id", "name", "description", "created_at", "updated_at", "last_recorded_at", "state","geohash", "uuid", "kit_id"]
+    end
+  end
+
   def self.ransackable_associations(auth_object = nil)
     [
       "components", "devices_tags", "kit", "owner",
@@ -266,16 +275,6 @@ class Device < ActiveRecord::Base
 
   def remove_mac_address_for_newly_registered_device!
     update(old_mac_address: mac_address, mac_address: nil)
-  end
-
-  def self.ransackable_attributes(auth_object = nil)
-    if auth_object == :admin
-      # admin can ransack on every attribute
-      super
-    else
-      # normal users can NOT ransack on device_token
-      column_names - ['device_token'] + _ransackers.keys
-    end
   end
 
   private

@@ -7,8 +7,12 @@ module V0
     end
 
     def index
-      @sensors = Sensor.includes(:measurement, :tag_sensors).all
-      @sensors = paginate @sensors
+      raise_ransack_errors_as_bad_request do
+        @q = Sensor.includes(:measurement, :tag_sensors).ransack(params[:q])
+        @q.sorts = 'id asc' if @q.sorts.empty?
+        @sensors = @q.result(distinct: true)
+        @sensors = paginate @sensors
+      end
     end
 
     def create

@@ -26,6 +26,61 @@ describe V0::SensorsController do
       expect(j[0]['name']).to eq('testing sensor')
       expect(response.status).to eq(200)
     end
+
+    describe "smoke tests for ransack" do
+
+      it "allows searching by ancestry" do
+        json = api_get "sensors?q[ancestry_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by created_at" do
+        json = api_get "sensors?q[created_at_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by description" do
+        json = api_get "sensors?q[description_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by id" do
+        json = api_get "sensors?q[id_lt]=100"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by measurement_id" do
+        json = api_get "sensors?q[measurement_id_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by name" do
+        json = api_get "sensors?q[name_eq]=name"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by unit" do
+        json = api_get "sensors?q[unit_eq]=ppm"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by updated_at" do
+        json = api_get "sensors?q[updated_at_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by uuid" do
+        json = api_get "sensors?q[uuid_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "does not allow searching on disallowed parameters" do
+        json = api_get "sensors?q[disallowed_eq]=1"
+        expect(response.status).to eq(400)
+        expect(json["status"]).to eq(400)
+      end
+
+    end
   end
 
   describe "POST /sensors" do
