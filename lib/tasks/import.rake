@@ -135,6 +135,29 @@ namespace :import do
     end
   end
 
+  desc "Converts old avatar images stored in S3 to use ActiveStorage"
+  task :old_avatar_images => :environment do
+    s3 = Fog::Storage.new({
+      :provider                 => 'AWS',
+      :aws_access_key_id        => ENV['aws_access_key'],
+      :aws_secret_access_key    => ENV['aws_secret_key'],
+      :region                   => ENV['aws_region'],
+    })
+    bucket = ENV['s3_bucket']
+    User.select { |u| !u.avatar_url.nil? && !u.profile_picture.attached? }.each do |user|
+      puts "Importing avatar for user with id #{user.id}"
+      begin
+      avatar_url = user.avatar_url
+      s3_key = avatar_url.gsub("https://images.smartcitizen.me/s100/", "")
+      filename = s3_key.split("/")[-1]
+      object = s3.get_object(bucket, s3_key)
+      user.profile_picture.attach(io: StringIO.new(object.body), filename: filename)
+      rescue Exception => e
+        puts " -- Error #{e.class.name}. Skipping..."
+        next
+      end
+    end
+  end
 end
 
 
