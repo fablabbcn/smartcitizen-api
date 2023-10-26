@@ -23,7 +23,7 @@ class MqttMessagesHandler
     return if device.nil?
 
     if topic.to_s.include?('raw')
-      handle_readings(device, parse_raw_readings(message))
+      handle_readings(device, parse_raw_readings(message, device.id))
     elsif topic.to_s.include?('readings')
       handle_readings(device, message)
     elsif topic.to_s.include?('info')
@@ -31,7 +31,12 @@ class MqttMessagesHandler
       crumb = Sentry::Breadcrumb.new(
         category: "MqttMessagesHandler.handle_topic",
         message: "Parsing info message",
-        data: { topic: topic, message: message, json: json_message }
+        data: {
+          topic: topic,
+          message: message,
+          json: json_message,
+          device_id: device.id
+        }
       )
       Sentry.add_breadcrumb(crumb)
       device.update hardware_info: json_message
@@ -53,11 +58,11 @@ class MqttMessagesHandler
   end
 
   # takes a raw packet and converts into JSON
-  def self.parse_raw_readings(message)
+  def self.parse_raw_readings(message, device_id=nil)
     crumb = Sentry::Breadcrumb.new(
       category: "MqttMessagesHandler.parse_raw_readings",
       message: "Parsing raw readings",
-      data: { message: message }
+      data: { message: message, device_id: device_id }
     )
     Sentry.add_breadcrumb(crumb)
     clean_tm = message[1..-2].split(",")[0].gsub("t:", "").strip
@@ -74,7 +79,7 @@ class MqttMessagesHandler
     crumb = Sentry::Breadcrumb.new(
       category: "MqttMessagesHandler.parse_raw_readings",
       message: "Readings data constructed",
-      data: { message: message, reading: reading }
+      data: { message: message, reading: reading, device_id: device_id }
     )
     Sentry.add_breadcrumb(crumb)
 
