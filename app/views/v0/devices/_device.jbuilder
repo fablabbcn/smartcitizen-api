@@ -29,6 +29,9 @@ if device.owner
     json.uuid device.owner.uuid
     json.username device.owner.username
     json.avatar device.owner.avatar
+
+    json.profile_picture profile_picture_url(device.owner)
+
     json.url device.owner.url
     json.joined_at device.owner.joined_at
     json.location device.owner.location

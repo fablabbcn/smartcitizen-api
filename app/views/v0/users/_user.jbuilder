@@ -11,13 +11,7 @@ json.(user,
   :updated_at
 )
 
-if user.profile_picture.attached?
-  json.profile_picture polymorphic_url(user.profile_picture, only_path: false)
-
-else
-  json.profile_picture ''
-end
-
+json.profile_picture profile_picture_url(user)
 
 if current_user and (current_user.is_admin? or current_user == user)
   json.merge! email: user.email
