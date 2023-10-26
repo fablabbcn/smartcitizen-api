@@ -75,9 +75,9 @@ describe V0::SensorsController do
       end
 
       it "does not allow searching on disallowed parameters" do
-        expect {
-          api_get "sensors?q[disallowed_eq]=1"
-        }.to raise_error(ActionController::BadRequest)
+        json = api_get "sensors?q[disallowed_eq]=1"
+        expect(response.status).to eq(400)
+        expect(json["status"]).to eq(400)
       end
 
     end

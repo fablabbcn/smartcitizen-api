@@ -190,15 +190,15 @@ describe V0::DevicesController do
       end
 
       it "does not allow searching by mac address by non-admins" do
-        expect {
-          api_get "devices?q[mac_address_eq]=00:00:00:00:00:00"
-        }.to raise_error(ActionController::BadRequest)
+        json = api_get "devices?q[mac_address_eq]=00:00:00:00:00:00"
+        expect(response.status).to eq(400)
+        expect(json["status"]).to eq(400)
       end
 
       it "does not allow searching on disallowed parameters" do
-        expect {
-          api_get "devices?q[disallowed_eq]=1"
-        }.to raise_error(ActionController::BadRequest)
+        json = api_get "devices?q[disallowed_eq]=1"
+        expect(response.status).to eq(400)
+        expect(json["status"]).to eq(400)
       end
     end
   end

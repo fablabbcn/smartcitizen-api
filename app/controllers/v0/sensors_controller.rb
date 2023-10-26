@@ -9,10 +9,10 @@ module V0
     def index
       raise_ransack_errors_as_bad_request do
         @q = Sensor.includes(:measurement, :tag_sensors).ransack(params[:q])
+        @q.sorts = 'id asc' if @q.sorts.empty?
+        @sensors = @q.result(distinct: true)
+        @sensors = paginate @sensors
       end
-      @q.sorts = 'id asc' if @q.sorts.empty?
-      @sensors = @q.result(distinct: true)
-      @sensors = paginate @sensors
     end
 
     def create

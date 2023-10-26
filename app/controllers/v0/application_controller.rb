@@ -33,7 +33,7 @@ module V0
       begin
         block.call
       rescue ArgumentError => e
-        raise ActionController::BadRequest.new(e.message)
+        render json: { message: e.message, status: 400 }, status: 400
       end
     end
 
