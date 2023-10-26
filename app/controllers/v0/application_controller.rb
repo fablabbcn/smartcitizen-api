@@ -1,3 +1,4 @@
+require_relative '../../helpers/user_helper'
 module V0
   class ApplicationController < ActionController::API
 
@@ -9,6 +10,8 @@ module V0
     include Pundit::Authorization
     include PrettyJSON
     include ErrorHandlers
+
+    helper ::UserHelper
 
     respond_to :json
 
