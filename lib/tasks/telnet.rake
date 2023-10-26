@@ -20,12 +20,14 @@ namespace :telnet do
     p 'Starting Redis subscription...'
     Redis.current.subscribe('telnet_queue') do |on|
       on.message do |channel, msg|
-        #puts "#{channel} - #{msg}"
-        alldata = JSON.parse(msg)
+        Sentry.with_scope do
+          #puts "#{channel} - #{msg}"
+          alldata = JSON.parse(msg)
 
-        alldata.each do |data|
-          telnet_string = "put #{data['name']} #{data['timestamp']} #{data['value']} device_id=#{data['tags']['device_id']} \n"
-          localhost.print telnet_string
+          alldata.each do |data|
+            telnet_string = "put #{data['name']} #{data['timestamp']} #{data['value']} device_id=#{data['tags']['device_id']} \n"
+            localhost.print telnet_string
+          end
         end
       end
     end

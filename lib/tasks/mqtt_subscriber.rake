@@ -38,10 +38,14 @@ namespace :mqtt do
         )
 
         client.get do |topic, message|
-          MqttMessagesHandler.handle_topic(topic, message)
-        rescue Exception => e
-          mqtt_log.info e
-          Sentry.capture_exception(e)
+          Sentry.with_scope do
+            begin
+              MqttMessagesHandler.handle_topic(topic, message)
+            rescue Exception => e
+              mqtt_log.info e
+              Sentry.capture_exception(e)
+            end
+          end
         end
       end
     rescue SystemExit, Interrupt, SignalException
