@@ -12,6 +12,7 @@ module V0
     include ErrorHandlers
 
     helper ::UserHelper
+    include ::UserHelper
 
     respond_to :json
 
