@@ -26,6 +26,20 @@ class Kairos
 
     component = device.find_component_by_sensor_id(sensor_id)
 
+    unless component
+      return {
+        device_id: params[:id],
+        sensor_key:	sensor_key,
+        sensor_id: sensor_id,
+        component_id: nil,
+        rollup: params[:rollup],
+        function:	function,
+        from:	params[:from],
+        to:	params[:to],
+        sample_size:	0,
+        readings: [],
+      }
+    end
 
     metrics = [{
       tags: { device_id: params[:id] },
