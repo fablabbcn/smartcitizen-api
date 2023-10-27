@@ -118,6 +118,7 @@ module V0
           elsif s.searchable_type == 'User'
             h['username'] = s.searchable.username
             h['avatar'] = s.searchable.avatar
+            h['profile_picture'] = s.searchable.profile_picture
             h['city'] = s.searchable.city
             h['url'] = v0_user_url(s.searchable_id)
           end
