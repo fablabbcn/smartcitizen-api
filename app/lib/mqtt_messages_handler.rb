@@ -1,9 +1,11 @@
 class MqttMessagesHandler
   def self.handle_topic(topic, message)
+    Sentry.set_tags('mqtt-topic': topic)
+
     crumb = Sentry::Breadcrumb.new(
       category: "MqttMessagesHandler.handle_topic",
       message: "Handling topic #{topic}",
-      data: { topic: topic, message: message.scrub }
+      data: { topic: topic, message: message.encode("UTF-8", invalid: :replace, undef: :replace) }
     )
     Sentry.add_breadcrumb(crumb)
 
@@ -33,7 +35,7 @@ class MqttMessagesHandler
         message: "Parsing info message",
         data: {
           topic: topic,
-          message: message.scrub,
+          message: message.encode("UTF-8", invalid: :replace, undef: :replace),
           json: json_message,
           device_id: device.id
         }
@@ -62,7 +64,7 @@ class MqttMessagesHandler
     crumb = Sentry::Breadcrumb.new(
       category: "MqttMessagesHandler.parse_raw_readings",
       message: "Parsing raw readings",
-      data: { message: message.scrub, device_id: device_id }
+      data: { message: message.encode("UTF-8", invalid: :replace, undef: :replace), device_id: device_id }
     )
     Sentry.add_breadcrumb(crumb)
     clean_tm = message[1..-2].split(",")[0].gsub("t:", "").strip
@@ -79,7 +81,7 @@ class MqttMessagesHandler
     crumb = Sentry::Breadcrumb.new(
       category: "MqttMessagesHandler.parse_raw_readings",
       message: "Readings data constructed",
-      data: { message: message.scrub, reading: reading, device_id: device_id }
+      data: { message: message.encode("UTF-8", invalid: :replace, undef: :replace), reading: reading, device_id: device_id }
     )
     Sentry.add_breadcrumb(crumb)
 
