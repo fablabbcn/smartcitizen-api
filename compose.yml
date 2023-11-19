@@ -39,10 +39,10 @@ services:
       - push
       #- mqtt
     restart: always
-      deploy:
-        resources:
-          limits:
-            memory: 2gb
+    deploy:
+      resources:
+        limits:
+          memory: 2gb
     volumes:
       - "./:/app"
     #command: rails server -p 3000 -b '0.0.0.0'
@@ -165,7 +165,7 @@ services:
       #- cassandra-1
 
 # Check if cassandra cluster is working:
-# docker-compose exec cassandra-1 nodetool status
+# docker compose exec cassandra-1 nodetool status
   cassandra-1:
     image: cassandra:3.11.4
     ports:
