@@ -5,4 +5,4 @@ if ! [[ $1 ]]; then
   exit
 fi
 
-docker exec -i $(docker-compose ps -q db) psql -Upostgres $1  < dump_latest.sql
+docker exec -i $(docker compose ps -q db) psql -Upostgres $1  < dump_latest.sql
