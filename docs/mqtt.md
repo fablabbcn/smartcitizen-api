@@ -12,7 +12,7 @@ The new system makes use of EMQ Shared Subscription system with Load balancing. 
 
 MQTT host address is held in `.env` under the `ENV["MQTT_HOST"]` variable. Although it must be provided for `'production'`, `127.0.0.1` is set by default on `'test'` and `'development'` environments if not specified.
 
-> NOTE: It is required defining `ENV["MQTT_HOST"]` and `ENV["MQTT_CLIENT"]` for `production` as an exception will be thrown at server startup otherwise. 
+> NOTE: It is required defining `ENV["MQTT_HOST"]` and `ENV["MQTT_CLIENT"]` for `production` as an exception will be thrown at server startup otherwise.
 
 ## End-points
 
@@ -57,7 +57,7 @@ Devices can also publish to the topic `device/sck/device_token:/readings/raw` wi
 
 * Messages must be published using QoS (Quality of Service) of 1.
 
-## Development and test 
+## Development and test
 
 ### Working with MQTT locally (no Docker)
 
@@ -85,7 +85,7 @@ The following will send a message from the `app` container to the `mqtt` contain
 
 2. Access the rails console inside the `app` container:
 
-   `docker-compose exec app bin/rails console`
+   `docker compose exec app bin/rails console`
 
 3. Send a message to the `test` topic:
 
