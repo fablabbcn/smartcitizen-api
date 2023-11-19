@@ -1,0 +1,15 @@
+services:
+  auth:
+    restart: "no"
+  app:
+    build:
+      args: !reset []
+    restart: "no"
+  sidekiq:
+    restart: "no"
+  mqtt-task:
+    restart: "no"
+  telnet-task:
+    restart: "no"
+  push:
+    restart: "no"
