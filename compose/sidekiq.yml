@@ -1,0 +1,8 @@
+services:
+  sidekiq:
+    build: ../.
+    env_file: ../.env
+    command: bundle exec sidekiq
+    restart: always
+    volumes:
+      - "../log:/app/log"

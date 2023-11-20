@@ -1,0 +1,41 @@
+services:
+  mqtt:
+    # NOTE: This cannot be fully dockerized in production yet because MQTT also needs port 80
+    # The MQTT server hax iptables rules that 80 -> 1883 and 443 -> 8883
+    # This was done in the past to allow kits to post mqtt over 80 to prevent firewall issues.
+    #
+    #image: emqx/emqx:v2.4.7 # This is currently on mqtt server #2020-05-05
+    image: emqx/emqx:v3.0.0 # last known working version on docker
+    ports:
+      - "1883:1883"   # mqtt tcp
+      #- "8080:8080"   # http:management - can clash with Kairos
+      - "8083:8083"   # HTTP and WebSocket
+      - "8084:8084"   # HTTPS and WSS
+      - "8883:8883"   # MQTT SSL listener port
+      - "18083:18083" # Web dashboard: admin:public
+      - "18084:18084" # Web dashboard TLS
+      #- "11883:11883"
+    environment:
+      # Enable HTTPS for Dashboard:
+      EMQX_DASHBOARD__LISTENER__HTTPS__KEYFILE: "/opt/emqx/etc/certs/mydomain.key"
+      EMQX_DASHBOARD__LISTENER__HTTPS__CERTFILE: "/opt/emqx/etc/certs/final.crt"
+      EMQX_DASHBOARD__LISTENER__HTTPS__CACERTFILE: "/opt/emqx/etc/certs/STAR_smartcitizen_me.ca-bundle"
+      EMQX_DASHBOARD__LISTENER__HTTPS: 18084
+      EMQX_DASHBOARD__LISTENER__HTTPS__ACCEPTORS: 2
+      EMQX_DASHBOARD__LISTENER__HTTPS__MAX_CLIENTS: 512
+
+      EMQX_LISTENER__WSS__EXTERNAL__KEYFILE: "/opt/emqx/etc/certs/mydomain.key"
+      EMQX_LISTENER__WSS__EXTERNAL__CERTFILE: "/opt/emqx/etc/certs/final.crt"
+      EMQX_LISTENER__WSS__EXTERNAL__CACERTFILE: "/opt/emqx/etc/certs/STAR_smartcitizen_me.ca-bundle"
+
+      EMQX_LISTENER__SSL__EXTERNAL__KEYFILE: "/opt/emqx/etc/certs/mydomain.key"
+      EMQX_LISTENER__SSL__EXTERNAL__CERTFILE: "/opt/emqx/etc/certs/final.crt"
+      EMQX_LISTENER__SSL__EXTERNAL__CACERTFILE: "/opt/emqx/etc/certs/STAR_smartcitizen_me.ca-bundle"
+      EMQX_LISTENER__SSL__EXTERNAL: 8883
+      #EMQX_LISTENER__SSL__EXTERNAL__REUSEADDR: "true"
+    volumes:
+      # emqx.conf can be overwritten with ENV vars, so next line is not needed. Rather use ENV above
+      #- "./scripts/emqx-config/emqx.conf:/opt/emqx/etc/emqx.conf"
+      # However, acl.conf is not supported (yet), see: https://github.com/emqx/emqx-docker/issues/86
+      #- "./scripts/emqx-config/acl.conf:/opt/emqx/etc/acl.conf"
+      - "../scripts/certs/:/opt/emqx/etc/certs/"
