@@ -1,0 +1,10 @@
+services:
+  # Websockets
+  push:
+    image: smartcitizen/push
+    environment:
+      - REDIS_URL=redis://redis:6379/4
+        # TODO: needs SSL on ws.smartcitizen.me
+    restart: always
+    ports:
+      - 8000:8000
