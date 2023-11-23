@@ -3,6 +3,12 @@ services:
   # docker compose exec cassandra-1 nodetool status
   cassandra-1:
       image: cassandra:3.11.4
+      healthcheck:
+        test: ["CMD-SHELL", "[ $$(nodetool statusgossip) = running ]"]
+        interval: 30s
+        start_period: 30s
+        timeout: 10s
+        retries: 5
       ports:
         # no need to expose all ports?
         - "7000:7000" # Internode, cluster communication
