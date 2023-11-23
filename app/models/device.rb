@@ -100,6 +100,10 @@ class Device < ActiveRecord::Base
     components.find_or_create_by(sensor_id: sensor_id)
   end
 
+  def find_component_by_sensor_id sensor_id
+    components.where(sensor_id: sensor_id).first
+  end
+
   def find_sensor_id_by_key sensor_key
     sensor_map[sensor_key.to_s] rescue nil
   end
