@@ -21,7 +21,9 @@ else
   json.merge! legacy_api_key: '[FILTERED]'
 end
 
-json.devices user.devices do |device|
+json.devices user.devices.filter { |d|
+  !d.is_private? || current_user == user || current_user&.is_admin?
+} do |device|
   json.id device.id
   json.uuid device.uuid
   json.is_private device.is_private

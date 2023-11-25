@@ -42,52 +42,62 @@ describe V0::UsersController do
       expect(j['email']).to eq(user.email)
     end
 
-    describe "smoke tests for ransack" do
-      it "does not allow searching by first name" do
-        json = api_get "users?q[first_name_eq]=Tim"
-        expect(response.status).to eq(400)
-        expect(json["status"]).to eq(400)
+    describe "device privacy" do
+      before do
+        @private_device = create(:device, owner: user, is_private: true)
+        @public_device = create(:device, owner: user, is_private: false)
       end
 
-      it "allows searching by city" do
-        json = api_get "users?q[city_eq]=Barcelona"
-        expect(response.status).to eq(200)
+      context "when the request is not authenticated" do
+        it "only returns public devices" do
+          j = api_get "users/testguy"
+          expect(j["devices"].map { |d| d["id"] }).to include(@public_device.id)
+          expect(j["devices"].map { |d| d["id"] }).not_to include(@private_device.id)
+        end
       end
 
-      it "allows searching by country code" do
-        json = api_get "users?q[country_code_eq]=es"
-        expect(response.status).to eq(200)
+      context "when the request is authenticated as the user being requested" do
+        it "returns all devices" do
+          j = api_get "users/testguy?access_token=#{token.token}"
+          expect(j["devices"].map { |d| d["id"] }).to include(@public_device.id)
+          expect(j["devices"].map { |d| d["id"] }).to include(@private_device.id)
+        end
       end
 
-      it "allows searching by id" do
-        json = api_get "users?q[id_eq]=1"
-        expect(response.status).to eq(200)
+      context "when the request is authenticated as a different citizen user" do
+        it "only returns public devices" do
+          requesting_user = create :user
+          requesting_token = create :access_token,
+            application: application,
+            resource_owner_id: requesting_user.id
+          j = api_get "users/testguy?access_token=#{requesting_token.token}"
+          expect(j["devices"].map { |d| d["id"] }).to include(@public_device.id)
+          expect(j["devices"].map { |d| d["id"] }).not_to include(@private_device.id)
+        end
       end
 
-      it "allows searching by username" do
-        json = api_get "users?q[username_eq]=mistertim"
-        expect(response.status).to eq(200)
+      context "when the request is authenticated as a different researcher user" do
+        it "only returns public devices" do
+          requesting_user = create :user, role_mask: 3
+          requesting_token = create :access_token,
+            application: application,
+            resource_owner_id: requesting_user.id
+          j = api_get "users/testguy?access_token=#{requesting_token.token}"
+          expect(j["devices"].map { |d| d["id"] }).to include(@public_device.id)
+          expect(j["devices"].map { |d| d["id"] }).not_to include(@private_device.id)
+        end
       end
 
-      it "allows searching by uuid" do
-        json = api_get "users?q[uuid_eq]=1"
-        expect(response.status).to eq(200)
-      end
-
-      it "allows searching by created_at" do
-        json = api_get "users?q[created_at_eq]=1"
-        expect(response.status).to eq(200)
-      end
-
-      it "allows searching by updated_at" do
-        json = api_get "users?q[updated_at_eq]=1"
-        expect(response.status).to eq(200)
-      end
-
-      it "does not allow searching on disallowed parameters" do
-        json = api_get "users?q[disallowed_eq]=1"
-        expect(response.status).to eq(400)
-        expect(json["status"]).to eq(400)
+      context "when the request is authenticated as a different admin user" do
+        it "returns all devices" do
+          requesting_user = create :user, role_mask: 5
+          requesting_token = create :access_token,
+            application: application,
+            resource_owner_id: requesting_user.id
+          j = api_get "users/testguy?access_token=#{requesting_token.token}"
+          expect(j["devices"].map { |d| d["id"] }).to include(@public_device.id)
+          expect(j["devices"].map { |d| d["id"] }).to include(@private_device.id)
+        end
       end
     end
   end
@@ -161,6 +171,54 @@ describe V0::UsersController do
       end
     end
 
+    describe "smoke tests for ransack" do
+      it "does not allow searching by first name" do
+        json = api_get "users?q[first_name_eq]=Tim"
+        expect(response.status).to eq(400)
+        expect(json["status"]).to eq(400)
+      end
+
+      it "allows searching by city" do
+        json = api_get "users?q[city_eq]=Barcelona"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by country code" do
+        json = api_get "users?q[country_code_eq]=es"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by id" do
+        json = api_get "users?q[id_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by username" do
+        json = api_get "users?q[username_eq]=mistertim"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by uuid" do
+        json = api_get "users?q[uuid_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by created_at" do
+        json = api_get "users?q[created_at_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "allows searching by updated_at" do
+        json = api_get "users?q[updated_at_eq]=1"
+        expect(response.status).to eq(200)
+      end
+
+      it "does not allow searching on disallowed parameters" do
+        json = api_get "users?q[disallowed_eq]=1"
+        expect(response.status).to eq(400)
+        expect(json["status"]).to eq(400)
+      end
+    end
   end
 
   describe "POST /users" do
