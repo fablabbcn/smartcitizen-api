@@ -93,6 +93,19 @@ RSpec.describe MqttMessagesHandler do
         MqttMessagesHandler.handle_topic(@packet.topic, @packet.payload)
       end
 
+      it 'handshakes the device if an orphan device exists' do
+        orphan_device = create(:orphan_device, device_token: device.device_token)
+        expect(orphan_device.device_handshake).to be false
+        allow(Redis.current).to receive(:publish)
+        expect(Redis.current).to receive(:publish).with(
+          'token-received', {
+            onboarding_session: orphan_device.onboarding_session
+          }.to_json
+        )
+        MqttMessagesHandler.handle_topic(@packet.topic, @packet.payload)
+        expect(orphan_device.reload.device_handshake).to be true
+      end
+
       it 'does not queue when there is no data' do
         expect(Redis.current).not_to receive(:publish).with(
           'telnet_queue', [{
@@ -120,9 +133,12 @@ RSpec.describe MqttMessagesHandler do
   end
 
   describe '#handle_raw' do
-    it 'processes raw data' do
-      the_data = "{ t:2017-03-24T13:35:14Z, 1:48.45, 13:66, 12:28, 10:4.45 }"
 
+    let(:the_data) {
+      "{ t:2017-03-24T13:35:14Z, 1:48.45, 13:66, 12:28, 10:4.45 }"
+    }
+
+    it 'processes raw data' do
       expect(Redis.current).to receive(:publish).with(
         'telnet_queue', [{
           name: nil,
@@ -148,10 +164,23 @@ RSpec.describe MqttMessagesHandler do
       # TODO: we should expect that a new Storer object should contain the correct, processed readings
       #expect(Storer).to receive(:new)
     end
+
+    it 'handshakes the device if an orphan device exists' do
+      orphan_device = create(:orphan_device, device_token: device.device_token)
+      expect(orphan_device.device_handshake).to be false
+      allow(Redis.current).to receive(:publish)
+      expect(Redis.current).to receive(:publish).with(
+        'token-received', {
+          onboarding_session: orphan_device.onboarding_session
+        }.to_json
+      )
+      MqttMessagesHandler.handle_topic("device/sck/#{device.device_token}/readings/raw", the_data)
+      expect(orphan_device.reload.device_handshake).to be true
+    end
   end
 
   describe '#handle_hello' do
-    it 'logs device_token has been received' do
+    it 'handshakes the device if an orphan device exists' do
       expect(orphan_device.device_handshake).to be false
       expect(Redis.current).to receive(:publish).with(
         'token-received', {
@@ -183,6 +212,13 @@ RSpec.describe MqttMessagesHandler do
       MqttMessagesHandler.handle_topic(nil,'{"random_property":"random_result2"}')
       expect(DeviceInventory.count).to eq(0)
     end
+
+    it 'does not handshake any device' do
+      expect(Redis.current).not_to receive(:publish)
+      MqttMessagesHandler.handle_topic(
+        @inventory_packet.topic, @inventory_packet.payload
+      )
+    end
   end
 
   describe '#hardware_info' do
@@ -192,6 +228,19 @@ RSpec.describe MqttMessagesHandler do
       device.reload
       expect(device.hardware_info["id"]).to eq(48)
       expect(@hardware_info_packet.payload).to eq((device.hardware_info.to_json))
+    end
+
+    it 'handshakes the device if an orphan device exists' do
+      orphan_device = create(:orphan_device, device_token: device.device_token)
+      expect(orphan_device.device_handshake).to be false
+      allow(Redis.current).to receive(:publish)
+      expect(Redis.current).to receive(:publish).with(
+        'token-received', {
+          onboarding_session: orphan_device.onboarding_session
+        }.to_json
+      )
+      MqttMessagesHandler.handle_topic(@hardware_info_packet.topic, @hardware_info_packet.payload)
+      expect(orphan_device.reload.device_handshake).to be true
     end
 
     it 'does not handle bad topic' do
