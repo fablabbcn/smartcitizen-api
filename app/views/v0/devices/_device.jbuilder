@@ -1,3 +1,6 @@
+with_owner = true unless local_assigns.has_key?(:with_owner)
+with_data = true unless local_assigns.has_key?(:with_data)
+
 json.(
   device,
   :id,
@@ -23,7 +26,7 @@ else
   json.merge! mac_address: '[FILTERED]'
 end
 
-if device.owner
+if with_owner && device.owner
   json.owner do
     json.id device.owner.id
     json.uuid device.owner.uuid
@@ -37,11 +40,9 @@ if device.owner
     json.location device.owner.location
     json.device_ids device.owner.cached_device_ids
   end
-else
-  json.merge! owner: nil
 end
 
-json.data device.formatted_data
+json.data device.formatted_data if with_data
 
 if device.kit
   json.kit device.kit, :id, :uuid, :slug, :name, :description, :created_at, :updated_at

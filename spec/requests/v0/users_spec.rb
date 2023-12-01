@@ -54,6 +54,13 @@ describe V0::UsersController do
           expect(j["devices"].map { |d| d["id"] }).to include(@public_device.id)
           expect(j["devices"].map { |d| d["id"] }).not_to include(@private_device.id)
         end
+
+        it "does not include the device locations" do
+          j = api_get "users/testguy"
+          expect(j["devices"].map { |d| d["location"]}.compact).to be_empty
+          expect(j["devices"].map { |d| d["latitude"]}.compact).to be_empty
+          expect(j["devices"].map { |d| d["longitude"]}.compact).to be_empty
+        end
       end
 
       context "when the request is authenticated as the user being requested" do
@@ -62,41 +69,78 @@ describe V0::UsersController do
           expect(j["devices"].map { |d| d["id"] }).to include(@public_device.id)
           expect(j["devices"].map { |d| d["id"] }).to include(@private_device.id)
         end
+
+        it "includes the device locations" do
+          j = api_get "users/testguy?access_token=#{token.token}"
+          expect(j["devices"].map { |d| d["location"]}.compact).not_to be_empty
+          expect(j["devices"].map { |d| d["latitude"]}.compact).not_to be_empty
+          expect(j["devices"].map { |d| d["longitude"]}.compact).not_to be_empty
+        end
       end
 
       context "when the request is authenticated as a different citizen user" do
-        it "only returns public devices" do
+        let(:requesting_token) {
           requesting_user = create :user
-          requesting_token = create :access_token,
+          create :access_token,
             application: application,
             resource_owner_id: requesting_user.id
+        }
+
+        it "only returns public devices" do
           j = api_get "users/testguy?access_token=#{requesting_token.token}"
           expect(j["devices"].map { |d| d["id"] }).to include(@public_device.id)
           expect(j["devices"].map { |d| d["id"] }).not_to include(@private_device.id)
+        end
+
+        it "does not include the device locations" do
+          j = api_get "users/testguy?access_token=#{requesting_token.token}"
+          expect(j["devices"].map { |d| d["location"]}.compact).to be_empty
+          expect(j["devices"].map { |d| d["latitude"]}.compact).to be_empty
+          expect(j["devices"].map { |d| d["longitude"]}.compact).to be_empty
         end
       end
 
       context "when the request is authenticated as a different researcher user" do
-        it "only returns public devices" do
+        let(:requesting_token) {
           requesting_user = create :user, role_mask: 3
-          requesting_token = create :access_token,
+          create :access_token,
             application: application,
             resource_owner_id: requesting_user.id
+        }
+
+        it "only returns public devices" do
           j = api_get "users/testguy?access_token=#{requesting_token.token}"
           expect(j["devices"].map { |d| d["id"] }).to include(@public_device.id)
           expect(j["devices"].map { |d| d["id"] }).not_to include(@private_device.id)
         end
+
+        it "does not include the device locations" do
+          j = api_get "users/testguy?access_token=#{requesting_token.token}"
+          expect(j["devices"].map { |d| d["location"]}.compact).to be_empty
+          expect(j["devices"].map { |d| d["latitude"]}.compact).to be_empty
+          expect(j["devices"].map { |d| d["longitude"]}.compact).to be_empty
+        end
       end
 
       context "when the request is authenticated as a different admin user" do
-        it "returns all devices" do
+        let(:requesting_token) {
           requesting_user = create :user, role_mask: 5
-          requesting_token = create :access_token,
+          create :access_token,
             application: application,
             resource_owner_id: requesting_user.id
+        }
+
+        it "returns all devices" do
           j = api_get "users/testguy?access_token=#{requesting_token.token}"
           expect(j["devices"].map { |d| d["id"] }).to include(@public_device.id)
           expect(j["devices"].map { |d| d["id"] }).to include(@private_device.id)
+        end
+
+        it "includes the device locations" do
+          j = api_get "users/testguy?access_token=#{requesting_token.token}"
+          expect(j["devices"].map { |d| d["location"]}.compact).not_to be_empty
+          expect(j["devices"].map { |d| d["latitude"]}.compact).not_to be_empty
+          expect(j["devices"].map { |d| d["longitude"]}.compact).not_to be_empty
         end
       end
     end
