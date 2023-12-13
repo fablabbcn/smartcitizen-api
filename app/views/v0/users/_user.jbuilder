@@ -7,7 +7,6 @@ json.(user,
   :profile_picture,
   :url,
   :location,
-  :joined_at,
   :updated_at
 )
 
@@ -21,29 +20,16 @@ else
   json.merge! legacy_api_key: '[FILTERED]'
 end
 
-json.devices user.devices do |device|
-  json.id device.id
-  json.uuid device.uuid
-  json.is_private device.is_private
-
-  if current_user and (current_user.is_admin? or (device.owner_id and current_user.id == device.owner_id))
-    json.mac_address device.mac_address
-  else
-    json.mac_address '[FILTERED]'
-    if device.is_private?
-      next
-    end
+json.devices user.devices.filter { |d|
+  !d.is_private? || current_user == user || current_user&.is_admin?
+}.map do |device|
+  json.partial! "devices/device", device: device, with_data: false, with_owner: false
+  json.merge!(kit_id: device.kit_id)
+  if current_user == user || current_user&.is_admin?
+    json.merge!(
+      location: device.location,
+      latitude: device.latitude,
+      longitude: device.longitude,
+    )
   end
-
-  json.name device.name.present? ? device.name : nil
-  json.description device.description.present? ? device.description : nil
-  json.location device.location
-  json.latitude device.latitude
-  json.longitude device.longitude
-  json.kit_id device.kit_id
-  json.state device.state
-  json.system_tags device.system_tags
-  json.last_reading_at device.last_reading_at
-  json.added_at device.added_at.utc.iso8601
-  json.updated_at device.updated_at.utc.iso8601
 end
