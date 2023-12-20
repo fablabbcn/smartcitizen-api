@@ -25,7 +25,7 @@ describe V0::DevicesController do
       # expect(json[0]['name']).to eq(first.name)
       # expect(json[1]['name']).to eq(second.name)
       expect(json[0].keys).to eq(%w(id uuid name description state postprocessing
-        hardware_info system_tags user_tags is_private notify_low_battery notify_stopped_publishing last_reading_at added_at updated_at mac_address owner data kit))
+        hardware_info system_tags user_tags is_private notify_low_battery notify_stopped_publishing last_reading_at added_at updated_at mac_address device_token owner data kit))
     end
 
     describe "when not logged in" do
@@ -253,6 +253,36 @@ describe V0::DevicesController do
       it "exposes mac address to admin" do
         j = api_get "devices/#{device.id}?access_token=#{admin_token.token}"
         expect(j['mac_address']).to eq(device.mac_address)
+      end
+
+    end
+
+    describe "device_token" do
+
+      before do
+        device.device_token = "secret_token"
+        device.save!
+      end
+
+      it "filters device token from guests" do
+        j = api_get "devices/#{device.id}"
+        expect(j['device_token']).to eq('[FILTERED]')
+      end
+
+      it "filters device token from users" do
+        j = api_get "devices/#{device.id}?access_token=#{token.token}"
+        expect(j['device_token']).to eq('[FILTERED]')
+      end
+
+      it "exposes device token to device owner" do
+        device = create(:device, owner: user, device_token: "secret_token_2")
+        j = api_get "devices/#{device.id}?access_token=#{token.token}"
+        expect(j['device_token']).to eq(device.device_token)
+      end
+
+      it "exposes device token to admin" do
+        j = api_get "devices/#{device.id}?access_token=#{admin_token.token}"
+        expect(j['device_token']).to eq(device.device_token)
       end
 
     end
