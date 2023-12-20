@@ -6,15 +6,15 @@ end
 
 RSpec.describe RawStorer, :type => :model do
   before(:each) do
-    Sensor.create!(id: 7, name: "POM-3044P-R", description: "test", key: "noise", equation: "Mathematician.table_calibration({0=>50,2=>55,3=>57,6=>58,20=>59,40=>60,60=>61,75=>62,115=>63,150=>64,180=>65,220=>66,260=>67,300=>68,375=>69,430=>70,500=>71,575=>72,660=>73,720=>74,820=>75,900=>76,975=>77,1050=>78,1125=>79,1200=>80,1275=>81,1320=>82,1375=>83,1400=>84,1430=>85,1450=>86,1480=>87,1500=>88,1525=>89,1540=>90,1560=>91,1580=>92,1600=>93,1620=>94,1640=>95,1660=>96,1680=>97,1690=>98,1700=>99,1710=>100,1720=>101,1745=>102,1770=>103,1785=>104,1800=>105,1815=>106,1830=>107,1845=>108,1860=>109,1875=>110},x)", reverse_equation: "x")
-    Sensor.create!(id: 12, name: "HPP828E031", description: "test", key: "temp", equation: "(175.72 / 65536.0 * x) - 53", reverse_equation: "x")
-    Sensor.create!(id: 13, name: "HPP828E031", description: "test", key: "hum", equation: "(125.0 / 65536.0  * x) + 7", reverse_equation: "x")
-    Sensor.create!(id: 14, name: "BH1730FVC", description: "test", key: "light", equation: "x", reverse_equation: "x/10.0")
-    Sensor.create!(id: 15, name: "MiCS-4514", description: "test", key: "no2", equation: "x", reverse_equation: "x/1000.0")
-    Sensor.create!(id: 16, name: "MiCS-4514", description: "test", key: "co", equation: "x", reverse_equation: "x/1000.0")
-    Sensor.create!(id: 17, name: "Battery", description: "test", key: "bat", equation: "x", reverse_equation: "x/10.0")
-    Sensor.create!(id: 18, name: "Solar Panel", description: "test", key: "panel", equation: "x", reverse_equation: "x/1000.0")
-    Sensor.create!(id: 21, name: "Microchip RN-131", description: "test", key: "nets", equation: "x", reverse_equation: "x")
+    Sensor.create!(id: 7, name: "POM-3044P-R", description: "test", default_key: "noise", equation: "Mathematician.table_calibration({0=>50,2=>55,3=>57,6=>58,20=>59,40=>60,60=>61,75=>62,115=>63,150=>64,180=>65,220=>66,260=>67,300=>68,375=>69,430=>70,500=>71,575=>72,660=>73,720=>74,820=>75,900=>76,975=>77,1050=>78,1125=>79,1200=>80,1275=>81,1320=>82,1375=>83,1400=>84,1430=>85,1450=>86,1480=>87,1500=>88,1525=>89,1540=>90,1560=>91,1580=>92,1600=>93,1620=>94,1640=>95,1660=>96,1680=>97,1690=>98,1700=>99,1710=>100,1720=>101,1745=>102,1770=>103,1785=>104,1800=>105,1815=>106,1830=>107,1845=>108,1860=>109,1875=>110},x)", reverse_equation: "x")
+    Sensor.create!(id: 12, name: "HPP828E031", description: "test", default_key: "temp", equation: "(175.72 / 65536.0 * x) - 53", reverse_equation: "x")
+    Sensor.create!(id: 13, name: "HPP828E031", description: "test", default_key: "hum", equation: "(125.0 / 65536.0  * x) + 7", reverse_equation: "x")
+    Sensor.create!(id: 14, name: "BH1730FVC", description: "test", default_key: "light", equation: "x", reverse_equation: "x/10.0")
+    Sensor.create!(id: 15, name: "MiCS-4514", description: "test", default_key: "no2", equation: "x", reverse_equation: "x/1000.0")
+    Sensor.create!(id: 16, name: "MiCS-4514", description: "test", default_key: "co", equation: "x", reverse_equation: "x/1000.0")
+    Sensor.create!(id: 17, name: "Battery", description: "test", default_key: "bat", equation: "x", reverse_equation: "x/10.0")
+    Sensor.create!(id: 18, name: "Solar Panel", description: "test", default_key: "panel", equation: "x", reverse_equation: "x/1000.0")
+    Sensor.create!(id: 21, name: "Microchip RN-131", description: "test", default_key: "nets", equation: "x", reverse_equation: "x")
 
     Component.create!(id: 12, device: device, sensor: Sensor.find(12))
     Component.create!(id: 13, device: device, sensor: Sensor.find(13))
@@ -41,7 +41,7 @@ RSpec.describe RawStorer, :type => :model do
   end
 
   it "updates component last_reading_at" do
-    includes_proxy = double({ where: double({last: device})})
+    includes_proxy = double({ where: double({last: device.reload})})
     allow(Device).to receive(:includes).and_return(includes_proxy)
 
     expect(device).to receive(:update_component_timestamps).with(
@@ -63,8 +63,8 @@ RSpec.describe RawStorer, :type => :model do
   end
 
   it "should return a correct sensor id number" do
-    expect(device.find_sensor_id_by_key(:co)).to eq(16)
-    expect(device.find_sensor_id_by_key(:bat)).to eq(17)
+    expect(device.reload.find_sensor_id_by_key(:co)).to eq(16)
+    expect(device.reload.find_sensor_id_by_key(:bat)).to eq(17)
   end
 
   it "will be created with valid data" do

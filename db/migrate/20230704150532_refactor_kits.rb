@@ -30,12 +30,12 @@ class RefactorKits < ActiveRecord::Migration[6.0]
     change_column_null :components, :board_type, true
 
     change_table :sensors do |t|
-      t.column :key, :string, null: true
+      t.column :default_key, :string, null: true
       t.column :equation, :string, null: true
       t.column :reverse_equation, :string, null: true
     end
 
-    # Add default key to sensors:
+    # Add default key to sensors to be used when new components are created:
     puts "-- setting default keys for sensors"
 
     key_counter =  Hash.new { |h, k|
@@ -51,7 +51,7 @@ class RefactorKits < ActiveRecord::Migration[6.0]
 
     key_counter.each do |id, keys|
       key = keys.max_by {|k, v| v }[0]
-      execute("UPDATE sensors SET key=? WHERE id=?", [key, id])
+      execute("UPDATE sensors SET default_key=? WHERE id=?", [key, id])
     end
 
 
@@ -83,7 +83,6 @@ class RefactorKits < ActiveRecord::Migration[6.0]
     end
 
     # For each existing device. Look up its kit, and create a component for each of that kit's components, with reference to the device itself.
-    # Override the key if it doesn't match that on sensor.
 
     puts "-- creating device components"
 
@@ -101,19 +100,12 @@ class RefactorKits < ActiveRecord::Migration[6.0]
           sensor_id = sensor_row["id"]
           created_at = kit_component_row["created_at"]
           updated_at = kit_component_row["updated_at"]
-          #p [sensor_row["key"], sensor_id,  sensor_map.invert[sensor_id]]
-          if sensor_row["key"] != sensor_map.invert[sensor_id]
-            key = sensor_map.invert[sensor_id]
-          end
-          begin
-            execute("""
-              INSERT INTO components
-              (device_id, sensor_id, key, created_at, updated_at)
-              VALUES (?, ?, ?, ?, ?)
-            """, [device_id, sensor_id, key, created_at, updated_at])
-          rescue Exception => e
-            raise e
-          end
+          key = sensor_map.invert[sensor_id]
+          execute("""
+            INSERT INTO components
+            (device_id, sensor_id, key, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?)
+          """, [device_id, sensor_id, key, created_at, updated_at])
         end
       end
     end
@@ -161,7 +153,7 @@ class RefactorKits < ActiveRecord::Migration[6.0]
     # Set constraints on components and sensors for the new device relationshop:
     change_column_null :components, :device_id, false
     add_foreign_key :components, :devices
-
-    change_column_null :sensors, :key, null: false
+    change_column_null :components, :key, null: false
+    change_column_null :sensors, :default_key, null: false
   end
 end

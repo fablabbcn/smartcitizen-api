@@ -3,13 +3,13 @@ require 'rails_helper'
 RSpec.describe MqttMessagesHandler do
   let(:device) { create(:device, device_token: 'aA1234') }
   let(:orphan_device) { create(:orphan_device, device_token: 'xX9876') }
-  let(:component) { build(:component, device: device, sensor: build(:sensor, id: 1)) }
+  let(:component) { build(:component, device: device, sensor: build(:sensor, id: 1, default_key: "key1")) }
 
   let(:device_inventory) { create(:device_inventory, report: '{"random_property": "random_result"}') }
 
   before do
     device.components << component
-    create(:sensor, id: 13, key: "key13")
+    create(:sensor, id: 13, default_key: "key13")
 
 
     @data = [{
@@ -81,7 +81,7 @@ RSpec.describe MqttMessagesHandler do
         #expect(Storer).to receive(:initialize).with('a', 'b')
         expect(Redis.current).to receive(:publish).with(
           'telnet_queue', [{
-            name: nil,
+            name: "key1",
             timestamp: 1465381800000,
             value: 21.0,
             tags: {
@@ -141,7 +141,7 @@ RSpec.describe MqttMessagesHandler do
     it 'processes raw data' do
       expect(Redis.current).to receive(:publish).with(
         'telnet_queue', [{
-          name: nil,
+          name: "key1",
           timestamp: 1490362514000,
           value: 48.45,
           tags: {
@@ -149,7 +149,7 @@ RSpec.describe MqttMessagesHandler do
             method: 'REST'
           }
         },{
-          name: nil,
+          name: "key13",
           timestamp: 1490362514000,
           value: 66.0,
           tags: {

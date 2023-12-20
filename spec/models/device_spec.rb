@@ -30,29 +30,15 @@ RSpec.describe Device, :type => :model do
   end
 
   describe "#sensor_map" do
-    context "when it has a sensor with its own key" do
-      it "maps the sensor key to the sensor id" do
-        device = create(:device)
-        sensor = create(:sensor, key: "sensor_key")
-        component = create(:component, device: device, sensor: sensor)
-        expect(device.sensor_map).to eq({"sensor_key" => sensor.id})
-      end
+    it "maps the component key to the sensor id" do
+      device = create(:device)
+      sensor = create(:sensor, default_key: "sensor_key")
+      component = create(:component, device: device, sensor: sensor, key: "component_key")
+      expect(device.sensor_map).to eq({"component_key" => sensor.id})
     end
-
-    context "when it has a sensor with an overriden key" do
-      it "maps the component key to the sensor id" do
-        device = create(:device)
-        sensor = create(:sensor, key: "sensor_key")
-        component = create(:component, device: device, sensor: sensor, key: "component_key")
-        expect(device.sensor_map).to eq({"component_key" => sensor.id})
-      end
-    end
-
-
   end
 
   describe "mac_address" do
-
     it "takes mac_address from existing device on update" do
       device = FactoryBot.create(:device, mac_address: mac_address)
       new_device = FactoryBot.create(:device)
@@ -298,9 +284,10 @@ RSpec.describe Device, :type => :model do
   describe "update_column_timestamps" do
 
     before do
-      @component_1 = create(:component, sensor: create(:sensor, id: 1))
-      @component_2 = create(:component, sensor: create(:sensor, id: 2))
-      @device = create(:device, components: [@component_1, @component_2])
+      @device = create(:device)
+      @component_1 = create(:component, device: @device, sensor: create(:sensor, id: 1))
+      @component_2 = create(:component, device: @device,  sensor: create(:sensor, id: 2))
+      @device.reload
       @timestamp = Time.parse("2023-10-06 06:00:00")
     end
 
