@@ -238,7 +238,7 @@ ActiveRecord::Schema.define(version: 2023_10_06_064514) do
     t.datetime "updated_at", null: false
     t.integer "measurement_id"
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
-    t.string "key"
+    t.string "default_key"
     t.string "equation"
     t.string "reverse_equation"
     t.index ["ancestry"], name: "index_sensors_on_ancestry"

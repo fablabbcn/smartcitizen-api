@@ -29,6 +29,7 @@ class RawStorer
         metric = sensor
 
         metric_id = device.find_sensor_id_by_key(metric)
+
         component = device.find_or_create_component_by_sensor_id(metric_id)
         next if component.nil?
 
@@ -53,7 +54,6 @@ class RawStorer
 
       #Kairos.http_post_to("/datapoints", _data)
       Redis.current.publish('telnet_queue', _data.to_json)
-
       sensor_ids = sql_data.select {|k, v| k.is_a?(Integer) }.keys.compact.uniq
       device.update_component_timestamps(parsed_ts, sensor_ids)
 

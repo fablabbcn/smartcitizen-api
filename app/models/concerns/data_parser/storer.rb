@@ -54,19 +54,12 @@ module DataParser
       end
 
       def sensor_reading(device, sensor)
-        begin
-          id = Integer(sensor['id'])
-          key = device.find_sensor_key_by_id(id)
-        rescue
-          key = sensor['id']
-          id = device.find_sensor_id_by_key(key)
-        end
-        component = device.find_or_create_component_by_sensor_id(id)
+        component = device.find_or_create_component_for_sensor_reading(sensor)
         return nil if component.nil?
         value = component.normalized_value( (Float(sensor['value']) rescue sensor['value']) )
         {
-          id: id,
-          key: key,
+          id: component.sensor_id,
+          key: component.key,
           component: component,
           value: value
         }
