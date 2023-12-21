@@ -22,8 +22,10 @@ json.(
 
 if current_user and (current_user.is_admin? or (device.owner_id and current_user.id == device.owner_id))
   json.merge! mac_address: device.mac_address
+  json.merge! device_token: device.device_token
 else
   json.merge! mac_address: '[FILTERED]'
+  json.merge! device_token: '[FILTERED]'
 end
 
 if with_owner && device.owner
