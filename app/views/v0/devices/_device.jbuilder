@@ -33,7 +33,6 @@ if with_owner && device.owner
     json.id device.owner.id
     json.uuid device.owner.uuid
     json.username device.owner.username
-    json.avatar device.owner.avatar
 
     json.profile_picture profile_picture_url(device.owner)
 

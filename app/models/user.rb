@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
 
   has_many :devices, foreign_key: 'owner_id', after_add: :update_cached_device_ids!, after_remove: :update_cached_device_ids!
   has_many :sensors, through: :devices
-  has_many :uploads, dependent: :destroy
+
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_one_attached :profile_picture
 
@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ["devices", "sensors", "uploads"]
+    ["devices", "sensors"]
   end
 
   def archive
@@ -61,10 +61,6 @@ class User < ActiveRecord::Base
 
   def access_token
     Doorkeeper::AccessToken.find_or_initialize_by(application_id: 4, resource_owner_id: id)
-  end
-
-  def avatar
-    avatar_url || "https://smartcitizen.s3.amazonaws.com/avatars/default.svg"
   end
 
   def access_token!
@@ -134,14 +130,6 @@ class User < ActiveRecord::Base
 
   def update_all_device_ids!
     update_column(:cached_device_ids, device_ids.try(:sort))
-  end
-
-  def self.check_bad_avatar_urls
-    User.where.not(avatar_url: nil).each do |user|
-      unless `curl -I #{user.avatar_url} 2>/dev/null | head -n 1`.split(' ')[1] == "200"
-        puts [user.id, user.avatar_url].join(' - ')
-      end
-    end
   end
 
 private

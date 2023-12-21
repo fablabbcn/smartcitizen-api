@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_06_064514) do
+ActiveRecord::Schema.define(version: 2023_12_21_142429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -261,19 +261,6 @@ ActiveRecord::Schema.define(version: 2023_10_06_064514) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
-  create_table "uploads", id: :serial, force: :cascade do |t|
-    t.string "type"
-    t.string "original_filename"
-    t.jsonb "metadata"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.uuid "uuid", default: -> { "uuid_generate_v4()" }
-    t.integer "user_id"
-    t.string "key"
-    t.index ["type"], name: "index_uploads_on_type"
-    t.index ["user_id"], name: "index_uploads_on_user_id"
-  end
-
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "username"
     t.string "email"
@@ -284,7 +271,6 @@ ActiveRecord::Schema.define(version: 2023_10_06_064514) do
     t.string "city"
     t.string "country_code"
     t.string "url"
-    t.string "avatar_url"
     t.integer "role_mask", default: 0, null: false
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.string "legacy_api_key", null: false
@@ -304,5 +290,4 @@ ActiveRecord::Schema.define(version: 2023_10_06_064514) do
   add_foreign_key "devices_tags", "tags"
   add_foreign_key "postprocessings", "devices"
   add_foreign_key "sensors", "measurements"
-  add_foreign_key "uploads", "users"
 end

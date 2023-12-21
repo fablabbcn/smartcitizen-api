@@ -61,9 +61,7 @@ private
         :password,
         :city,
         :country_code,
-        :url,
-        :avatar,
-        :avatar_url
+        :url
       )
     end
 
