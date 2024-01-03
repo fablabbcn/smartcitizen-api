@@ -283,18 +283,22 @@ The following will send a message from the `app` container to the `mqtt` contain
             - "EMQX_MQTT__MAX_MQUEUE_LEN=10000000"
             - "EMQX_NODE__COOKIE=sc_emqx"
             - "EMQX_ALLOW_ANONYMOUS=false"
-            - "EMQX_LISTENER__SSL__KEYFILE=/opt/emqx/etc/certs/privkey.pem"
-            - "EMQX_LISTENER__SSL__CERTFILE=/opt/emqx/etc/certs/fullchain.pem"
-            - "EMQX_LISTENER__WSS__KEYFILE=/opt/emqx/etc/certs/privkey.pem"
-            - "EMQX_LISTENER__WSS__CERTFILE=/opt/emqx/etc/certs/fullchain.pem"
+            - "EMQX_LISTENERS__SSL__DEFAULT__BIND=8883"
+            - "EMQX_LISTENERS__SSL__DEFAULT__SSL_OPTIONS__KEYFILE=/opt/emqx/etc/certs/privkey.pem"
+            - "EMQX_LISTENERS__SSL__DEFAULT__SSL_OPTIONS__CERTFILE=/opt/emqx/etc/certs/fullchain.pem"
+            - "EMQX_LISTENERS__SSL__DEFAULT__SSL_OPTIONS__CACERTFILE=/opt/emqx/etc/certs/fullchain.pem"
+            - "EMQX_LISTENERS__WSS__DEFAULT__SSL_OPTIONS__KEYFILE=/opt/emqx/etc/certs/privkey.pem"
+            - "EMQX_LISTENERS__WSS__DEFAULT__SSL_OPTIONS__CERTFILE=/opt/emqx/etc/certs/fullchain.pem"
+            - "EMQX_LISTENERS__WSS__DEFAULT__SSL_OPTIONS__CACERTFILE=/opt/emqx/etc/certs/fullchain.pem"
             - "EMQX_DASHBOARD__LISTENERS__HTTP__ENABLE=true"
             - "EMQX_DASHBOARD__LISTENERS__HTTP__BIND=18083"
             - "EMQX_DASHBOARD__LISTENERS__HTTP__MAX_CONNECTIONS=5"
             - "EMQX_DASHBOARD__LISTENERS__HTTPS__ENABLE=true"
             - "EMQX_DASHBOARD__LISTENERS__HTTPS__BIND=18084"
             - "EMQX_DASHBOARD__LISTENERS__HTTPS__MAX_CONNECTIONS=5"
-            - "EMQX_DASHBOARD__LISTENERS__HTTPS__KEYFILE=/opt/emqx/etc/certs/privkey.pem"
-            - "EMQX_DASHBOARD__LISTENERS__HTTPS__CERTFILE=/opt/emqx/etc/certs/fullchain.pem"
+            - "EMQX_DASHBOARD__LISTENERS__HTTPS__SSL_OPTIONS__KEYFILE=/opt/emqx/etc/certs/privkey.pem"
+            - "EMQX_DASHBOARD__LISTENERS__HTTPS__SSL_OPTIONS__CERTFILE=/opt/emqx/etc/certs/fullchain.pem"
+            - "EMQX_DASHBOARD__LISTENERS__HTTPS__SSL_OPTIONS__CACERTFILE=/opt/emqx/etc/certs/fullchain.pem"
          restart: unless-stopped
          deploy:
             resources:
@@ -327,4 +331,3 @@ docker compose up -d
 Issues for discussion:
 
 https://github.com/emqx/emqx/discussions/12094#discussioncomment-8002548
-
