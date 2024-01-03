@@ -51,3 +51,6 @@ storage
 deploy_history.txt
 scripts/certs
 scripts/emqt
+.tool-versions
+
+compose.override.yml

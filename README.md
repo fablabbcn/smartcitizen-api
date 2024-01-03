@@ -33,13 +33,16 @@ We recommend using `rbenv`.
 
    `cp env.example .env`
 
-2. Start basic services (recommended)
+2. Copy the local development docker overrides:
+   `cp compose.override.local.yml compose.override.yml`
+
+3. Start basic services (recommended)
 
    In a new terminal window do:
 
-   `docker-compose up app db`
+   `docker compose up app db`
 
-   See the `docker-compose.yml` file `depends_on:` section to see which containers depend on which.
+   See the `compose.yml` file `depends_on:` section to see which containers depend on which.
 
    Available containers:
    * `app` - Rails app
@@ -54,25 +57,25 @@ We recommend using `rbenv`.
 
    Start ALL of them (not recommended) with:
 
-   `docker-compose up`
+   `docker compose up`
 
-3. (OPTIONAL) Start Cassandra cluster of 3 nodes
+4. (OPTIONAL) Start Cassandra cluster of 3 nodes
 
    If you want to start Kairos with 3 Cassandra cluster with 3 nodes:
 
-   * Uncomment the other 2 cassandras in `docker-compose.yml` file
+   * Uncomment the other 2 cassandras in `compose.yml` file
 
    * Edit the file `scripts/conf/kairosdb.properties` and change the following line:
 
      `kairosdb.datastore.cassandra.cql_host_list=cassandra-1`
 
-     `docker-compose up kairos cassandra-1 cassandra-2 cassandra-3`
+     `docker compose up kairos cassandra-1 cassandra-2 cassandra-3`
 
-4. Create the database (first time only)
+5. Create the database (first time only)
 
    If you need to perfom many operations, it might be better to `bash` into the container:
 
-   `docker-compose exec app bash`
+   `docker compose exec app bash`
 
    and from here you can do
 
@@ -82,13 +85,29 @@ We recommend using `rbenv`.
 
    `bin/rails db:seed`
 
-    Or you can run them all at once with: `docker-compose exec app bin/rails db:setup`
+    Or you can run them all at once with: `docker compose exec app bin/rails db:setup`
 
-5. Removing everything
+6. Removing everything
 
    Remove all containers + data volumes with:
 
-   `docker-compose down -v`
+   `docker compose down -v`
+
+## Running the tests on a local docker container:
+
+_(I'm not 100% clear why step (3) is needed, but for some reason the DATABASE_URL overrides the test database details in database.yml which causes problems)_
+
+1. Make sure you're running the app and db containers as above:
+   `docker compose up app db`
+
+2. In another terminal, get a shell within the app container:
+   `docker compose exec app bash`
+
+3. Within that shell, unset the DATABASE_URL environment variable:
+   `unset DATABASE_URL`
+
+4. Finally, run the tests (within that shell)!
+   `bundle exec bin/rake spec`
 
 ## Deploying
 
@@ -96,8 +115,8 @@ We recommend using `rbenv`.
 
 1. SSH into the server
 1. `git pull`
-1. `docker-compose build`
-1. `docker-compose up -d`
+1. `docker compose build`
+1. `docker compose up -d`
 
 ## Cassandra
 

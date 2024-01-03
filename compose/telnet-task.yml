@@ -1,0 +1,6 @@
+services:
+  telnet-task:
+    build: ../.
+    env_file: ../.env
+    command: bundle exec rake telnet:push
+    restart: always

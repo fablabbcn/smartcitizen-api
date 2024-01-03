@@ -5,5 +5,5 @@ if ! [[ $1 ]]; then
   exit
 fi
 
-#docker exec -i $(docker-compose ps -q db) pg_dump -Upostgres $1 > dump_`date +%Y-%m-%d"_"%H_%M_%S`.sql
+#docker exec -i $(docker compose ps -q db) pg_dump -Upostgres $1 > dump_`date +%Y-%m-%d"_"%H_%M_%S`.sql
 docker exec -i smartcitizen-api_db_1 pg_dump -Upostgres $1 > backup/dump_`date +%Y-%m-%d"_"%H_%M_%S`.sql

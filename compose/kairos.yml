@@ -1,0 +1,23 @@
+services:
+  # There is no official docker image for Kairos 2017-12-18
+  #  kairos:
+  #    image: kairos
+  kairos:
+    env_file: ../.env
+    build:
+      context: ../scripts/
+      dockerfile: Dockerfile-kairos
+    depends_on:
+      cassandra-1:
+        condition: service_healthy
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+        window: 120s
+    ports:
+      - 8080:8080
+      - 4242:4242 #telnet
+    # We better not start Cassandra container in production, it eats up memory
+    #depends_on:
+      #- cassandra-1
