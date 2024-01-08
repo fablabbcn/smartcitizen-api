@@ -259,7 +259,7 @@ class Device < ActiveRecord::Base
 
   def update_component_timestamps(timestamp, sensor_ids)
     components.select {|c| sensor_ids.include?(c.sensor_id) }.each do |component|
-      component.update(last_reading_at: timestamp)
+      component.update_column(:last_reading_at, timestamp)
     end
   end
 

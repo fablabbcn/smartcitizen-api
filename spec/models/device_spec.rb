@@ -285,7 +285,7 @@ RSpec.describe Device, :type => :model do
 
     before do
       @device = create(:device)
-      @component_1 = create(:component, device: @device, sensor: create(:sensor, id: 1))
+      @component_1 = create(:component, device: @device, sensor: create(:sensor, id: 1), updated_at: "2023-01-01 12:00:00")
       @component_2 = create(:component, device: @device,  sensor: create(:sensor, id: 2))
       @device.reload
       @timestamp = Time.parse("2023-10-06 06:00:00")
@@ -299,6 +299,12 @@ RSpec.describe Device, :type => :model do
     it "does not update the timesatamp for components without the given sensor ids" do
       expect(@component_2).not_to receive(:update).with(last_reading_at: @timestamp)
       @device.update_component_timestamps(@timestamp, [1])
+    end
+
+    it "does not update the component updated_at" do
+      updated_at = @component_1.updated_at
+      @device.update_component_timestamps(@timestamp, [1])
+      expect(@component_1.reload.updated_at).to eq(updated_at)
     end
   end
 
