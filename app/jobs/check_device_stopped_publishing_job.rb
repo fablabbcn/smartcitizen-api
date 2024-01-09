@@ -9,7 +9,7 @@ class CheckDeviceStoppedPublishingJob < ApplicationJob
 
     devices.each do |device|
       if device.notify_stopped_publishing_timestamp < 24.hours.ago
-        device.update notify_stopped_publishing_timestamp: Time.now
+        device.update_column(:notify_stopped_publishing_timestamp, Time.now)
         UserMailer.device_stopped_publishing(device.id).deliver_now
       end
     end
