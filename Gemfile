@@ -87,6 +87,7 @@ end
 
 group :development, :test do
   # gem 'rspec_api_blueprint', require: false
+  gem "pry"
   gem 'brakeman', github: 'presidentbeef/brakeman', require: false
   gem 'byebug'
   gem 'cane'

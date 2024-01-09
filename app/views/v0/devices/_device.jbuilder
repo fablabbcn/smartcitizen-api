@@ -16,7 +16,7 @@ json.(
   :notify_low_battery,
   :notify_stopped_publishing,
   :last_reading_at,
-  :added_at,
+  :created_at,
   :updated_at
 )
 
@@ -33,12 +33,10 @@ if with_owner && device.owner
     json.id device.owner.id
     json.uuid device.owner.uuid
     json.username device.owner.username
-    json.avatar device.owner.avatar
 
     json.profile_picture profile_picture_url(device.owner)
 
     json.url device.owner.url
-    json.joined_at device.owner.joined_at
     json.location device.owner.location
     json.device_ids device.owner.cached_device_ids
   end
@@ -46,8 +44,4 @@ end
 
 json.data device.formatted_data if with_data
 
-if device.kit
-  json.kit device.kit, :id, :uuid, :slug, :name, :description, :created_at, :updated_at
-else
-  json.merge! kit: nil
-end
+

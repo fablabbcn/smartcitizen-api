@@ -57,9 +57,8 @@ RSpec.describe OrphanDevice, type: :model do
     it 'attributes hash without device_token and onboarding_session' do
       device_attributes_hash = orphan_device.device_attributes
 
-      expect(device_attributes_hash.length).to eq(8)
+      expect(device_attributes_hash.length).to eq(7)
       expect(device_attributes_hash.key?(:name)).to eq(true)
-      expect(device_attributes_hash.key?(:kit_id)).to eq(true)
       expect(device_attributes_hash.key?(:description)).to eq(true)
       expect(device_attributes_hash.key?(:user_tags)).to eq(true)
       expect(device_attributes_hash.key?(:longitude)).to eq(true)

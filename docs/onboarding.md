@@ -5,7 +5,7 @@
 ### POST /v0/onboarding/device
 
 Method creates orphan_device and returns unique 'onboarding_session' and 'device_token'.
-Requires no params at all, however, it can take any of the following: 'name', 'description', 'kit_id', 'exposure', 'latitude', 'longitude', 'user_tags'. Any passed params will be used on the creation of the 'orphan_device'.
+Requires no params at all, however, it can take any of the following: 'name', 'description', 'exposure', 'latitude', 'longitude', 'user_tags'. Any passed params will be used on the creation of the 'orphan_device'.
 
 Note that both 'device_token' and 'onboarding_session' are unique for each 'orphan_device'.
 ```
@@ -14,9 +14,7 @@ request example:
 Content-Type: application/json
 Accept: application/json
 ------------------------------
-{
-  "kit_id": 1
-}
+{}
 ```
 
 ```
@@ -46,7 +44,6 @@ OnboardingSession: a71095a2-e99c-4664-82d8-b4c1c9bbc531
 {
   "name": "Owner",
   "description": "device description",
-  "kit_id": 1,
   "exposure": "indoor",
   "latitude": 41.3966908,
   "longitude": 2.1921909,
@@ -61,7 +58,6 @@ response example:
   "id": 7,
   "name": "Owner",
   "description": "device description",
-  "kit_id": 1,
   "exposure": "indoor",
   "latitude": 41.3966908,
   "longitude": 2.1921909,
@@ -114,7 +110,7 @@ If 'Onboarding-Session' is not valid, (404) "Invalid onboarding_session".
 
 Requires user authentication, otherwise (401) "Authorization required" is returned.
 
-Requires all the `/onboarding/device` parameters to be provided (`name`, `description`, `kit_id`, `exposure`, `latitude`, `longitude`, `user_tags`), otherwise results in a 422, "Missing Params".
+Requires all the `/onboarding/device` parameters to be provided (`name`, `description`, `exposure`, `latitude`, `longitude`, `user_tags`), otherwise results in a 422, "Missing Params".
 
 ```
 POST v0/onboarding/register request example:
@@ -141,10 +137,9 @@ response example:
   "longitude": 2.1921909,
   "created_at": "2016-10-29T12:31:25+02:00",
   "updated_at": "2016-10-29T12:31:25+02:00",
-  "kit_id": 1,
   "latest_data": nil,
   "geohash": "sp3e9bh31y",
-  "last_recorded_at": nil,
+  "last_reading_at": nil,
   "meta": {
     "exposure": "indoor"
   },
@@ -171,7 +166,7 @@ This is the end of the onboarding process.
 
 ## Token notification
 
-This is tiggered when the platform receives the first **"Hello World"** from the Kit after the *light setup* process. 
+This is tiggered when the platform receives the first **"Hello World"** from the Kit after the *light setup* process.
 
 `io.connect(‘wss://smartcitizen.xyz’).on('token-received’, doSomething);``
 

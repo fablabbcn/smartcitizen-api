@@ -1,2 +1,0 @@
-class KitPolicy < AdminPolicy
-end

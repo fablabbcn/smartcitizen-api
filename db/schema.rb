@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_05_095430) do
+ActiveRecord::Schema.define(version: 2023_12_21_142429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -58,15 +58,14 @@ ActiveRecord::Schema.define(version: 2023_07_05_095430) do
   end
 
   create_table "components", id: :serial, force: :cascade do |t|
-    t.integer "board_id"
-    t.string "board_type"
     t.integer "sensor_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
-    t.text "equation"
-    t.text "reverse_equation"
-    t.index ["board_type", "board_id"], name: "index_components_on_board_type_and_board_id"
+    t.integer "device_id", null: false
+    t.string "key"
+    t.integer "bus", default: 1, null: false
+    t.datetime "last_reading_at"
     t.index ["sensor_id"], name: "index_components_on_sensor_id"
   end
 
@@ -79,10 +78,9 @@ ActiveRecord::Schema.define(version: 2023_07_05_095430) do
     t.float "longitude"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "kit_id"
     t.hstore "latest_data"
     t.string "geohash"
-    t.datetime "last_recorded_at"
+    t.datetime "last_reading_at"
     t.jsonb "meta"
     t.jsonb "location"
     t.jsonb "data"
@@ -105,8 +103,7 @@ ActiveRecord::Schema.define(version: 2023_07_05_095430) do
     t.datetime "archived_at"
     t.index ["device_token"], name: "index_devices_on_device_token", unique: true
     t.index ["geohash"], name: "index_devices_on_geohash"
-    t.index ["kit_id"], name: "index_devices_on_kit_id"
-    t.index ["last_recorded_at"], name: "index_devices_on_last_recorded_at"
+    t.index ["last_reading_at"], name: "index_devices_on_last_reading_at"
     t.index ["owner_id"], name: "index_devices_on_owner_id"
     t.index ["state"], name: "index_devices_on_state"
     t.index ["workflow_state"], name: "index_devices_on_workflow_state"
@@ -135,17 +132,6 @@ ActiveRecord::Schema.define(version: 2023_07_05_095430) do
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id"
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
-  end
-
-  create_table "kits", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "slug"
-    t.uuid "uuid", default: -> { "uuid_generate_v4()" }
-    t.jsonb "sensor_map"
-    t.index ["slug"], name: "index_kits_on_slug"
   end
 
   create_table "measurements", id: :serial, force: :cascade do |t|
@@ -201,7 +187,6 @@ ActiveRecord::Schema.define(version: 2023_07_05_095430) do
   create_table "orphan_devices", id: :serial, force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.integer "kit_id"
     t.string "exposure"
     t.float "latitude"
     t.float "longitude"
@@ -253,6 +238,9 @@ ActiveRecord::Schema.define(version: 2023_07_05_095430) do
     t.datetime "updated_at", null: false
     t.integer "measurement_id"
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
+    t.string "default_key"
+    t.string "equation"
+    t.string "reverse_equation"
     t.index ["ancestry"], name: "index_sensors_on_ancestry"
     t.index ["measurement_id"], name: "index_sensors_on_measurement_id"
   end
@@ -273,19 +261,6 @@ ActiveRecord::Schema.define(version: 2023_07_05_095430) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
-  create_table "uploads", id: :serial, force: :cascade do |t|
-    t.string "type"
-    t.string "original_filename"
-    t.jsonb "metadata"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.uuid "uuid", default: -> { "uuid_generate_v4()" }
-    t.integer "user_id"
-    t.string "key"
-    t.index ["type"], name: "index_uploads_on_type"
-    t.index ["user_id"], name: "index_uploads_on_user_id"
-  end
-
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "username"
     t.string "email"
@@ -296,7 +271,6 @@ ActiveRecord::Schema.define(version: 2023_07_05_095430) do
     t.string "city"
     t.string "country_code"
     t.string "url"
-    t.string "avatar_url"
     t.integer "role_mask", default: 0, null: false
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.string "legacy_api_key", null: false
@@ -310,11 +284,10 @@ ActiveRecord::Schema.define(version: 2023_07_05_095430) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "api_tokens", "users", column: "owner_id"
+  add_foreign_key "components", "devices"
   add_foreign_key "components", "sensors"
-  add_foreign_key "devices", "kits"
   add_foreign_key "devices_tags", "devices"
   add_foreign_key "devices_tags", "tags"
   add_foreign_key "postprocessings", "devices"
   add_foreign_key "sensors", "measurements"
-  add_foreign_key "uploads", "users"
 end

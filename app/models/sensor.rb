@@ -1,12 +1,9 @@
-# Every Device has one or more sensors. A Kit is a blueprint/group of sensors.
-# A Kit is not an SCK. There is a naming conflict with the frontend, please see
-# app/models/kit.rb for more information.
+# Every Device has one or more sensors.
 
 class Sensor < ActiveRecord::Base
 
   has_many :components
-  has_many :boards, through: :components
-  has_many :kits, through: :components
+  has_many :devices, through: :components
 
   has_many :sensor_tags
   has_many :tag_sensors, through: :sensor_tags

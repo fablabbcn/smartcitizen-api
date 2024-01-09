@@ -54,7 +54,7 @@ namespace :i do
           else
             next
           end
-          if device.last_recorded_at < 8.hours_ago
+          if device.last_reading_at < 8.hours_ago
             device.update_column(:data, a[0])
           end
         end

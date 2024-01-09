@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :component do
     uuid { SecureRandom.uuid }
-    association :board, factory: :kit
+    association :device
     association :sensor
   end
 

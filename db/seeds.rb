@@ -11,32 +11,21 @@ unless Rails.env.development?
   exit
 end
 
-p '---- Seeding for development environment ----'
+p "---- Seeding for development environment ----"
 
 User.create(
-  username: 'user1',
-  email: 'email@example.com',
-  password: 'password',
+  username: "user1",
+  email: "email@example.com",
+  password: "password",
   country_code: Faker::Address.country_code,
-  city: Faker::Address.city
+  city: Faker::Address.city,
 )
-
-#Kit.create(name: 'Making Sense WAAG #1', description: 'AQM sensor by WAAG', slug:'makingSenseSlug')
-# Kits need to have a sensor_map
-3.times do
-  Kit.create(
-    name: "Kit #{Faker::Educator.campus}",
-    description: Faker::Lorem.sentence,
-    slug: 'sck:1,1',
-    sensor_map: {"temp": 12, "hum": 13, "light": 14}
-  )
-end
 
 Measurement.create(
   [
-    { name: 'air temperature',  description: 'How hot is the air', unit: 'C' },
-    { name: 'air humidity',  description: 'How humit is the air', unit: '% Rel' },
-    { name: 'light',  description: 'Lux is a measure', unit: 'lux' }
+    { name: "air temperature", description: "How hot is the air", unit: "C" },
+    { name: "air humidity", description: "How humit is the air", unit: "% Rel" },
+    { name: "light", description: "Lux is a measure", unit: "lux" },
   ]
 )
 
@@ -45,25 +34,25 @@ unless Sensor.exists?(12)
     [
       {
         id: 12,
-        name: 'My temp sensor',
-        unit: 'temperature unit',
+        name: "My temp sensor",
+        unit: "temperature unit",
         measurement: Measurement.first,
-        description: 'temp sens descript'
+        description: "temp sens descript",
       },
       {
         id: 13,
-        name: 'My hum sensor',
-        unit: 'hum unit',
+        name: "My hum sensor",
+        unit: "hum unit",
         measurement: Measurement.second,
-        description: 'light sens descript'
+        description: "light sens descript",
       },
       {
         id: 14,
-        name: 'My light sensor',
-        unit: 'light unit',
+        name: "My light sensor",
+        unit: "light unit",
         measurement: Measurement.third,
-        description: 'light sens descript'
-      }
+        description: "light sens descript",
+      },
     ]
   )
 end
@@ -72,26 +61,23 @@ unless Sensor.exists?(14)
   Sensor.find(14).tag_sensors.create(
     [
       {
-        name: 'environmental seed 1',
-        description: 'environmental sensor tag'
+        name: "environmental seed 1",
+        description: "environmental sensor tag",
       },
       {
-        name: 'light seed',
-        description: 'Light sensor tag'
+        name: "light seed",
+        description: "Light sensor tag",
       },
       {
-        name: 'digital seed',
-        description: 'Digital sensor tag'
-      }
+        name: "digital seed",
+        description: "Digital sensor tag",
+      },
     ]
   )
 end
 
-#device has many sensors through components
-#has_many :components, as: :board
-
 10.times do
-  Device.create(
+  device = Device.create(
     {
       owner: User.all.sample,
       name: Faker::Address.city,
@@ -102,69 +88,62 @@ end
       # reverse_geocode will FAIL if it receives a location at sea
       latitude: 42.385,
       longitude: 2.173,
-      device_token: Faker::Crypto.sha1[0,6],
+      device_token: Faker::Crypto.sha1[0, 6],
       is_private: [true, false].sample,
       notify_low_battery: [true, false].sample,
       notify_low_battery_timestamp: Time.now,
       notify_stopped_publishing: [true, false].sample,
       notify_stopped_publishing_timestamp: Time.now,
       data: {
-        7  => 50,
+        7 => 50,
         10 => rand(20), #battery level below 15 get emails
         12 => -0.629348144531249,
         13 => 131.992370605469,
         14 => 37.8,
         15 => 27.384,
         16 => 275.303,
-        17 => 100
+        17 => 100,
       },
-      kit: Kit.all.sample
     }
+  )
+
+  Component.create(
+    device: device, sensor: Sensor.find(12),
+  )
+  Component.create(
+    device: device, sensor: Sensor.find(13),
+  )
+  Component.create(
+    device: device, sensor: Sensor.find(14),
+  )
+  Component.create(
+    device: device, sensor: Sensor.find(12),
+  )
+  Component.create(
+    device: device, sensor: Sensor.find(13),
+  )
+  Component.create(
+    device: device, sensor: Sensor.find(14),
+  )
+  Component.create(
+    device: device, sensor: Sensor.find(12),
+  )
+  Component.create(
+    device: device, sensor: Sensor.find(13),
+  )
+  Component.create(
+    device: device, sensor: Sensor.find(14),
   )
 end
 
 # Make the last Device an archived one?
 Device.last.archive!
 
-# belongs_to :board, polymorphic: true
-# belongs_to :sensor
-# Kit and Device have many Components, as: :board
-
-
-Component.create(
-  board: Kit.first, sensor: Sensor.find(12)
-)
-Component.create(
-  board: Kit.first, sensor: Sensor.find(13)
-)
-Component.create(
-  board: Kit.first, sensor: Sensor.find(14)
-)
-Component.create(
-  board: Kit.second, sensor: Sensor.find(12)
-)
-Component.create(
-  board: Kit.second, sensor: Sensor.find(13)
-)
-Component.create(
-  board: Kit.second, sensor: Sensor.find(14)
-)
-Component.create(
-  board: Kit.third, sensor: Sensor.find(12)
-)
-Component.create(
-  board: Kit.third, sensor: Sensor.find(13)
-)
-Component.create(
-  board: Kit.third, sensor: Sensor.find(14)
-)
-
-
 Tag.create(
   [
-    { name: 'Amsterdam', description: 'SCK in Adam' },
-    { name: 'Barcelona', description: 'SCK in Barcelona' },
-    { name: 'Manchester', description: 'SCK in Manchester' }
+    { name: "Amsterdam", description: "SCK in Adam" },
+    { name: "Barcelona", description: "SCK in Barcelona" },
+    { name: "Manchester", description: "SCK in Manchester" },
   ]
 )
 
@@ -173,15 +152,15 @@ begin
     [
       { device: Device.first, tag: Tag.first },
       { device: Device.first, tag: Tag.second },
-      { device: Device.second, tag: Tag.second }
+      { device: Device.second, tag: Tag.second },
     ]
   )
 rescue
-  p 'DevicesTags already created'
+  p "DevicesTags already created"
 end
 
 DeviceInventory.create(
-  report: {"random_property":"random_result"},
+  report: { "random_property": "random_result" },
 )
 
 d = Device.first
@@ -193,18 +172,18 @@ d.update!(
     "description": "iSCAPE Station Lab test unit",
     "state": "has_published",
     "info": {
-      "time":"2018-07-17T06:55:06Z",
-      "hw_ver":"2.0",
-      "id":"6C4C1AF4504E4B4B372E314AFF031619",
-      "sam_ver":"0.3.0-ce87e64",
-      "sam_bd":"2018-07-17T06:55:06Z",
-      "esp_ver":"0.3.0-ce87e64",
-      "esp_bd":"2018-07-17T06:55:06Z"
-    }
-  }
+      "time": "2018-07-17T06:55:06Z",
+      "hw_ver": "2.0",
+      "id": "6C4C1AF4504E4B4B372E314AFF031619",
+      "sam_ver": "0.3.0-ce87e64",
+      "sam_bd": "2018-07-17T06:55:06Z",
+      "esp_ver": "0.3.0-ce87e64",
+      "esp_bd": "2018-07-17T06:55:06Z",
+    },
+  },
 )
 #ApiToken.create(
 #  owner_id: User.first,
 #  token: 'random token'
 #)
-p '---- Seeding complete! ----'
+p "---- Seeding complete! ----"

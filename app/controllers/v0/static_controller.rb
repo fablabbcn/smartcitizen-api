@@ -15,7 +15,6 @@ module V0
         current_user_url: [request.base_url, v0_me_index_path].join,
         components_url: [request.base_url, v0_components_path].join,
         devices_url: [request.base_url, v0_devices_path].join,
-        kits_url: [request.base_url, v0_kits_path].join,
         measurements_url: [request.base_url, v0_measurements_path].join,
         sensors_url: [request.base_url, v0_sensors_path].join,
         users_url: [request.base_url, v0_users_path].join,
@@ -32,12 +31,12 @@ module V0
           private: Device.where(is_private: true).count,
           test: Device.where(is_test: true).count,
           online: {
-            now: Device.where('last_recorded_at > ?', 10.minutes.ago).count,
-            last_hour: Device.where('last_recorded_at > ?', 1.hour.ago).count,
-            today: Device.where('last_recorded_at > ?', Time.now.beginning_of_day).count,
-            this_month: Device.where('last_recorded_at > ?', Time.now.beginning_of_month).count,
-            this_year: Device.where('last_recorded_at > ?', Time.now.beginning_of_year).count,
-            all_time: Device.where.not(last_recorded_at: nil).count
+            now: Device.where('last_reading_at > ?', 10.minutes.ago).count,
+            last_hour: Device.where('last_reading_at > ?', 1.hour.ago).count,
+            today: Device.where('last_reading_at > ?', Time.now.beginning_of_day).count,
+            this_month: Device.where('last_reading_at > ?', Time.now.beginning_of_month).count,
+            this_year: Device.where('last_reading_at > ?', Time.now.beginning_of_year).count,
+            all_time: Device.where.not(last_reading_at: nil).count
           },
           readings: {
             good: {
@@ -117,7 +116,6 @@ module V0
             h['url'] = v0_device_url(s.searchable_id)
           elsif s.searchable_type == 'User'
             h['username'] = s.searchable.username
-            h['avatar'] = s.searchable.avatar
             h['profile_picture'] = profile_picture_url(s.searchable)
             h['city'] = s.searchable.city
             h['url'] = v0_user_url(s.searchable_id)

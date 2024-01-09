@@ -2,7 +2,6 @@ FactoryBot.define do
   factory :orphan_device do
     name { "OrphanDeviceName" }
     description { "OrphanDeviceDescription" }
-    kit_id { 1 }
     exposure { "indoor" }
     # same coordinates used for testing Device
     latitude { 41.3966908 }

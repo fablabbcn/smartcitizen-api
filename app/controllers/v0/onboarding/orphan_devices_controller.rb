@@ -43,7 +43,7 @@ module V0
       private
 
       def orphan_device_params
-        params.permit(:name, :description, :kit_id, :exposure, :latitude, :longitude, :user_tags)
+        params.permit(:name, :description, :exposure, :latitude, :longitude, :user_tags)
       end
 
       def set_orphan_device

@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Storer, type: :model do
-  let(:kit){       build(:kit, id: 3, name: 'SCK', description: "Board", slug: 'sck', sensor_map: '{"temp": 12}')}
-  let(:sensor){    build(:sensor, id:12, name:'HPP828E031', description: 'test')}
-  let(:component){ create(:component, id: 12, board: kit, sensor: sensor, equation: '(175.72 / 65536.0 * x) - 53', reverse_equation: 'x')}
-  let(:device) {   create(:device, device_token: 'aA1234', kit: kit) }
+  let(:sensor){    build(:sensor, id:12, name:'HPP828E031', description: 'test', equation: '(175.72 / 65536.0 * x) - 53', reverse_equation: 'x')}
+  let(:device) {   create(:device, device_token: 'aA1234') }
+  let(:component){ create(:component, id: 12, device: device, sensor: sensor) }
+
 
   context 'when receiving good data' do
     before do
@@ -41,7 +41,16 @@ RSpec.describe Storer, type: :model do
       # model/storer.rb is not using Kairos, but Redis -> Telnet
       # expect(Kairos).to receive(:http_post_to).with("/datapoints", @karios_data)
       # expect_any_instance_of(Storer).to receive(:ws_publish)
+      expect do
+        Storer.new(device, @data)
+      end.not_to raise_error
+    end
 
+    it "updates the component last_reading_at timestamp for each of the provided sensors" do
+       expect(device).to receive(:update_component_timestamps).with(
+        Time.parse(@data['recorded_at']),
+        [sensor.id]
+      )
       Storer.new(device, @data)
     end
 
@@ -53,7 +62,7 @@ RSpec.describe Storer, type: :model do
       expect(device.reload.updated_at).to eq(updated_at)
 
       expect(device.reload.data).not_to eq(nil)
-      expect(device.reload.last_recorded_at).not_to eq(nil)
+      expect(device.reload.last_reading_at).not_to eq(nil)
       expect(device.reload.state).to eq('has_published')
 
       expect(Storer).to receive(:ws_publish)
@@ -78,7 +87,7 @@ RSpec.describe Storer, type: :model do
     it 'does not update device' do
       expect{ Storer.new(device, @bad_data) }.to raise_error(ArgumentError)
 
-      expect(device.reload.last_recorded_at).to eq(nil)
+      expect(device.reload.last_reading_at).to eq(nil)
       expect(device.reload.data).to eq(nil)
       expect(device.reload.state).to eq('never_published')
     end

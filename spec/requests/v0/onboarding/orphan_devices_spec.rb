@@ -27,10 +27,10 @@ describe V0::Onboarding::OrphanDevicesController do
 
     it 'creates an orphan_device with passed attributes' do
       j = api_post '/onboarding/device', {
-        kit_id: 3
+
       }
 
-      expect(OrphanDevice.where(kit_id: 3).count).to eq(1)
+      expect(OrphanDevice.count).to eq(1)
     end
   end
 

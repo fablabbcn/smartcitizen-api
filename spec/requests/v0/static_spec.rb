@@ -13,7 +13,6 @@ describe V0::StaticController do
         current_user_url
         components_url
         devices_url
-        kits_url
         measurements_url
         sensors_url
         users_url
