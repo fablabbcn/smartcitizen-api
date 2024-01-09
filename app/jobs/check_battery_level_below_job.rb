@@ -18,7 +18,7 @@ class CheckBatteryLevelBelowJob < ApplicationJob
           if device.data["10"].to_i < 15 && device.data["10"].to_i > 1
             #p "Sending email to: #{device.owner.email} - device: #{device}"
 
-            device.update(notify_low_battery_timestamp: Time.now)
+            device.update_column(:notify_low_battery_timestamp,  Time.now)
 
             UserMailer.device_battery_low(device.id).deliver_now
           end

@@ -38,7 +38,7 @@ class MqttMessagesHandler
         }
       )
       Sentry.add_breadcrumb(crumb)
-      device.update hardware_info: json_message
+      device.update_column(:hardware_info, json_message)
     end
   end
 
