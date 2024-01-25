@@ -101,6 +101,11 @@ ActiveRecord::Schema.define(version: 2023_10_06_064514) do
     t.boolean "is_private", default: false
     t.boolean "is_test", default: false, null: false
     t.datetime "archived_at"
+    t.string "hardware_type_override"
+    t.string "hardware_name_override"
+    t.string "hardware_version_override"
+    t.string "hardware_description_override"
+    t.string "hardware_slug_override"
     t.index ["device_token"], name: "index_devices_on_device_token", unique: true
     t.index ["geohash"], name: "index_devices_on_geohash"
     t.index ["last_reading_at"], name: "index_devices_on_last_reading_at"

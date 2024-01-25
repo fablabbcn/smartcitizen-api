@@ -1,3 +1,4 @@
+require 'csv'
 class RefactorKits < ActiveRecord::Migration[6.0]
 
   def execute(query, args=[])
@@ -33,6 +34,14 @@ class RefactorKits < ActiveRecord::Migration[6.0]
       t.column :default_key, :string, null: true
       t.column :equation, :string, null: true
       t.column :reverse_equation, :string, null: true
+    end
+
+    change_table :devices do |t|
+      t.column :hardware_type_override, :string, null: true
+      t.column :hardware_name_override, :string, null: true
+      t.column :hardware_version_override, :string, null: true
+      t.column :hardware_description_override, :string, null: true
+      t.column :hardware_slug_override, :string, null: true
     end
 
     # Add default key to sensors to be used when new components are created:
@@ -82,12 +91,53 @@ class RefactorKits < ActiveRecord::Migration[6.0]
       end
     end
 
-    # For each existing device. Look up its kit, and create a component for each of that kit's components, with reference to the device itself.
+    # For each existing device. Look up its kit, set its hardware_info, and create a component for each of that kit's components, with reference to the device itself.
 
-    puts "-- creating device components"
+    kits_info =  CSV.foreach("db/data/kits.csv", headers:true).map(&:to_h).reduce({}) { |h, r| h[r["id"].to_i] = r; h }
+
+
+    puts "-- setting hardware info and creating components for devices"
 
     execute("SELECT * FROM devices").each do |device_row|
       execute("SELECT * FROM kits WHERE id = ? LIMIT 1", device_row["kit_id"]).each do |kit_row|
+
+        device_id = device_row["id"]
+
+        kit_id = kit_row["id"]
+        kit_info = kits_info[kit_id]
+
+        hardware_version = kit_info["hardware_version"]
+
+        unless kit_info["hardware_type"] == "SCK"
+          hardware_type = kit_info["hardware_type"]
+        end
+
+        default_name = "SmartCitizen Kit #{hardware_version}"
+        unless kit_info["hardware_name"] == default_name
+          hardware_name = kit_info["hardware_name"]
+        end
+
+        default_slug = "#{kit_info["hardware_type"].downcase}:#{hardware_version.gsub(".", ",")}"
+        unless kit_info["slug"] == default_slug
+          hardware_slug = kit_info["slug"]
+        end
+
+        unless kit_info["hardware_description"] == kit_info["hardware_name"]
+          hardware_description =   kit_info["hardware_description"]
+        end
+
+        execute("""
+          UPDATE devices
+          SET
+            hardware_version_override = ?,
+            hardware_type_override = ?,
+            hardware_name_override = ?,
+            hardware_description_override = ?,
+            hardware_slug_override = ?
+          WHERE id = ?
+        """, [hardware_version, hardware_type, hardware_name, hardware_description, hardware_slug, device_id])
+
+
         kit_component_rows = execute("""
           SELECT * FROM components
           WHERE board_type = 'Kit'

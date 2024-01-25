@@ -263,6 +263,37 @@ class Device < ActiveRecord::Base
     end
   end
 
+  def hardware
+    {
+      name: hardware_name,
+      type: hardware_type,
+      description: hardware_description,
+      version: hardware_version,
+      slug: hardware_slug,
+      info: hardware_info,
+    }
+  end
+
+  def hardware_name
+    hardware_name_override || [hardware_version ? "SmartCitizen Kit" : "Unknown", hardware_version].compact.join(" ")
+  end
+
+  def hardware_type
+    hardware_type_override || (hardware_version ? "SCK" : "Unknown")
+  end
+
+  def hardware_description
+    hardware_description_override || hardware_name
+  end
+
+  def hardware_version
+    hardware_version_override || hardware_info&.fetch('hw_ver', nil)
+  end
+
+  def hardware_slug
+    hardware_slug_override || [hardware_type.downcase, hardware_version&.gsub(".", ",")].compact.join(":")
+  end
+
   private
 
     def set_state

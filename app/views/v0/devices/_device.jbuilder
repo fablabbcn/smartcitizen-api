@@ -9,13 +9,13 @@ json.(
   :description,
   :state,
   :postprocessing,
-  :hardware_info,
   :system_tags,
   :user_tags,
   :is_private,
   :notify_low_battery,
   :notify_stopped_publishing,
   :last_reading_at,
+  :hardware,
   :created_at,
   :updated_at
 )

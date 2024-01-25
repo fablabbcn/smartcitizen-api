@@ -24,8 +24,7 @@ describe V0::DevicesController do
       expect(json.length).to eq(2)
       # expect(json[0]['name']).to eq(first.name)
       # expect(json[1]['name']).to eq(second.name)
-      expect(json[0].keys).to eq(%w(id uuid name description state postprocessing
-        hardware_info system_tags user_tags is_private notify_low_battery notify_stopped_publishing last_reading_at created_at updated_at mac_address device_token owner data))
+      expect(json[0].keys).to eq(%w(id uuid name description state postprocessing system_tags user_tags is_private notify_low_battery notify_stopped_publishing last_reading_at hardware created_at updated_at mac_address device_token owner data))
     end
 
     describe "when not logged in" do

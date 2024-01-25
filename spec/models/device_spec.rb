@@ -425,6 +425,121 @@ RSpec.describe Device, :type => :model do
     end
   end
 
+  describe "hardware info" do
+    describe "hardware_name" do
+      context "when it has a name override" do
+        it "returns the overriden name" do
+          device = create(:device, hardware_name_override: "Overriden name")
+          expect(device.hardware_name).to eq("Overriden name")
+        end
+      end
+
+      context "when it has a hardware_version" do
+        it "returns the string 'SmartCitizen Kit' concatenated with the version" do
+          device = create(:device)
+          expect(device).to receive(:hardware_version).at_least(:once).and_return("1.0.0")
+          expect(device.hardware_name).to eq("SmartCitizen Kit 1.0.0")
+        end
+      end
+
+      context "otherwise" do
+        it "returns the string 'Unknown'" do
+          device = create(:device)
+          expect(device.hardware_name).to eq("Unknown")
+        end
+      end
+    end
+
+    describe "hardware_type" do
+      context "when it has a type override" do
+        it "returns the overriden type" do
+          device = create(:device, hardware_type_override: "Overriden type")
+          expect(device.hardware_type).to eq("Overriden type")
+        end
+      end
+
+      context "when it has a hardware_version" do
+        it "returns the string 'SCK'" do
+          expect(device).to receive(:hardware_version).and_return("1.0.0")
+          expect(device.hardware_type).to eq("SCK")
+        end
+      end
+
+      context "otherwise" do
+        it "returns the string 'Unknown'" do
+          device = create(:device)
+          expect(device.hardware_type).to eq("Unknown")
+        end
+      end
+    end
+
+    describe "hardware_version" do
+      context "when it has a version override" do
+        it "returns the overriden version" do
+          device = create(:device, hardware_version_override: "1.4.0+with+extra+sensors")
+          expect(device.hardware_version).to eq("1.4.0+with+extra+sensors")
+        end
+      end
+
+      context "when it has hardware_info" do
+        it "returns the version from hardware_info" do
+          device = create(:device, hardware_info: { hw_ver: "1.5.0" })
+          expect(device.hardware_version).to eq("1.5.0")
+        end
+      end
+
+      context "otherwise" do
+        it "returns nil" do
+          device = create(:device)
+          expect(device.hardware_version).to be(nil)
+        end
+      end
+    end
+
+    describe "hardware_description" do
+      context "when it has a description override" do
+        it "returns the overriden description" do
+          device = create(:device, hardware_description_override: "Overriden description")
+          expect(device.hardware_description).to eq("Overriden description")
+        end
+      end
+
+      context "otherwise" do
+        it "returns the hardware_name" do
+          device = create(:device)
+          expect(device).to receive(:hardware_name).and_return("Hardware name")
+          expect(device.hardware_description).to eq("Hardware name")
+        end
+
+      end
+    end
+
+    describe "hardware_slug" do
+      context "when it has a slug override" do
+        it "returns the overriden slug" do
+          device = create(:device, hardware_slug_override: "overriden_slug")
+          expect(device.hardware_slug).to eq("overriden_slug")
+        end
+      end
+
+      context "when it has a hardware_version" do
+        it "returns the hardware type downcased, concatenated with the version number with periods translated to commas, seperated by a colon" do
+          device = create(:device)
+          expect(device).to receive(:hardware_type).and_return("SCK")
+          expect(device).to receive(:hardware_version).and_return("1.0.0")
+          expect(device.hardware_slug).to eq("sck:1,0,0")
+        end
+      end
+
+      context "when it has no harware version" do
+        it "returns the hardware type downcased" do
+          device = create(:device)
+          expect(device.hardware_slug).to eq("unknown")
+        end
+      end
+    end
+  end
+
   describe "#find_or_create_component_by_sensor_id" do
     context "when the sensor exists and a component already exists for this device" do
       it "returns the existing component" do
