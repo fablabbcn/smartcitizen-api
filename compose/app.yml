@@ -1,5 +1,5 @@
 services:
-  app:
+  app: &app
     build:
       context: ../.
       # Skip installing development & test gems in production, saves 20s build time.
@@ -18,6 +18,7 @@ services:
       - mqtt-task
       - telnet-task
       - push
+      - app-migrations
       #- mqtt
     restart: always
     deploy:
@@ -35,3 +36,10 @@ services:
       driver: "json-file"
       options:
         max-size: "100m"
+  app-migrations:
+    <<: *app
+    depends_on:
+      - db
+    ports: []
+    entrypoint: ["bash", "-c", "rake db:migrate"]
+    restart: no
