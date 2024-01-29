@@ -242,6 +242,7 @@ class Device < ActiveRecord::Base
           latitude: device.latitude,
           longitude: device.longitude,
           city: device.city,
+          hardware: device.hardware,
           country_code: device.country_code,
           state: device.state,
           system_tags: device.system_tags,
