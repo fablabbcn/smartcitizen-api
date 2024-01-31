@@ -76,26 +76,7 @@ module V0
 
     # debug method, must be refactored
     def fresh_world_map
-      @devices = Device.where.not(latitude: nil).where.not(data: nil).includes(:owner,:tags).map do |device|
-        {
-          id: device.id,
-          name: device.name,
-          description: (device.description.present? ? device.description : nil),
-          owner_id: device.owner_id,
-          owner_username: device.owner_id ? device.owner_username : nil,
-          latitude: device.latitude,
-          longitude: device.longitude,
-          city: device.city,
-          country_code: device.country_code,
-          is_private: device.is_private,
-          state: device.state,
-          system_tags: device.system_tags,
-          user_tags: device.user_tags,
-          updated_at: device.updated_at,
-          last_reading_at: (device.last_reading_at.present? ? device.last_reading_at : nil)
-        }
-      end
-      render json: @devices
+      render json: Device.for_world_map(current_user&.is_admin?)
     end
 
     def world_map
@@ -103,7 +84,7 @@ module V0
         expires_in 30.seconds, public: true # CRON cURL every 60 seconds to cache
       end
 
-      render json: Device.for_world_map
+      render json: Device.for_world_map(current_user&.is_admin?)
     end
 
 private

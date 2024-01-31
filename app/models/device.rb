@@ -225,7 +225,7 @@ class Device < ActiveRecord::Base
     end
   end
 
-  def self.for_world_map
+  def self.for_world_map(authorized=false)
     Rails.cache.fetch("world_map", expires_in: 10.seconds) do
       where
         .not(latitude: nil)
@@ -242,7 +242,7 @@ class Device < ActiveRecord::Base
           latitude: device.latitude,
           longitude: device.longitude,
           city: device.city,
-          hardware: device.hardware,
+          hardware: device.hardware(authorized),
           country_code: device.country_code,
           state: device.state,
           system_tags: device.system_tags,
@@ -264,14 +264,14 @@ class Device < ActiveRecord::Base
     end
   end
 
-  def hardware
+  def hardware(authorized=false)
     {
       name: hardware_name,
       type: hardware_type,
       description: hardware_description,
       version: hardware_version,
       slug: hardware_slug,
-      info: hardware_info,
+      info: authorized ? hardware_info : "[FILTERED]",
     }
   end
 

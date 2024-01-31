@@ -15,18 +15,21 @@ json.(
   :notify_low_battery,
   :notify_stopped_publishing,
   :last_reading_at,
-  :hardware,
   :created_at,
   :updated_at
 )
 
-if current_user and (current_user.is_admin? or (device.owner_id and current_user.id == device.owner_id))
+authorized = current_user && (current_user.is_admin? || (device.owner_id && current_user.id == device.owner_id))
+
+if authorized
   json.merge! mac_address: device.mac_address
   json.merge! device_token: device.device_token
 else
   json.merge! mac_address: '[FILTERED]'
   json.merge! device_token: '[FILTERED]'
 end
+
+json.merge!(hardware: device.hardware(authorized))
 
 if with_owner && device.owner
   json.owner do

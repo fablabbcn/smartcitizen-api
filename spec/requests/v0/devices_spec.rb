@@ -24,7 +24,7 @@ describe V0::DevicesController do
       expect(json.length).to eq(2)
       # expect(json[0]['name']).to eq(first.name)
       # expect(json[1]['name']).to eq(second.name)
-      expect(json[0].keys).to eq(%w(id uuid name description state postprocessing system_tags user_tags is_private notify_low_battery notify_stopped_publishing last_reading_at hardware created_at updated_at mac_address device_token owner data))
+      expect(json[0].keys).to eq(%w(id uuid name description state postprocessing system_tags user_tags is_private notify_low_battery notify_stopped_publishing last_reading_at created_at updated_at mac_address device_token hardware owner data))
     end
 
     describe "when not logged in" do
@@ -38,6 +38,13 @@ describe V0::DevicesController do
         expect(response.status).to eq(200)
         expect(j.count).to eq(1)
         expect(j[0]['id']).to eq(device.id)
+      end
+
+      it "does not show hardware_info" do
+        first = create(:device)
+        second = create(:device)
+        json = api_get 'devices'
+        expect(json[0]['hardware']['info']).to eq("[FILTERED]")
       end
     end
 
@@ -53,6 +60,13 @@ describe V0::DevicesController do
         expect(j.count).to eq(2)
         expect(j[0]['id']).to be_in([device1.id, device2.id])
       end
+
+      it "does not show hardware_info" do
+        first = create(:device)
+        second = create(:device)
+        json = api_get 'devices', { access_token: token.token }
+        expect(json[0]['hardware']['info']).to eq("[FILTERED]")
+      end
     end
 
     describe "when logged in as an admin" do
@@ -66,6 +80,13 @@ describe V0::DevicesController do
         expect(response.status).to eq(200)
         expect(j.count).to eq(3)
         expect(j[0]['id']).to be_in([device1.id, device2.id, device3.id])
+      end
+
+      it "shows hardware_info" do
+        first = create(:device)
+        second = create(:device)
+        json = api_get 'devices', { access_token: admin_token.token}
+        expect(json[0]['hardware']['info']).not_to eq('[FILTERED]')
       end
     end
 
