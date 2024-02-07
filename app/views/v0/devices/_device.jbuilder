@@ -22,10 +22,8 @@ json.(
 authorized = current_user && (current_user.is_admin? || (device.owner_id && current_user.id == device.owner_id))
 
 if authorized
-  json.merge! mac_address: device.mac_address
   json.merge! device_token: device.device_token
 else
-  json.merge! mac_address: '[FILTERED]'
   json.merge! device_token: '[FILTERED]'
 end
 
