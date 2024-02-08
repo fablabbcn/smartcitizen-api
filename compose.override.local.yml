@@ -13,3 +13,6 @@ services:
     restart: "no"
   push:
     restart: "no"
+  grafana:
+    entrypoint: ["echo", "Grafana service disabled in development"]
+    restart: "no"
