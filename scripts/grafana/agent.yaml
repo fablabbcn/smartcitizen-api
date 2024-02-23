@@ -1,24 +1,15 @@
-prometheus:
+server:
+  log_level: info
+metrics:
   wal_directory: /tmp/grafana-agent-wal
   global:
     scrape_interval: 15s
-  configs:
-    - name: integrations
-      scrape_configs:
-        - job_name: integrations/nodejs
-          static_configs:
-            - targets:
-                - localhost:4001
-      remote_write:
-        - url: ${PROMETHEUS_HOST}
-          basic_auth:
-            username: ${PROMETHEUS_USERNAME}
-            password: ${PROMETHEUS_PASSWORD}
 integrations:
   node_exporter:
     enabled: true
+    instance: ${PROMETHEUS_INSTANCE_LABEL}  
   prometheus_remote_write:
-    - url: ${PROMETHEUS_HOST}
+    - url: ${PROMETHEUS_URL}
       basic_auth:
         username: ${PROMETHEUS_USERNAME}
         password: ${PROMETHEUS_PASSWORD}
