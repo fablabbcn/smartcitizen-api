@@ -10,7 +10,7 @@ namespace :mqtt do
     mqtt_port = ENV.has_key?('MQTT_PORT') ? ENV['MQTT_PORT'] : 1883
     mqtt_ssl = ENV.has_key?('MQTT_SSL') ? ENV['MQTT_SSL'] : false
     mqtt_topics_string = ENV.fetch('MQTT_TOPICS', '')
-    mqtt_topics = mqtt_topics_string.include?(",") ? mqtt_topics_string.split(",") : mqtt_topics_string
+    mqtt_topics = mqtt_topics_string.include?(",") ? mqtt_topics_string.split(",") : [ mqtt_topics_string ]
     mqtt_log.info('MQTT TASK STARTING')
     mqtt_log.info("clean_session: #{mqtt_clean_session}")
     mqtt_log.info("client_id: #{mqtt_client_id}")
@@ -30,7 +30,7 @@ namespace :mqtt do
         mqtt_log.info "Connected to #{client.host}"
         mqtt_log.info "Using clean_session setting: #{client.clean_session}"
 
-        client.subscribe(*mqtt_topics.flat_map { |topic| 
+        client.subscribe(*mqtt_topics.flat_map { |topic|
           topic = topic == "" ? topic : topic + "/"
           [
             "$queue/#{topic}device/sck/+/readings" => 2,
