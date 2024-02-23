@@ -1,0 +1,7 @@
+services:
+  grafana:
+    image: grafana/agent
+    env_file: ../.env
+    volumes:
+      - ../scripts/grafana/agent.yaml:/etc/agent/agent.yaml
+    entrypoint: ["/bin/grafana-agent", "-config.expand-env", "--config.file=/etc/agent/agent.yaml","--metrics.wal-directory=/etc/agent/data"]

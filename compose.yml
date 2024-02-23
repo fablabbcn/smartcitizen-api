@@ -11,3 +11,4 @@ include:
   - compose/push.yml
   - compose/kairos.yml
   - compose/cassandra.yml
+  - compose/grafana.yml
