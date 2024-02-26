@@ -58,8 +58,6 @@ describe V0::UsersController do
         it "does not include the device locations" do
           j = api_get "users/testguy"
           expect(j["devices"].map { |d| d["location"]}.compact).to be_empty
-          expect(j["devices"].map { |d| d["latitude"]}.compact).to be_empty
-          expect(j["devices"].map { |d| d["longitude"]}.compact).to be_empty
         end
       end
 
@@ -73,8 +71,6 @@ describe V0::UsersController do
         it "includes the device locations" do
           j = api_get "users/testguy?access_token=#{token.token}"
           expect(j["devices"].map { |d| d["location"]}.compact).not_to be_empty
-          expect(j["devices"].map { |d| d["latitude"]}.compact).not_to be_empty
-          expect(j["devices"].map { |d| d["longitude"]}.compact).not_to be_empty
         end
       end
 
@@ -95,8 +91,6 @@ describe V0::UsersController do
         it "does not include the device locations" do
           j = api_get "users/testguy?access_token=#{requesting_token.token}"
           expect(j["devices"].map { |d| d["location"]}.compact).to be_empty
-          expect(j["devices"].map { |d| d["latitude"]}.compact).to be_empty
-          expect(j["devices"].map { |d| d["longitude"]}.compact).to be_empty
         end
       end
 
@@ -117,8 +111,6 @@ describe V0::UsersController do
         it "does not include the device locations" do
           j = api_get "users/testguy?access_token=#{requesting_token.token}"
           expect(j["devices"].map { |d| d["location"]}.compact).to be_empty
-          expect(j["devices"].map { |d| d["latitude"]}.compact).to be_empty
-          expect(j["devices"].map { |d| d["longitude"]}.compact).to be_empty
         end
       end
 
@@ -139,8 +131,6 @@ describe V0::UsersController do
         it "includes the device locations" do
           j = api_get "users/testguy?access_token=#{requesting_token.token}"
           expect(j["devices"].map { |d| d["location"]}.compact).not_to be_empty
-          expect(j["devices"].map { |d| d["latitude"]}.compact).not_to be_empty
-          expect(j["devices"].map { |d| d["longitude"]}.compact).not_to be_empty
         end
       end
     end

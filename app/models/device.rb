@@ -69,6 +69,10 @@ class Device < ActiveRecord::Base
     end
   end
 
+  scope :for_world_map, -> {
+    where.not(latitude: nil).where.not(data: nil).where(is_test: false).includes(:owner, :tags)
+  }
+
   def self.ransackable_attributes(auth_object = nil)
     if auth_object == :admin
       # admin can ransack on every attribute
@@ -228,32 +232,30 @@ class Device < ActiveRecord::Base
     end
   end
 
-  def self.for_world_map(authorized=false)
-    Rails.cache.fetch("world_map", expires_in: 10.seconds) do
-      where
-        .not(latitude: nil)
-        .where.not(data: nil)
-        .where(is_test: false)
-        .includes(:owner,:tags)
-        .map do |device|
-        {
-          id: device.id,
-          name: device.name,
-          description: (device.description.present? ? device.description : nil),
-          owner_id: device.owner_id,
-          owner_username: device.owner_id ? device.owner_username : nil,
-          latitude: device.latitude,
-          longitude: device.longitude,
-          city: device.city,
-          hardware: device.hardware(authorized),
-          country_code: device.country_code,
-          state: device.state,
-          system_tags: device.system_tags,
-          user_tags: device.user_tags,
-          updated_at: device.updated_at,
-          last_reading_at: (device.last_reading_at.present? ? device.last_reading_at : nil)
-        }
-      end
+  def self.old_for_world_map(authorized=false)
+    where
+      .not(latitude: nil)
+      .where.not(data: nil)
+      .where(is_test: false)
+      .includes(:owner,:tags)
+      .map do |device|
+      {
+        id: device.id,
+        name: device.name,
+        description: (device.description.present? ? device.description : nil),
+        owner_id: device.owner_id,
+        owner_username: device.owner_id ? device.owner_username : nil,
+        latitude: device.latitude,
+        longitude: device.longitude,
+        city: device.city,
+        hardware: device.hardware(authorized),
+        country_code: device.country_code,
+        state: device.state,
+        system_tags: device.system_tags,
+        user_tags: device.user_tags,
+        updated_at: device.updated_at,
+        last_reading_at: (device.last_reading_at.present? ? device.last_reading_at : nil)
+      }
     end
   end
 

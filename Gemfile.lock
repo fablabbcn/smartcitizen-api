@@ -53,6 +53,8 @@ GEM
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.2.0)
+    actionpack-action_caching (1.2.2)
+      actionpack (>= 4.0.0)
     actiontext (6.1.7.3)
       actionpack (= 6.1.7.3)
       activerecord (= 6.1.7.3)
@@ -531,6 +533,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionpack-action_caching
   ancestry
   api-pagination
   api_cache
@@ -616,4 +619,4 @@ RUBY VERSION
    ruby 3.0.6p216
 
 BUNDLED WITH
-   2.4.13
+   2.5.6
