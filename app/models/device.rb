@@ -187,19 +187,22 @@ class Device < ActiveRecord::Base
     end
   end
 
+  def formatted_location
+    {
+      ip: nil,
+      exposure: exposure,
+      elevation: elevation.try(:to_i) ,
+      latitude: latitude,
+      longitude: longitude,
+      geohash: geohash,
+      city: city,
+      country_code: country_code,
+      country: country_name
+    }
+  end
+
   def formatted_data
     s = {
-      location: {
-        ip: nil,
-        exposure: exposure,
-        elevation: elevation.try(:to_i) ,
-        latitude: latitude,
-        longitude: longitude,
-        geohash: geohash,
-        city: city,
-        country_code: country_code,
-        country: country_name
-      },
       sensors: []
     }
 

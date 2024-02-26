@@ -27,6 +27,7 @@ else
   json.merge! device_token: '[FILTERED]'
 end
 
+json.merge!(location: device.formatted_location)
 json.merge!(hardware: device.hardware(authorized))
 
 if with_owner && device.owner
