@@ -1,12 +1,8 @@
-require 'actionpack/action_caching'
 module V0
   class DevicesController < ApplicationController
-    include ActionController::Caching
     before_action :check_if_authorized!, only: [:create]
     after_action :verify_authorized,
       except: [:index, :world_map, :fresh_world_map]
-
-    caches_action :world_map, expires_in: 1.minute
 
     def show
       @device = Device.includes(
@@ -79,12 +75,10 @@ module V0
 
     # debug method, must be refactored
     def fresh_world_map
-      @devices = Device.for_world_map
       render :world_map
     end
 
     def world_map
-      @devices = Device.for_world_map
     end
 
 private
