@@ -273,7 +273,6 @@ class Device < ActiveRecord::Base
     {
       name: hardware_name,
       type: hardware_type,
-      description: hardware_description,
       version: hardware_version,
       slug: hardware_slug,
       info: authorized ? hardware_info : "[FILTERED]",
@@ -286,10 +285,6 @@ class Device < ActiveRecord::Base
 
   def hardware_type
     hardware_type_override || (hardware_version ? "SCK" : "Unknown")
-  end
-
-  def hardware_description
-    hardware_description_override || hardware_name
   end
 
   def hardware_version

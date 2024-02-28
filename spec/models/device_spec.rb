@@ -496,24 +496,6 @@ RSpec.describe Device, :type => :model do
       end
     end
 
-    describe "hardware_description" do
-      context "when it has a description override" do
-        it "returns the overriden description" do
-          device = create(:device, hardware_description_override: "Overriden description")
-          expect(device.hardware_description).to eq("Overriden description")
-        end
-      end
-
-      context "otherwise" do
-        it "returns the hardware_name" do
-          device = create(:device)
-          expect(device).to receive(:hardware_name).and_return("Hardware name")
-          expect(device.hardware_description).to eq("Hardware name")
-        end
-
-      end
-    end
-
     describe "hardware_slug" do
       context "when it has a slug override" do
         it "returns the overriden slug" do
