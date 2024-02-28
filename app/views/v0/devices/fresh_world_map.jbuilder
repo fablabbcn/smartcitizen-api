@@ -1,0 +1,1 @@
+json.partial! 'devices/world_map_list'
