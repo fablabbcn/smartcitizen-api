@@ -75,6 +75,7 @@ module V0
 
     # debug method, must be refactored
     def fresh_world_map
+      @no_cache = true
       render :world_map
     end
 
