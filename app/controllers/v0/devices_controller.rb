@@ -86,6 +86,7 @@ private
       params_to_permit = [
         :name,
         :description,
+        :hardware_name_override,
         :mac_address,
         :latitude,
         :longitude,

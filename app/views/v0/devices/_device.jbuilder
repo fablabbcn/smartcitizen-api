@@ -26,6 +26,7 @@ authorized = !local_assigns[:never_authorized] && current_user && (current_user.
 
 if authorized
   json.merge! device_token: device.device_token
+  json.merge! mac_address: device.mac_address if device.mac_address
 else
   json.merge! device_token: '[FILTERED]'
 end
