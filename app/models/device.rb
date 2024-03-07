@@ -32,9 +32,10 @@ class Device < ActiveRecord::Base
 
   validates_uniqueness_of :device_token, allow_nil: true
 
-  validates :mac_address,
-    format: { with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/ },  uniqueness: true, allow_nil: true
+  validates_format_of :mac_address,
+    with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
 
+  before_save :nullify_other_mac_addresses, if: :mac_address
   before_save :calculate_geohash
   after_validation :do_geocoding
 
@@ -311,4 +312,11 @@ class Device < ActiveRecord::Base
     def do_geocoding
       reverse_geocode if (latitude_changed? or longitude_changed?) or city.blank?
     end
+
+    def nullify_other_mac_addresses
+      if mac_address_changed?
+        Device.unscoped.where(mac_address: mac_address).map(&:remove_mac_address_for_newly_registered_device!)
+      end
+    end
+
 end

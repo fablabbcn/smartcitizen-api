@@ -23,16 +23,10 @@ RSpec.describe Device, :type => :model do
     end
   end
 
-  xit "validates format of mac address, but allows nil" do
-    # TODO: Skipping for now as there's some weird interaction between this and the uniqueness validation which means that for some reason adding uniqueness validation means the format validation is ignored. The database will raise an error in any case though so invalid mac addresses won't be saved, and we have client side validation for this.
+  it "validates format of mac address, but allows nil" do
     expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to_not raise_error
     expect{ create(:device, mac_address: nil) }.to_not raise_error
     expect{ create(:device, mac_address: 123) }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it "validates uniqueness of mac address" do
-    expect{ create(:device, mac_address: '10:9A:DD:63:C0:10') }.to_not raise_error
-    expect{ create(:device, mac_address:  '10:9A:DD:63:C0:10') }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   describe "#sensor_map" do
@@ -45,6 +39,34 @@ RSpec.describe Device, :type => :model do
   end
 
   describe "mac_address" do
+    it "takes mac_address from existing device on update" do
+      device = FactoryBot.create(:device, mac_address: mac_address)
+      new_device = FactoryBot.create(:device)
+      new_device.update_attribute(:mac_address, mac_address)
+      expect(new_device.mac_address).to eq(mac_address)
+      expect(new_device).to be_valid
+      device.reload
+      expect(device.mac_address).to be_blank
+      # should be checking the following instead
+      # expect(device).to receive(:remove_mac_address_for_newly_registered_device!)
+    end
+
+    it "takes mac_address from existing device on create" do
+      device = FactoryBot.create(:device, mac_address: mac_address)
+      new_device = FactoryBot.create(:device, mac_address: mac_address)
+      expect(new_device.mac_address).to eq(mac_address)
+      expect(new_device).to be_valid
+      device.reload
+      expect(device.mac_address).to be_blank
+    end
+
+    it "has remove_mac_address_for_newly_registered_device!" do
+      device = create(:device, mac_address: mac_address, old_mac_address: nil)
+      device.remove_mac_address_for_newly_registered_device!
+      expect(device.mac_address).to be_blank
+      expect(device.old_mac_address).to eq(mac_address)
+    end
+
     it "can find device with upper or lowercase mac_address" do
       expect(Device.where(mac_address: mac_address.upcase )).to eq([device])
       expect(Device.where(mac_address: mac_address.downcase )).to eq([device])
