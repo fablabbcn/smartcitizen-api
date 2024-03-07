@@ -6,7 +6,7 @@ module V0
 
     def show
       @device = Device.includes(
-        :owner, :sensors,:tags).find(params[:id])
+        :owner,:tags, {sensors: :measurement}).find(params[:id])
       authorize @device
       @device
     end
@@ -14,7 +14,7 @@ module V0
     def index
       raise_ransack_errors_as_bad_request do
         @q = policy_scope(Device)
-          .includes(:owner, :tags, :components, :sensors)
+          .includes(:owner, :tags, :components, {sensors: :measurement})
           .ransack(params[:q], auth_object: (current_user&.is_admin? ? :admin : nil))
 
         # We are here customly adding multiple tags into the Ransack query.

@@ -213,8 +213,9 @@ class Device < ActiveRecord::Base
 
     components.sort_by {|c| c.sensor.name }.each do |component|
       sensor = component.sensor
-      sa = sensor.attributes.except(*%w{key equation reverse_equation})
+      sa = sensor.attributes.except(*%w{key equation reverse_equation measurement_id})
       sa = sa.merge(
+        measurement: sensor.measurement.for_sensor_json,
         value: (data ? data["#{sensor.id}"] : nil),
         prev_value: (old_data ? old_data["#{sensor.id}"] : nil),
         last_reading_at: component.last_reading_at
@@ -230,33 +231,6 @@ class Device < ActiveRecord::Base
       device.reverse_geocode
       device.save validate: false
       sleep(1)
-    end
-  end
-
-  def self.old_for_world_map(authorized=false)
-    where
-      .not(latitude: nil)
-      .where.not(data: nil)
-      .where(is_test: false)
-      .includes(:owner,:tags)
-      .map do |device|
-      {
-        id: device.id,
-        name: device.name,
-        description: (device.description.present? ? device.description : nil),
-        owner_id: device.owner_id,
-        owner_username: device.owner_id ? device.owner_username : nil,
-        latitude: device.latitude,
-        longitude: device.longitude,
-        city: device.city,
-        hardware: device.hardware(authorized),
-        country_code: device.country_code,
-        state: device.state,
-        system_tags: device.system_tags,
-        user_tags: device.user_tags,
-        updated_at: device.updated_at,
-        last_reading_at: (device.last_reading_at.present? ? device.last_reading_at : nil)
-      }
     end
   end
 
