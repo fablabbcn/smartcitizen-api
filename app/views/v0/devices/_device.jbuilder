@@ -15,12 +15,15 @@ json.(
   :system_tags,
   :user_tags,
   :is_private,
-  :notify_low_battery,
-  :notify_stopped_publishing,
   :last_reading_at,
   :created_at,
   :updated_at
 )
+
+  json.merge!(notify: {
+    stopped_publishing: device.notify_stopped_publishing,
+    low_battery: device.notify_low_battery
+  })
 
 authorized = !local_assigns[:never_authorized] && current_user && (current_user.is_admin? || (device.owner_id && current_user.id == device.owner_id))
 
