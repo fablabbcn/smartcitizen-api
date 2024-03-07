@@ -344,8 +344,13 @@ describe V0::DevicesController do
     end
 
     it "will update a device with empty parameters access_token" do
-      api_put "devices/#{device.id}", { name: nil, access_token: token.token }
+      api_put "devices/#{device.id}", { access_token: token.token }
       expect(response.status).to eq(200)
+    end
+
+    it "does not allow an empty device name" do
+      api_put "devices/#{device.id}", { name: nil, access_token: token.token }
+      expect(response.status).to eq(422)
     end
 
     it 'can read and update a jsonb' do

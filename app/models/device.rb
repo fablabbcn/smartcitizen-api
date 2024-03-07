@@ -27,7 +27,8 @@ class Device < ActiveRecord::Base
 
   accepts_nested_attributes_for :postprocessing, update_only: true
 
-  validates_presence_of :name, :owner, on: :create
+  validates_presence_of :name
+  validates_presence_of :owner, on: :create
   #validates_uniqueness_of :name, scope: :owner_id, on: :create
 
   validates_uniqueness_of :device_token, allow_nil: true
