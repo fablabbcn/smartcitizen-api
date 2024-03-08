@@ -218,7 +218,8 @@ class Device < ActiveRecord::Base
         measurement: sensor.measurement.for_sensor_json,
         value: (data ? data["#{sensor.id}"] : nil),
         prev_value: (old_data ? old_data["#{sensor.id}"] : nil),
-        last_reading_at: component.last_reading_at
+        last_reading_at: component.last_reading_at,
+        tags: sensor.tags
       )
       s[:sensors] << sa
     end
