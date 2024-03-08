@@ -250,7 +250,7 @@ class Device < ActiveRecord::Base
       type: hardware_type,
       version: hardware_version,
       slug: hardware_slug,
-      info: authorized ? hardware_info : "[FILTERED]",
+      last_status_message: authorized ? hardware_info : "[FILTERED]",
     }
   end
 

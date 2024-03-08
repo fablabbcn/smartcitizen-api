@@ -44,7 +44,7 @@ describe V0::DevicesController do
         first = create(:device)
         second = create(:device)
         json = api_get 'devices'
-        expect(json[0]['hardware']['info']).to eq("[FILTERED]")
+        expect(json[0]['hardware']['last_status_message']).to eq("[FILTERED]")
       end
     end
 
@@ -65,7 +65,7 @@ describe V0::DevicesController do
         first = create(:device)
         second = create(:device)
         json = api_get 'devices', { access_token: token.token }
-        expect(json[0]['hardware']['info']).to eq("[FILTERED]")
+        expect(json[0]['hardware']['last_status_message']).to eq("[FILTERED]")
       end
     end
 
@@ -86,7 +86,7 @@ describe V0::DevicesController do
         first = create(:device)
         second = create(:device)
         json = api_get 'devices', { access_token: admin_token.token}
-        expect(json[0]['hardware']['info']).not_to eq('[FILTERED]')
+        expect(json[0]['hardware']['last_status_message']).not_to eq('[FILTERED]')
       end
     end
 
@@ -256,23 +256,23 @@ describe V0::DevicesController do
 
       it "filters hardware info from guests" do
         j = api_get "devices/#{device.id}"
-        expect(j['hardware']['info']).to eq('[FILTERED]')
+        expect(j['hardware']['last_status_message']).to eq('[FILTERED]')
       end
 
       it "filters hardware info from users" do
         j = api_get "devices/#{device.id}?access_token=#{token.token}"
-        expect(j['hardware']['info']).to eq('[FILTERED]')
+        expect(j['hardware']['last_status_message']).to eq('[FILTERED]')
       end
 
       it "exposes hardware info to device owner" do
         device = create(:device, owner: user)
         j = api_get "devices/#{device.id}?access_token=#{token.token}"
-        expect(j['hardware']['info']).to eq(device.hardware_info)
+        expect(j['hardware']['last_status_message']).to eq(device.hardware_info)
       end
 
       it "exposes hardware info address to admin" do
         j = api_get "devices/#{device.id}?access_token=#{admin_token.token}"
-        expect(j['hardware']['info']).to eq(device.hardware_info)
+        expect(j['hardware']['last_status_message']).to eq(device.hardware_info)
       end
 
     end
