@@ -1,0 +1,56 @@
+id,ancestry,count_children,name,description,unit,created_at,key
+3,,2,DHT22,"A digital temperature and humidity sensor. It uses a capacitive humidity sensor and a thermistor to measure the surrounding air, and spits out a digital signal on the data pin (no analog input pins needed)",,2015-02-02 18:14:15.199342,
+19,,2,HPP828E031 (SHT21),Digital Temperature and Relative Humidity Sensor,,2015-02-02 18:27:20.701211,
+20,,4,MiCS4514,Gas Sensor,,2015-02-02 18:31:50.485383,
+37,,4,Camera - Ionizing Radiation,CMOS camera embedded in Smart phones and laptops measuring ionizing radiation using the GammaSense web app,CPM,2017-05-17 10:34:20.744418,
+44,,4,AS EZO Conductivity,Atlas Scientific EZO™ Conductivity Probe,,2017-08-04 12:05:30.666055,
+47,,2,AS  EZO DO,Atlas Scientific EZO™ Dissolved Oxygen Probe,,2017-08-04 12:05:30.666055,
+52,NULL,3,ICS43432,I2S Digital Mems Microphone with custom Audio Processing Algorithm,NULL,2018-05-03 10:34:06.367516,
+54,,2,Sensirion SHT31,Digital relative humidity and air temperature sensor,,2018-05-03 10:46:15.286301,
+57,NULL,2,MPL3115A2,Digital Barometric Pressure Sensor,,2018-05-03 10:48:17.286301,
+59,,3,SCK Gases Pro Board,SCK Gases Pro Board: Alphasense Series B 3 Channel Driver ,,2018-05-03 13:58:57.722415,
+60,59,3,NO2-B43F,Alphasense Nitrogen Dioxide + Ozone,,2018-05-03 13:58:57.722415,
+63,59,3,CO-B4F,Alphasense Carbon Monoxide + Ozone,,2018-05-03 14:16:33.478454,
+66,59,3,OXB431,Alphasense Ozone,,2018-05-03 14:16:33.478454,
+69,,3,SCK PM Board,SCK PM Driver: Dual Platfower PMSX003 driver,,2018-05-03 14:22:12.270653,
+70,69,9,PMS5003_A,Plantower PMS5003 PM 10/2.5/1 sensor,,2018-05-03 14:22:12.270653,
+74,69,9,PMS5003_B,Plantower PMS5003 PM 10/2.5/1 sensor,,2018-05-03 14:22:12.270653,
+78,NULL,2,Ext SHT31,External digital relative humidity and air temperature sensor,,2018-05-03 16:56:15.286301,
+81,20,0,MiCS-4514-NO2-CON,MICS Nitrogen Dioxide,ppb,2018-05-22 12:58:05.741005,mics_4514_no2
+82,20,0,MiCS-4514-CO-CON,MICS Carbon Monoxide,ppm,2018-05-22 12:58:05.741005,mics_4514_co
+86,69,6,PMS5003_AVG,PM Board with dual PMS5003 PM 10/2.5/1 sensors,,2018-05-22 13:20:34.385306,
+90,,4,Ultrasonic Ranger,Ping Ultrasonic (40KHz) non-contact distance ranger (Ping with Grove connector),,2018-07-20 11:10:48.578866,
+111,,2,AMS CCS811,Digital gas sensor for monitoring indoor air quality,,2019-03-21 16:43:37.814294,
+114,,3,PMS5003,PM PMS5003 PM 10/2.5/1 sensors,,2019-03-21 17:09:09.164676,
+115,114,0,PMS5003-PM2.5,Particle Matter PM 2.5,ug/m3,2019-03-21 17:09:09.164676,pm25
+116,114,0,PMS5003-PM10,Particle Matter PM 10,ug/m3,2019-03-21 17:09:09.164676,pm10
+117,114,0,PMS5003-PM1,Particle Matter PM 1,ug/m3,2019-03-21 17:09:09.164676,pm1
+124,,7,GPS,Location data frm a GPS device,,2020-11-11 15:19:06.495725,
+132,,4,ADC_48,16-bit Analog to Digital Converter - ADS1X15 addr. 48,V,2020-12-11 15:35:48.93594,
+137,,4,ADC_49,16-bit Analog to Digital Converter - ADS1X15 addr. 49,V,2020-12-11 15:37:12.86794,
+142,,4,ADC_4A,16-bit Analog to Digital Converter - ADS1X15 addr. 4A,V,2020-12-11 15:38:01.76852,
+147,,4,ADC_4B,16-bit Analog to Digital Converter - ADS1X15 addr. 4B,V,2020-12-11 15:38:55.359661,
+162,,2,SCD30,"Digital NDIR CO2, temperature and humidity sensor",,2021-05-07 16:14:52.627648,
+163,,1,AS EZO ORP,Atlas Scientific EZO™ ORP Probe,,2022-09-06 11:58:58.089711,
+171,,1,Winsen MH-Z16,Digital NDIR CO2 sensor,,2022-11-17 16:44:34.791725,
+173,,2,Bosch BMP280,Digital ambient temperature and pressure sensor,,2022-11-17 16:45:47.510406,
+176,,1,Electret Microphone,Electret Microphone with MAX9814 Amplifier,,2022-11-17 16:47:19.59493,
+178,,2,NovaFitness SDS011,Light Scattering Particle Matter Sensor,,2022-11-17 16:48:07.440543,
+181,,10,Sensirion SPS30,Light Scattering Particle Matter Sensor,,2023-05-16 16:13:32.451798,
+192,,16,Sensirion SEN5X,Light Scattering Particle Matter Sensor with additional NOx and VOCs indexes,,2023-05-23 11:34:29.863582,
+209,,3,Sensirion SFA30,Formaldehyde electrochemical sensor,,2023-05-30 11:51:02.871029,
+213,,3,AMS AS7731,3 channel spectral UV-A/B/C sensor,,2023-07-14 16:34:12.947438,
+214,213,0,AMS AS7731 - UVA,AMS AS7731 UVA Channel,uW/cm2,2023-07-14 16:33:21.304504,uv_a
+215,213,0,AMS AS7731 - UVB,AMS AS7731 UVB Channel,uW/cm2,2023-07-14 16:33:21.320123,uv_b
+216,213,0,AMS AS7731 - UVC,AMS AS7731 UVC Channel,uW/cm2,2023-07-14 16:33:21.328074,uv_c
+217,52,0,TDK ICS43432 - Noise C,C-Scale RMS from I2S Digital Mems Microphone with custom Audio Processing Algorithm,dBC,2023-07-14 16:45:26.938851,noise_c
+218,52,0,TDK ICS43432 - Noise Z,Z-Scale RMS from I2S Digital Mems Microphone with custom Audio Processing Algorithm,dBZ,2023-07-14 16:45:37.793749,noise_z
+219,57,0,NXP MPL3115A2 - Altitude,Altitude from digital barometric pressure sensor,m,2023-07-14 16:53:03.159593,mpl_alt
+222,,0,Battery Voltage,Battery voltage,V,2023-07-14 17:08:28.702493,batt_volt
+223,,2,Sensirion SHT35,Digital relative humidity and air temperature sensor,,2023-07-14 17:12:58.415308,
+224,223,0,Sensirion SHT35 - Temperature,Temperature from digital relative humidity and air temperature sensor,ºC,2023-07-14 17:14:02.042413,sht35_t
+225,223,0,Sensirion SHT35 - Humidity,Humidity from digital relative humidity and air temperature sensor,%,2023-07-14 17:14:38.432689,sht35_h
+226,,1,ST LPS33,Digital Barometric Pressure Sensor,,2023-07-24 16:39:27.885491,
+227,226,0,ST LPS33 - Barometric Pressure,Digital Barometric Pressure Sensor,kPa,2023-07-24 16:41:36.559386,lps_p
+,,,,,,,
+,,,,,,,

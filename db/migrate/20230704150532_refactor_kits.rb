@@ -91,10 +91,19 @@ class RefactorKits < ActiveRecord::Migration[6.0]
       end
     end
 
+    # Set default key for sensors which are not part of a kit:
+    sensor_info =  CSV.foreach("db/data/sensors_without_default_keys.csv", headers:true).map(&:to_h).reduce({}) { |h, r| h[r["id"].to_i] = r; h }
+
+    sensor_info.each do |sensor_id, sensor_data|
+      if sensor_data["key"]
+        execute("UPDATE sensors SET default_key = ? WHERE id = ?", [sensor_data["key"], sensor_id])
+      end
+    end
+
+
     # For each existing device. Look up its kit, set its hardware_info, and create a component for each of that kit's components, with reference to the device itself.
 
     kits_info =  CSV.foreach("db/data/kits.csv", headers:true).map(&:to_h).reduce({}) { |h, r| h[r["id"].to_i] = r; h }
-
 
     puts "-- setting hardware info and creating components for devices"
 
