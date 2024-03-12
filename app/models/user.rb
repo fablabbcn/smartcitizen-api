@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
   validates :username, :email, presence: true
   validates :username, uniqueness: true, if: :username?
   validates :username, length: { in: 3..30 }, allow_nil: true
-  validates :email, format: { with: /@/ }, uniqueness: true, if: :email?, on: :create
+  validates :email, format: { with: /@/ }, uniqueness: true
   validates :url, format: URI::regexp(%w(http https)), allow_nil: true, allow_blank: true, on: :create
 
   has_many :devices, foreign_key: 'owner_id', after_add: :update_cached_device_ids!, after_remove: :update_cached_device_ids!
