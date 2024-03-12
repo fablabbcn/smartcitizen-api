@@ -215,7 +215,7 @@ class Device < ActiveRecord::Base
       sensor = component.sensor
       sa = sensor.attributes.except(*%w{key equation reverse_equation measurement_id})
       sa = sa.merge(
-        measurement: sensor.measurement.for_sensor_json,
+        measurement: sensor.measurement&.for_sensor_json,
         value: (data ? data["#{sensor.id}"] : nil),
         prev_value: (old_data ? old_data["#{sensor.id}"] : nil),
         last_reading_at: component.last_reading_at,
