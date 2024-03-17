@@ -123,7 +123,7 @@ class User < ActiveRecord::Base
   def location
     {
       city: city,
-      country: country.try(:name),
+      country: country_name,
       country_code: country_code
     }
   end

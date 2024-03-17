@@ -281,7 +281,7 @@ describe V0::UsersController do
 
   describe "PUT /users/<username>|<id>" do
 
-    let(:user) { create(:user, username: 'lisasimpson') }
+    let(:user) { create(:user, username: 'lisasimpson', country_code: "GB") }
 
     it "updates user" do
       j = api_put "users/#{[user.username,user.id].sample}", {
@@ -289,6 +289,16 @@ describe V0::UsersController do
       }
       expect(j['username']).to eq('bart')
       expect(response.status).to eq(200)
+    end
+
+    it "updates user country code" do
+      j = api_put "users/#{[user.username,user.id].sample}", {
+        country_code: 'ES', access_token: token.token
+      }
+      expect(j['location']['country_code']).to eq('ES')
+      expect(j['location']['country']).to eq('Spain')
+      expect(response.status).to eq(200)
+      expect(user.reload.country_code).to eq('ES')
     end
 
     it "does not update a user with invalid access_token" do
