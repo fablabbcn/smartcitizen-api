@@ -71,7 +71,7 @@ class Device < ActiveRecord::Base
   end
 
   scope :for_world_map, -> {
-    where.not(latitude: nil).where.not(data: nil).where(is_test: false).includes(:owner, :tags)
+    where.not(latitude: nil).where.not(last_reading_at: nil).where(is_test: false).includes(:owner, :tags)
   }
 
   def self.ransackable_attributes(auth_object = nil)

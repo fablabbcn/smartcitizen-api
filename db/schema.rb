@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_28_125910) do
+ActiveRecord::Schema.define(version: 2024_03_18_110256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 2024_02_28_125910) do
     t.index ["last_reading_at"], name: "index_devices_on_last_reading_at"
     t.index ["owner_id"], name: "index_devices_on_owner_id"
     t.index ["state"], name: "index_devices_on_state"
+    t.index ["workflow_state", "is_test", "last_reading_at", "latitude"], name: "world_map_request"
     t.index ["workflow_state"], name: "index_devices_on_workflow_state"
   end
 
