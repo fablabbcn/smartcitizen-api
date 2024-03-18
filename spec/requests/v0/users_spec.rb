@@ -301,6 +301,26 @@ describe V0::UsersController do
       expect(user.reload.country_code).to eq('ES')
     end
 
+    it "unsets user country code" do
+      j = api_put "users/#{[user.username,user.id].sample}", {
+        country_code: nil, access_token: token.token
+      }
+      expect(j['location']['country_code']).to be_nil
+      expect(j['location']['country']).to be_nil
+      expect(response.status).to eq(200)
+      expect(user.reload.country_code).to be_nil
+    end
+
+    it "leaves country code as is when not explicitly passsed" do
+      j = api_put "users/#{[user.username,user.id].sample}", {
+        username: "new_username", access_token: token.token
+      }
+      expect(j['location']['country_code']).to eq("GB")
+      expect(j['location']['country']).to eq("United Kingdom of Great Britain and Northern Ireland")
+      expect(response.status).to eq(200)
+      expect(user.reload.country_code).to eq("GB")
+    end
+
     it "does not update a user with invalid access_token" do
       j = api_put "users/#{[user.username,user.id].sample}", {
         username: 'bart', access_token: '123'
