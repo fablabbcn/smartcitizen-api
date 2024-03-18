@@ -49,6 +49,7 @@ namespace :mqtt do
                 MqttMessagesHandler.handle_topic(topic, message)
               end
               mqtt_log.info "Processed MQTT message in #{time}"
+              mqtt_log.info "MQTT queue length: #{client.queue_length}"
             rescue Exception => e
               mqtt_log.info e
               Sentry.capture_exception(e)
