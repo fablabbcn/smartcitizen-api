@@ -21,7 +21,7 @@ class Device < ActiveRecord::Base
 
   has_many :devices_tags, dependent: :destroy
   has_many :tags, through: :devices_tags
-  has_many :components
+  has_many :components, dependent: :destroy
   has_many :sensors, through: :components
   has_one :postprocessing, dependent: :destroy
 
