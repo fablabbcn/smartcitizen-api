@@ -1,1 +1,1 @@
-json.partial! 'devices/world_map_list'
+json.partial! 'devices/world_map_list', { never_authorized: false }
