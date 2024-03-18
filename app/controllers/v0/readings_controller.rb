@@ -57,11 +57,6 @@ module V0
       @device = Device.find(params[:id])
       authorize @device, :update?
 
-      if @device.kit.nil?
-        render json: { id: "error", message: "Device does not have a kit", url: "", errors: "" }, status: 420
-        return
-      end
-
       if !@device.csv_export_requested_at or (@device.csv_export_requested_at < 15.minutes.ago)
         @device.update_column(:csv_export_requested_at, Time.now.utc)
         if Rails.env.test?

@@ -572,6 +572,7 @@ DEPENDENCIES
   pg
   pg_search
   premailer-rails
+  pry
   pry-rails
   puma
   pundit
@@ -615,4 +616,4 @@ RUBY VERSION
    ruby 3.0.6p216
 
 BUNDLED WITH
-   2.4.13
+   2.5.6

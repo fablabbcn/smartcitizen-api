@@ -34,10 +34,17 @@ RSpec.describe User, :type => :model do
     expect(build(:user, avatar: 'http://i.imgur.com/SZD8ADL.JPEG')).to be_valid
   end
 
-  it "has joined_at"do
-    Timecop.freeze do
-      expect(create(:user).joined_at).to eq(Time.current.utc)
-    end
+  it "is invalid with an email which isn't an email adddress" do
+    expect(build(:user, email: "not an email")).to be_invalid
+  end
+
+  it "is invalid without an email" do
+    expect(build(:user, email: nil)).to be_invalid
+  end
+
+  it "is invalid with an email which is already taken" do
+    create(:user, email: "taken@example.com")
+    expect(build(:user, email: "taken@example.com")).to be_invalid
   end
 
   it "has a location" do

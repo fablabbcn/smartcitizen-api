@@ -5,7 +5,6 @@ RSpec.describe Device, :type => :model do
   let(:mac_address) { "10:9a:dd:63:c0:10" }
   let(:device) { create(:device, mac_address: mac_address) }
 
-  it { is_expected.to belong_to(:kit).without_validating_presence }
   it { is_expected.to belong_to(:owner) }
   it { is_expected.to have_many(:devices_tags) }
   it { is_expected.to have_many(:tags).through(:devices_tags) }
@@ -19,14 +18,8 @@ RSpec.describe Device, :type => :model do
 
   it "has last_reading_at" do
     Timecop.freeze do
-      device = create(:device, last_recorded_at: 1.minute.ago)
+      device = create(:device, last_reading_at: 1.minute.ago)
       expect(device.last_reading_at).to eq(1.minute.ago)
-    end
-  end
-
-  it "has added_at"do
-    Timecop.freeze do
-      expect(create(:device).added_at).to eq(Time.current.utc)
     end
   end
 
@@ -36,8 +29,16 @@ RSpec.describe Device, :type => :model do
     expect{ create(:device, mac_address: 123) }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  describe "mac_address" do
+  describe "#sensor_map" do
+    it "maps the component key to the sensor id" do
+      device = create(:device)
+      sensor = create(:sensor, default_key: "sensor_key")
+      component = create(:component, device: device, sensor: sensor, key: "component_key")
+      expect(device.sensor_map).to eq({"component_key" => sensor.id})
+    end
+  end
 
+  describe "mac_address" do
     it "takes mac_address from existing device on update" do
       device = FactoryBot.create(:device, mac_address: mac_address)
       new_device = FactoryBot.create(:device)
@@ -202,24 +203,6 @@ RSpec.describe Device, :type => :model do
 
   end
 
-  describe "kit_version" do
-    it "has kit_version setter" do
-      device = build(:device, kit_version: "1.1")
-      expect(device.kit_id).to eq(3)
-
-      device = build(:device, kit_version: "1.0")
-      expect(device.kit_id).to eq(2)
-    end
-
-    it "has kit_version getter" do
-      device = build(:device, kit_id: 3)
-      expect(device.kit_version).to eq("1.1")
-
-      device = build(:device, kit_id: 2)
-      expect(device.kit_version).to eq("1.0")
-    end
-  end
-
   it "has to_s" do
     device = create(:device, name: 'cool device')
     expect(device.to_s).to eq('cool device')
@@ -233,31 +216,15 @@ RSpec.describe Device, :type => :model do
 
   skip "has status" do
     expect(Device.new.status).to eq('new')
-    expect(create(:device, last_recorded_at: 1.minute.ago).status).to eq('online')
-    expect(create(:device, last_recorded_at: 10.minutes.ago).status).to eq('offline')
+    expect(create(:device, last_reading_at: 1.minute.ago).status).to eq('online')
+    expect(create(:device, last_reading_at: 10.minutes.ago).status).to eq('offline')
   end
 
   it "has firmware" do
     expect(create(:device, firmware_version: 'xyz').firmware).to eq('sck:xyz')
   end
 
-  context "with kit" do
-
-    let(:kit) { build(:kit) }
-    let(:sensor) { build(:sensor) }
-    let(:device) { build(:device, kit: kit) }
-
-    it "has the kit's sensors" do
-      expect(device.sensors).to eq(kit.sensors)
-    end
-
-    it "has the kit's components" do
-      expect(device.components).to eq(kit.components)
-    end
-
-  end
-
-  context "without kit" do
+  context "creation" do
 
     let(:sensor) { create(:sensor) }
     let(:device) { create(:device, sensors: [sensor]) }
@@ -267,7 +234,7 @@ RSpec.describe Device, :type => :model do
     end
 
     it "has its own components" do
-      expect(device.components).to eq([Component.find_by(board: device, sensor: sensor)])
+      expect(device.components).to eq([Component.find_by(device: device, sensor: sensor)])
     end
   end
 
@@ -311,6 +278,33 @@ RSpec.describe Device, :type => :model do
       expect(dev2.save).to eq(true)
       # FIXME broke after Rails 4 -> 5 update
       #expect(dev2.errors.messages[:device_token].nil?).to eq(true)
+    end
+  end
+
+  describe "update_column_timestamps" do
+
+    before do
+      @device = create(:device)
+      @component_1 = create(:component, device: @device, sensor: create(:sensor, id: 1), updated_at: "2023-01-01 12:00:00")
+      @component_2 = create(:component, device: @device,  sensor: create(:sensor, id: 2))
+      @device.reload
+      @timestamp = Time.parse("2023-10-06 06:00:00")
+    end
+
+    it "updates the timestamp for components with the given sensor ids" do
+      @device.update_component_timestamps(@timestamp, [1])
+      expect(@component_1.reload.last_reading_at).to eq(@timestamp)
+    end
+
+    it "does not update the timesatamp for components without the given sensor ids" do
+      expect(@component_2).not_to receive(:update).with(last_reading_at: @timestamp)
+      @device.update_component_timestamps(@timestamp, [1])
+    end
+
+    it "does not update the component updated_at" do
+      updated_at = @component_1.updated_at
+      @device.update_component_timestamps(@timestamp, [1])
+      expect(@component_1.reload.updated_at).to eq(updated_at)
     end
   end
 
@@ -378,7 +372,7 @@ RSpec.describe Device, :type => :model do
   context "notifications for stopped publishing" do
     describe "do not get sent" do
       it 'when they are disabled' do
-        device = create(:device, notify_stopped_publishing: false, last_recorded_at: 24.hours.ago)
+        device = create(:device, notify_stopped_publishing: false, last_reading_at: 24.hours.ago)
         expect(device).to have_attributes(notify_stopped_publishing: false)
         before_date = device.notify_stopped_publishing_timestamp
         CheckDeviceStoppedPublishingJob.perform_now
@@ -389,7 +383,7 @@ RSpec.describe Device, :type => :model do
 
       it 'when they are enabled, but timestamp is too recent' do
         device = create(:device, notify_stopped_publishing: true,
-                        last_recorded_at: 2.hours.ago,
+                        last_reading_at: 2.hours.ago,
                         notify_stopped_publishing_timestamp: 2.hours.ago)
         device.reload
         expect(device).to have_attributes(notify_stopped_publishing: true)
@@ -403,9 +397,9 @@ RSpec.describe Device, :type => :model do
     end
 
     describe "do get sent" do
-       it 'when enabled, timestamp is more than 24 hours old AND last_recorded older than 10 minutes' do
+       it 'when enabled, timestamp is more than 24 hours old AND last_reading older than 10 minutes' do
         device = create(:device, notify_stopped_publishing: true,
-                        last_recorded_at: 2.hours.ago,
+                        last_reading_at: 2.hours.ago,
                         notify_stopped_publishing_timestamp: 25.hours.ago)
         device.reload
         expect(device).to have_attributes(notify_stopped_publishing: true)
@@ -429,6 +423,140 @@ RSpec.describe Device, :type => :model do
       expect(Postprocessing.count).to eq(0)
       expect(Device.count).to eq(0)
     end
+  end
+
+  describe "hardware info" do
+    describe "hardware_name" do
+      context "when it has a name override" do
+        it "returns the overriden name" do
+          device = create(:device, hardware_name_override: "Overriden name")
+          expect(device.hardware_name).to eq("Overriden name")
+        end
+      end
+
+      context "when it has a hardware_version" do
+        it "returns the string 'SmartCitizen Kit' concatenated with the version" do
+          device = create(:device)
+          expect(device).to receive(:hardware_version).at_least(:once).and_return("1.0.0")
+          expect(device.hardware_name).to eq("SmartCitizen Kit 1.0.0")
+        end
+      end
+
+      context "otherwise" do
+        it "returns the string 'Unknown'" do
+          device = create(:device)
+          expect(device.hardware_name).to eq("Unknown")
+        end
+      end
+    end
+
+    describe "hardware_type" do
+      context "when it has a type override" do
+        it "returns the overriden type" do
+          device = create(:device, hardware_type_override: "Overriden type")
+          expect(device.hardware_type).to eq("Overriden type")
+        end
+      end
+
+      context "when it has a hardware_version" do
+        it "returns the string 'SCK'" do
+          expect(device).to receive(:hardware_version).and_return("1.0.0")
+          expect(device.hardware_type).to eq("SCK")
+        end
+      end
+
+      context "otherwise" do
+        it "returns the string 'Unknown'" do
+          device = create(:device)
+          expect(device.hardware_type).to eq("Unknown")
+        end
+      end
+    end
+
+    describe "hardware_version" do
+      context "when it has a version override" do
+        it "returns the overriden version" do
+          device = create(:device, hardware_version_override: "1.4.0+with+extra+sensors")
+          expect(device.hardware_version).to eq("1.4.0+with+extra+sensors")
+        end
+      end
+
+      context "when it has hardware_info" do
+        it "returns the version from hardware_info" do
+          device = create(:device, hardware_info: { hw_ver: "1.5.0" })
+          expect(device.hardware_version).to eq("1.5.0")
+        end
+      end
+
+      context "otherwise" do
+        it "returns nil" do
+          device = create(:device)
+          expect(device.hardware_version).to be(nil)
+        end
+      end
+    end
+
+    describe "hardware_slug" do
+      context "when it has a slug override" do
+        it "returns the overriden slug" do
+          device = create(:device, hardware_slug_override: "overriden_slug")
+          expect(device.hardware_slug).to eq("overriden_slug")
+        end
+      end
+
+      context "when it has a hardware_version" do
+        it "returns the hardware type downcased, concatenated with the version number with periods translated to commas, seperated by a colon" do
+          device = create(:device)
+          expect(device).to receive(:hardware_type).and_return("SCK")
+          expect(device).to receive(:hardware_version).and_return("1.0.0")
+          expect(device.hardware_slug).to eq("sck:1,0,0")
+        end
+      end
+
+      context "when it has no harware version" do
+        it "returns the hardware type downcased" do
+          device = create(:device)
+          expect(device.hardware_slug).to eq("unknown")
+        end
+      end
+    end
+  end
+
+  describe "#find_or_create_component_by_sensor_id" do
+    context "when the sensor exists and a component already exists for this device" do
+      it "returns the existing component" do
+        sensor = create(:sensor)
+        component = create(:component, sensor: sensor, device: device)
+        expect(device.find_or_create_component_by_sensor_id(sensor.id)).to eq(component)
+      end
+    end
+
+    context "when the sensor exists and a component does not already exist for this device" do
+      it "returns a new valid component with the correct sensor and device" do
+        sensor = create(:sensor)
+        component = device.find_or_create_component_by_sensor_id(sensor.id)
+        expect(component).not_to be_blank
+        expect(component).to be_a Component
+        expect(component.valid?).to be(true)
+        expect(component.persisted?).to be(true)
+        expect(component.device).to eq(device)
+        expect(component.sensor).to eq(sensor)
+      end
+    end
+
+    context "when no sensor exists with this id" do
+      it "returns nil" do
+        create(:sensor, id: 12345)
+        expect(device.find_or_create_component_by_sensor_id(54321)).to be_blank
+      end
+    end
+
+    context "when the id is nil" do
+      it "returns nil" do
+        expect(device.find_or_create_component_by_sensor_id(nil)).to be_blank
+      end
+    end
+
   end
 
 end

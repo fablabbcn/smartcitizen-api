@@ -58,8 +58,6 @@ describe V0::UsersController do
         it "does not include the device locations" do
           j = api_get "users/testguy"
           expect(j["devices"].map { |d| d["location"]}.compact).to be_empty
-          expect(j["devices"].map { |d| d["latitude"]}.compact).to be_empty
-          expect(j["devices"].map { |d| d["longitude"]}.compact).to be_empty
         end
       end
 
@@ -73,8 +71,6 @@ describe V0::UsersController do
         it "includes the device locations" do
           j = api_get "users/testguy?access_token=#{token.token}"
           expect(j["devices"].map { |d| d["location"]}.compact).not_to be_empty
-          expect(j["devices"].map { |d| d["latitude"]}.compact).not_to be_empty
-          expect(j["devices"].map { |d| d["longitude"]}.compact).not_to be_empty
         end
       end
 
@@ -95,8 +91,6 @@ describe V0::UsersController do
         it "does not include the device locations" do
           j = api_get "users/testguy?access_token=#{requesting_token.token}"
           expect(j["devices"].map { |d| d["location"]}.compact).to be_empty
-          expect(j["devices"].map { |d| d["latitude"]}.compact).to be_empty
-          expect(j["devices"].map { |d| d["longitude"]}.compact).to be_empty
         end
       end
 
@@ -117,8 +111,6 @@ describe V0::UsersController do
         it "does not include the device locations" do
           j = api_get "users/testguy?access_token=#{requesting_token.token}"
           expect(j["devices"].map { |d| d["location"]}.compact).to be_empty
-          expect(j["devices"].map { |d| d["latitude"]}.compact).to be_empty
-          expect(j["devices"].map { |d| d["longitude"]}.compact).to be_empty
         end
       end
 
@@ -139,8 +131,6 @@ describe V0::UsersController do
         it "includes the device locations" do
           j = api_get "users/testguy?access_token=#{requesting_token.token}"
           expect(j["devices"].map { |d| d["location"]}.compact).not_to be_empty
-          expect(j["devices"].map { |d| d["latitude"]}.compact).not_to be_empty
-          expect(j["devices"].map { |d| d["longitude"]}.compact).not_to be_empty
         end
       end
     end
@@ -291,7 +281,7 @@ describe V0::UsersController do
 
   describe "PUT /users/<username>|<id>" do
 
-    let(:user) { create(:user, username: 'lisasimpson') }
+    let(:user) { create(:user, username: 'lisasimpson', country_code: "GB") }
 
     it "updates user" do
       j = api_put "users/#{[user.username,user.id].sample}", {
@@ -299,6 +289,36 @@ describe V0::UsersController do
       }
       expect(j['username']).to eq('bart')
       expect(response.status).to eq(200)
+    end
+
+    it "updates user country code" do
+      j = api_put "users/#{[user.username,user.id].sample}", {
+        country_code: 'ES', access_token: token.token
+      }
+      expect(j['location']['country_code']).to eq('ES')
+      expect(j['location']['country']).to eq('Spain')
+      expect(response.status).to eq(200)
+      expect(user.reload.country_code).to eq('ES')
+    end
+
+    it "unsets user country code" do
+      j = api_put "users/#{[user.username,user.id].sample}", {
+        country_code: nil, access_token: token.token
+      }
+      expect(j['location']['country_code']).to be_nil
+      expect(j['location']['country']).to be_nil
+      expect(response.status).to eq(200)
+      expect(user.reload.country_code).to be_nil
+    end
+
+    it "leaves country code as is when not explicitly passsed" do
+      j = api_put "users/#{[user.username,user.id].sample}", {
+        username: "new_username", access_token: token.token
+      }
+      expect(j['location']['country_code']).to eq("GB")
+      expect(j['location']['country']).to eq("United Kingdom of Great Britain and Northern Ireland")
+      expect(response.status).to eq(200)
+      expect(user.reload.country_code).to eq("GB")
     end
 
     it "does not update a user with invalid access_token" do

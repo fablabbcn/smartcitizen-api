@@ -11,14 +11,11 @@ class MqttMessagesHandler
 
     return if topic.nil?
 
+    handshake_device(topic)
+
     # The following do NOT need a device
     if topic.to_s.include?('inventory')
       DeviceInventory.create({ report: (message rescue nil) })
-    elsif topic.to_s.include?('hello')
-      orphan_device = OrphanDevice.find_by(device_token: device_token(topic))
-      return if orphan_device.nil?
-
-      handle_hello(orphan_device)
     end
 
     device = Device.find_by(device_token: device_token(topic))
@@ -41,7 +38,7 @@ class MqttMessagesHandler
         }
       )
       Sentry.add_breadcrumb(crumb)
-      device.update hardware_info: json_message
+      device.update_column(:hardware_info, json_message)
     end
   end
 
@@ -55,6 +52,7 @@ class MqttMessagesHandler
     end
   rescue Exception => e
     Sentry.capture_exception(e)
+    raise e if Rails.env.test?
     #puts e.inspect
     #puts message
   end
@@ -88,11 +86,13 @@ class MqttMessagesHandler
     JSON[reading]
   end
 
-  def self.handle_hello(orphan_device)
-    payload = {}
-    orphan_device.update(device_handshake: true)
-    payload[:onboarding_session] = orphan_device.onboarding_session
-    Redis.current.publish('token-received', payload.to_json)
+  def self.handshake_device(topic)
+    orphan_device = OrphanDevice.find_by(device_token: device_token(topic))
+    return if orphan_device.nil?
+    orphan_device.update!(device_handshake: true)
+    Redis.current.publish('token-received',  {
+      onboarding_session: orphan_device.onboarding_session
+    }.to_json)
   end
 
   # takes a packet and returns 'device token' from topic

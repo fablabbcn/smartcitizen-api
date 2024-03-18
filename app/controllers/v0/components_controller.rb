@@ -7,7 +7,7 @@ module V0
     end
 
     def show
-      @component = Component.includes(:board, :sensor).find(params[:id])
+      @component = Component.includes(:device, :sensor).find(params[:id])
       authorize @component
     end
 
@@ -15,10 +15,8 @@ private
 
     def component_params
       params.permit(
-        :board_id,
-        :board_type,
-        :sensor_id,
-        :equation
+        :device_id,
+        :sensor_id
       )
     end
 

@@ -11,9 +11,9 @@ RSpec.describe DeleteArchivedDevicesJob, type: :job do
     end
 
     it "should delete all archived devices, archived_at at least 24 hours ago" do
-      deviceNormal = create(:device, name: "dontDeleteMe", created_at: 6.weeks.ago)
-      deviceArchived = create(:device, name: "deleteMe", created_at: 1.month.ago)
-      deviceArchivedToday = create(:device, name: "dontDeleteMe", created_at: 2.months.ago)
+      deviceNormal = create(:device, name: "dontDeleteMe", created_at: 6.weeks.ago, components: [create(:component)])
+      deviceArchived = create(:device, name: "deleteMe", created_at: 1.month.ago, components: [create(:component)])
+      deviceArchivedToday = create(:device, name: "dontDeleteMe", created_at: 2.months.ago, components: [create(:component)])
       deviceArchived.archive!
       deviceArchivedToday.archive!
       deviceArchived.update!({archived_at: 2.days.ago})

@@ -8,7 +8,6 @@ gem 'doorkeeper', '~> 5'
 # To resize active storage images:
 # Revise if this is needed after Rails 6.0
 gem 'image_processing'
-
 gem 'ancestry'
 gem 'api-pagination'
 gem 'api_cache'
@@ -87,6 +86,7 @@ end
 
 group :development, :test do
   # gem 'rspec_api_blueprint', require: false
+  gem "pry"
   gem 'brakeman', github: 'presidentbeef/brakeman', require: false
   gem 'byebug'
   gem 'cane'

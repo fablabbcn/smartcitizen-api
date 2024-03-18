@@ -6,6 +6,7 @@ module V0
     include ActionController::HttpAuthentication::Token::ControllerMethods
     include ActionController::Helpers
     include ActionController::ImplicitRender
+    include ActionController::Caching
 
     include Pundit::Authorization
     include PrettyJSON

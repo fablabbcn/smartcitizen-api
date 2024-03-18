@@ -15,7 +15,6 @@ class OrphanDevice < ActiveRecord::Base
     {
       name: name,
       description: description,
-      kit_id: kit_id,
       user_tags: user_tags,
       exposure: exposure,
       latitude: latitude,

@@ -1,3 +1,4 @@
+require 'benchmark'
 namespace :mqtt do
   task sub: :environment do
     pid_file = Rails.root.join('tmp/pids/mqtt_subscriber.pid')
@@ -44,7 +45,11 @@ namespace :mqtt do
         client.get do |topic, message|
           Sentry.with_scope do
             begin
-              MqttMessagesHandler.handle_topic(topic, message)
+              time = Benchmark.measure do
+                MqttMessagesHandler.handle_topic(topic, message)
+              end
+              mqtt_log.info "Processed MQTT message in #{time}"
+              mqtt_log.info "MQTT queue length: #{client.queue_length}"
             rescue Exception => e
               mqtt_log.info e
               Sentry.capture_exception(e)

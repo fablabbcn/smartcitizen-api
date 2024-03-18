@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
   validates :username, :email, presence: true
   validates :username, uniqueness: true, if: :username?
   validates :username, length: { in: 3..30 }, allow_nil: true
-  validates :email, format: { with: /@/ }, uniqueness: true, if: :email?, on: :create
+  validates :email, format: { with: /@/ }, uniqueness: true
   validates :url, format: URI::regexp(%w(http https)), allow_nil: true, allow_blank: true, on: :create
 
   has_many :devices, foreign_key: 'owner_id', after_add: :update_cached_device_ids!, after_remove: :update_cached_device_ids!
@@ -38,8 +38,6 @@ class User < ActiveRecord::Base
   has_one_attached :profile_picture
 
   before_create :generate_legacy_api_key
-
-  alias_attribute :joined_at, :created_at
 
   def self.ransackable_attributes(auth_object = nil)
     [ "city", "country_code", "id", "username", "uuid", "created_at", "updated_at"]
@@ -125,7 +123,7 @@ class User < ActiveRecord::Base
   def location
     {
       city: city,
-      country: country.try(:name),
+      country: country_name,
       country_code: country_code
     }
   end

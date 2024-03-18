@@ -12,7 +12,9 @@ json.(user,
 
 json.profile_picture profile_picture_url(user)
 
-if current_user and (current_user.is_admin? or current_user == user)
+authorized = current_user && current_user == user || current_user&.is_admin?
+
+if authorized
   json.merge! email: user.email
   json.merge! legacy_api_key: user.legacy_api_key
 else
@@ -21,15 +23,7 @@ else
 end
 
 json.devices user.devices.filter { |d|
-  !d.is_private? || current_user == user || current_user&.is_admin?
+  !d.is_private? || authorized
 }.map do |device|
-  json.partial! "devices/device", device: device, with_data: false, with_owner: false
-  json.merge!(kit_id: device.kit_id)
-  if current_user == user || current_user&.is_admin?
-    json.merge!(
-      location: device.location,
-      latitude: device.latitude,
-      longitude: device.longitude,
-    )
-  end
+  json.partial! "devices/device", device: device, with_data: false, with_owner: false, with_location: authorized
 end

@@ -24,8 +24,7 @@ describe V0::DevicesController do
       expect(json.length).to eq(2)
       # expect(json[0]['name']).to eq(first.name)
       # expect(json[1]['name']).to eq(second.name)
-      expect(json[0].keys).to eq(%w(id uuid name description state postprocessing
-        hardware_info system_tags user_tags is_private notify_low_battery notify_stopped_publishing last_reading_at added_at updated_at mac_address device_token owner data kit))
+      expect(json[0].keys).to eq(%w(id uuid name description state system_tags user_tags is_private last_reading_at created_at updated_at notify device_token postprocessing location hardware owner data))
     end
 
     describe "when not logged in" do
@@ -39,6 +38,13 @@ describe V0::DevicesController do
         expect(response.status).to eq(200)
         expect(j.count).to eq(1)
         expect(j[0]['id']).to eq(device.id)
+      end
+
+      it "does not show hardware_info" do
+        first = create(:device)
+        second = create(:device)
+        json = api_get 'devices'
+        expect(json[0]['hardware']['last_status_message']).to eq("[FILTERED]")
       end
     end
 
@@ -54,6 +60,13 @@ describe V0::DevicesController do
         expect(j.count).to eq(2)
         expect(j[0]['id']).to be_in([device1.id, device2.id])
       end
+
+      it "does not show hardware_info" do
+        first = create(:device)
+        second = create(:device)
+        json = api_get 'devices', { access_token: token.token }
+        expect(json[0]['hardware']['last_status_message']).to eq("[FILTERED]")
+      end
     end
 
     describe "when logged in as an admin" do
@@ -67,6 +80,13 @@ describe V0::DevicesController do
         expect(response.status).to eq(200)
         expect(j.count).to eq(3)
         expect(j[0]['id']).to be_in([device1.id, device2.id, device3.id])
+      end
+
+      it "shows hardware_info" do
+        first = create(:device)
+        second = create(:device)
+        json = api_get 'devices', { access_token: admin_token.token}
+        expect(json[0]['hardware']['last_status_message']).not_to eq('[FILTERED]')
       end
     end
 
@@ -139,8 +159,8 @@ describe V0::DevicesController do
         expect(response.status).to eq(200)
       end
 
-      it "allows searching by last_recorded_at" do
-        json = api_get "devices?q[last_recorded_at_lt]=2023-09-26"
+      it "allows searching by last_reading_at" do
+        json = api_get "devices?q[last_reading_at_lt]=2023-09-26"
         expect(response.status).to eq(200)
       end
 
@@ -234,25 +254,25 @@ describe V0::DevicesController do
 
     describe "mac_address" do
 
-      it "filters mac address from guests" do
+      it "filters hardware info from guests" do
         j = api_get "devices/#{device.id}"
-        expect(j['mac_address']).to eq('[FILTERED]')
+        expect(j['hardware']['last_status_message']).to eq('[FILTERED]')
       end
 
-      it "filters mac address from users" do
+      it "filters hardware info from users" do
         j = api_get "devices/#{device.id}?access_token=#{token.token}"
-        expect(j['mac_address']).to eq('[FILTERED]')
+        expect(j['hardware']['last_status_message']).to eq('[FILTERED]')
       end
 
-      it "exposes mac address to device owner" do
+      it "exposes hardware info to device owner" do
         device = create(:device, owner: user)
         j = api_get "devices/#{device.id}?access_token=#{token.token}"
-        expect(j['mac_address']).to eq(device.mac_address)
+        expect(j['hardware']['last_status_message']).to eq(device.hardware_info)
       end
 
-      it "exposes mac address to admin" do
+      it "exposes hardware info address to admin" do
         j = api_get "devices/#{device.id}?access_token=#{admin_token.token}"
-        expect(j['mac_address']).to eq(device.mac_address)
+        expect(j['hardware']['last_status_message']).to eq(device.hardware_info)
       end
 
     end
@@ -324,8 +344,13 @@ describe V0::DevicesController do
     end
 
     it "will update a device with empty parameters access_token" do
-      api_put "devices/#{device.id}", { name: nil, access_token: token.token }
+      api_put "devices/#{device.id}", { access_token: token.token }
       expect(response.status).to eq(200)
+    end
+
+    it "does not allow an empty device name" do
+      api_put "devices/#{device.id}", { name: nil, access_token: token.token }
+      expect(response.status).to eq(422)
     end
 
     it 'can read and update a jsonb' do

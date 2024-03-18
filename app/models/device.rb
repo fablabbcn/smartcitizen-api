@@ -17,18 +17,18 @@ class Device < ActiveRecord::Base
 
   multisearchable :against => [:name, :description, :city, :country_name], if: :active?
 
-  belongs_to :kit, optional: :true
   belongs_to :owner, class_name: 'User'
 
   has_many :devices_tags, dependent: :destroy
   has_many :tags, through: :devices_tags
-  has_many :components, as: :board
+  has_many :components, dependent: :destroy
   has_many :sensors, through: :components
   has_one :postprocessing, dependent: :destroy
 
   accepts_nested_attributes_for :postprocessing, update_only: true
 
-  validates_presence_of :name, :owner, on: :create
+  validates_presence_of :name
+  validates_presence_of :owner, on: :create
   #validates_uniqueness_of :name, scope: :owner_id, on: :create
 
   validates_uniqueness_of :device_token, allow_nil: true
@@ -56,9 +56,6 @@ class Device < ActiveRecord::Base
     :debug_push,
     :enclosure_type
 
-  alias_attribute :added_at, :created_at
-  alias_attribute :last_reading_at, :last_recorded_at
-
   before_save :set_state
 
   reverse_geocoded_by :latitude, :longitude do |obj, results|
@@ -73,26 +70,55 @@ class Device < ActiveRecord::Base
     end
   end
 
+  scope :for_world_map, -> {
+    where.not(latitude: nil).where.not(last_reading_at: nil).where(is_test: false).includes(:owner, :tags)
+  }
+
   def self.ransackable_attributes(auth_object = nil)
     if auth_object == :admin
       # admin can ransack on every attribute
       self.authorizable_ransackable_attributes
     else
-      ["id", "name", "description", "created_at", "updated_at", "last_recorded_at", "state","geohash", "uuid", "kit_id"]
+      ["id", "name", "description", "created_at", "updated_at", "last_reading_at", "state","geohash", "uuid", "kit_id"]
     end
   end
 
   def self.ransackable_associations(auth_object = nil)
     [
-      "components", "devices_tags", "kit", "owner",
+      "components", "devices_tags", "owner",
       "pg_search_document" , "postprocessing", "sensors",
        "tags"
     ]
   end
 
   def sensor_keys
-    # will be changed when different kinds of device added
-    %w(temp bat co hum light nets no2 noise panel)
+    sensor_map.keys
+  end
+
+  def sensor_map
+    components.map { |c| [c.key, c.sensor.id]}.to_h
+  end
+
+  def find_or_create_component_by_sensor_id(sensor_id)
+    return nil if sensor_id.nil? || !Sensor.exists?(id: sensor_id)
+    components.find_or_create_by(sensor_id: sensor_id)
+  end
+
+  def find_or_create_component_by_sensor_key(sensor_key)
+    return nil if sensor_key.nil?
+    sensor = Sensor.find_by(default_key: sensor_key)
+    return nil if sensor.nil?
+    components.find_or_create_by(sensor_id: sensor.id)
+  end
+
+  def find_or_create_component_for_sensor_reading(reading)
+    key_or_id = reading["id"]
+    if key_or_id.is_a?(Integer) || key_or_id =~ /\d+/
+      # It's an integer and therefore a sensor id
+      find_or_create_component_by_sensor_id(key_or_id)
+    else
+      find_or_create_component_by_sensor_key(key_or_id)
+    end
   end
 
   def find_component_by_sensor_id sensor_id
@@ -100,11 +126,11 @@ class Device < ActiveRecord::Base
   end
 
   def find_sensor_id_by_key sensor_key
-    kit.sensor_map[sensor_key.to_s] rescue nil
+    sensor_map[sensor_key.to_s] rescue nil
   end
 
   def find_sensor_key_by_id sensor_id
-    kit.sensor_map.invert[sensor_id] rescue nil
+    sensor_map.invert[sensor_id] rescue nil
   end
 
   def user_tags
@@ -117,25 +143,6 @@ class Device < ActiveRecord::Base
     end
   end
 
-  # temporary kit getter/setter
-  def kit_version
-    if self.kit_id
-      if self.kit_id == 2
-        "1.0"
-      elsif self.kit_id == 3
-        "1.1"
-      end
-    end
-  end
-
-  def kit_version=(kv)
-    if kv == "1.0"
-      self.kit_id = 2
-    elsif kv == "1.1"
-      self.kit_id = 3
-    end
-  end
-
   def owner_username
     owner.username if owner
   end
@@ -145,7 +152,7 @@ class Device < ActiveRecord::Base
       exposure, # indoor / outdoor
       ('new' if created_at > 1.week.ago), # new
       ('test_device' if is_test?),
-      ((last_recorded_at.present? and last_recorded_at > 60.minutes.ago) ? 'online' : 'offline') # state
+      ((last_reading_at.present? and last_reading_at > 60.minutes.ago) ? 'online' : 'offline') # state
     ].reject(&:blank?).sort
   end
 
@@ -171,14 +178,6 @@ class Device < ActiveRecord::Base
     end
   end
 
-  def components
-    kit ? kit.components : super
-  end
-
-  def sensors
-    kit ? kit.sensors : super
-  end
-
   def status
     data.present? ? state : 'new'
   end
@@ -193,32 +192,34 @@ class Device < ActiveRecord::Base
     end
   end
 
+  def formatted_location
+    {
+      ip: nil,
+      exposure: exposure,
+      elevation: elevation.try(:to_i) ,
+      latitude: latitude,
+      longitude: longitude,
+      geohash: geohash,
+      city: city,
+      country_code: country_code,
+      country: country_name
+    }
+  end
+
   def formatted_data
     s = {
-      recorded_at: last_recorded_at,
-      added_at: last_recorded_at,
-      # calibrated_at: updated_at,
-      location: {
-        ip: nil,
-        exposure: exposure,
-        elevation: elevation.try(:to_i) ,
-        latitude: latitude,
-        longitude: longitude,
-        geohash: geohash,
-        city: city,
-        country_code: country_code,
-        country: country_name
-      },
       sensors: []
     }
 
-    sensors.sort_by(&:name).each do |sensor|
-      sa = sensor.attributes
+    components.sort_by {|c| c.sensor.name }.each do |component|
+      sensor = component.sensor
+      sa = sensor.attributes.except(*%w{key equation reverse_equation measurement_id})
       sa = sa.merge(
+        measurement: sensor.measurement&.for_sensor_json,
         value: (data ? data["#{sensor.id}"] : nil),
-        raw_value: (data ? data["#{sensor.id}_raw"] : nil),
         prev_value: (old_data ? old_data["#{sensor.id}"] : nil),
-        prev_raw_value: (old_data ? old_data["#{sensor.id}_raw"] : nil)
+        last_reading_at: component.last_reading_at,
+        tags: sensor.tags
       )
       s[:sensors] << sa
     end
@@ -234,47 +235,40 @@ class Device < ActiveRecord::Base
     end
   end
 
-  def set_version_if_required! identifier
-    if identifier and (identifier == "1.1" or identifier == "1.0") # and !device.kit_id
-      if self.kit_version.blank? or self.kit_version != identifier
-        self.kit_version = identifier
-        self.save validate: false
-      end
-    end
-  end
-
-  def self.for_world_map
-    Rails.cache.fetch("world_map", expires_in: 10.seconds) do
-      where
-        .not(latitude: nil)
-        .where.not(data: nil)
-        .where(is_test: false)
-        .includes(:owner,:tags)
-        .map do |device|
-        {
-          id: device.id,
-          name: device.name,
-          description: (device.description.present? ? device.description : nil),
-          owner_id: device.owner_id,
-          owner_username: device.owner_id ? device.owner_username : nil,
-          latitude: device.latitude,
-          longitude: device.longitude,
-          city: device.city,
-          country_code: device.country_code,
-          kit_id: device.kit_id,
-          state: device.state,
-          system_tags: device.system_tags,
-          user_tags: device.user_tags,
-          added_at: device.added_at,
-          updated_at: device.updated_at,
-          last_reading_at: (device.last_reading_at.present? ? device.last_reading_at : nil)
-        }
-      end
-    end
-  end
-
   def remove_mac_address_for_newly_registered_device!
     update(old_mac_address: mac_address, mac_address: nil)
+  end
+
+  def update_component_timestamps(timestamp, sensor_ids)
+    components.select {|c| sensor_ids.include?(c.sensor_id) }.each do |component|
+      component.update_column(:last_reading_at, timestamp)
+    end
+  end
+
+  def hardware(authorized=false)
+    {
+      name: hardware_name,
+      type: hardware_type,
+      version: hardware_version,
+      slug: hardware_slug,
+      last_status_message: authorized ? hardware_info : "[FILTERED]",
+    }
+  end
+
+  def hardware_name
+    hardware_name_override || [hardware_version ? "SmartCitizen Kit" : "Unknown", hardware_version].compact.join(" ")
+  end
+
+  def hardware_type
+    hardware_type_override || (hardware_version ? "SCK" : "Unknown")
+  end
+
+  def hardware_version
+    hardware_version_override || hardware_info&.fetch('hw_ver', nil)
+  end
+
+  def hardware_slug
+    hardware_slug_override || [hardware_type.downcase, hardware_version&.gsub(".", ",")].compact.join(":")
   end
 
   private

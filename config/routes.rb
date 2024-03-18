@@ -33,7 +33,6 @@ Rails.application.routes.draw do
     resources :tag_sensors
     resources :tags
     resources :measurements
-    resources :kits, except: [:destroy]
     resources :users
     resources :password_resets, only: [:show, :create, :update]
     resources :oauth_applications, path: 'applications'

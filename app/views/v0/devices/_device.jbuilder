@@ -1,5 +1,9 @@
-with_owner = true unless local_assigns.has_key?(:with_owner)
-with_data = true unless local_assigns.has_key?(:with_data)
+local_assigns[:with_owner] = true unless local_assigns.has_key?(:with_owner)
+local_assigns[:with_data] = true unless local_assigns.has_key?(:with_data)
+local_assigns[:with_postprocessing] = true unless local_assigns.has_key?(:with_postprocessing)
+local_assigns[:with_location] = true unless local_assigns.has_key?(:with_location)
+local_assigns[:slim_owner] = false unless local_assigns.has_key?(:slim_owner)
+local_assigns[:never_authorized] = false unless local_assigns.has_key?(:never_authorized)
 
 json.(
   device,
@@ -8,46 +12,47 @@ json.(
   :name,
   :description,
   :state,
-  :postprocessing,
-  :hardware_info,
   :system_tags,
   :user_tags,
   :is_private,
-  :notify_low_battery,
-  :notify_stopped_publishing,
   :last_reading_at,
-  :added_at,
+  :created_at,
   :updated_at
 )
 
-if current_user and (current_user.is_admin? or (device.owner_id and current_user.id == device.owner_id))
-  json.merge! mac_address: device.mac_address
+  json.merge!(notify: {
+    stopped_publishing: device.notify_stopped_publishing,
+    low_battery: device.notify_low_battery
+  })
+
+authorized = !local_assigns[:never_authorized] && (current_user && (current_user.is_admin? || (device.owner_id && current_user.id == device.owner_id)))
+
+if authorized
   json.merge! device_token: device.device_token
+  json.merge! mac_address: device.mac_address if device.mac_address
 else
-  json.merge! mac_address: '[FILTERED]'
   json.merge! device_token: '[FILTERED]'
 end
+json.merge!(postprocessing: device.postprocessing) if local_assigns[:with_postprocessing]
+json.merge!(location: device.formatted_location) if local_assigns[:with_location]
+json.merge!(hardware: device.hardware(authorized))
 
-if with_owner && device.owner
+if local_assigns[:with_owner] && device.owner
   json.owner do
     json.id device.owner.id
     json.uuid device.owner.uuid
     json.username device.owner.username
-    json.avatar device.owner.avatar
-
-    json.profile_picture profile_picture_url(device.owner)
-
     json.url device.owner.url
-    json.joined_at device.owner.joined_at
-    json.location device.owner.location
-    json.device_ids device.owner.cached_device_ids
+
+    unless local_assigns[:slim_owner]
+      json.avatar device.owner.avatar
+      json.profile_picture profile_picture_url(device.owner)
+      json.location device.owner.location
+      json.device_ids device.owner.cached_device_ids
+    end
   end
 end
 
-json.data device.formatted_data if with_data
+json.data device.formatted_data if local_assigns[:with_data]
 
-if device.kit
-  json.kit device.kit, :id, :uuid, :slug, :name, :description, :created_at, :updated_at
-else
-  json.merge! kit: nil
-end
+
