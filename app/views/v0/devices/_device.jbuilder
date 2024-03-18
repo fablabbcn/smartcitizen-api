@@ -3,7 +3,7 @@ local_assigns[:with_data] = true unless local_assigns.has_key?(:with_data)
 local_assigns[:with_postprocessing] = true unless local_assigns.has_key?(:with_postprocessing)
 local_assigns[:with_location] = true unless local_assigns.has_key?(:with_location)
 local_assigns[:slim_owner] = false unless local_assigns.has_key?(:slim_owner)
-local_assigns[:never_authorized] = false unless local_assigns.has_key?(:not_authorized)
+local_assigns[:never_authorized] = false unless local_assigns.has_key?(:never_authorized)
 
 json.(
   device,
@@ -25,7 +25,7 @@ json.(
     low_battery: device.notify_low_battery
   })
 
-authorized = !local_assigns[:never_authorized] && current_user && (current_user.is_admin? || (device.owner_id && current_user.id == device.owner_id))
+authorized = !local_assigns[:never_authorized] && (current_user && (current_user.is_admin? || (device.owner_id && current_user.id == device.owner_id)))
 
 if authorized
   json.merge! device_token: device.device_token
