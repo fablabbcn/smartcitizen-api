@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_18_110256) do
+ActiveRecord::Schema.define(version: 2024_03_18_171656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 2024_03_18_110256) do
     t.string "key"
     t.integer "bus", default: 1, null: false
     t.datetime "last_reading_at"
-    t.index ["sensor_id"], name: "index_components_on_sensor_id"
+    t.index ["device_id", "sensor_id"], name: "index_components_on_device_id_and_sensor_id"
   end
 
   create_table "devices", id: :serial, force: :cascade do |t|
