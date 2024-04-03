@@ -6,7 +6,8 @@ services:
     ports:
       - 80:80
       - 80:80/udp
-      #- 443:443
+      - 443:443
     volumes:
       - ../scripts/nginx-conf/api.smartcitizen.me.conf:/etc/nginx/conf.d/api.smartcitizen.me.conf
       - ../scripts/nginx.conf:/etc/nginx/nginx.conf
+      - ../scripts/certs:/etc/ssl:ro
