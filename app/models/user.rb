@@ -144,6 +144,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def forward_device_readings?
+    !!forwarding_token
+  end
+
+  def regenerate_forwarding_token!
+    self.forwarding_token = SecureRandom.urlsafe_base64(12) if self.is_admin_or_researcher?
+  end
+
 private
 
   def check_if_users_have_valid_email

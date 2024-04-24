@@ -27,6 +27,16 @@ RSpec.describe RawStorer, :type => :model do
     Component.create!(id: 21, device: device, sensor: Sensor.find(21))
   end
 
+  let(:mqtt_client) {
+    double(:mqtt_client).tap do |mqtt_client|
+      allow(mqtt_client).to receive(:publish)
+    end
+  }
+
+  subject(:storer) {
+    RawStorer.new(mqtt_client)
+  }
+
   let(:json) {
     { "co": "118439", "bat": "1000", "hum": "21592", "no2": "260941", "nets": "17", "temp": "25768", "light": "509", "noise": "0", "panel": "0", "timestamp": to_ts(1.day.ago) }
   }
@@ -37,7 +47,13 @@ RSpec.describe RawStorer, :type => :model do
 
   it "will not be created with invalid past timestamp" do
     ts = { timestamp: to_ts(5.years.ago) }
-    raw_storer = RawStorer.new(json.merge(ts), device.mac_address, "1.1-0.9.0-A", "127.0.0.1")
+    includes_proxy = double({ where: double({last: device.reload})})
+    allow(Device).to receive(:includes).and_return(includes_proxy)
+    expect(device).not_to receive(:update_component_timestamps)
+    expect(Redis.current).not_to receive(:publish)
+    expect {
+      storer.store(json.merge(ts), device.mac_address, "1.1-0.9.0-A", "127.0.0.1", true)
+    }.to raise_error
   end
 
   it "updates component last_reading_at" do
@@ -49,17 +65,24 @@ RSpec.describe RawStorer, :type => :model do
       [16, 17, 13, 15, 21, 12, 14, 7, 18]
     )
 
-    raw_storer = RawStorer.new(json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1", true)
+    storer.store(json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1", true)
   end
 
   it "will not be created with invalid future timestamp" do
     ts = { timestamp: to_ts(2.days.from_now) }
-    raw_storer = RawStorer.new(json.merge(ts), device.mac_address, "1.1-0.9.0-A", "127.0.0.1")
+    includes_proxy = double({ where: double({last: device.reload})})
+    allow(Device).to receive(:includes).and_return(includes_proxy)
+    expect(device).not_to receive(:update_component_timestamps)
+    expect(Redis.current).not_to receive(:publish)
+    storer.store(json.merge(ts), device.mac_address, "1.1-0.9.0-A", "127.0.0.1")
   end
 
   it "will not be created with invalid data" do
+    includes_proxy = double({ where: double({last: device.reload})})
+    allow(Device).to receive(:includes).and_return(includes_proxy)
+    expect(device).not_to receive(:update_component_timestamps)
     expect(Redis.current).not_to receive(:publish)
-    raw_storer = RawStorer.new({}, device.mac_address, "1.1-0.9.0-A", "127.0.0.1")
+    storer.store({}, device.mac_address, "1.1-0.9.0-A", "127.0.0.1")
   end
 
   it "should return a correct sensor id number" do
@@ -69,6 +92,28 @@ RSpec.describe RawStorer, :type => :model do
 
   it "will be created with valid data" do
     expect(Redis.current).to receive(:publish)
-    raw_storer = RawStorer.new(json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1", true)
+    storer.store(json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1", true)
+  end
+
+  context "when the device allows forwarding" do
+    # TODO Tim Refactor this now you're passing in the MQTT client
+    it "forwards the message with the forwarding token and the device's id" do
+      forwarding_token = double(:forwarding_token)
+      allow_any_instance_of(Device).to receive(:forwarding_token).and_return(forwarding_token)
+      allow_any_instance_of(Device).to receive(:forward_readings?).and_return(true)
+
+      forwarder = double(:mqtt_forwarder)
+      allow(MQTTForwarder).to receive(:new).and_return(forwarder)
+      expect(forwarder).to receive(:forward_reading).with(forwarding_token, device.id, json)
+      storer.store(json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1", true)
+    end
+  end
+
+  context "when the device does not have allow forwarding" do
+    it "does not forward the message" do
+      allow_any_instance_of(Device).to receive(:forward_readings?).and_return(false)
+      expect_any_instance_of(MQTTForwarder).not_to receive(:forward_reading)
+      storer.store(json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1", true)
+    end
   end
 end

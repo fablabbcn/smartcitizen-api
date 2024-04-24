@@ -20,7 +20,7 @@ namespace :mqtt do
     mqtt_log.info("ssl: #{mqtt_ssl}")
 
     begin
-      MQTT::Client.connect(
+      MQTTClientFactory.create_client(
         :host => mqtt_host,
         :port => mqtt_port,
         :clean_session => mqtt_clean_session,
@@ -30,6 +30,8 @@ namespace :mqtt do
 
         mqtt_log.info "Connected to #{client.host}"
         mqtt_log.info "Using clean_session setting: #{client.clean_session}"
+
+        message_handler = MqttMessagesHandler.new(client)
 
         client.subscribe(*mqtt_topics.flat_map { |topic|
           topic = topic == "" ? topic : topic + "/"
@@ -46,7 +48,7 @@ namespace :mqtt do
           Sentry.with_scope do
             begin
               time = Benchmark.measure do
-                MqttMessagesHandler.handle_topic(topic, message)
+                message_handler.handle_topic(topic, message)
               end
               mqtt_log.info "Processed MQTT message in #{time}"
               mqtt_log.info "MQTT queue length: #{client.queue_length}"

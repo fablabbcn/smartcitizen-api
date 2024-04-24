@@ -3,9 +3,13 @@
 # ingest raw data posted by Devices into Kairos and Postgres (backup purposes).
 
 class RawStorer
+  include MessageForwarding
 
-  def initialize data, mac, version, ip, raise_errors=false
+  def initialize(mqtt_client)
+    @mqtt_client = mqtt_client
+  end
 
+  def store data, mac, version, ip, raise_errors=false
     success = true
 
     begin
@@ -62,6 +66,7 @@ class RawStorer
         device.update_columns(last_reading_at: parsed_ts, data: sql_data, state: 'has_published')
       end
 
+      forward_reading(device, data)
     rescue Exception => e
 
       success = false
@@ -74,7 +79,10 @@ class RawStorer
       rescue
       end
     end
-
   end
+
+  private
+
+  attr_reader :mqtt_client
 
 end

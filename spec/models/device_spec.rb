@@ -522,6 +522,24 @@ RSpec.describe Device, :type => :model do
     end
   end
 
+  describe "forwarding" do
+    describe "#forward_readings?" do
+      it "delegates to the forward_device_readings? method on the device owner" do
+        forward_readings = double(:forward_readings)
+        expect(device.owner).to receive(:forward_device_readings?).and_return(forward_readings)
+        expect(device.forward_readings?).to eq(forward_readings)
+      end
+    end
+
+    describe "#forwarding_token?" do
+      it "delegates to the device owner" do
+        forwarding_token = double(:forwarding_token)
+        expect(device.owner).to receive(:forwarding_token).and_return(forwarding_token)
+        expect(device.forwarding_token).to eq(forwarding_token)
+      end
+    end
+  end
+
   describe "#find_or_create_component_by_sensor_id" do
     context "when the sensor exists and a component already exists for this device" do
       it "returns the existing component" do

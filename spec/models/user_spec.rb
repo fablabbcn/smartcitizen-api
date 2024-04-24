@@ -71,6 +71,49 @@ RSpec.describe User, :type => :model do
     expect(last_email.to).to eq([user.email])
   end
 
+  describe "forwarding" do
+    describe "generating a forwarding token" do
+      context "when the user is a citizen" do
+        it "does not generate a forwarding token" do
+          user.role_mask = 0
+          user.regenerate_forwarding_token!
+          expect(user.forwarding_token).to be(nil)
+        end
+      end
+      context "when the user is a researcher" do
+        it "generates a forwarding token" do
+          user.role_mask = 2
+          user.regenerate_forwarding_token!
+          expect(user.forwarding_token).not_to be(nil)
+        end
+      end
+      context "when the user is an admin" do
+        it "generates a forwarding token" do
+          user.role_mask = 5
+          user.regenerate_forwarding_token!
+          expect(user.forwarding_token).not_to be(nil)
+        end
+      end
+    end
+
+    describe "forwarding device readings" do
+      context "when the user has a forwarding token" do
+        it "forwards device readings" do
+          user.forwarding_token = double(:forwarding_token)
+          expect(user.forward_device_readings?).to be(true)
+        end
+      end
+
+      context "when the user has no forwarding token" do
+        it "does not forward device readings" do
+          user.forwarding_token = nil
+          expect(user.forward_device_readings?).to be(false)
+        end
+      end
+    end
+  end
+
+
   describe "authenticate_with_legacy_support" do
 
     let(:user) { build_stubbed(:user, password: 'password') }
