@@ -120,14 +120,24 @@ RSpec.describe MqttMessagesHandler do
         )
         MqttMessagesHandler.handle_topic(@packet.topic, @hardware_info_packet.payload)
       end
-    end
 
-    context 'invalid packet' do
-      it 'it notifies Sentry' do
-        allow(Sentry).to receive(:capture_exception)
-        expect(Kairos).not_to receive(:http_post_to)
+      it 'defers messages with unknown device tokens if retry flag is true' do
+        expect(RetryMQTTMessageJob).to receive(:perform_later).with(@invalid_packet.topic, @invalid_packet.payload)
         MqttMessagesHandler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
-        #expect(Sentry).to have_received(:capture_exception).with(RuntimeError)
+      end
+
+      it 'does not defer messages with unknown device tokens if retry flag is false' do
+        expect(RetryMQTTMessageJob).not_to receive(:perform_later).with(@invalid_packet.topic, @invalid_packet.payload)
+        MqttMessagesHandler.handle_topic(@invalid_packet.topic, @invalid_packet.payload, false)
+      end
+
+      context 'invalid packet' do
+        it 'it notifies Sentry' do
+          allow(Sentry).to receive(:capture_exception)
+          expect(Kairos).not_to receive(:http_post_to)
+          MqttMessagesHandler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
+          #expect(Sentry).to have_received(:capture_exception).with(RuntimeError)
+        end
       end
     end
   end

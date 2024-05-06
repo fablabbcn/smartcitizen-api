@@ -46,7 +46,7 @@ class MqttMessagesHandler
   end
 
   def self.handle_nil_device(topic, message, retry_on_nil_device)
-    if topic.to_s.include?("info")
+    if !topic.to_s.include?("inventory")
       retry_later(topic, message) if retry_on_nil_device
     end
   end
