@@ -37,7 +37,7 @@ module V0
 
       if request.headers['X-SmartCitizenData']
         MQTTClientFactory.create_client({clean_session: true, client_id: nil}) do |mqtt_client|
-          storer = RawStorer.new(mqtt_client)
+          storer = RawStorer.new(mqtt_client, self)
           JSON.parse(request.headers['X-SmartCitizenData']).each do |raw_reading|
             mac = request.headers['X-SmartCitizenMacADDR']
             version = request.headers['X-SmartCitizenVersion']

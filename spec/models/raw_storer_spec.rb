@@ -33,8 +33,14 @@ RSpec.describe RawStorer, :type => :model do
     end
   }
 
+  let(:renderer) {
+    # TODO: refactor these tests so they don't depend on the actual rendering,
+    # then replace this with a mock, to reduce brittleness.
+    ActionController::Base.new.view_context
+  }
+
   subject(:storer) {
-    RawStorer.new(mqtt_client)
+    RawStorer.new(mqtt_client, renderer)
   }
 
   let(:json) {
@@ -96,15 +102,23 @@ RSpec.describe RawStorer, :type => :model do
   end
 
   context "when the device allows forwarding" do
-    # TODO Tim Refactor this now you're passing in the MQTT client
+    let(:device_json) {
+      double(:device_json)
+    }
+
+    let(:renderer) {
+      double(:renderer).tap do |renderer|
+        allow(renderer).to receive(:render).and_return(device_json)
+      end
+    }
+
     it "forwards the message with the forwarding token and the device's id" do
       forwarding_token = double(:forwarding_token)
       allow_any_instance_of(Device).to receive(:forwarding_token).and_return(forwarding_token)
       allow_any_instance_of(Device).to receive(:forward_readings?).and_return(true)
-
       forwarder = double(:mqtt_forwarder)
       allow(MQTTForwarder).to receive(:new).and_return(forwarder)
-      expect(forwarder).to receive(:forward_reading).with(forwarding_token, device.id, json)
+      expect(forwarder).to receive(:forward_reading).with(forwarding_token, device.id, device_json)
       storer.store(json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1", true)
     end
   end

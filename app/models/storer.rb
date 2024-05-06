@@ -2,8 +2,9 @@ class Storer
   include DataParser::Storer
   include MessageForwarding
 
-  def initialize(mqtt_client)
+  def initialize(mqtt_client, renderer)
     @mqtt_client = mqtt_client
+    @renderer = renderer
   end
 
   def store device, reading, do_update = true
@@ -51,13 +52,13 @@ class Storer
   def ws_publish(device)
     return if Rails.env.test? or device.blank?
     begin
-      Redis.current.publish("data-received", ActionController::Base.new.view_context.render( partial: "v0/devices/device", locals: {device: device, current_user: nil}))
+      Redis.current.publish("data-received", renderer.render( partial: "v0/devices/device", locals: {device: device, current_user: nil}))
     rescue
     end
   end
 
   private
 
-  attr_reader :mqtt_client
+  attr_reader :mqtt_client, :renderer
 
 end

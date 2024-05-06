@@ -16,7 +16,7 @@ class SendToDatastoreJob < ApplicationJob
   end
 
   def storer
-    @storer ||= Storer.new(mqtt_client)
+    @storer ||= Storer.new(mqtt_client, ActionController::Base.new.view_context)
   end
 
   def mqtt_client
