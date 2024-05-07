@@ -43,6 +43,7 @@ class MqttMessagesHandler
       Sentry.add_breadcrumb(crumb)
       device.update_column(:hardware_info, json_message)
     end
+    return true
   end
 
   def self.handle_nil_device(topic, message, retry_on_nil_device)
