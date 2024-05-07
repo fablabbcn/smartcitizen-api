@@ -16,6 +16,7 @@ class MqttMessagesHandler
     # The following do NOT need a device
     if topic.to_s.include?('inventory')
       DeviceInventory.create({ report: (message rescue nil) })
+      return true
     end
 
     device = Device.find_by(device_token: device_token(topic))

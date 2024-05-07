@@ -3,13 +3,14 @@ class RetryMQTTMessageJob < ApplicationJob
 
   sidekiq_retry_in do |count|
    case count
-   when 0..10 # Every 30 seconds for the first 5 minutes
+   when 0..12
+     5.seconds
+   when 12..20 # Every 30 seconds for the first 5 minutes
     30.seconds
-   when 11..55 # Then every minute for an hour
+   when 20..75 # Then every minute for an hour
      1.minute
    else
-     false # Fallback to default backoff after an hour,
-       # see https://github.com/sidekiq/sidekiq/issues/2338
+     :discard
    end
   end
 
