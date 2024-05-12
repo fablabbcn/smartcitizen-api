@@ -1,5 +1,5 @@
 class MQTTForwarder
-  def initialize(client, prefix="forward/devices", suffix="readings")
+  def initialize(client)
     @client = client
     @prefix = prefix
     @suffix = suffix
@@ -13,7 +13,7 @@ class MQTTForwarder
   private
 
   def topic_path(token, device_id)
-    [prefix, token, device_id, suffix].join("/")
+    ["/forward", token, "device", device_id, "readings"].join("/")
   end
 
   attr_reader :client, :prefix, :suffix
