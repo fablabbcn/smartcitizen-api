@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_23_162838) do
+ActiveRecord::Schema.define(version: 2024_05_12_132257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -297,6 +297,8 @@ ActiveRecord::Schema.define(version: 2024_04_23_162838) do
     t.integer "cached_device_ids", array: true
     t.string "workflow_state"
     t.string "forwarding_token"
+    t.string "forwarding_username"
+    t.index ["forwarding_token"], name: "index_users_on_forwarding_token"
     t.index ["legacy_api_key"], name: "index_users_on_legacy_api_key", unique: true
     t.index ["workflow_state"], name: "index_users_on_workflow_state"
   end
