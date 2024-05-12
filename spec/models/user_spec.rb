@@ -74,24 +74,27 @@ RSpec.describe User, :type => :model do
   describe "forwarding" do
     describe "generating a forwarding token" do
       context "when the user is a citizen" do
-        it "does not generate a forwarding token" do
+        it "does not generate a forwarding token or username" do
           user.role_mask = 0
-          user.regenerate_forwarding_token!
+          user.regenerate_forwarding_tokens!
           expect(user.forwarding_token).to be(nil)
+          expect(user.forwarding_username).to be(nil)
         end
       end
       context "when the user is a researcher" do
-        it "generates a forwarding token" do
+        it "generates a forwarding token and username" do
           user.role_mask = 2
-          user.regenerate_forwarding_token!
+          user.regenerate_forwarding_tokens!
           expect(user.forwarding_token).not_to be(nil)
+          expect(user.forwarding_username).not_to be(nil)
         end
       end
       context "when the user is an admin" do
-        it "generates a forwarding token" do
+        it "generates a forwarding token and username" do
           user.role_mask = 5
-          user.regenerate_forwarding_token!
+          user.regenerate_forwarding_tokens!
           expect(user.forwarding_token).not_to be(nil)
+          expect(user.forwarding_username).not_to be(nil)
         end
       end
     end
