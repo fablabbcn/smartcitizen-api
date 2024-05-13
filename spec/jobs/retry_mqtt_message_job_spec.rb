@@ -41,7 +41,7 @@ RSpec.describe RetryMQTTMessageJob, type: :job do
     expect(mqtt_message_handler).to have_received(:handle_topic).with(topic, message, false)
   end
 
-  it "disconnects the cliient when done" do
+  it "disconnects the client when done" do
     RetryMQTTMessageJob.perform_now(topic, message)
     expect(mqtt_client).to have_received(:disconnect)
   end
