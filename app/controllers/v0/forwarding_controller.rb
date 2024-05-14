@@ -6,7 +6,7 @@ module V0
       username = params[:username]
       token = topic && get_forwarding_token(topic)
       authorized = token && username && User.forwarding_subscription_authorized?(token, username)
-      render json: { result: authorized ? "allow" : "ignore" }
+      render json: { result: authorized ? "allow" : "deny" }
     end
 
     private

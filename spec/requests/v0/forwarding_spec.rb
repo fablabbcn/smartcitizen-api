@@ -40,7 +40,7 @@ describe V0::ForwardingController, type: :request do
     it "does not authorize the subscription" do
       r = api_get "/forward", params
       expect(response.status).to eq(200)
-      expect(r["result"]).to eq("ignore")
+      expect(r["result"]).to eq("deny")
     end
   end
 
