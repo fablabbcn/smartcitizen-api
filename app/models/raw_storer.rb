@@ -5,9 +5,9 @@
 class RawStorer
   include MessageForwarding
 
-  def initialize(mqtt_client, renderer)
+  def initialize(mqtt_client, renderer=nil)
     @mqtt_client = mqtt_client
-    @renderer = renderer
+    @renderer = renderer || ActionController::Base.new.view_context
   end
 
   def store data, mac, version, ip, raise_errors=false

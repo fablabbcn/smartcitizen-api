@@ -2,9 +2,9 @@ class Storer
   include DataParser::Storer
   include MessageForwarding
 
-  def initialize(mqtt_client, renderer)
+  def initialize(mqtt_client, renderer=nil)
     @mqtt_client = mqtt_client
-    @renderer = renderer
+    @renderer = renderer || ActionController::Base.new.view_context
   end
 
   def store device, reading, do_update = true
