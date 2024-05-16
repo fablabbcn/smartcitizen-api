@@ -1,5 +1,5 @@
 class MqttMessagesHandler
-  def self.handle_topic(topic, message)
+  def self.handle_topic(topic, message, retry_on_nil_device=true)
     Sentry.set_tags('mqtt-topic': topic)
 
     crumb = Sentry::Breadcrumb.new(
@@ -16,10 +16,14 @@ class MqttMessagesHandler
     # The following do NOT need a device
     if topic.to_s.include?('inventory')
       DeviceInventory.create({ report: (message rescue nil) })
+      return true
     end
 
     device = Device.find_by(device_token: device_token(topic))
-    return if device.nil?
+    if device.nil?
+      handle_nil_device(topic, message, retry_on_nil_device)
+      return nil
+    end
 
     if topic.to_s.include?('raw')
       handle_readings(device, parse_raw_readings(message, device.id))
@@ -40,6 +44,17 @@ class MqttMessagesHandler
       Sentry.add_breadcrumb(crumb)
       device.update_column(:hardware_info, json_message)
     end
+    return true
+  end
+
+  def self.handle_nil_device(topic, message, retry_on_nil_device)
+    if !topic.to_s.include?("inventory")
+      retry_later(topic, message) if retry_on_nil_device
+    end
+  end
+
+  def self.retry_later(topic, message)
+    RetryMQTTMessageJob.perform_later(topic, message)
   end
 
   # takes a packet and stores data

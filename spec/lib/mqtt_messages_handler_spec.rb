@@ -120,14 +120,24 @@ RSpec.describe MqttMessagesHandler do
         )
         MqttMessagesHandler.handle_topic(@packet.topic, @hardware_info_packet.payload)
       end
-    end
 
-    context 'invalid packet' do
-      it 'it notifies Sentry' do
-        allow(Sentry).to receive(:capture_exception)
-        expect(Kairos).not_to receive(:http_post_to)
+      it 'defers messages with unknown device tokens if retry flag is true' do
+        expect(RetryMQTTMessageJob).to receive(:perform_later).with(@invalid_packet.topic, @invalid_packet.payload)
         MqttMessagesHandler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
-        #expect(Sentry).to have_received(:capture_exception).with(RuntimeError)
+      end
+
+      it 'does not defer messages with unknown device tokens if retry flag is false' do
+        expect(RetryMQTTMessageJob).not_to receive(:perform_later).with(@invalid_packet.topic, @invalid_packet.payload)
+        MqttMessagesHandler.handle_topic(@invalid_packet.topic, @invalid_packet.payload, false)
+      end
+
+      context 'invalid packet' do
+        it 'it notifies Sentry' do
+          allow(Sentry).to receive(:capture_exception)
+          expect(Kairos).not_to receive(:http_post_to)
+          MqttMessagesHandler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
+          #expect(Sentry).to have_received(:capture_exception).with(RuntimeError)
+        end
       end
     end
   end
@@ -243,9 +253,19 @@ RSpec.describe MqttMessagesHandler do
       expect(orphan_device.reload.device_handshake).to be true
     end
 
-    it 'does not handle bad topic' do
+    it 'defers messages with unknown device tokens if retry flag is true' do
       expect(device.hardware_info["id"]).to eq(47)
+      expect(RetryMQTTMessageJob).to receive(:perform_later).with(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
       MqttMessagesHandler.handle_topic(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
+      device.reload
+      expect(device.hardware_info["id"]).to eq(47)
+      expect(@hardware_info_packet_bad.payload).to_not eq((device.hardware_info.to_json))
+    end
+
+    it 'does not defer messages with unknown device tokens if retry flag is false' do
+      expect(device.hardware_info["id"]).to eq(47)
+      expect(RetryMQTTMessageJob).not_to receive(:perform_later).with(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
+      MqttMessagesHandler.handle_topic(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload, false)
       device.reload
       expect(device.hardware_info["id"]).to eq(47)
       expect(@hardware_info_packet_bad.payload).to_not eq((device.hardware_info.to_json))
