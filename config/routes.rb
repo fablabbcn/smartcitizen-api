@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     resources :users
     resources :password_resets, only: [:show, :create, :update]
     resources :oauth_applications, path: 'applications'
+    get :forward, to: "forwarding#authorize"
 
     resources :me, only: [:index] do
       patch 'avatar' => 'uploads#create', on: :collection

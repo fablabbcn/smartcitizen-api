@@ -19,9 +19,26 @@ class RetryMQTTMessageJob < ApplicationJob
   end
 
   def perform(topic, message)
-    result = MqttMessagesHandler.handle_topic(topic, message, false)
-    raise RetryMessageHandlerError if result.nil?
+    begin
+      result = handler.handle_topic(topic, message, false)
+      raise RetryMessageHandlerError if result.nil?
+    ensure
+      disconnect_mqtt
+    end
+  end
+
+  private
+
+  def handler
+    @handler ||= MqttMessagesHandler.new(mqtt_client)
+  end
+
+  def mqtt_client
+    @mqtt_client ||= MQTTClientFactory.create_client({clean_session: true, client_id: nil })
+  end
+
+  def disconnect_mqtt
+    @mqtt_client&.disconnect
   end
 end
-
 

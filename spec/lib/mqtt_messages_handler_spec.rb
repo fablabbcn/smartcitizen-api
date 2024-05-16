@@ -7,6 +7,18 @@ RSpec.describe MqttMessagesHandler do
 
   let(:device_inventory) { create(:device_inventory, report: '{"random_property": "random_result"}') }
 
+
+  let(:mqtt_client) {
+    double(:mqtt_client).tap do |mqtt_client|
+      allow(mqtt_client).to receive(:publish)
+    end
+  }
+
+  subject(:message_handler) {
+    MqttMessagesHandler.new(mqtt_client)
+  }
+
+
   before do
     device.components << component
     create(:sensor, id: 13, default_key: "key13")
@@ -48,13 +60,13 @@ RSpec.describe MqttMessagesHandler do
 
   describe '#device_token' do
     it 'returns device_token from topic' do
-      expect(MqttMessagesHandler.device_token(@packet.topic)).to eq(device.device_token)
+      expect(message_handler.device_token(@packet.topic)).to eq(device.device_token)
     end
   end
 
   describe '#data' do
     it 'returns parsed data from payload' do
-      expect(MqttMessagesHandler.data(@packet.payload)).to match_array(@data)
+      expect(message_handler.data(@packet.payload)).to match_array(@data)
     end
   end
 
@@ -90,7 +102,7 @@ RSpec.describe MqttMessagesHandler do
             }
           }].to_json
         )
-        MqttMessagesHandler.handle_topic(@packet.topic, @packet.payload)
+        message_handler.handle_topic(@packet.topic, @packet.payload)
       end
 
       it 'handshakes the device if an orphan device exists' do
@@ -102,7 +114,7 @@ RSpec.describe MqttMessagesHandler do
             onboarding_session: orphan_device.onboarding_session
           }.to_json
         )
-        MqttMessagesHandler.handle_topic(@packet.topic, @packet.payload)
+        message_handler.handle_topic(@packet.topic, @packet.payload)
         expect(orphan_device.reload.device_handshake).to be true
       end
 
@@ -118,24 +130,29 @@ RSpec.describe MqttMessagesHandler do
             }
           }].to_json
         )
-        MqttMessagesHandler.handle_topic(@packet.topic, @hardware_info_packet.payload)
+        message_handler.handle_topic(@packet.topic, @hardware_info_packet.payload)
       end
 
       it 'defers messages with unknown device tokens if retry flag is true' do
         expect(RetryMQTTMessageJob).to receive(:perform_later).with(@invalid_packet.topic, @invalid_packet.payload)
-        MqttMessagesHandler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
+        message_handler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
+      end
+
+      it 'does not defer messages from the bridge with unknown device tokens even if retry flag is true' do
+        expect(RetryMQTTMessageJob).not_to receive(:perform_later).with("bridge/" + @invalid_packet.topic, @invalid_packet.payload)
+        message_handler.handle_topic("bridge/" + @invalid_packet.topic, @invalid_packet.payload)
       end
 
       it 'does not defer messages with unknown device tokens if retry flag is false' do
         expect(RetryMQTTMessageJob).not_to receive(:perform_later).with(@invalid_packet.topic, @invalid_packet.payload)
-        MqttMessagesHandler.handle_topic(@invalid_packet.topic, @invalid_packet.payload, false)
+        message_handler.handle_topic(@invalid_packet.topic, @invalid_packet.payload, false)
       end
 
       context 'invalid packet' do
         it 'it notifies Sentry' do
           allow(Sentry).to receive(:capture_exception)
           expect(Kairos).not_to receive(:http_post_to)
-          MqttMessagesHandler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
+          message_handler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
           #expect(Sentry).to have_received(:capture_exception).with(RuntimeError)
         end
       end
@@ -169,7 +186,7 @@ RSpec.describe MqttMessagesHandler do
         }].to_json
       )
 
-      MqttMessagesHandler.handle_topic("device/sck/#{device.device_token}/readings/raw", the_data)
+      message_handler.handle_topic("device/sck/#{device.device_token}/readings/raw", the_data)
 
       # TODO: we should expect that a new Storer object should contain the correct, processed readings
       #expect(Storer).to receive(:new)
@@ -184,7 +201,7 @@ RSpec.describe MqttMessagesHandler do
           onboarding_session: orphan_device.onboarding_session
         }.to_json
       )
-      MqttMessagesHandler.handle_topic("device/sck/#{device.device_token}/readings/raw", the_data)
+      message_handler.handle_topic("device/sck/#{device.device_token}/readings/raw", the_data)
       expect(orphan_device.reload.device_handshake).to be true
     end
   end
@@ -197,7 +214,7 @@ RSpec.describe MqttMessagesHandler do
           onboarding_session: orphan_device.onboarding_session
         }.to_json
       )
-      MqttMessagesHandler.handle_topic(
+      message_handler.handle_topic(
         "device/sck/#{orphan_device.device_token}/hello",
         'content ignored by MqttMessagesHandler\#hello'
       )
@@ -211,21 +228,21 @@ RSpec.describe MqttMessagesHandler do
       # This creates a new device_inventory item
       expect(@inventory_packet.payload).to eq((device_inventory.report.to_json))
       expect(DeviceInventory.count).to eq(1)
-      MqttMessagesHandler.handle_topic(@inventory_packet.topic, @inventory_packet.payload)
+      message_handler.handle_topic(@inventory_packet.topic, @inventory_packet.payload)
       expect(DeviceInventory.last.report["random_property"]).to eq('random_result')
       expect(DeviceInventory.count).to eq(2)
     end
 
     it 'does not log inventory with an incorrect / nil topic' do
       expect(DeviceInventory.count).to eq(0)
-      MqttMessagesHandler.handle_topic('invenxxx','{"random_property":"random_result2"}')
-      MqttMessagesHandler.handle_topic(nil,'{"random_property":"random_result2"}')
+      message_handler.handle_topic('invenxxx','{"random_property":"random_result2"}')
+      message_handler.handle_topic(nil,'{"random_property":"random_result2"}')
       expect(DeviceInventory.count).to eq(0)
     end
 
     it 'does not handshake any device' do
       expect(Redis.current).not_to receive(:publish)
-      MqttMessagesHandler.handle_topic(
+      message_handler.handle_topic(
         @inventory_packet.topic, @inventory_packet.payload
       )
     end
@@ -234,7 +251,7 @@ RSpec.describe MqttMessagesHandler do
   describe '#hardware_info' do
     it 'hardware info has been received and id changed from 47 -> 48' do
       expect(device.hardware_info["id"]).to eq(47)
-      MqttMessagesHandler.handle_topic(@hardware_info_packet.topic, @hardware_info_packet.payload)
+      message_handler.handle_topic(@hardware_info_packet.topic, @hardware_info_packet.payload)
       device.reload
       expect(device.hardware_info["id"]).to eq(48)
       expect(@hardware_info_packet.payload).to eq((device.hardware_info.to_json))
@@ -249,14 +266,24 @@ RSpec.describe MqttMessagesHandler do
           onboarding_session: orphan_device.onboarding_session
         }.to_json
       )
-      MqttMessagesHandler.handle_topic(@hardware_info_packet.topic, @hardware_info_packet.payload)
+      message_handler.handle_topic(@hardware_info_packet.topic, @hardware_info_packet.payload)
       expect(orphan_device.reload.device_handshake).to be true
     end
 
     it 'defers messages with unknown device tokens if retry flag is true' do
       expect(device.hardware_info["id"]).to eq(47)
       expect(RetryMQTTMessageJob).to receive(:perform_later).with(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
-      MqttMessagesHandler.handle_topic(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
+      message_handler.handle_topic(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
+      device.reload
+      expect(device.hardware_info["id"]).to eq(47)
+      expect(@hardware_info_packet_bad.payload).to_not eq((device.hardware_info.to_json))
+    end
+
+
+    it 'does not defers messages with unknown device tokens from the bridge even if retry flag is true' do
+      expect(device.hardware_info["id"]).to eq(47)
+      expect(RetryMQTTMessageJob).not_to receive(:perform_later).with("bridge/" + @hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
+      message_handler.handle_topic("bridge/" + @hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
       device.reload
       expect(device.hardware_info["id"]).to eq(47)
       expect(@hardware_info_packet_bad.payload).to_not eq((device.hardware_info.to_json))
@@ -265,7 +292,7 @@ RSpec.describe MqttMessagesHandler do
     it 'does not defer messages with unknown device tokens if retry flag is false' do
       expect(device.hardware_info["id"]).to eq(47)
       expect(RetryMQTTMessageJob).not_to receive(:perform_later).with(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
-      MqttMessagesHandler.handle_topic(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload, false)
+      message_handler.handle_topic(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload, false)
       device.reload
       expect(device.hardware_info["id"]).to eq(47)
       expect(@hardware_info_packet_bad.payload).to_not eq((device.hardware_info.to_json))

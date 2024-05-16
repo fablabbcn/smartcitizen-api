@@ -3,9 +3,14 @@
 # ingest raw data posted by Devices into Kairos and Postgres (backup purposes).
 
 class RawStorer
+  include MessageForwarding
 
-  def initialize data, mac, version, ip, raise_errors=false
+  def initialize(mqtt_client, renderer)
+    @mqtt_client = mqtt_client
+    @renderer = renderer
+  end
 
+  def store data, mac, version, ip, raise_errors=false
     success = true
 
     begin
@@ -62,6 +67,7 @@ class RawStorer
         device.update_columns(last_reading_at: parsed_ts, data: sql_data, state: 'has_published')
       end
 
+      forward_reading(device, data)
     rescue Exception => e
 
       success = false
@@ -70,11 +76,14 @@ class RawStorer
 
     if !Rails.env.test? and device
       begin
-        Redis.current.publish("data-received", ActionController::Base.new.view_context.render( partial: "v0/devices/device", locals: {device: @device, current_user: nil}))
+        Redis.current.publish("data-received", renderer.render( partial: "v0/devices/device", locals: {device: @device, current_user: nil}))
       rescue
       end
     end
-
   end
+
+  private
+
+  attr_reader :mqtt_client, :renderer
 
 end

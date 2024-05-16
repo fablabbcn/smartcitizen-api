@@ -36,13 +36,14 @@ module V0
     def legacy_create
 
       if request.headers['X-SmartCitizenData']
-        JSON.parse(request.headers['X-SmartCitizenData']).each do |raw_reading|
-
-          mac = request.headers['X-SmartCitizenMacADDR']
-          version = request.headers['X-SmartCitizenVersion']
-          ip = (request.headers['X-SmartCitizenIP'] || request.remote_ip)
-
-          RawStorer.new(raw_reading,mac,version,ip)
+        MQTTClientFactory.create_client({clean_session: true, client_id: nil}) do |mqtt_client|
+          storer = RawStorer.new(mqtt_client, self)
+          JSON.parse(request.headers['X-SmartCitizenData']).each do |raw_reading|
+            mac = request.headers['X-SmartCitizenMacADDR']
+            version = request.headers['X-SmartCitizenVersion']
+            ip = (request.headers['X-SmartCitizenIP'] || request.remote_ip)
+            storer.store(raw_reading,mac,version,ip)
+          end
         end
       end
 

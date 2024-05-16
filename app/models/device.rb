@@ -271,6 +271,14 @@ class Device < ActiveRecord::Base
     hardware_slug_override || [hardware_type.downcase, hardware_version&.gsub(".", ",")].compact.join(":")
   end
 
+  def forward_readings?
+    owner.forward_device_readings?
+  end
+
+  def forwarding_token
+    owner.forwarding_token
+  end
+
   private
 
     def set_state

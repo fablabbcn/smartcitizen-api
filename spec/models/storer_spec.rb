@@ -6,6 +6,22 @@ RSpec.describe Storer, type: :model do
   let(:component){ create(:component, id: 12, device: device, sensor: sensor) }
 
 
+  let(:mqtt_client) {
+    double(:mqtt_client).tap do |mqtt_client|
+      allow(mqtt_client).to receive(:publish)
+    end
+  }
+
+  let(:renderer) {
+    double(:renderer).tap do |renderer|
+      allow(renderer).to receive(:render)
+    end
+  }
+
+  subject(:storer) {
+    Storer.new(mqtt_client, renderer)
+  }
+
   context 'when receiving good data' do
     before do
       allow(Rails.env).to receive(:production?).and_return(true)
@@ -42,7 +58,7 @@ RSpec.describe Storer, type: :model do
       # expect(Kairos).to receive(:http_post_to).with("/datapoints", @karios_data)
       # expect_any_instance_of(Storer).to receive(:ws_publish)
       expect do
-        Storer.new(device, @data)
+        storer.store(device, @data)
       end.not_to raise_error
     end
 
@@ -51,13 +67,15 @@ RSpec.describe Storer, type: :model do
         Time.parse(@data['recorded_at']),
         [sensor.id]
       )
-      Storer.new(device, @data)
+      storer.store(device, @data)
     end
 
     skip 'updates device without touching updated_at' do
       updated_at = device.updated_at
 
-      Storer.new(device, @data)
+      expect(storer).to receive(:ws_publish)
+
+      storer.store(device, @data)
 
       expect(device.reload.updated_at).to eq(updated_at)
 
@@ -65,7 +83,32 @@ RSpec.describe Storer, type: :model do
       expect(device.reload.last_reading_at).not_to eq(nil)
       expect(device.reload.state).to eq('has_published')
 
-      expect(Storer).to receive(:ws_publish)
+    end
+
+    context "when the device allows forwarding" do
+
+      let(:device_json) {
+        double(:device_json)
+      }
+
+      it "forwards the message with the forwarding token and the device's id" do
+        forwarding_token = double(:forwarding_token)
+        forwarder = double(:mqtt_forwarder)
+        allow(device).to receive(:forwarding_token).and_return(forwarding_token)
+        allow(device).to receive(:forward_readings?).and_return(true)
+        allow(renderer).to receive(:render).and_return(device_json)
+        allow(MQTTForwarder).to receive(:new).and_return(forwarder)
+        expect(forwarder).to receive(:forward_reading).with(forwarding_token, device.id, device_json)
+        storer.store(device, @data)
+      end
+    end
+
+    context "when the device does not allow forwarding" do
+      it "does not forward the message" do
+        allow(device).to receive(:forward_readings?).and_return(false)
+        expect_any_instance_of(MQTTForwarder).not_to receive(:forward_reading)
+        storer.store(device, @data)
+      end
     end
   end
 
@@ -81,11 +124,11 @@ RSpec.describe Storer, type: :model do
 
     it 'does raise error' do
       expect(Kairos).not_to receive(:http_post_to).with("/datapoints", anything)
-      expect{ Storer.new(device, @bad_data) }.to raise_error(ArgumentError)
+      expect{ storer.store(device, @bad_data) }.to raise_error(ArgumentError)
     end
 
     it 'does not update device' do
-      expect{ Storer.new(device, @bad_data) }.to raise_error(ArgumentError)
+      expect{ storer.store(device, @bad_data) }.to raise_error(ArgumentError)
 
       expect(device.reload.last_reading_at).to eq(nil)
       expect(device.reload.data).to eq(nil)

@@ -39,6 +39,11 @@ class User < ActiveRecord::Base
 
   before_create :generate_legacy_api_key
 
+
+  def self.forwarding_subscription_authorized?(token, username)
+    User.find_by_forwarding_token(token)&.forwarding_username == username
+  end
+
   def self.ransackable_attributes(auth_object = nil)
     [ "city", "country_code", "id", "username", "uuid", "created_at", "updated_at"]
   end
@@ -141,6 +146,17 @@ class User < ActiveRecord::Base
       unless `curl -I #{user.avatar_url} 2>/dev/null | head -n 1`.split(' ')[1] == "200"
         puts [user.id, user.avatar_url].join(' - ')
       end
+    end
+  end
+
+  def forward_device_readings?
+    !!forwarding_token
+  end
+
+  def regenerate_forwarding_tokens!
+    if is_admin_or_researcher?
+      self.forwarding_token = SecureRandom.urlsafe_base64(12)
+      self.forwarding_username = SecureRandom.urlsafe_base64(12)
     end
   end
 

@@ -1,5 +1,10 @@
 class MqttMessagesHandler
-  def self.handle_topic(topic, message, retry_on_nil_device=true)
+
+  def initialize(mqtt_client)
+    @mqtt_client = mqtt_client
+  end
+
+  def handle_topic(topic, message, retry_on_nil_device=true)
     Sentry.set_tags('mqtt-topic': topic)
 
     crumb = Sentry::Breadcrumb.new(
@@ -47,23 +52,23 @@ class MqttMessagesHandler
     return true
   end
 
-  def self.handle_nil_device(topic, message, retry_on_nil_device)
-    if !topic.to_s.include?("inventory")
+  def handle_nil_device(topic, message, retry_on_nil_device)
+    if !topic.to_s.include?("inventory") && !topic.to_s.include?("bridge")
       retry_later(topic, message) if retry_on_nil_device
     end
   end
 
-  def self.retry_later(topic, message)
+  def retry_later(topic, message)
     RetryMQTTMessageJob.perform_later(topic, message)
   end
 
   # takes a packet and stores data
-  def self.handle_readings(device, message)
+  def handle_readings(device, message)
     data = self.data(message)
     return if data.nil? or data&.empty?
 
     data.each do |reading|
-      Storer.new(device, reading)
+      storer.store(device, reading)
     end
   rescue Exception => e
     Sentry.capture_exception(e)
@@ -73,7 +78,7 @@ class MqttMessagesHandler
   end
 
   # takes a raw packet and converts into JSON
-  def self.parse_raw_readings(message, device_id=nil)
+  def parse_raw_readings(message, device_id=nil)
     crumb = Sentry::Breadcrumb.new(
       category: "MqttMessagesHandler.parse_raw_readings",
       message: "Parsing raw readings",
@@ -101,7 +106,7 @@ class MqttMessagesHandler
     JSON[reading]
   end
 
-  def self.handshake_device(topic)
+  def handshake_device(topic)
     orphan_device = OrphanDevice.find_by(device_token: device_token(topic))
     return if orphan_device.nil?
     orphan_device.update!(device_handshake: true)
@@ -111,12 +116,12 @@ class MqttMessagesHandler
   end
 
   # takes a packet and returns 'device token' from topic
-  def self.device_token(topic)
+  def device_token(topic)
     topic[/device\/sck\/(.*?)\//m, 1].to_s
   end
 
   # takes a packet and returns 'data' from payload
-  def self.data(message)
+  def data(message)
     # TODO: what if message is empty?
     if message
       begin
@@ -127,5 +132,15 @@ class MqttMessagesHandler
     else
       raise "No data(message)"
     end
+  end
+
+
+  private
+
+  attr_reader :mqtt_client
+
+
+  def storer
+    @storer ||= Storer.new(mqtt_client, ActionController::Base.new.view_context)
   end
 end
