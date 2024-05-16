@@ -53,7 +53,8 @@ class MqttMessagesHandler
   end
 
   def handle_nil_device(topic, message, retry_on_nil_device)
-    if !topic.to_s.include?("inventory") && !topic.to_s.include?("bridge")
+    orphan_device = OrphanDevice.find_by_device_token(device_token(topic))
+    if !topic.to_s.include?("inventory") && !topic.to_s.include?("bridge") && orphan_device
       retry_later(topic, message) if retry_on_nil_device
     end
   end
