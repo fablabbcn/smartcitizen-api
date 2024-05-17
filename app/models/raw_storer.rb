@@ -5,11 +5,6 @@
 class RawStorer
   include MessageForwarding
 
-  def initialize(mqtt_client, renderer=nil)
-    @mqtt_client = mqtt_client
-    @renderer = renderer || ActionController::Base.new.view_context
-  end
-
   def store data, mac, version, ip, raise_errors=false
     success = true
 
@@ -73,17 +68,5 @@ class RawStorer
       success = false
       raise e if raise_errors
     end
-
-    if !Rails.env.test? and device
-      begin
-        Redis.current.publish("data-received", renderer.render( partial: "v0/devices/device", locals: {device: @device, current_user: nil}))
-      rescue
-      end
-    end
   end
-
-  private
-
-  attr_reader :mqtt_client, :renderer
-
 end

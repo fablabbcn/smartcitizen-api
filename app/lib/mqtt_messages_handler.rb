@@ -1,10 +1,9 @@
 class MqttMessagesHandler
 
-  def initialize(mqtt_client)
-    @mqtt_client = mqtt_client
+  class DeviceOnboardingIncompleteError < RuntimeError
   end
 
-  def handle_topic(topic, message, retry_on_nil_device=true)
+  def handle_topic(topic, message)
     Sentry.set_tags('mqtt-topic': topic)
 
     crumb = Sentry::Breadcrumb.new(
@@ -26,7 +25,7 @@ class MqttMessagesHandler
 
     device = Device.find_by(device_token: device_token(topic))
     if device.nil?
-      handle_nil_device(topic, message, retry_on_nil_device)
+      handle_nil_device(topic, message)
       return nil
     end
 
@@ -52,15 +51,11 @@ class MqttMessagesHandler
     return true
   end
 
-  def handle_nil_device(topic, message, retry_on_nil_device)
+  def handle_nil_device(topic, message)
     orphan_device = OrphanDevice.find_by_device_token(device_token(topic))
     if !topic.to_s.include?("inventory") && !topic.to_s.include?("bridge") && orphan_device
-      retry_later(topic, message) if retry_on_nil_device
+      raise DeviceOnboardingIncompleteError
     end
-  end
-
-  def retry_later(topic, message)
-    RetryMQTTMessageJob.perform_later(topic, message)
   end
 
   # takes a packet and stores data
@@ -135,13 +130,9 @@ class MqttMessagesHandler
     end
   end
 
-
   private
 
-  attr_reader :mqtt_client
-
-
   def storer
-    @storer ||= Storer.new(mqtt_client)
+    @storer ||= Storer.new
   end
 end

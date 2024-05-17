@@ -5,21 +5,8 @@ RSpec.describe Storer, type: :model do
   let(:device) {   create(:device, device_token: 'aA1234') }
   let(:component){ create(:component, id: 12, device: device, sensor: sensor) }
 
-
-  let(:mqtt_client) {
-    double(:mqtt_client).tap do |mqtt_client|
-      allow(mqtt_client).to receive(:publish)
-    end
-  }
-
-  let(:renderer) {
-    double(:renderer).tap do |renderer|
-      allow(renderer).to receive(:render)
-    end
-  }
-
   subject(:storer) {
-    Storer.new(mqtt_client, renderer)
+    Storer.new
   }
 
   context 'when receiving good data' do
@@ -94,11 +81,9 @@ RSpec.describe Storer, type: :model do
       it "forwards the message with the forwarding token and the device's id" do
         forwarding_token = double(:forwarding_token)
         forwarder = double(:mqtt_forwarder)
-        allow(device).to receive(:forwarding_token).and_return(forwarding_token)
         allow(device).to receive(:forward_readings?).and_return(true)
-        allow(renderer).to receive(:render).and_return(device_json)
         allow(MQTTForwarder).to receive(:new).and_return(forwarder)
-        expect(forwarder).to receive(:forward_reading).with(forwarding_token, device.id, device_json)
+        expect(forwarder).to receive(:forward_reading).with(device, @data)
         storer.store(device, @data)
       end
     end

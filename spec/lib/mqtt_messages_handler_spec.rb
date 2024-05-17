@@ -8,14 +8,8 @@ RSpec.describe MqttMessagesHandler do
   let(:device_inventory) { create(:device_inventory, report: '{"random_property": "random_result"}') }
 
 
-  let(:mqtt_client) {
-    double(:mqtt_client).tap do |mqtt_client|
-      allow(mqtt_client).to receive(:publish)
-    end
-  }
-
   subject(:message_handler) {
-    MqttMessagesHandler.new(mqtt_client)
+    MqttMessagesHandler.new
   }
 
 
@@ -133,25 +127,23 @@ RSpec.describe MqttMessagesHandler do
         message_handler.handle_topic(@packet.topic, @hardware_info_packet.payload)
       end
 
-      it 'defers messages with unknown device tokens and an orphan device if retry flag is true' do
-        expect(RetryMQTTMessageJob).to receive(:perform_later).with(@invalid_packet.topic, @invalid_packet.payload)
+      it 'defers messages with unknown device tokens and an orphan device' do
         OrphanDevice.create(device_token: "invalid_device_token")
-        message_handler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
+        expect {
+          message_handler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
+        }.to raise_error(MqttMessagesHandler::DeviceOnboardingIncompleteError)
       end
 
-      it 'does not defer messages with unknown device tokens and no orphan device even if retry flag is true' do
-        expect(RetryMQTTMessageJob).not_to receive(:perform_later).with(@invalid_packet.topic, @invalid_packet.payload)
-        message_handler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
+      it 'does not defer messages with unknown device tokens and no orphan device' do
+        expect {
+          message_handler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
+        }.not_to raise_error
       end
 
-      it 'does not defer messages from the bridge with unknown device tokens even if retry flag is true' do
-        expect(RetryMQTTMessageJob).not_to receive(:perform_later).with("bridge/" + @invalid_packet.topic, @invalid_packet.payload)
-        message_handler.handle_topic("bridge/" + @invalid_packet.topic, @invalid_packet.payload)
-      end
-
-      it 'does not defer messages with unknown device tokens if retry flag is false' do
-        expect(RetryMQTTMessageJob).not_to receive(:perform_later).with(@invalid_packet.topic, @invalid_packet.payload)
-        message_handler.handle_topic(@invalid_packet.topic, @invalid_packet.payload, false)
+      it 'does not defer messages from the bridge with unknown device tokens' do
+        expect {
+          message_handler.handle_topic("bridge/" + @invalid_packet.topic, @invalid_packet.payload)
+        }.not_to raise_error
       end
 
       context 'invalid packet' do
@@ -220,10 +212,13 @@ RSpec.describe MqttMessagesHandler do
           onboarding_session: orphan_device.onboarding_session
         }.to_json
       )
-      message_handler.handle_topic(
-        "device/sck/#{orphan_device.device_token}/hello",
-        'content ignored by MqttMessagesHandler\#hello'
-      )
+      begin
+        message_handler.handle_topic(
+          "device/sck/#{orphan_device.device_token}/hello",
+          'content ignored by MqttMessagesHandler\#hello'
+        )
+      rescue MqttMessagesHandler::DeviceOnboardingIncompleteError
+      end
       expect(orphan_device.reload.device_handshake).to be true
     end
   end
@@ -276,38 +271,32 @@ RSpec.describe MqttMessagesHandler do
       expect(orphan_device.reload.device_handshake).to be true
     end
 
-    it 'defers messages with unknown device tokens if retry flag is true and an orphan device exists' do
+    it 'defers messages with unknown device tokens if an orphan device exists' do
       expect(device.hardware_info["id"]).to eq(47)
-      expect(RetryMQTTMessageJob).to receive(:perform_later).with(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
       OrphanDevice.create(device_token: "BAD_TOPIC")
-      message_handler.handle_topic(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
+      expect {
+        message_handler.handle_topic(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
+      }.to raise_error(MqttMessagesHandler::DeviceOnboardingIncompleteError)
       device.reload
       expect(device.hardware_info["id"]).to eq(47)
       expect(@hardware_info_packet_bad.payload).to_not eq((device.hardware_info.to_json))
     end
 
-    it 'does not defer messages with unknown device tokens if retry flag is true and an orphan device does not exist' do
+    it 'does not defer messages with unknown device tokens if an orphan device does not exist' do
       expect(device.hardware_info["id"]).to eq(47)
-      expect(RetryMQTTMessageJob).not_to receive(:perform_later).with(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
-      message_handler.handle_topic(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
+      expect {
+        message_handler.handle_topic(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
+      }.not_to raise_error
       device.reload
       expect(device.hardware_info["id"]).to eq(47)
       expect(@hardware_info_packet_bad.payload).to_not eq((device.hardware_info.to_json))
     end
 
-    it 'does not defers messages with unknown device tokens from the bridge even if retry flag is true' do
+    it 'does not defers messages with unknown device tokens from the bridge' do
       expect(device.hardware_info["id"]).to eq(47)
-      expect(RetryMQTTMessageJob).not_to receive(:perform_later).with("bridge/" + @hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
-      message_handler.handle_topic("bridge/" + @hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
-      device.reload
-      expect(device.hardware_info["id"]).to eq(47)
-      expect(@hardware_info_packet_bad.payload).to_not eq((device.hardware_info.to_json))
-    end
-
-    it 'does not defer messages with unknown device tokens if retry flag is false' do
-      expect(device.hardware_info["id"]).to eq(47)
-      expect(RetryMQTTMessageJob).not_to receive(:perform_later).with(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
-      message_handler.handle_topic(@hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload, false)
+      expect {
+        message_handler.handle_topic("bridge/" + @hardware_info_packet_bad.topic, @hardware_info_packet_bad.payload)
+      }.not_to raise_error
       device.reload
       expect(device.hardware_info["id"]).to eq(47)
       expect(@hardware_info_packet_bad.payload).to_not eq((device.hardware_info.to_json))

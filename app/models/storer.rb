@@ -2,11 +2,6 @@ class Storer
   include DataParser::Storer
   include MessageForwarding
 
-  def initialize(mqtt_client, renderer=nil)
-    @mqtt_client = mqtt_client
-    @renderer = renderer || ActionController::Base.new.view_context
-  end
-
   def store device, reading, do_update = true
     begin
       parsed_reading = Storer.parse_reading(device, reading)
@@ -14,7 +9,6 @@ class Storer
 
       if do_update
         update_device(device, parsed_reading[:parsed_ts], parsed_reading[:sql_data])
-        ws_publish(device)
       end
 
       forward_reading(device, reading)
@@ -48,17 +42,4 @@ class Storer
     #NOTE: If you want to use the Telnet port below, make sure it is open!
     Redis.current.publish('telnet_queue', reading_data.to_json)
   end
-
-  def ws_publish(device)
-    return if Rails.env.test? or device.blank?
-    begin
-      Redis.current.publish("data-received", renderer.render( partial: "v0/devices/device", locals: {device: device, current_user: nil}))
-    rescue
-    end
-  end
-
-  private
-
-  attr_reader :mqtt_client, :renderer
-
 end
