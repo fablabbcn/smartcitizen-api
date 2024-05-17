@@ -10,7 +10,7 @@ class MQTTForwarder
     topic = topic_path(token, device_id)
     payload = payload_for(device, reading)
     with_client do |client|
-      client.publish(topic, reading)
+      client.publish(topic, payload)
     end
   end
 
