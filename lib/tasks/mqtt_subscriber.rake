@@ -32,9 +32,7 @@ namespace :mqtt do
           ]
         })
 
-        mqtt_log.info "SUBSCRIBED!!"
         client.get do |topic, message|
-          mqtt_log.info "MESSAGE! "
           Sentry.with_scope do
             begin
               time = Benchmark.measure do
