@@ -38,9 +38,9 @@ namespace :mqtt do
           Sentry.with_scope do
             begin
               time = Benchmark.measure do
-                cleaned_message = message.force_encoding("ascii").encode("utf-8", {
+                cleaned_message = message.force_encoding("ascii").encode("utf-8",
                   invalid: :replace, undef: :replace, replace: "", universal_newline: true
-                })
+                )
                 HandleIncomingMQTTMessageJob.perform_later(topic, cleaned_message)
               end
               mqtt_log.info "Processed MQTT message in #{time}"
