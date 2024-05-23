@@ -3,9 +3,11 @@ module MessageForwarding
   extend ActiveSupport::Concern
 
   def forward_reading(device, reading)
-    forwarder = MQTTForwarder.new(mqtt_client)
-    payload = payload_for(device, reading)
-    forwarder.forward_reading(device.forwarding_token, device.id, payload) if device.forward_readings?
+    if device.forward_readings?
+      forwarder = MQTTForwarder.new(mqtt_client)
+      payload = payload_for(device, reading)
+      forwarder.forward_reading(device.forwarding_token, device.id, payload)
+    end
   end
 
   def payload_for(device, reading)
