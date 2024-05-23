@@ -8,6 +8,6 @@
   - mqtt_incoming
 
 production:
-  :concurrency: 25
+  :concurrency: 50
 staging:
   :concurrency: 15
