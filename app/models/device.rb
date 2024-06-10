@@ -101,14 +101,18 @@ class Device < ActiveRecord::Base
 
   def find_or_create_component_by_sensor_id(sensor_id)
     return nil if sensor_id.nil? || !Sensor.exists?(id: sensor_id)
-    components.find_or_create_by(sensor_id: sensor_id)
+    self.with_lock(isolation: :repeatable_read) do
+      components.find_or_create_by(sensor_id: sensor_id)
+    end
   end
 
   def find_or_create_component_by_sensor_key(sensor_key)
     return nil if sensor_key.nil?
     sensor = Sensor.find_by(default_key: sensor_key)
     return nil if sensor.nil?
-    components.find_or_create_by(sensor_id: sensor.id)
+    self.with_lock(isolation: :repeatable_read) do
+      components.find_or_create_by(sensor_id: sensor_id)
+    end
   end
 
   def find_or_create_component_for_sensor_reading(reading)
