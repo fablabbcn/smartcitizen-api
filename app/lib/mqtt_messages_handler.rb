@@ -24,30 +24,32 @@ class MqttMessagesHandler
       return true
     end
 
-    device = Device.find_by(device_token: device_token(topic))
-    if device.nil?
-      handle_nil_device(topic, message, retry_on_nil_device)
-      return nil
-    end
+    Device.transaction(isolation: :repeatable_read) do
+      device = Device.lock.find_by(device_token: device_token(topic))
+      if device.nil?
+        handle_nil_device(topic, message, retry_on_nil_device)
+        return nil
+      end
 
-    if topic.to_s.include?('raw')
-      handle_readings(device, parse_raw_readings(message, device.id))
-    elsif topic.to_s.include?('readings')
-      handle_readings(device, message)
-    elsif topic.to_s.include?('info')
-      json_message = JSON.parse(message)
-      crumb = Sentry::Breadcrumb.new(
-        category: "MqttMessagesHandler.handle_topic",
-        message: "Parsing info message",
-        data: {
-          topic: topic,
-          message: message.encode("UTF-8", invalid: :replace, undef: :replace),
-          json: json_message,
-          device_id: device.id
-        }
-      )
-      Sentry.add_breadcrumb(crumb)
-      device.update_column(:hardware_info, json_message)
+      if topic.to_s.include?('raw')
+        handle_readings(device, parse_raw_readings(message, device.id))
+      elsif topic.to_s.include?('readings')
+        handle_readings(device, message)
+      elsif topic.to_s.include?('info')
+        json_message = JSON.parse(message)
+        crumb = Sentry::Breadcrumb.new(
+          category: "MqttMessagesHandler.handle_topic",
+          message: "Parsing info message",
+          data: {
+            topic: topic,
+            message: message.encode("UTF-8", invalid: :replace, undef: :replace),
+            json: json_message,
+            device_id: device.id
+          }
+        )
+        Sentry.add_breadcrumb(crumb)
+        device.update_column(:hardware_info, json_message)
+      end
     end
     return true
   end

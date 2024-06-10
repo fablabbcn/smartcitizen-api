@@ -100,19 +100,23 @@ class Device < ActiveRecord::Base
   end
 
   def find_or_create_component_by_sensor_id(sensor_id)
+    # Note: because find_or_create_by is not atomic, make sure you have a lock on the
+    # appropriate device when calling this. We don't lock here for performance reasons
+    # in mqtt-task (the additional reload slows the subscription.) TODO: Rethink mqtt-task
+    # entirely.
     return nil if sensor_id.nil? || !Sensor.exists?(id: sensor_id)
-    self.with_lock(isolation: :repeatable_read) do
-      components.find_or_create_by(sensor_id: sensor_id)
-    end
+    components.find_or_create_by(sensor_id: sensor_id)
   end
 
   def find_or_create_component_by_sensor_key(sensor_key)
+    # Note: because find_or_create_by is not atomic, make sure you have a lock on the
+    # appropriate device when calling this. We don't lock here for performance reasons
+    # in mqtt-task (the additional reload slows the subscription.) TODO: Rethink mqtt-task
+    # entirely.
     return nil if sensor_key.nil?
     sensor = Sensor.find_by(default_key: sensor_key)
     return nil if sensor.nil?
-    self.with_lock(isolation: :repeatable_read) do
-      components.find_or_create_by(sensor_id: sensor_id)
-    end
+    components.find_or_create_by(sensor_id: sensor_id)
   end
 
   def find_or_create_component_for_sensor_reading(reading)
