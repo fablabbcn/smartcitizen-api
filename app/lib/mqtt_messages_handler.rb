@@ -24,7 +24,7 @@ class MqttMessagesHandler
       return true
     end
 
-    Device.transaction(isolation: :repeatable_read) do
+    Device.transaction(isolation: :serializable) do
       device = Device.lock.find_by(device_token: device_token(topic))
       if device.nil?
         handle_nil_device(topic, message, retry_on_nil_device)

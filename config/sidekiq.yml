@@ -5,6 +5,8 @@
   - default
   - mailers
   - mqtt_retry
+:limits:
+  - mqtt_retry: 1
 
 production:
   :concurrency: 25
