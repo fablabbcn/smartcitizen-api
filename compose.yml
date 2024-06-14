@@ -8,7 +8,6 @@ include:
   - compose/telnet-task.yml
   - compose/mqtt.yml
   - compose/web.yml
-  - compose/push.yml
   - compose/kairos.yml
   - compose/cassandra.yml
   - compose/grafana.yml

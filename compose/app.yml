@@ -17,7 +17,6 @@ services:
       - sidekiq
       - mqtt-task
       - telnet-task
-      - push
       #- mqtt
     restart: always
     deploy:
