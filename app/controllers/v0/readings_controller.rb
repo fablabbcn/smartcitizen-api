@@ -9,6 +9,8 @@ module V0
 
     def index
       check_missing_params("rollup", "sensor_key||sensor_id") # sensor_key or sensor_id
+      return unless check_date_param_format("from")
+      return unless check_date_param_format("to")
       render json: Kairos.query(params)
     end
 
