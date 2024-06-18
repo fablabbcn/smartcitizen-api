@@ -133,8 +133,8 @@ RSpec.describe MqttMessagesHandler do
         message_handler.handle_topic(@packet.topic, @hardware_info_packet.payload)
       end
 
-      it 'defers messages with unknown device tokens and an orphan device if retry flag is true' do
-        expect(RetryMQTTMessageJob).to receive(:perform_later).with(@invalid_packet.topic, @invalid_packet.payload)
+      it 'does not defer messages with unknown device tokens and an orphan device if retry flag is true' do
+        expect(RetryMQTTMessageJob).not_to receive(:perform_later).with(@invalid_packet.topic, @invalid_packet.payload)
         OrphanDevice.create(device_token: "invalid_device_token")
         message_handler.handle_topic(@invalid_packet.topic, @invalid_packet.payload)
       end

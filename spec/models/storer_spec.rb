@@ -56,7 +56,6 @@ RSpec.describe Storer, type: :model do
     it 'stores data to device' do
       # model/storer.rb is not using Kairos, but Redis -> Telnet
       # expect(Kairos).to receive(:http_post_to).with("/datapoints", @karios_data)
-      # expect_any_instance_of(Storer).to receive(:ws_publish)
       expect do
         storer.store(device, @data)
       end.not_to raise_error
@@ -72,8 +71,6 @@ RSpec.describe Storer, type: :model do
 
     skip 'updates device without touching updated_at' do
       updated_at = device.updated_at
-
-      expect(storer).to receive(:ws_publish)
 
       storer.store(device, @data)
 

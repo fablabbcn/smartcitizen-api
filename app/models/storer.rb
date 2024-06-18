@@ -14,7 +14,6 @@ class Storer
 
       if do_update
         update_device(device, parsed_reading[:parsed_ts], parsed_reading[:sql_data])
-        ws_publish(device)
       end
 
       forward_reading(device, reading)
@@ -47,14 +46,6 @@ class Storer
     #Kairos.http_post_to("/datapoints", reading_data)
     #NOTE: If you want to use the Telnet port below, make sure it is open!
     Redis.current.publish('telnet_queue', reading_data.to_json)
-  end
-
-  def ws_publish(device)
-    return if Rails.env.test? or device.blank?
-    begin
-      Redis.current.publish("data-received", renderer.render( partial: "v0/devices/device", locals: {device: device, current_user: nil}))
-    rescue
-    end
   end
 
   private

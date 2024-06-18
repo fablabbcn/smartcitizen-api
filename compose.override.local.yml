@@ -11,8 +11,6 @@ services:
     restart: "no"
   telnet-task:
     restart: "no"
-  push:
-    restart: "no"
   grafana:
     entrypoint: ["echo", "Grafana service disabled in development"]
     restart: "no"
