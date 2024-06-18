@@ -32,6 +32,19 @@ module V0
       raise ActionController::ParameterMissing.new(missing_params.to_sentence) if missing_params.any?
     end
 
+    def check_date_param_format(param_name)
+      return true if !params[param_name]
+      return true if params[param_name] =~ /^\d+$/
+      begin
+        Time.parse(params[param_name])
+        return true
+      rescue
+        message = "The #{param_name} parameter must be an ISO8601 format datetime or an integer number of seconds since the start of the UNIX epoch."
+        render json: { message:  message, status: 400 }, status: 400
+        return false
+      end
+    end
+
     private
 
     def raise_ransack_errors_as_bad_request(&block)
