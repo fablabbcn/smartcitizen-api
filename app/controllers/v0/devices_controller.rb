@@ -97,6 +97,7 @@ private
         :device_token,
         :notify_low_battery,
         :notify_stopped_publishing,
+        :precise_location,
         :exposure,
         :meta,
         :user_tags,
@@ -105,7 +106,7 @@ private
 
       # Researchers + Admins can update is_private
       if current_user.role_mask >= 2
-        params_to_permit.push(:is_private, :is_test)
+        params_to_permit.push(:is_private, :is_test, :enable_forwarding)
       end
 
       params.permit(
