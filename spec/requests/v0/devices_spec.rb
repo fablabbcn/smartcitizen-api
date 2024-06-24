@@ -24,7 +24,7 @@ describe V0::DevicesController do
       expect(json.length).to eq(2)
       # expect(json[0]['name']).to eq(first.name)
       # expect(json[1]['name']).to eq(second.name)
-      expect(json[0].keys).to eq(%w(id uuid name description state system_tags user_tags is_private last_reading_at created_at updated_at notify device_token postprocessing location hardware owner data))
+      expect(json[0].keys).to eq(%w(id uuid name description state system_tags user_tags last_reading_at created_at updated_at notify device_token postprocessing location data_policy hardware owner data))
     end
 
     describe "when not logged in" do
@@ -45,6 +45,13 @@ describe V0::DevicesController do
         second = create(:device)
         json = api_get 'devices'
         expect(json[0]['hardware']['last_status_message']).to eq("[FILTERED]")
+      end
+
+      it "does not show data policies" do
+        first = create(:device)
+        second = create(:device)
+        json = api_get 'devices'
+        expect(json[0]['data_policy']['enable_forwarding']).to eq("[FILTERED]")
       end
     end
 
@@ -67,6 +74,14 @@ describe V0::DevicesController do
         json = api_get 'devices', { access_token: token.token }
         expect(json[0]['hardware']['last_status_message']).to eq("[FILTERED]")
       end
+
+      it "only shows device policies for the owning user" do
+        first = create(:device)
+        second = create(:device, owner: user)
+        json = api_get 'devices', { access_token: token.token}
+        expect(json[0]['data_policy']['enable_forwarding']).to eq('[FILTERED]')
+        expect(json[1]['data_policy']['enable_forwarding']).not_to eq('[FILTERED]')
+      end
     end
 
     describe "when logged in as an admin" do
@@ -87,6 +102,13 @@ describe V0::DevicesController do
         second = create(:device)
         json = api_get 'devices', { access_token: admin_token.token}
         expect(json[0]['hardware']['last_status_message']).not_to eq('[FILTERED]')
+      end
+
+      it "shows device policies" do
+        first = create(:device)
+        second = create(:device)
+        json = api_get 'devices', { access_token: admin_token.token}
+        expect(json[0]['data_policy']['enable_forwarding']).not_to eq('[FILTERED]')
       end
     end
 

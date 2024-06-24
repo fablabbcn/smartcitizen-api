@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_12_132257) do
+ActiveRecord::Schema.define(version: 2024_06_24_161155) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -105,6 +105,8 @@ ActiveRecord::Schema.define(version: 2024_05_12_132257) do
     t.string "hardware_name_override"
     t.string "hardware_version_override"
     t.string "hardware_slug_override"
+    t.boolean "precise_location", default: false, null: false
+    t.boolean "enable_forwarding", default: false, null: false
     t.index ["device_token"], name: "index_devices_on_device_token", unique: true
     t.index ["geohash"], name: "index_devices_on_geohash"
     t.index ["last_reading_at"], name: "index_devices_on_last_reading_at"

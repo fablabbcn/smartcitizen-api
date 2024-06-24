@@ -14,7 +14,6 @@ json.(
   :state,
   :system_tags,
   :user_tags,
-  :is_private,
   :last_reading_at,
   :created_at,
   :updated_at
@@ -35,6 +34,7 @@ else
 end
 json.merge!(postprocessing: device.postprocessing) if local_assigns[:with_postprocessing]
 json.merge!(location: device.formatted_location) if local_assigns[:with_location]
+json.merge!(data_policy: device.data_policy(authorized))
 json.merge!(hardware: device.hardware(authorized))
 
 if local_assigns[:with_owner] && device.owner
