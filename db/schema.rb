@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_24_161155) do
+ActiveRecord::Schema.define(version: 2024_06_24_175242) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -148,6 +148,7 @@ ActiveRecord::Schema.define(version: 2024_06_24_161155) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
+    t.string "definition"
   end
 
   create_table "oauth_access_grants", id: :serial, force: :cascade do |t|
@@ -248,6 +249,8 @@ ActiveRecord::Schema.define(version: 2024_06_24_161155) do
     t.string "default_key"
     t.string "equation"
     t.string "reverse_equation"
+    t.string "datasheet"
+    t.string "unit_definition"
     t.index ["ancestry"], name: "index_sensors_on_ancestry"
     t.index ["measurement_id"], name: "index_sensors_on_measurement_id"
   end

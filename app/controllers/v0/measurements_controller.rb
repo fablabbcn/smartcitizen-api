@@ -34,7 +34,7 @@ module V0
 private
 
     def measurement_params
-      params.permit( :name, :description, :unit )
+      params.permit( :name, :description, :unit, :definition)
     end
 
     def set_measurement

@@ -42,7 +42,9 @@ private
         :name,
         :description,
         :unit,
-        :measurement_id
+        :measurement_id,
+        :datasheet,
+        :unit_definition
       )
     end
 
