@@ -1,11 +1,11 @@
 json.(sensor,
-  :id, :uuid, :parent_id, :name, :description, :unit, :tags, :created_at, :updated_at
+  :id, :uuid, :parent_id, :name, :description, :unit, :tags, :datasheet, :unit_definition, :created_at, :updated_at
   # :is_childless?,
 )
 
 if sensor.measurement
   json.measurement(
-    sensor.measurement, :id, :uuid, :name, :description
+    sensor.measurement, :id, :uuid, :name, :description, :definition
   )
 else
   json.merge! measurement: nil

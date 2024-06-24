@@ -90,7 +90,9 @@ describe V0::SensorsController do
         name: 'new sensor',
         description: 'blah blah blah',
         unit: 'm',
-        access_token: admin_token.token
+        access_token: admin_token.token,
+        data_sheet: "definition url",
+        unit_definition: "unit definition url"
       }
       expect(j['name']).to eq('new sensor')
       expect(response.status).to eq(201)
