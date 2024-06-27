@@ -2,10 +2,10 @@ require 'rails_helper'
 
 describe V0::ReadingsController do
   let(:user) { build(:user) }
-  let(:device) { create(:device, owner: user) }
+  let(:device) { create(:device, owner: user, components: [component]) }
   let(:measurement) { build(:measurement) }
   let(:sensor) { build(:sensor, measurement: measurement) }
-  let(:component) { build(:component, device: device, sensor: sensor)  }
+  let(:component) { build(:component, sensor: sensor)  }
 
   let(:application) { build :application }
   let(:token) { build :access_token, application: application, resource_owner_id: user.id }
@@ -15,6 +15,10 @@ describe V0::ReadingsController do
 
   describe "GET devices/:id/readings" do
 
+    before do
+      allow(Kairos).to receive(:query).and_return({})
+    end
+
     %w(sensor_id rollup).each do |param|
       it "requires #{param}" do
         api_get "devices/#{device.id}/readings"
@@ -22,12 +26,44 @@ describe V0::ReadingsController do
       end
     end
 
-    skip "returns readings" do
-      b = api_get "devices/#{device.id}/readings?sensor_id=#{device.sensors.first.id}"
+    it "returns readings" do
+      b = api_get "devices/#{device.id}/readings?sensor_id=#{device.sensors.first.id}&rollup=avg"
       expect(response.status).to eq(200)
       # puts b
     end
 
+
+    it "allows from dates in unix epoch format" do
+      api_get "devices/#{device.id}/readings?sensor_id=#{device.sensors.first.id}&rollup=avg&from=123456"
+      expect(response.status).to eq(200)
+    end
+
+    it "allows from dates in ISO format" do
+      api_get "devices/#{device.id}/readings?sensor_id=#{device.sensors.first.id}&rollup=avg&from=2020-04-04T00:00:00Z"
+      expect(response.status).to eq(200)
+    end
+
+    it "rejects from dates in unrecognised format" do
+      api_get "devices/#{device.id}/readings?sensor_id=#{device.sensors.first.id}&rollup=avg&from=2020-15"
+      expect(response.status).to eq(400)
+      expect(response.body).to match("The from parameter must be an ISO8601 format date or datetime or an integer number of seconds since the start of the UNIX epoch.")
+    end
+
+    it "allows to dates in unix epoch format" do
+      api_get "devices/#{device.id}/readings?sensor_id=#{device.sensors.first.id}&rollup=avg&to=123456"
+      expect(response.status).to eq(200)
+    end
+
+    it "allows to dates in ISO format" do
+      api_get "devices/#{device.id}/readings?sensor_id=#{device.sensors.first.id}&rollup=avg&to=2020-04-04T00:00:00Z"
+      expect(response.status).to eq(200)
+    end
+
+    it "rejects to dates in unrecognised format" do
+      api_get "devices/#{device.id}/readings?sensor_id=#{device.sensors.first.id}&rollup=avg&to=2020-15"
+      expect(response.status).to eq(400)
+      expect(response.body).to match("The to parameter must be an ISO8601 format date or datetime or an integer number of seconds since the start of the UNIX epoch.")
+    end
   end
 
   describe "GET /add" do
