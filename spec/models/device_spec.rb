@@ -226,13 +226,13 @@ RSpec.describe Device, :type => :model do
         }
 
 
-        it "truncates the location to 2 decimal places and adds 3 extra dp of randomness" do
+        it "truncates the location to 3 decimal places and adds 2 extra dp of randomness" do
           device.update(latitude: 0.12345, longitude: 10.12345)
           device.save
           expect(device.latitude).not_to eq(0.12345)
           expect(device.longitude).not_to eq(10.12345)
-          expect((device.latitude - 0.12345).abs.truncate(5)).to be <= 0.01
-          expect((device.longitude - 10.12345).abs.truncate(5)).to be <= 0.01
+          expect((device.latitude - 0.12345).abs.truncate(5)).to be <= 0.001
+          expect((device.longitude - 10.12345).abs.truncate(5)).to be <= 0.001
         end
       end
     end
