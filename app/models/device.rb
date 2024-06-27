@@ -9,6 +9,7 @@ class Device < ActiveRecord::Base
 
   default_scope { with_active_state }
 
+  include ActiveModel::Dirty
   include Workflow
   include WorkflowActiverecord
   include ArchiveWorkflow
@@ -37,6 +38,7 @@ class Device < ActiveRecord::Base
     with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
 
   before_save :nullify_other_mac_addresses, if: :mac_address
+  before_save :truncate_and_fuzz_location!, if: :location_changed?
   before_save :calculate_geohash
   after_validation :do_geocoding
 
@@ -245,6 +247,14 @@ class Device < ActiveRecord::Base
     end
   end
 
+  def data_policy(authorized=false)
+    {
+      is_private: authorized ? is_private : "[FILTERED]",
+      enable_forwarding: authorized ? enable_forwarding : "[FILTERED]",
+      precise_location: authorized ? precise_location : "[FILTERED]"
+    }
+  end
+
   def hardware(authorized=false)
     {
       name: hardware_name,
@@ -272,17 +282,32 @@ class Device < ActiveRecord::Base
   end
 
   def forward_readings?
-    owner.forward_device_readings?
+    enable_forwarding && owner.forward_device_readings?
   end
 
   def forwarding_token
     owner.forwarding_token
   end
 
+  def truncate_and_fuzz_location!
+    if latitude && longitude
+      fuzz_decimal_places = 3
+      total_decimal_places = 5
+      lat_fuzz = self.precise_location ? 0.0 : (Random.rand * 1/10.0**fuzz_decimal_places)
+      long_fuzz = self.precise_location ? 0.0 : (Random.rand * 1/10.0**fuzz_decimal_places)
+      self.latitude = (self.latitude + lat_fuzz).truncate(total_decimal_places)
+      self.longitude = (self.longitude + long_fuzz).truncate(total_decimal_places)
+    end
+  end
+
   private
 
     def set_state
       self.state = self.soft_state
+    end
+
+    def location_changed?
+      latitude_changed? || longitude_changed? || precise_location_changed?
     end
 
     def calculate_geohash

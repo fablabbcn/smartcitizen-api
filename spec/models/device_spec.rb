@@ -192,7 +192,7 @@ RSpec.describe Device, :type => :model do
 
     it "calculates geohash on save" do
       barcelona = create(:device)
-      expect(barcelona.geohash).to match('sp3e9bh31y')
+      expect(barcelona.geohash).to match(/^sp3e/)
     end
 
     skip "calculates elevation on save", :vcr do
@@ -202,6 +202,60 @@ RSpec.describe Device, :type => :model do
     end
 
   end
+
+  describe "location truncation and fuzzing" do
+    context "when the location is changed" do
+      context "when the device has precise location set" do
+        let(:device) {
+          create(:device, precise_location: true)
+
+        }
+
+        it "truncates the location to 5 decimal places" do
+          device.update(latitude: 0.1234567, longitude: 10.1234567)
+          device.save
+          expect(device.latitude).to eq(0.12345)
+          expect(device.longitude).to eq(10.12345)
+        end
+      end
+
+      context "when the device has no precise location set" do
+        let(:device) {
+          create(:device, precise_location: false)
+
+        }
+
+
+        it "truncates the location to 3 decimal places and adds 2 extra dp of randomness" do
+          device.update(latitude: 0.12345, longitude: 10.12345)
+          device.save
+          expect(device.latitude).not_to eq(0.12345)
+          expect(device.longitude).not_to eq(10.12345)
+          expect((device.latitude - 0.12345).abs.truncate(5)).to be <= 0.001
+          expect((device.longitude - 10.12345).abs.truncate(5)).to be <= 0.001
+        end
+      end
+    end
+
+    context "when the location is not changed" do
+      let(:device) {
+        create(:device, precise_location: false, latitude: 0.12345, longitude: 0.12345)
+
+      }
+
+      it "does not re-fuzz the device location" do
+        lat_before = device.latitude
+        long_before = device.longitude
+
+        device.update(name: "not updating location")
+        device.save!
+
+        expect(device.reload.latitude).to eq(lat_before)
+        expect(device.reload.longitude).to eq(long_before)
+      end
+    end
+  end
+
 
   it "has to_s" do
     device = create(:device, name: 'cool device')
@@ -524,10 +578,51 @@ RSpec.describe Device, :type => :model do
 
   describe "forwarding" do
     describe "#forward_readings?" do
+      context "when the device has forwarding enabled" do
+        let(:device) {
+          create(:device, enable_forwarding: true)
+        }
+
+        context "when forward_device_readings is true on the owning user" do
+          it "forwardds readings" do
+            expect(device.owner).to receive(:forward_device_readings?).and_return(true)
+            expect(device.forward_readings?).to be(true)
+          end
+        end
+
+        context "when forward_device_readings is not true on the owning user" do
+          it "does not forward readings" do
+            expect(device.owner).to receive(:forward_device_readings?).and_return(false)
+            expect(device.forward_readings?).to be(false)
+          end
+        end
+      end
+
+      context "when the device does not have forwarding enabled" do
+        let(:device) {
+          create(:device, enable_forwarding: false)
+        }
+
+        context "when forward_device_readings is true on the owning user" do
+          it "does not forward readings" do
+            allow(device.owner).to receive(:forward_device_readings?).and_return(true)
+            expect(device.forward_readings?).to be(false)
+            expect(device.owner).not_to have_received(:forward_device_readings?)
+          end
+        end
+
+        context "when forward_device_readings is not true on the owning user" do
+          it "does not forward readings" do
+            allow(device.owner).to receive(:forward_device_readings?).and_return(false)
+            expect(device.forward_readings?).to be(false)
+            expect(device.owner).not_to have_received(:forward_device_readings?)
+          end
+        end
+
+
+      end
+
       it "delegates to the forward_device_readings? method on the device owner" do
-        forward_readings = double(:forward_readings)
-        expect(device.owner).to receive(:forward_device_readings?).and_return(forward_readings)
-        expect(device.forward_readings?).to eq(forward_readings)
       end
     end
 
