@@ -231,8 +231,8 @@ RSpec.describe Device, :type => :model do
           device.save
           expect(device.latitude).not_to eq(0.12345)
           expect(device.longitude).not_to eq(10.12345)
-          expect((device.latitude - 0.12345).abs.truncate(5)).to be <= 0.001
-          expect((device.longitude - 10.12345).abs.truncate(5)).to be <= 0.001
+          expect((device.latitude - 0.12345).abs.truncate(5)).to be <= 0.0001
+          expect((device.longitude - 10.12345).abs.truncate(5)).to be <= 0.0001
         end
       end
     end
