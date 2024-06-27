@@ -291,11 +291,12 @@ class Device < ActiveRecord::Base
 
   def truncate_and_fuzz_location!
     if latitude && longitude
-      decimal_places = self.precise_location ? 5 : 2
-      lat_fuzz = self.precise_location ? 0.0 : (Random.rand * 1/10.0**decimal_places).truncate(5)
-      long_fuzz = self.precise_location ? 0.0 : (Random.rand * 1/10.0**decimal_places).truncate(5)
-      self.latitude = self.latitude.truncate(decimal_places) + lat_fuzz
-      self.longitude = self.longitude.truncate(decimal_places) + long_fuzz
+      fuzz_decimal_places = 2
+      total_decimal_places = 5
+      lat_fuzz = self.precise_location ? 0.0 : (Random.rand * 1/10.0**fuzz_decimal_places)
+      long_fuzz = self.precise_location ? 0.0 : (Random.rand * 1/10.0**fuzz_decimal_places)
+      self.latitude = (self.latitude + lat_fuzz).truncate(total_decimal_places)
+      self.longitude = (self.longitude + long_fuzz).truncate(total_decimal_places)
     end
   end
 
