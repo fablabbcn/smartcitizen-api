@@ -46,7 +46,7 @@ describe V0::ReadingsController do
     it "rejects from dates in unrecognised format" do
       api_get "devices/#{device.id}/readings?sensor_id=#{device.sensors.first.id}&rollup=avg&from=2020-15"
       expect(response.status).to eq(400)
-      expect(response.body).to match("The from parameter must be an ISO8601 format datetime or an integer number of seconds since the start of the UNIX epoch.")
+      expect(response.body).to match("The from parameter must be an ISO8601 format date or datetime or an integer number of seconds since the start of the UNIX epoch.")
     end
 
     it "allows to dates in unix epoch format" do
@@ -62,7 +62,7 @@ describe V0::ReadingsController do
     it "rejects to dates in unrecognised format" do
       api_get "devices/#{device.id}/readings?sensor_id=#{device.sensors.first.id}&rollup=avg&to=2020-15"
       expect(response.status).to eq(400)
-      expect(response.body).to match("The to parameter must be an ISO8601 format datetime or an integer number of seconds since the start of the UNIX epoch.")
+      expect(response.body).to match("The to parameter must be an ISO8601 format date or datetime or an integer number of seconds since the start of the UNIX epoch.")
     end
   end
 

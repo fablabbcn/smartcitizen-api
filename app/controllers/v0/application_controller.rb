@@ -39,7 +39,7 @@ module V0
         Time.parse(params[param_name])
         return true
       rescue
-        message = "The #{param_name} parameter must be an ISO8601 format datetime or an integer number of seconds since the start of the UNIX epoch."
+        message = "The #{param_name} parameter must be an ISO8601 format date or datetime or an integer number of seconds since the start of the UNIX epoch."
         render json: { message:  message, status: 400 }, status: 400
         return false
       end
