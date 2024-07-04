@@ -23,15 +23,23 @@ class DevicePolicy < ApplicationPolicy
     end
   end
 
+  def show_private_info?
+    admin_or_owner?
+  end
+
   def show?
     if record.is_private?
-      update?
+      admin_or_owner?
     else
       true
     end
   end
 
   def update?
+    admin_or_owner?
+  end
+
+  def admin_or_owner?
     user.try(:is_admin?) || user == record.owner
   end
 
