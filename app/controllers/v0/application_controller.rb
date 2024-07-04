@@ -15,6 +15,9 @@ module V0
     helper ::UserHelper
     include ::UserHelper
 
+    helper ::PresentationHelper
+    include ::PresentationHelper
+
     respond_to :json
 
     before_action :prepend_view_paths
