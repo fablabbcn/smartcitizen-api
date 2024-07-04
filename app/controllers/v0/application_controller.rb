@@ -16,6 +16,9 @@ module V0
 
     include SharedControllerMethods
 
+    helper ::PresentationHelper
+    include ::PresentationHelper
+
     respond_to :json
 
     before_action :prepend_view_paths
