@@ -1,9 +1,5 @@
 class MqttMessagesHandler
 
-  def initialize(mqtt_client)
-    @mqtt_client = mqtt_client
-  end
-
   def handle_topic(topic, message, retry_on_nil_device=true)
     Sentry.set_tags('mqtt-topic': topic)
 
@@ -138,10 +134,7 @@ class MqttMessagesHandler
 
   private
 
-  attr_reader :mqtt_client
-
-
   def storer
-    @storer ||= Storer.new(mqtt_client)
+    @storer ||= Storer.new
   end
 end

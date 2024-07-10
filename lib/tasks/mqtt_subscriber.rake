@@ -31,7 +31,7 @@ namespace :mqtt do
         mqtt_log.info "Connected to #{client.host}"
         mqtt_log.info "Using clean_session setting: #{client.clean_session}"
 
-        message_handler = MqttMessagesHandler.new(client)
+        message_handler = MqttMessagesHandler.new
 
         client.subscribe(*mqtt_topics.flat_map { |topic|
           topic = topic == "" ? topic : topic + "/"
