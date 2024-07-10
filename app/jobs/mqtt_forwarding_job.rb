@@ -1,5 +1,7 @@
 class MQTTForwardingJob < ApplicationJob
 
+  queue_as :mqtt_forward
+
   def perform(device_id, reading)
     begin
       device = Device.find(device_id)
