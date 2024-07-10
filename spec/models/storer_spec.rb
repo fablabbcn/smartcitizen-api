@@ -75,6 +75,19 @@ RSpec.describe Storer, type: :model do
         double(:device_json)
       }
 
+      it "creates a presentation of the device for the authorized user, passing the readings" do
+
+        forwarding_token = double(:forwarding_token)
+        forwarder = double(:mqtt_forwarder)
+        allow(device).to receive(:forwarding_token).and_return(forwarding_token)
+        allow(device).to receive(:forward_readings?).and_return(true)
+        allow(MQTTForwarder).to receive(:new).and_return(forwarder)
+        allow(forwarder).to receive(:forward_reading)
+        # TODO update this to test the actual arguments passed once we've refactored the mess of different reading formats and parsers.
+        expect(Presenters).to receive(:present).and_return(device_json)
+        storer.store(device, @data)
+      end
+
       it "forwards the message with the forwarding token and the device's id" do
         allow(device).to receive(:forward_readings?).and_return(true)
         expect(MQTTForwardingJob).to receive(:perform_later).with(device.id, @data)
