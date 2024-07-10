@@ -62,7 +62,7 @@ class RawStorer
         device.update_columns(last_reading_at: parsed_ts, data: sql_data, state: 'has_published')
       end
 
-      forward_reading(device, data)
+      forward_reading(device, sql_data)
     rescue Exception => e
 
       success = false

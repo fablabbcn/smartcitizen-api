@@ -28,23 +28,19 @@ module Presenters
     def readings
       readings = options[:readings]
       if readings
-        readings.flat_map { |reading| format_reading(reading) }.compact
+        readings.map { |reading| format_reading(reading) }.compact
       end
     end
 
     private
 
     def format_reading(reading)
-      # TODO sort out the mess of multiple reading formats used ini
-      # DataParser, RawStorer, etc, etc.
-      reading.data.map { |entry|
-        timestamp = entry.timestamp
-        value = entry.sensors&.find { |sensor|
-          sensor["id"] == component.sensor_id
-        }.dig("value")
-        { timestamp: timestamp, value: value  } if value
-      }.compact
-
+      timestamp = reading[""]
+      value = reading[component.sensor_id.to_s]
+      raw_value = reading["#{component.sensor_id}_raw"]
+      if value || raw_value
+        { timestamp: timestamp, value: value, raw_value: raw_value }.compact
+      end
     end
   end
 end
