@@ -27,20 +27,8 @@ RSpec.describe RawStorer, :type => :model do
     Component.create!(id: 21, device: device, sensor: Sensor.find(21))
   end
 
-  let(:mqtt_client) {
-    double(:mqtt_client).tap do |mqtt_client|
-      allow(mqtt_client).to receive(:publish)
-    end
-  }
-
-  let(:renderer) {
-    # TODO: refactor these tests so they don't depend on the actual rendering,
-    # then replace this with a mock, to reduce brittleness.
-    ActionController::Base.new.view_context
-  }
-
   subject(:storer) {
-    RawStorer.new(mqtt_client, renderer)
+    RawStorer.new
   }
 
   let(:json) {
@@ -102,23 +90,9 @@ RSpec.describe RawStorer, :type => :model do
   end
 
   context "when the device allows forwarding" do
-    let(:device_json) {
-      double(:device_json)
-    }
-
-    let(:renderer) {
-      double(:renderer).tap do |renderer|
-        allow(renderer).to receive(:render).and_return(device_json)
-      end
-    }
-
-    it "forwards the message with the forwarding token and the device's id" do
-      forwarding_token = double(:forwarding_token)
-      allow_any_instance_of(Device).to receive(:forwarding_token).and_return(forwarding_token)
+    it "forwards the message" do
       allow_any_instance_of(Device).to receive(:forward_readings?).and_return(true)
-      forwarder = double(:mqtt_forwarder)
-      allow(MQTTForwarder).to receive(:new).and_return(forwarder)
-      expect(forwarder).to receive(:forward_reading).with(forwarding_token, device.id, device_json)
+      expect(MQTTForwardingJob).to receive(:perform_later).with(device.id, json)
       storer.store(json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1", true)
     end
   end
@@ -126,7 +100,7 @@ RSpec.describe RawStorer, :type => :model do
   context "when the device does not have allow forwarding" do
     it "does not forward the message" do
       allow_any_instance_of(Device).to receive(:forward_readings?).and_return(false)
-      expect_any_instance_of(MQTTForwarder).not_to receive(:forward_reading)
+      expect(MQTTForwardingJob).not_to receive(:perform_later)
       storer.store(json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1", true)
     end
   end

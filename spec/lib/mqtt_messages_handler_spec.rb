@@ -8,14 +8,8 @@ RSpec.describe MqttMessagesHandler do
   let(:device_inventory) { create(:device_inventory, report: '{"random_property": "random_result"}') }
 
 
-  let(:mqtt_client) {
-    double(:mqtt_client).tap do |mqtt_client|
-      allow(mqtt_client).to receive(:publish)
-    end
-  }
-
   subject(:message_handler) {
-    MqttMessagesHandler.new(mqtt_client)
+    MqttMessagesHandler.new
   }
 
 

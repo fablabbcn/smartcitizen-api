@@ -5,6 +5,7 @@
   - default
   - mailers
   - mqtt_retry
+  - mqtt_forward
 
 production:
   :concurrency: 25
