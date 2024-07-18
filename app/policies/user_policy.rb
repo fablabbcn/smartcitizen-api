@@ -24,4 +24,7 @@ class UserPolicy < ApplicationPolicy
     update?
   end
 
+  def show_private_info?
+    update?
+  end
 end

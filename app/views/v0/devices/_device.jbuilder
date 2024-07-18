@@ -45,7 +45,6 @@ if local_assigns[:with_owner] && device.owner
     json.url device.owner.url
 
     unless local_assigns[:slim_owner]
-      json.avatar device.owner.avatar
       json.profile_picture profile_picture_url(device.owner)
       json.location device.owner.location
       json.device_ids device.owner.cached_device_ids
