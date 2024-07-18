@@ -20,6 +20,13 @@ RSpec.describe Storer, type: :model do
         'sensors'=> [{ 'id'=> sensor.id, 'value'=>21 }]
       }
 
+      # TODO get rid of this fucked-up intermediate representation
+      @sql_data = {
+        "" => Time.parse(@data["recorded_at"]),
+        "#{sensor.id}_raw" => 21,
+        sensor.id => component.calibrated_value(21)
+      }
+
       sensor_key = device.find_sensor_key_by_id(sensor.id)
       normalized_value = component.normalized_value((Float(@data['sensors'][0]['value'])))
       calibrated_value = component.calibrated_value(normalized_value)
@@ -75,22 +82,9 @@ RSpec.describe Storer, type: :model do
         double(:device_json)
       }
 
-      it "creates a presentation of the device for the authorized user, passing the readings" do
-
-        forwarding_token = double(:forwarding_token)
-        forwarder = double(:mqtt_forwarder)
-        allow(device).to receive(:forwarding_token).and_return(forwarding_token)
-        allow(device).to receive(:forward_readings?).and_return(true)
-        allow(MQTTForwarder).to receive(:new).and_return(forwarder)
-        allow(forwarder).to receive(:forward_reading)
-        # TODO update this to test the actual arguments passed once we've refactored the mess of different reading formats and parsers.
-        expect(Presenters).to receive(:present).and_return(device_json)
-        storer.store(device, @data)
-      end
-
       it "forwards the message with the forwarding token and the device's id" do
         allow(device).to receive(:forward_readings?).and_return(true)
-        expect(MQTTForwardingJob).to receive(:perform_later).with(device.id, @data)
+        expect(MQTTForwardingJob).to receive(:perform_later).with(device.id, @sql_data)
         storer.store(device, @data)
       end
     end

@@ -68,12 +68,5 @@ class RawStorer
       success = false
       raise e if raise_errors
     end
-
-    if !Rails.env.test? and device
-      begin
-        Redis.current.publish("data-received", renderer.render( partial: "v0/devices/device", locals: {device: @device, current_user: nil}))
-      rescue
-      end
-    end
   end
 end
