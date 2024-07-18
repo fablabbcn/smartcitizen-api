@@ -16,14 +16,7 @@ class MQTTForwardingJob < ApplicationJob
   private
 
   def payload_for(device, reading)
-    renderer.render(
-      partial: "v0/devices/device",
-      locals: {
-        device: device.reload,
-        current_user: nil,
-        slim_owner: true
-      }
-    )
+    Presenters.present(device, device.owner, renderer, readings: [reading])
   end
 
   def mqtt_client
