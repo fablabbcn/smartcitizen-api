@@ -52,4 +52,12 @@ namespace :users do
         puts "Check moved devices: #{Device.count} (should be #{count_devices}, #{count_moved_devices} moved)"
         puts "Check deleted users: #{User.count} (should be #{count_users - count_deleted_users}, #{count_deleted_users} deleted)"
     end
+
+    task :generate_forwarding_tokens => :environment do
+      User.where("role_mask >= 4 AND forwarding_token IS NULL").each do |user|
+        puts "Generating tokens for user #{user.username} (role_mask: #{user.role_mask}, id: #{user.id})"
+        user.regenerate_forwarding_tokens!
+        user.save!
+      end
+    end
 end
