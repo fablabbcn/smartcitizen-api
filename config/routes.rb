@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     resources :sensors, except: [:destroy]
     resources :components, only: [:show, :index]
     resources :sessions, only: :create
+    resources :experiments
 
     resources :uploads, path: 'avatars' do
       post 'uploaded' => 'uploads#uploaded', on: :collection

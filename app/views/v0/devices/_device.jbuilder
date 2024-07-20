@@ -55,4 +55,6 @@ end
 
 json.data device.formatted_data if local_assigns[:with_data]
 
+json.experiment_ids device.experiment_ids
+
 
