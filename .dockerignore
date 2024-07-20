@@ -3,3 +3,4 @@ capybara-*.html
 /log/*.log*
 coverage
 tmp/cache
+sck-cassandra
