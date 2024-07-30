@@ -171,6 +171,70 @@ RSpec.describe User, :type => :model do
     end
   end
 
+  describe "generating forwarding tokens" do
+    context "on creating a new admin user" do
+      it "generates forwarding tokens" do
+        user = build(:user, role_mask: 7)
+        user.save!
+        expect(user.forwarding_token).not_to be(nil)
+        expect(user.forwarding_username).not_to be(nil)
+      end
+    end
+
+    context "on creating a new researcher user" do
+      it "generates forwarding tokens" do
+        user = build(:user, role_mask: 4)
+        user.save!
+        expect(user.forwarding_token).not_to be(nil)
+        expect(user.forwarding_username).not_to be(nil)
+      end
+    end
+
+    context "on creating a new citizen user" do
+      it "does not generate forwarding tokens" do
+        user = build(:user, role_mask: 0)
+        user.save!
+        expect(user.forwarding_token).to be(nil)
+        expect(user.forwarding_username).to be(nil)
+      end
+    end
+
+    context "on upgrading a user" do
+      context "when the user already has forwarding tokens" do
+        it "does not generate new tokens" do
+          user = build(:user, role_mask: 4)
+          user.save!
+          existing_token = user.forwarding_token
+          existing_username = user.forwarding_username
+          user.reload
+
+          user.role_mask = 7
+          user.save!
+
+          expect(user.forwarding_token).not_to be(nil)
+          expect(user.forwarding_username).not_to be(nil)
+
+          expect(user.forwarding_token).to eq(existing_token)
+          expect(user.forwarding_username).to eq(existing_username)
+        end
+      end
+
+      context "when the user does not have forwarding tokens" do
+        it "generates new tokens" do
+          user = build(:user, role_mask: 0)
+          user.save!
+
+          user.role_mask = 7
+          user.save!
+
+          expect(user.forwarding_token).not_to be(nil)
+          expect(user.forwarding_username).not_to be(nil)
+        end
+      end
+    end
+  end
+
+
   describe "states" do
     it "has a default active state" do
       expect(user.workflow_state).to eq('active')

@@ -38,6 +38,7 @@ class User < ActiveRecord::Base
   has_one_attached :profile_picture
 
   before_create :generate_legacy_api_key
+  before_save :generate_forwarding_tokens
 
 
   def self.forwarding_subscription_authorized?(token, username)
@@ -170,6 +171,12 @@ private
 
   def generate_legacy_api_key
     generate_token(:legacy_api_key, Digest::SHA1.hexdigest(SecureRandom.uuid) )
+  end
+
+  def generate_forwarding_tokens
+    if is_admin_or_researcher? && forwarding_token.blank?
+      regenerate_forwarding_tokens!
+    end
   end
 
   def generate_token(column, token=SecureRandom.urlsafe_base64)

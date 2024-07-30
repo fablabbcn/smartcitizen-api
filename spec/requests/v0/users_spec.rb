@@ -42,6 +42,22 @@ describe V0::UsersController do
       expect(j['email']).to eq(user.email)
     end
 
+    it "des not include the forwarding token and username by default" do
+      user.role_mask = 4
+      user.save!
+      j = api_get "users/testguy"
+      expect(j["forwarding_token"]).to eq("[FILTERED]")
+      expect(j["forwarding_username"]).to eq("[FILTERED]")
+    end
+
+    it "includes the forwarding token and username for the owner" do
+      user.role_mask = 4
+      user.save!
+      j = api_get "users/testguy?access_token=#{token.token}"
+      expect(j["forwarding_token"]).to eq(user.forwarding_token)
+      expect(j["forwarding_username"]).to eq(user.forwarding_username)
+    end
+
     describe "device privacy" do
       before do
         @private_device = create(:device, owner: user, is_private: true)
