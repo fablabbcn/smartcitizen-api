@@ -26,10 +26,6 @@ Rails.application.routes.draw do
     resources :components, only: [:show, :index]
     resources :sessions, only: :create
 
-    resources :uploads, path: 'avatars' do
-      post 'uploaded' => 'uploads#uploaded', on: :collection
-    end
-
     resources :tag_sensors
     resources :tags
     resources :measurements
@@ -39,8 +35,6 @@ Rails.application.routes.draw do
     get :forward, to: "forwarding#authorize"
 
     resources :me, only: [:index] do
-      patch 'avatar' => 'uploads#create', on: :collection
-      post 'avatar' => 'uploads#create', on: :collection
       patch '/' => 'me#update', on: :collection
       put '/' => 'me#update', on: :collection
       delete '/' => 'me#destroy', on: :collection
