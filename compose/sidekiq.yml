@@ -6,3 +6,5 @@ services:
     restart: always
     volumes:
       - "../log:/app/log"
+    environment:
+      db_pool_size: 30
