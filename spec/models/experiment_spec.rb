@@ -1,35 +1,94 @@
 require "rails_helper"
 
 RSpec.describe Experiment, type: :model do
-
-
   describe "validations" do
-    context "when the experiment has private devices owned by the same owner" do
-      it "is valid" do
-        owner = create(:user)
-        device = create(:device, is_private: true, owner: owner)
-        experiment = build(:experiment, owner: owner, devices: [device])
-        expect(experiment).to be_valid
+    describe "validate date format" do
+      describe "start date" do
+        it "is valid with a full iso datetime string" do
+          experiment = build(:experiment, starts_at: "2024-01-02T06:00:00Z")
+          expect(experiment).to be_valid
+        end
+
+        it "is valid with a date only iso datetime string" do
+          experiment = build(:experiment, starts_at: "2024-01-02")
+          expect(experiment).to be_valid
+        end
+
+        it "is invalid with an invalid datetime" do
+          experiment = build(:experiment, starts_at: "lolwut")
+          expect(experiment).not_to be_valid
+        end
+      end
+
+      describe "end date" do
+        it "is valid with a full iso datetime string" do
+          experiment = build(:experiment, ends_at: "2024-01-02T06:00:00Z")
+          expect(experiment).to be_valid
+        end
+
+        it "is valid with a date only iso datetime string" do
+          experiment = build(:experiment, ends_at: "2024-01-02")
+          expect(experiment).to be_valid
+        end
+
+        it "is invalid with an invalid datetime" do
+          experiment = build(:experiment, ends_at: "lolwut")
+          expect(experiment).not_to be_valid
+        end
       end
     end
 
-    context "when the experiment has public devices owned by another user" do
-      it "is valid" do
-        device_owner = create(:user)
-        experiment_owner = create(:user)
-        device = create(:device, is_private: false, owner: device_owner)
-        experiment = build(:experiment, owner: experiment_owner, devices: [device])
-        expect(experiment).to be_valid
-      end
-    end
-
-    context "when the experiment has private devices owned by another user" do
-      it "is not valid" do
-        device_owner = create(:user)
-        experiment_owner = create(:user)
-        device = create(:device, is_private: true, owner: device_owner)
-        experiment = build(:experiment, owner: experiment_owner, devices: [device])
+    describe "start date is before end date" do
+      it "is invalid when end date is before start date" do
+        experiment = build(:experiment, starts_at: "2024-02-01", ends_at: "2024-01-01")
         expect(experiment).not_to be_valid
+      end
+
+      it "is valid when start date is before end date" do
+        experiment = build(:experiment, starts_at: "2024-01-01", ends_at: "2024-02-01")
+        expect(experiment).to be_valid
+      end
+
+      it "is valid with only a start date" do
+        experiment = build(:experiment, starts_at: "2024-01-01")
+        expect(experiment).to be_valid
+      end
+
+      it "is valid with only an end date" do
+        experiment = build(:experiment, ends_at: "2024-01-01")
+        expect(experiment).to be_valid
+      end
+    end
+
+
+    describe "device privacy" do
+      context "when the experiment has private devices owned by the same owner" do
+        it "is valid" do
+          owner = create(:user)
+          device = create(:device, is_private: true, owner: owner)
+          experiment = build(:experiment, owner: owner, devices: [device])
+          expect(experiment).to be_valid
+        end
+      end
+
+      context "when the experiment has public devices owned by another user" do
+        it "is valid" do
+          device_owner = create(:user)
+          experiment_owner = create(:user)
+          device = create(:device, is_private: false, owner: device_owner)
+          experiment = build(:experiment, owner: experiment_owner, devices: [device])
+          expect(experiment).to be_valid
+        end
+      end
+
+      context "when the experiment has private devices owned by another user" do
+        it "is not valid" do
+          device_owner = create(:user)
+          experiment_owner = create(:user)
+          device = create(:device, is_private: true, owner: device_owner)
+          experiment = build(:experiment, owner: experiment_owner, devices: [device])
+          expect(experiment).not_to be_valid
+        end
       end
     end
   end
