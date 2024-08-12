@@ -15,6 +15,9 @@ class Experiment < ApplicationRecord
     ["created_at", "description", "ends_at", "id", "is_test", "name", "owner_id", "starts_at", "status", "updated_at"]
   end
 
+  def active
+    active?
+  end
 
   def active?
     (!starts_at || Time.now >= starts_at) && (!ends_at || Time.now <= ends_at)

@@ -23,7 +23,6 @@ describe V0::ExperimentsController do
       name: "test experiment",
       description: "a test experiment",
       is_test: false,
-      active: true,
       starts_at: "2024-01-01T00:00:00Z",
       ends_at: "2024-06-30T23:59:59Z",
       device_ids: [ device.id ]
@@ -65,7 +64,6 @@ describe V0::ExperimentsController do
         expect(created.name).to eq(valid_params[:name])
         expect(created.description).to eq(valid_params[:description])
         expect(created.is_test).to eq(valid_params[:is_test])
-        expect(created.active).to eq(valid_params[:active])
         expect(created.starts_at).to eq(Time.parse(valid_params[:starts_at]))
         expect(created.ends_at).to eq(Time.parse(valid_params[:ends_at]))
         expect(created.device_ids).to eq(valid_params[:device_ids])
@@ -102,7 +100,6 @@ describe V0::ExperimentsController do
         expect(updated.name).to eq(valid_params[:name])
         expect(updated.description).to eq(valid_params[:description])
         expect(updated.is_test).to eq(valid_params[:is_test])
-        expect(updated.active).to eq(valid_params[:active])
         expect(updated.starts_at).to eq(Time.parse(valid_params[:starts_at]))
         expect(updated.ends_at).to eq(Time.parse(valid_params[:ends_at]))
         expect(updated.device_ids).to eq(valid_params[:device_ids])
@@ -127,7 +124,6 @@ describe V0::ExperimentsController do
         expect(updated.name).to eq(valid_params[:name])
         expect(updated.description).to eq(valid_params[:description])
         expect(updated.is_test).to eq(valid_params[:is_test])
-        expect(updated.active).to eq(valid_params[:active])
         expect(updated.starts_at).to eq(Time.parse(valid_params[:starts_at]))
         expect(updated.ends_at).to eq(Time.parse(valid_params[:ends_at]))
         expect(updated.device_ids).to eq(valid_params[:device_ids])
