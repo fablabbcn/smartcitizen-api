@@ -5,6 +5,8 @@ class Experiment < ApplicationRecord
   validates_presence_of :name, :owner
   validates_inclusion_of :is_test, in: [true, false]
 
+  validate :cannot_add_private_devices_of_other_users
+
   def self.ransackable_attributes(auth_object = nil)
     ["created_at", "description", "ends_at", "id", "is_test", "name", "owner_id", "starts_at", "status", "updated_at"]
   end
@@ -12,5 +14,15 @@ class Experiment < ApplicationRecord
 
   def active?
     (!starts_at || Time.now >= starts_at) && (!ends_at || Time.now <= ends_at)
+  end
+
+  private
+
+  def cannot_add_private_devices_of_other_users
+    private_devices =  devices.select { |device| device.is_private? && device.owner != self.owner }
+    if private_devices.any?
+      ids = private_devices.map(&:id).join(", ")
+      errors.add(:devices, "can't contain private devices owned by other users (ids: #{ids})")
+    end
   end
 end
