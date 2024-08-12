@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_18_054447) do
+ActiveRecord::Schema.define(version: 2024_08_12_081108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -140,7 +140,6 @@ ActiveRecord::Schema.define(version: 2024_07_18_054447) do
     t.string "name", null: false
     t.string "description"
     t.bigint "owner_id"
-    t.boolean "active", default: true, null: false
     t.boolean "is_test", default: false, null: false
     t.datetime "starts_at"
     t.datetime "ends_at"

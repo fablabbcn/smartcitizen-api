@@ -8,4 +8,9 @@ class Experiment < ApplicationRecord
   def self.ransackable_attributes(auth_object = nil)
     ["created_at", "description", "ends_at", "id", "is_test", "name", "owner_id", "starts_at", "status", "updated_at"]
   end
+
+
+  def active?
+    (!starts_at || Time.now >= starts_at) && (!ends_at || Time.now <= ends_at)
+  end
 end
