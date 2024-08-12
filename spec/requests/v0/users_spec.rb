@@ -378,6 +378,37 @@ describe V0::UsersController do
       expect(response.status).to eq(422)
     end
 
+    context "updating role" do
+      it "allows admins to update user roles" do
+        requesting_user = create :user, role_mask: 5
+        requesting_token = create :access_token,
+          application: application,
+          resource_owner_id: requesting_user.id
+        j = api_put "users/#{[user.username,user.id].sample}", {
+          role_mask: 5, access_token: requesting_token.token
+        }
+        expect(response.status).to eq(200)
+        expect(user.reload.role_mask).to eq(5)
+      end
+
+      it "does not allow users to update user roles" do
+        j = api_put "users/#{[user.username,user.id].sample}", {
+          role_mask: 5, access_token: token.token
+        }
+        expect(response.status).to eq(200)
+        expect(user.reload.role_mask).to eq(0)
+      end
+
+      it "does not allow researchers to update user roles" do
+        user.role_mask = 4
+        user.save!
+        j = api_put "users/#{[user.username,user.id].sample}", {
+          role_mask: 5, access_token: token.token
+        }
+        expect(response.status).to eq(200)
+        expect(user.reload.role_mask).to eq(4)
+      end
+    end
   end
 
 
