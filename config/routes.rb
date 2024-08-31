@@ -7,6 +7,10 @@ Rails.application.routes.draw do
   end
   mount Sidekiq::Web, at: "/sidekiq"
 
+  api_version(module: "V1", path: { value: "v1" }, header: {name: "Accept", value: "application/vnd.smartcitizen; version=1"}, defaults: { format: :json }) do
+    resources :devices
+  end
+
   api_version(module: "V0", path: {value: "v0"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0"}, default: true, defaults: { format: :json }) do
     # devices
     resources :devices do
