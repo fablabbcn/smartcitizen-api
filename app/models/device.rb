@@ -194,6 +194,7 @@ class Device < ActiveRecord::Base
     end
   end
 
+  # TODO Remove: Deprevated in API v1
   def formatted_location
     {
       ip: nil,
@@ -208,6 +209,7 @@ class Device < ActiveRecord::Base
     }
   end
 
+  # TODO Remove: Deprevated in API v1
   def formatted_data
     s = {
       sensors: []
@@ -247,6 +249,7 @@ class Device < ActiveRecord::Base
     end
   end
 
+  # TODO Remove: Deprevated in API v1
   def data_policy(authorized=false)
     {
       is_private: authorized ? is_private : "[FILTERED]",
@@ -255,6 +258,7 @@ class Device < ActiveRecord::Base
     }
   end
 
+  # TODO Remove: Deprevated in API v1
   def hardware(authorized=false)
     {
       name: hardware_name,
