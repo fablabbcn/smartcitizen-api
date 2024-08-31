@@ -204,6 +204,7 @@ class Device < ActiveRecord::Base
     end
   end
 
+  # TODO Remove: Deprevated in API v1
   def formatted_location(slim = false)
     {
       exposure: exposure,
@@ -217,6 +218,7 @@ class Device < ActiveRecord::Base
     }.compact
   end
 
+  # TODO Remove: Deprevated in API v1
   def formatted_data
     s = {
       sensors: []
@@ -259,6 +261,7 @@ class Device < ActiveRecord::Base
     end
   end
 
+  # TODO Remove: Deprevated in API v1
   def data_policy(authorized=false)
     {
       is_private: is_private,
@@ -267,6 +270,7 @@ class Device < ActiveRecord::Base
     }
   end
 
+  # TODO Remove: Deprevated in API v1
   def hardware(authorized=false)
     {
       name: hardware_name,
