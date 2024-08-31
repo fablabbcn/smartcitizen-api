@@ -19,9 +19,7 @@ RSpec.describe MQTTForwardingJob, type: :job do
   }
 
   let(:renderer) {
-    double(:renderer).tap do |renderer|
-      allow(renderer).to receive(:render).and_return(device_json)
-    end
+    double(:renderer)
   }
 
   let(:forwarder) {
@@ -32,6 +30,7 @@ RSpec.describe MQTTForwardingJob, type: :job do
 
   before do
     allow(MQTTClientFactory).to receive(:create_client).and_return(mqtt_client)
+    allow(Presenters).to receive(:present).and_return(device_json)
     allow_any_instance_of(ActionController::Base).to receive(:view_context).and_return(renderer)
     allow(MQTTForwarder).to receive(:new).and_return(forwarder)
     allow_any_instance_of(Device).to receive(:forwarding_token).and_return(forwarding_token)
@@ -50,16 +49,9 @@ RSpec.describe MQTTForwardingJob, type: :job do
     expect(MQTTForwarder).to have_received(:new).with(mqtt_client)
   end
 
-  it "renders the device json for the given device, as an unauthorized user" do
+  it "renders the device json for the given device and reading, as the device owner" do
     MQTTForwardingJob.perform_now(device.id, reading)
-    expect(renderer).to have_received(:render).with({
-      partial: "v0/devices/device",
-      locals: {
-        device: device.reload,
-        current_user: nil,
-        slim_owner: true
-      }
-    })
+    expect(Presenters).to have_received(:present).with(device, device.owner, renderer, readings: [reading])
   end
 
   it "forwards using the device's id and forwarding token, with the rendered json payload" do

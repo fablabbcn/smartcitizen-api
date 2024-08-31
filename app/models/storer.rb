@@ -11,7 +11,7 @@ class Storer
         update_device(device, parsed_reading[:parsed_ts], parsed_reading[:sql_data])
       end
 
-      forward_reading(device, reading)
+      forward_reading(device, parsed_reading[:sql_data])
 
     rescue Exception => e
       Sentry.capture_exception(e)

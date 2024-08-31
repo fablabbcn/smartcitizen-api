@@ -39,8 +39,6 @@ private
         :country_code,
         :profile_picture,
         :url,
-        :avatar,
-        :avatar_url
       )
     end
 
