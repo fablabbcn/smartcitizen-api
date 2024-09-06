@@ -72,5 +72,6 @@ module Smartcitizen
     end
 
     config.api_only = true
+    config.active_storage.service_urls_expire_in = 30.minutes
   end
 end
