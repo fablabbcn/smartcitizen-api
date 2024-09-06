@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_24_175242) do
+ActiveRecord::Schema.define(version: 2024_08_12_081108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -116,6 +116,13 @@ ActiveRecord::Schema.define(version: 2024_06_24_175242) do
     t.index ["workflow_state"], name: "index_devices_on_workflow_state"
   end
 
+  create_table "devices_experiments", id: false, force: :cascade do |t|
+    t.bigint "device_id"
+    t.bigint "experiment_id"
+    t.index ["device_id"], name: "index_devices_experiments_on_device_id"
+    t.index ["experiment_id"], name: "index_devices_experiments_on_experiment_id"
+  end
+
   create_table "devices_inventory", id: :serial, force: :cascade do |t|
     t.jsonb "report", default: {}
     t.datetime "created_at"
@@ -127,6 +134,18 @@ ActiveRecord::Schema.define(version: 2024_06_24_175242) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["device_id", "tag_id"], name: "index_devices_tags_on_device_id_and_tag_id", unique: true
+  end
+
+  create_table "experiments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "description"
+    t.bigint "owner_id"
+    t.boolean "is_test", default: false, null: false
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["owner_id"], name: "index_experiments_on_owner_id"
   end
 
   create_table "friendly_id_slugs", id: :serial, force: :cascade do |t|
@@ -313,8 +332,11 @@ ActiveRecord::Schema.define(version: 2024_06_24_175242) do
   add_foreign_key "api_tokens", "users", column: "owner_id"
   add_foreign_key "components", "devices"
   add_foreign_key "components", "sensors"
+  add_foreign_key "devices_experiments", "devices"
+  add_foreign_key "devices_experiments", "experiments"
   add_foreign_key "devices_tags", "devices"
   add_foreign_key "devices_tags", "tags"
+  add_foreign_key "experiments", "users", column: "owner_id"
   add_foreign_key "postprocessings", "devices"
   add_foreign_key "sensors", "measurements"
   add_foreign_key "uploads", "users"
