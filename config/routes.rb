@@ -30,7 +30,12 @@ Rails.application.routes.draw do
     resources :tag_sensors
     resources :tags
     resources :measurements
-    resources :users
+
+    constraints id: /[^\/]+/ do
+      # Explicitly override to allow usernames with dots.
+      # See:https://stackoverflow.com/questions/5369654/why-do-routes-with-a-dot-in-a-parameter-fail-to-match
+      resources :users
+    end
     resources :password_resets, only: [:show, :create, :update]
     resources :oauth_applications, path: 'applications'
     get :forward, to: "forwarding#authorize"
