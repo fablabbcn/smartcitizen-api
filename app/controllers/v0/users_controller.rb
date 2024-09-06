@@ -55,14 +55,15 @@ module V0
 private
 
     def user_params
-      params.permit(
+      params.permit(*[
         :email,
         :username,
         :password,
         :city,
         :country_code,
         :url,
-      )
+        (:role_mask if current_user&.is_admin?)
+      ].compact)
     end
 
   end
