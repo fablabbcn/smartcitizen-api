@@ -251,7 +251,7 @@ class Device < ActiveRecord::Base
 
   def data_policy(authorized=false)
     {
-      is_private: authorized ? is_private : "[FILTERED]",
+      is_private: is_private,
       enable_forwarding: authorized ? enable_forwarding : "[FILTERED]",
       precise_location: authorized ? precise_location : "[FILTERED]"
     }
