@@ -11,4 +11,4 @@ services:
       options:
         max-size: "100m"
     environment:
-      db_pool_size: 2
+      db_pool_size: 5
