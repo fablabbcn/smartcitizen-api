@@ -10,8 +10,14 @@ namespace :mqtt do
     mqtt_port = ENV.has_key?('MQTT_PORT') ? ENV['MQTT_PORT'] : 1883
     mqtt_ssl = ENV.has_key?('MQTT_SSL') ? ENV['MQTT_SSL'] : false
     mqtt_shared_subscription_group = ENV.fetch("MQTT_SHARED_SUBSCRIPTION_GROUP", nil)
+    
     mqtt_topics_string = ENV.fetch('MQTT_TOPICS', '')
     mqtt_topics = mqtt_topics_string.include?(",") ? mqtt_topics_string.split(",") : [ mqtt_topics_string ]
+
+    if mqtt_shared_subscription_group && mqtt_clean_session
+      mqtt_client_id += "-#{ENV.fetch("HOSTNAME")}"
+    end
+ 
     mqtt_log = Logger.new("log/mqtt-#{mqtt_client_id}.log", 5, 100.megabytes)
     mqtt_log.info('MQTT TASK STARTING')
     mqtt_log.info("clean_session: #{mqtt_clean_session}")
