@@ -18,7 +18,7 @@ services:
       file: mqtt-task-common.yml
       service: mqtt-task
     environment: 
-      MQTT_CLIENT_ID: "smartcitizen-api-staging-secondary-${HOSTNAME}"
+      MQTT_CLIENT_ID: "smartcitizen-api-staging-secondary"
       MQTT_CLEAN_SESSION: true
     deploy:
       mode: replicated

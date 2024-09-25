@@ -2,7 +2,7 @@ services:
   mqtt-task:
     build: ../
     env_file: ../.env
-    command: bundle exec rake mqtt:sub
+    command: ./mqtt_subscriber.sh
     restart: always
     volumes:
       - "../log:/app/log"
