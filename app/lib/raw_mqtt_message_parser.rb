@@ -6,7 +6,7 @@ class RawMQTTMessageParser
   end
 
   def parse(message)
-    parser.parse(self.convert_to_ascii(message)).to_hash
+    parser.parse(self.convert_to_ascii(message))&.to_hash
   end
 
   private
