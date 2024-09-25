@@ -1,0 +1,57 @@
+grammar RawMessage
+  rule message
+    '{' message_body '}' {
+      def to_hash
+        message_body.to_hash
+      end
+    }
+  end
+
+  rule message_body
+    (pairs:pair*) {
+      def to_hash
+        pairs.elements.inject({}) {|m, p| m.merge(p.to_hash) }
+      end
+    }
+  end
+
+  rule pair
+    key ':' value (','?) {
+      def to_hash
+        { key.to_sym => value.to_number }
+      end
+    }
+  end
+
+  rule key
+    key:(number / 't') {
+      def to_sym
+        key.text_value.to_sym
+      end
+    }
+  end
+
+  rule value
+    float / number
+  end
+
+  rule float
+    float:(number decimal_part) {
+      def to_number
+        float.text_value.to_f
+      end
+    }
+  end
+
+  rule number
+    number:[0-9]+ {
+      def to_number
+        number.text_value.to_i
+      end
+    }
+  end
+
+  rule decimal_part
+    '.' number
+  end
+end
