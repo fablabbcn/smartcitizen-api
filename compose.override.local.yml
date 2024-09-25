@@ -7,7 +7,11 @@ services:
     restart: "no"
   sidekiq:
     restart: "no"
-  mqtt-task:
+  mqtt-task-main-1:
+    restart: "no"
+  mqtt-task-main-2:
+    restart: "no"
+  mqtt-task-secondary:
     restart: "no"
   telnet-task:
     restart: "no"
