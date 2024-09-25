@@ -15,7 +15,9 @@ services:
       - auth
       - redis
       - sidekiq
-      - mqtt-task
+      - mqtt-task-main-1
+      - mqtt-task-main-2
+      - mqtt-task-secondary
       - telnet-task
       #- mqtt
     restart: always

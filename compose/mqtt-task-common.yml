@@ -1,0 +1,14 @@
+services:
+  mqtt-task:
+    build: ../
+    env_file: ../.env
+    command: bundle exec rake mqtt:sub
+    restart: always
+    volumes:
+      - "../log:/app/log"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+    environment:
+      db_pool_size: 2

@@ -1,14 +1,27 @@
 services:
-  mqtt-task:
-    build: ../
-    env_file: ../.env
-    command: bundle exec rake mqtt:sub
-    restart: always
-    volumes:
-      - "../log:/app/log"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "100m"
-    environment:
-      db_pool_size: 5
+  mqtt-task-main-1:
+    extends:
+      file: mqtt-task-common.yml
+      service: mqtt-task
+    environment: 
+      MQTT_CLIENT_ID: smartcitizen-api-staging-main-1
+      MQTT_CLEAN_SESSION: false
+  mqtt-task-main-2:
+    extends:
+      file: mqtt-task-common.yml
+      service: mqtt-task
+    environment: 
+      MQTT_CLIENT_ID: smartcitizen-api-staging-main-2
+      MQTT_CLEAN_SESSION: false
+  mqtt-task-secondary:
+    extends:
+      file: mqtt-task-common.yml
+      service: mqtt-task
+    environment: 
+      MQTT_CLIENT_ID: "smartcitizen-api-staging-secondary-${HOSTNAME}"
+      MQTT_CLEAN_SESSION: true
+    deploy:
+      mode: replicated
+      replicas: 2
+
+

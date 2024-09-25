@@ -3,15 +3,16 @@ namespace :mqtt do
   task sub: :environment do
     pid_file = Rails.root.join('tmp/pids/mqtt_subscriber.pid')
     File.open(pid_file, 'w') { |f| f.puts Process.pid }
-    mqtt_log = Logger.new('log/mqtt.log', 5, 100.megabytes)
 
     mqtt_clean_session = ENV.has_key?('MQTT_CLEAN_SESSION') ? ENV['MQTT_CLEAN_SESSION'] == "true" : true
     mqtt_client_id = ENV.has_key?('MQTT_CLIENT_ID') ? ENV['MQTT_CLIENT_ID'] : nil
     mqtt_host = ENV.has_key?('MQTT_HOST') ? ENV['MQTT_HOST'] : 'mqtt'
     mqtt_port = ENV.has_key?('MQTT_PORT') ? ENV['MQTT_PORT'] : 1883
     mqtt_ssl = ENV.has_key?('MQTT_SSL') ? ENV['MQTT_SSL'] : false
+    mqtt_shared_subscription_group = ENV.fetch("MQTT_SHARED_SUBSCRIPTION_GROUP", nil)
     mqtt_topics_string = ENV.fetch('MQTT_TOPICS', '')
     mqtt_topics = mqtt_topics_string.include?(",") ? mqtt_topics_string.split(",") : [ mqtt_topics_string ]
+    mqtt_log = Logger.new("log/mqtt-#{mqtt_client_id}.log", 5, 100.megabytes)
     mqtt_log.info('MQTT TASK STARTING')
     mqtt_log.info("clean_session: #{mqtt_clean_session}")
     mqtt_log.info("client_id: #{mqtt_client_id}")
@@ -32,15 +33,15 @@ namespace :mqtt do
         mqtt_log.info "Using clean_session setting: #{client.clean_session}"
 
         message_handler = MqttMessagesHandler.new
-
+        prefix = mqtt_shared_subscription_group ? "$share/#{mqtt_shared_subscription_group}" : "$queue"
         client.subscribe(*mqtt_topics.flat_map { |topic|
           topic = topic == "" ? topic : topic + "/"
           [
-            "$queue/#{topic}device/sck/+/readings" => 2,
-            "$queue/#{topic}device/sck/+/readings/raw" => 2,
-            "$queue/#{topic}device/sck/+/hello" => 2,
-            "$queue/#{topic}device/sck/+/info" => 2,
-            "$queue/#{topic}device/inventory" => 2
+            "#{prefix}/#{topic}device/sck/+/readings" => 2,
+            "#{prefix}/#{topic}device/sck/+/readings/raw" => 2,
+            "#{prefix}/#{topic}device/sck/+/hello" => 2,
+            "#{prefix}/#{topic}device/sck/+/info" => 2,
+            "#{prefix}/#{topic}device/inventory" => 2
           ]
         })
 
