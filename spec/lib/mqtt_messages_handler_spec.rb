@@ -52,18 +52,6 @@ RSpec.describe MqttMessagesHandler do
     )
   end
 
-  describe '#device_token' do
-    it 'returns device_token from topic' do
-      expect(message_handler.device_token(@packet.topic)).to eq(device.device_token)
-    end
-  end
-
-  describe '#data' do
-    it 'returns parsed data from payload' do
-      expect(message_handler.data(@packet.payload)).to match_array(@data)
-    end
-  end
-
   describe '#readings' do
     before do
       # storer data processing

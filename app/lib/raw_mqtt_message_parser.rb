@@ -1,12 +1,12 @@
 require_relative "../grammars/raw_message"
 
-class RawMQTTMessageParser
+class RawMqttMessageParser
   def initialize
     @parser = RawMessageParser.new
   end
 
   def parse(message)
-    parser.parse(self.convert_to_ascii(message))&.to_hash
+    parser.parse(self.convert_to_ascii(message.strip))&.to_hash
   end
 
   private

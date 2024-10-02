@@ -1,106 +1,58 @@
 class MqttMessagesHandler
 
   def handle_topic(topic, message, retry_on_nil_device=true)
-    Sentry.set_tags('mqtt-topic': topic)
-
-    crumb = Sentry::Breadcrumb.new(
-      category: "MqttMessagesHandler.handle_topic",
-      message: "Handling topic #{topic}",
-      data: { topic: topic, message: message.encode("UTF-8", invalid: :replace, undef: :replace) }
-    )
-    Sentry.add_breadcrumb(crumb)
-
     return if topic.nil?
-
+    message = message.encode("US-ASCII", invalid: :replace, undef: :replace, replace: "")
+    log_message_to_sentry(topic, message)
     handshake_device(topic)
 
-    # The following do NOT need a device
     if topic.to_s.include?('inventory')
-      DeviceInventory.create({ report: (message rescue nil) })
-      return true
-    end
-
-    device = Device.find_by(device_token: device_token(topic))
-    if device.nil?
-      handle_nil_device(topic, message, retry_on_nil_device)
-      return nil
-    end
-
-    if topic.to_s.include?('raw')
-      handle_readings(device, parse_raw_readings(message, device.id))
+      handle_inventory(topic, message)
+    elsif topic.to_s.include?('raw')
+      handle_readings(topic, parse_raw_readings(message), retry_on_nil_device)
     elsif topic.to_s.include?('readings')
-      handle_readings(device, message)
+      handle_readings(topic, message, retry_on_nil_device)
     elsif topic.to_s.include?('info')
-      json_message = JSON.parse(message)
-      crumb = Sentry::Breadcrumb.new(
-        category: "MqttMessagesHandler.handle_topic",
-        message: "Parsing info message",
-        data: {
-          topic: topic,
-          message: message.encode("UTF-8", invalid: :replace, undef: :replace),
-          json: json_message,
-          device_id: device.id
-        }
-      )
-      Sentry.add_breadcrumb(crumb)
-      device.update_column(:hardware_info, json_message)
+      handle_info(topic, message, retry_on_nil_device)
+    else
+      true
     end
+  end
+
+  private
+
+  def handle_inventory(topic, message)
+    DeviceInventory.create({ report: (message rescue nil) })
     return true
   end
 
-  def handle_nil_device(topic, message, retry_on_nil_device)
-    orphan_device = OrphanDevice.find_by_device_token(device_token(topic))
-    if topic.to_s.include?("info") && !topic.to_s.include?("bridge") && orphan_device
-      retry_later(topic, message) if retry_on_nil_device
-    end
-  end
+  def handle_readings(topic, message, retry_on_nil_device)
+    device = find_device_for_topic(topic, message, retry_on_nil_device)
+    return nil if device.nil?
 
-  def retry_later(topic, message)
-    RetryMQTTMessageJob.perform_later(topic, message)
-  end
-
-  # takes a packet and stores data
-  def handle_readings(device, message)
-    data = self.data(message)
-    return if data.nil? or data&.empty?
+    data = JSON.parse(message)["data"] if message
+    return nil if data.nil? or data&.empty?
 
     data.each do |reading|
       storer.store(device, reading)
     end
+
+    return true
   rescue Exception => e
     Sentry.capture_exception(e)
     raise e if Rails.env.test?
-    #puts e.inspect
-    #puts message
   end
 
-  # takes a raw packet and converts into JSON
-  def parse_raw_readings(message, device_id=nil)
-    crumb = Sentry::Breadcrumb.new(
-      category: "MqttMessagesHandler.parse_raw_readings",
-      message: "Parsing raw readings",
-      data: { message: message.encode("UTF-8", invalid: :replace, undef: :replace), device_id: device_id }
-    )
-    Sentry.add_breadcrumb(crumb)
-    clean_tm = message[1..-2].split(",")[0].gsub("t:", "").strip
-    raw_readings = message[1..-2].split(",")[1..]
+  def handle_info(topic, message, retry_on_nil_device)
+    device = find_device_for_topic(topic, message, retry_on_nil_device)
+    return nil if device.nil?
+    json_message = JSON.parse(message)
+    device.update_column(:hardware_info, json_message)
+    return true
+  end
 
-    reading = { 'data' => ['recorded_at' => clean_tm, 'sensors' => []] }
-
-    raw_readings.each do |raw_read|
-      raw_id = raw_read.split(":")[0].strip
-      raw_value = raw_read.split(":")[1]&.strip
-      reading['data'].first['sensors'] << { 'id' => raw_id, 'value' => raw_value }
-    end
-
-    crumb = Sentry::Breadcrumb.new(
-      category: "MqttMessagesHandler.parse_raw_readings",
-      message: "Readings data constructed",
-      data: { message: message.encode("UTF-8", invalid: :replace, undef: :replace), reading: reading, device_id: device_id }
-    )
-    Sentry.add_breadcrumb(crumb)
-
-    JSON[reading]
+  def parse_raw_readings(message)
+    JSON[raw_readings_parser.parse(message)]
   end
 
   def handshake_device(topic)
@@ -112,29 +64,38 @@ class MqttMessagesHandler
     }.to_json)
   end
 
-  # takes a packet and returns 'device token' from topic
-  def device_token(topic)
-    topic[/device\/sck\/(.*?)\//m, 1].to_s
+  def log_message_to_sentry(topic, message)
+    Sentry.set_tags('mqtt-topic': topic)
+    crumb = Sentry::Breadcrumb.new(
+      category: "MqttMessagesHandler.handle_topic",
+      message: "Handling topic #{topic}",
+      data: { topic: topic, message: message }
+    )
+    Sentry.add_breadcrumb(crumb)
   end
 
-  # takes a packet and returns 'data' from payload
-  def data(message)
-    # TODO: what if message is empty?
-    if message
-      begin
-        JSON.parse(message)['data']
-      rescue JSON::ParserError
-        # Handle error
-      end
-    else
-      raise "No data(message)"
+  def find_device_for_topic(topic, message, retry_on_nil_device)
+    device = Device.find_by(device_token: device_token(topic))
+    handle_nil_device(topic, message, retry_on_nil_device) if device.nil?
+    return device
+  end
+
+  def handle_nil_device(topic, message, retry_on_nil_device)
+    orphan_device = OrphanDevice.find_by_device_token(device_token(topic))
+    if topic.to_s.include?("info") && !topic.to_s.include?("bridge") && orphan_device
+      RetryMQTTMessageJob.perform_later(topic, message) if retry_on_nil_device
     end
   end
 
-
-  private
+  def device_token(topic)
+    device_token = topic[/device\/sck\/(.*?)\//m, 1].to_s
+  end
 
   def storer
     @storer ||= Storer.new
+  end
+
+  def raw_readings_parser
+    @raw_readings_parser ||= RawMqttMessageParser.new
   end
 end

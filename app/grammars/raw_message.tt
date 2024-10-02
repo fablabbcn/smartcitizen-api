@@ -1,6 +1,6 @@
 grammar RawMessage
   rule message
-    '{' message_body '}' {
+    '{' whitespace message_body whitespace '}' {
       def to_hash
         { data: [ message_body.to_hash ] }
       end
@@ -24,7 +24,7 @@ grammar RawMessage
   end
 
   rule pair
-    pair:(timestamp_pair / value_pair) ","? {
+    pair:(timestamp_pair / value_pair) whitespace ","? whitespace {
       def to_value
         pair.to_value
       end
@@ -32,7 +32,7 @@ grammar RawMessage
   end
 
   rule timestamp_pair
-    't:' timestamp {
+    't' whitespace ':' timestamp {
       def to_value
         { key: :t, value: timestamp.text_value }
       end
@@ -40,7 +40,7 @@ grammar RawMessage
   end
 
   rule value_pair
-    number ':' value {
+    number whitespace ':' whitespace value {
       def to_value
          { key: number.text_value, value: value.text_value }
       end
@@ -77,6 +77,10 @@ grammar RawMessage
         Time.parse(timestamp.text_value)
       end
     }
+  end
+
+  rule whitespace
+    ' '*
   end
 
 end
