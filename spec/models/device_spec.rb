@@ -669,7 +669,45 @@ RSpec.describe Device, :type => :model do
         expect(device.find_or_create_component_by_sensor_id(nil)).to be_blank
       end
     end
+  end
 
+  context ".for_world_map" do
+
+    let(:current_user) { create(:user) }
+    let(:other_user)  { create(:user) }
+    let(:admin) { create(:admin) }
+
+    let(:public_device) { create(:device, last_reading_at: Time.now) }
+    let(:my_private_device) { create(:device, is_private: true, owner: current_user, last_reading_at: Time.now) }
+    let(:their_private_device) { create(:device, is_private: true, owner: other_user, last_reading_at: Time.now) }
+
+
+    context "when no authorized user is provided" do
+      it "only returns public devices" do
+        results = Device.for_world_map(false)
+        expect(results).to include(public_device)
+        expect(results).not_to include(my_private_device)
+        expect(results).not_to include(their_private_device)
+      end
+    end
+
+    context "when a non-admin user is provided" do
+      it "only returns public devices, and private devices owned by the current user" do
+        results = Device.for_world_map(current_user)
+        expect(results).to include(public_device)
+        expect(results).to include(my_private_device)
+        expect(results).not_to include(their_private_device)
+      end
+    end
+
+    context "when an admin user is provided" do
+      it "returns all devices" do
+        results = Device.for_world_map(admin)
+        expect(results).to include(public_device)
+        expect(results).to include(my_private_device)
+        expect(results).to include(their_private_device)
+      end
+    end
   end
 
 end

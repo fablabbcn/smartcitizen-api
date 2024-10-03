@@ -1,1 +1,1 @@
-json.array! Device.for_world_map, partial: 'device', as: :device, local_assigns: { with_data: false, with_postprocessing: false, slim_owner: true, never_authorized: never_authorized }
+json.array! Device.for_world_map(!never_authorized && current_user), partial: 'device', as: :device, local_assigns: { with_data: false, with_postprocessing: false, slim_owner: true, never_authorized: never_authorized }

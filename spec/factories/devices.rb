@@ -10,5 +10,4 @@ FactoryBot.define do
     elevation { 100 }
     hardware_info { { "id":47,"uuid":"7d45fead-defd-4482-bc6a-a1b711879e2d" } }
   end
-
 end

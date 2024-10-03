@@ -107,7 +107,11 @@ private
 
       # Researchers + Admins can update is_test and enable_forwarding
       if current_user.is_admin_or_researcher?
-        params_to_permit.push(:is_test, :enable_forwarding)
+        params_to_permit.push(:enable_forwarding)
+      end
+
+      if current_user.is_admin?
+        params_to_permit.push(:is_test)
       end
 
       params.permit(

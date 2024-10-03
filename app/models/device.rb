@@ -74,8 +74,15 @@ class Device < ActiveRecord::Base
     end
   end
 
-  scope :for_world_map, -> {
-    where.not(latitude: nil).where.not(last_reading_at: nil).where(is_test: false).includes(:owner, :tags)
+  scope :for_world_map, ->(authorized_user=nil) {
+    privacy_conditions = if authorized_user && authorized_user.is_admin?
+                           []
+                         elsif authorized_user
+                           ["is_private IS NOT true OR owner_id = ?", authorized_user.id]
+                         else
+                           ["is_private IS NOT true"]
+                         end
+    where.not(latitude: nil).where.not(last_reading_at: nil).where(is_test: false).where(privacy_conditions).includes(:owner, :tags)
   }
 
   def self.ransackable_attributes(auth_object = nil)
