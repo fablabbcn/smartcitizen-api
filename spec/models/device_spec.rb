@@ -204,6 +204,16 @@ RSpec.describe Device, :type => :model do
   end
 
   describe "location truncation and fuzzing" do
+
+    context "by default" do
+      it "saves the precise location" do
+        device = create(:device, latitude: 0.12345, longitude: 10.12345)
+        expect(device.precise_location).to eq(true)
+        expect(device.latitude).to eq(0.12345)
+        expect(device.longitude).to eq(10.12345)
+      end
+    end
+
     context "when the location is changed" do
       context "when the device has precise location set" do
         let(:device) {
