@@ -2,7 +2,9 @@ services:
   web:
     image: nginx
     depends_on:
-      - app
+      app:
+        condition: service_healthy
+        restart: true
     ports:
       - 80:80
       - 80:80/udp
