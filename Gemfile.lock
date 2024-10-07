@@ -307,6 +307,7 @@ GEM
     pg_search (2.3.6)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
+    polyglot (0.3.5)
     premailer (1.21.0)
       addressable
       css_parser (>= 1.12.0)
@@ -502,6 +503,8 @@ GEM
     tilt (2.0.11)
     timecop (0.9.6)
     timeout (0.3.2)
+    treetop (1.6.12)
+      polyglot (~> 0.3)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unaccent (0.4.0)
@@ -604,6 +607,7 @@ DEPENDENCIES
   sshkit-sudo
   stamp
   timecop
+  treetop
   vcr
   versionist!
   webmock
@@ -616,4 +620,4 @@ RUBY VERSION
    ruby 3.0.6p216
 
 BUNDLED WITH
-   2.5.6
+   2.5.20
