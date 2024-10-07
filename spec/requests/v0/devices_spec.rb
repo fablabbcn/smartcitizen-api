@@ -114,15 +114,26 @@ describe V0::DevicesController do
 
     describe "world map" do
       it "returns all devices" do
-        first = create(:device, data: { "": Time.now })
-        second = create(:device, data: { "": Time.now })
+        Rails.cache.clear
+        first = create(:device,  last_reading_at: Time.now)
+        second = create(:device, last_reading_at: Time.now)
         json = api_get "devices/world_map"
         expect(response.status).to eq(200)
-        # World map is not always sorted. This test fails at random
-        #expect(json.map{|j| j['id']}).to eq([first, second].map(&:id))
+        ids = json.map { |d| d["id"] }
+        expect(ids).to include(first.id)
+        expect(ids).to include(second.id)
       end
 
-      skip "needs more specs"
+      it "does not include private devices" do
+        Rails.cache.clear
+        public_device = create(:device, last_reading_at: Time.now)
+        private_device = create(:device, is_private: true, last_reading_at: Time.now)
+        json = api_get "devices/world_map"
+        ids = json.map { |d| d["id"] }
+        expect(ids).to include(public_device.id)
+        expect(ids).not_to include(private_device.id)
+      end
+
     end
 
     describe "with near" do
@@ -335,14 +346,7 @@ describe V0::DevicesController do
 
     let!(:device) { create :device, owner: user }
 
-    it "cannot update a device is_private attribute" do
-      api_put "devices/#{device.id}", { is_private: true, access_token: token.token }
-      expect(response.status).to eq(200)
-      expect(Device.find(device.id).is_private).to eq(false)
-    end
-
-    it "can update a device is_private attribute when user has role" do
-      user.update role_mask: 3
+    it "can update the device is_private attribute" do
       api_put "devices/#{device.id}", { is_private: true, access_token: token.token }
       expect(response.status).to eq(200)
       expect(Device.find(device.id).is_private).to eq(true)

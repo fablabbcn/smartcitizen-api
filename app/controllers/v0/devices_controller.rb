@@ -101,12 +101,17 @@ private
         :exposure,
         :meta,
         :user_tags,
+        :is_private,
         postprocessing_attributes: [:blueprint_url, :hardware_url, :latest_postprocessing, :meta, :forwarding_params],
       ]
 
-      # Researchers + Admins can update is_private
-      if current_user.role_mask >= 2
-        params_to_permit.push(:is_private, :is_test, :enable_forwarding)
+      # Researchers + Admins can update is_test and enable_forwarding
+      if current_user.is_admin_or_researcher?
+        params_to_permit.push(:enable_forwarding)
+      end
+
+      if current_user.is_admin?
+        params_to_permit.push(:is_test)
       end
 
       params.permit(
