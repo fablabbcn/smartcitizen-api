@@ -5,8 +5,17 @@ class Component < ActiveRecord::Base
   belongs_to :sensor
 
   validates_presence_of :device, :sensor
-  validates :sensor_id, :uniqueness => { :scope => [:device_id] }
-  validates :key, :uniqueness => { :scope =>  [:device_id] }
+
+  # IMPORTANT: Validation of sensor/device uniqueness is done at the database level,
+  # as this allows us to use the create_or_find_by! method to atomically upsert components
+  # in the mqtt-task, avoiding component duplication due to race conditions.
+  # For some reason, create_or_find_by! ONLY works when the database constraint is
+  # the ONLY uniqueness constraint on those two values, so adding a rails validation here
+  # causes an error. Leaving the validations here commented out by way of documentation.
+  # See https://stackoverflow.com/questions/74566974/create-or-find-by-not-working-as-it-should-in-rails-6
+  # validates :sensor_id, :uniqueness => { :scope => [:device_id] }
+  # validates :key, :uniqueness => { :scope =>  [:device_id] }
+
 
   before_validation :set_key, on: :create
 
