@@ -110,25 +110,25 @@ class Device < ActiveRecord::Base
     components.map { |c| [c.key, c.sensor.id]}.to_h
   end
 
-  def find_or_create_component_by_sensor_id(sensor_id)
+  def create_or_find_component_by_sensor_id(sensor_id)
     return nil if sensor_id.nil? || !Sensor.exists?(id: sensor_id)
-    components.find_or_create_by(sensor_id: sensor_id)
+    components.create_or_find_by!(sensor_id: sensor_id)
   end
 
-  def find_or_create_component_by_sensor_key(sensor_key)
+  def create_or_find_component_by_sensor_key(sensor_key)
     return nil if sensor_key.nil?
     sensor = Sensor.find_by(default_key: sensor_key)
     return nil if sensor.nil?
-    components.find_or_create_by(sensor_id: sensor.id)
+    components.create_or_find_by!(sensor_id: sensor.id)
   end
 
-  def find_or_create_component_for_sensor_reading(reading)
+  def create_or_find_component_for_sensor_reading(reading)
     key_or_id = reading["id"]
     if key_or_id.is_a?(Integer) || key_or_id =~ /\d+/
       # It's an integer and therefore a sensor id
-      find_or_create_component_by_sensor_id(key_or_id)
+      create_or_find_component_by_sensor_id(key_or_id)
     else
-      find_or_create_component_by_sensor_key(key_or_id)
+      create_or_find_component_by_sensor_key(key_or_id)
     end
   end
 
@@ -251,7 +251,10 @@ class Device < ActiveRecord::Base
 
   def update_component_timestamps(timestamp, sensor_ids)
     components.select {|c| sensor_ids.include?(c.sensor_id) }.each do |component|
-      component.update_column(:last_reading_at, timestamp)
+      component.transaction do
+        component.lock!
+        component.update_column(:last_reading_at, timestamp)
+      end
     end
   end
 

@@ -8,7 +8,7 @@ RSpec.describe Component, :type => :model do
 
   it "validates uniqueness of board to sensor" do
     component = create(:component, device: create(:device), sensor: create(:sensor))
-    expect{ create(:component, device: component.device, sensor: component.sensor) }.to raise_error(ActiveRecord::RecordInvalid)
+    expect{ create(:component, device: component.device, sensor: component.sensor) }.to raise_error(ActiveRecord::RecordNotUnique)
   end
 
   describe "creating a unique sensor key" do
