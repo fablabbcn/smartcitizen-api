@@ -5,4 +5,4 @@ services:
     command: bundle exec rake telnet:push
     restart: always
     environment:
-      db_pool_size: 5
+      db_pool_size: 2
