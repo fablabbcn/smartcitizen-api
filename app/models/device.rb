@@ -251,8 +251,8 @@ class Device < ActiveRecord::Base
 
   def update_component_timestamps(timestamp, sensor_ids)
     components.select {|c| sensor_ids.include?(c.sensor_id) }.each do |component|
-      component.transaction do
-        component.lock!
+      component.lock! if self.class.connection.transaction_open?
+      if !component.reload.last_reading_at || timestamp > component.last_reading_at
         component.update_column(:last_reading_at, timestamp)
       end
     end
