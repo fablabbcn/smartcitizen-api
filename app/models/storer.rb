@@ -23,7 +23,7 @@ class Storer
 
   def update_device(device, parsed_ts, sql_data)
     return if parsed_ts <= Time.at(0)
-    device.transaction(isolation: :serializable) do
+    device.transaction do
       device.lock!
       if device.reload.last_reading_at.present?
         # Comparison errors if device.last_reading_at is nil (new devices).
