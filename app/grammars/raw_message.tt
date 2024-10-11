@@ -14,9 +14,11 @@ grammar RawMessage
           pair = pair_node.to_value
           if pair[:key] == :t
             accum.merge(recorded_at: pair[:value])
-          else
+          elsif pair && pair[:value]
             new_sensors_list = accum[:sensors] + [{id: pair[:key], value: pair[:value]}]
             accum.merge(sensors: new_sensors_list)
+          else
+            accum
           end
         }
       end
@@ -34,21 +36,33 @@ grammar RawMessage
   rule timestamp_pair
     't' whitespace ':' timestamp {
       def to_value
-        { key: :t, value: timestamp.text_value }
+        { key: :t, value: timestamp.to_value }
       end
     }
   end
 
   rule value_pair
-    number whitespace ':' whitespace value {
+    number whitespace ':' whitespace optional_value {
       def to_value
-         { key: number.text_value, value: value.text_value }
+         { key: number.to_value, value: optional_value.to_value }
       end
     }
   end
 
+  rule optional_value
+    value / null
+  end
+
   rule value
     float / number
+  end
+
+  rule null
+    "null" {
+      def to_value
+        nil
+      end
+    }
   end
 
   rule float
@@ -74,7 +88,7 @@ grammar RawMessage
   rule timestamp
     timestamp:([0-9] 4..4 '-' [0-9] 2..2 '-' [0-9] 2..2 'T' [0-9] 2..2 ':' [0-9] 2..2 ':' [0-9] 2..2 'Z') {
       def to_value
-        Time.parse(timestamp.text_value)
+        timestamp.text_value
       end
     }
   end
