@@ -30,7 +30,8 @@ class MqttMessagesHandler
     device = find_device_for_topic(topic, message, retry_on_nil_device)
     return nil if device.nil?
 
-    data = JSON.parse(message)["data"] if message
+    parsed = JSON.parse(message) if message
+    data = parsed["data"] if parsed
     return nil if data.nil? or data&.empty?
 
     data.each do |reading|
