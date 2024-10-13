@@ -57,6 +57,7 @@ gem 'sentry-sidekiq'
 gem 'sinatra'
 #gem 'skylight'
 gem 'stamp'
+gem "treetop"
 gem 'versionist', github: 'bploetz/versionist'
 gem 'webrick'
 gem 'workflow'
