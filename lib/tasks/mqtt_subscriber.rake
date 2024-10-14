@@ -60,9 +60,11 @@ namespace :mqtt do
               end
               mqtt_log.info "Processed MQTT message in #{time}"
               mqtt_log.info "MQTT queue length: #{client.queue_length}"
-              if !threshold_passed && client.queue_length >= mqtt_queue_length_warning_threshold
-                threshold_passed = true
-                Sentry.capture_message("Warning: Internal MQTT queue length is #{client.queue_length} (>= #{mqtt_queue_length_warning_threshold} on client #{mqtt_client_id}).")
+              if client.queue_length >= mqtt_queue_length_warning_threshold
+                if !threshold_passed
+                  Sentry.capture_message("Warning: Internal MQTT queue length is #{client.queue_length} (>= #{mqtt_queue_length_warning_threshold} on client #{mqtt_client_id}).")
+                  threshold_passed = true
+                end
               else
                 threshold_passed = false
               end
