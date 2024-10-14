@@ -203,18 +203,17 @@ class Device < ActiveRecord::Base
     end
   end
 
-  def formatted_location
+  def formatted_location(slim = false)
     {
-      ip: nil,
       exposure: exposure,
-      elevation: elevation.try(:to_i) ,
+      elevation: slim ? nil : elevation.try(:to_i),
       latitude: latitude,
       longitude: longitude,
-      geohash: geohash,
+      geohash: slim ? nil : geohash,
       city: city,
-      country_code: country_code,
+      country_code: slim ? nil : country_code,
       country: country_name
-    }
+    }.compact
   end
 
   def formatted_data

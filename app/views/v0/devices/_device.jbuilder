@@ -1,9 +1,7 @@
 local_assigns[:with_owner] = true unless local_assigns.has_key?(:with_owner)
 local_assigns[:with_data] = true unless local_assigns.has_key?(:with_data)
-local_assigns[:with_postprocessing] = true unless local_assigns.has_key?(:with_postprocessing)
 local_assigns[:with_location] = true unless local_assigns.has_key?(:with_location)
 local_assigns[:slim_owner] = false unless local_assigns.has_key?(:slim_owner)
-local_assigns[:never_authorized] = false unless local_assigns.has_key?(:never_authorized)
 
 json.(
   device,
@@ -24,7 +22,7 @@ json.(
     low_battery: device.notify_low_battery
   })
 
-authorized = !local_assigns[:never_authorized] && (current_user && (current_user.is_admin? || (device.owner_id && current_user.id == device.owner_id)))
+authorized = (current_user && (current_user.is_admin? || (device.owner_id && current_user.id == device.owner_id)))
 
 if authorized
   json.merge! device_token: device.device_token
@@ -32,7 +30,7 @@ if authorized
 else
   json.merge! device_token: '[FILTERED]'
 end
-json.merge!(postprocessing: device.postprocessing) if local_assigns[:with_postprocessing]
+json.merge!(postprocessing: device.postprocessing)
 json.merge!(location: device.formatted_location) if local_assigns[:with_location]
 json.merge!(data_policy: device.data_policy(authorized))
 json.merge!(hardware: device.hardware(authorized))
