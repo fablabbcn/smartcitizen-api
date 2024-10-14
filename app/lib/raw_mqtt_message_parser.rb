@@ -6,7 +6,9 @@ class RawMqttMessageParser
   end
 
   def parse(message)
-    parser.parse(self.convert_to_ascii(message.strip))&.to_hash
+    message = parser.parse(self.convert_to_ascii(message.strip))&.to_hash
+    raise "Message not parsed: #{message}" unless message
+    return message
   end
 
   private
