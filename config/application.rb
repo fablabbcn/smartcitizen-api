@@ -73,5 +73,6 @@ module Smartcitizen
 
     config.api_only = true
     config.active_storage.service_urls_expire_in = 30.minutes
+    config.middleware.use Rack::Deflater
   end
 end
