@@ -25,6 +25,7 @@ class Device < ActiveRecord::Base
   has_many :components, dependent: :destroy
   has_many :sensors, through: :components
   has_one :postprocessing, dependent: :destroy
+  has_many :ingest_errors, dependent: :destroy
 
   has_and_belongs_to_many :experiments
 
