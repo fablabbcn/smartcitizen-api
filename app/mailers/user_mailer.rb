@@ -32,4 +32,10 @@ class UserMailer < ApplicationMailer
     mail to: @user.to_email_s, subject: 'Device stopped publishing', from: "SmartCitizen Notifications - Device <notifications@mailbot.smartcitizen.me>"
   end
 
+  def device_ingest_errors(device_id)
+    @device = Device.find(device_id)
+    @user = @device.owner
+    mail to: @user.to_email_s, subject: "Device has errors", from: "SmartCitizen Notifications - Device <notifications@mailbot.smartcitizen.me>"
+  end
+
 end

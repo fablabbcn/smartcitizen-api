@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_08_12_081108) do
+ActiveRecord::Schema.define(version: 2024_10_14_052837) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
   enable_extension "hstore"
@@ -65,7 +66,9 @@ ActiveRecord::Schema.define(version: 2024_08_12_081108) do
     t.string "key"
     t.integer "bus", default: 1, null: false
     t.datetime "last_reading_at"
-    t.index ["device_id", "sensor_id"], name: "index_components_on_device_id_and_sensor_id"
+    t.index ["device_id", "key"], name: "unique_key_for_device", unique: true
+    t.index ["device_id", "sensor_id"], name: "index_components_on_device_id_and_sensor_id", unique: true
+    t.index ["device_id", "sensor_id"], name: "unique_sensor_for_device", unique: true
   end
 
   create_table "devices", id: :serial, force: :cascade do |t|
@@ -104,7 +107,7 @@ ActiveRecord::Schema.define(version: 2024_08_12_081108) do
     t.string "hardware_name_override"
     t.string "hardware_version_override"
     t.string "hardware_slug_override"
-    t.boolean "precise_location", default: false, null: false
+    t.boolean "precise_location", default: true, null: false
     t.boolean "enable_forwarding", default: false, null: false
     t.index ["device_token"], name: "index_devices_on_device_token", unique: true
     t.index ["geohash"], name: "index_devices_on_geohash"
@@ -157,6 +160,18 @@ ActiveRecord::Schema.define(version: 2024_08_12_081108) do
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id"
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
+  end
+
+  create_table "ingest_errors", force: :cascade do |t|
+    t.bigint "device_id", null: false
+    t.text "topic"
+    t.text "message"
+    t.text "error_class"
+    t.text "error_message"
+    t.text "error_trace"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["device_id"], name: "index_ingest_errors_on_device_id"
   end
 
   create_table "measurements", id: :serial, force: :cascade do |t|
@@ -336,6 +351,7 @@ ActiveRecord::Schema.define(version: 2024_08_12_081108) do
   add_foreign_key "devices_tags", "devices"
   add_foreign_key "devices_tags", "tags"
   add_foreign_key "experiments", "users", column: "owner_id"
+  add_foreign_key "ingest_errors", "devices"
   add_foreign_key "postprocessings", "devices"
   add_foreign_key "sensors", "measurements"
   add_foreign_key "uploads", "users"
