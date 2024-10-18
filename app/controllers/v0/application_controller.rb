@@ -15,6 +15,8 @@ module V0
     helper ::UserHelper
     include ::UserHelper
 
+    include SharedControllerMethods
+
     respond_to :json
 
     before_action :prepend_view_paths
@@ -65,26 +67,6 @@ module V0
         Rack::Attack.cache.write("throttle_whitelist_#{request.remote_ip}", true, 5.minutes)
       end
     end
-
-    def current_user(fail_unauthorized=true)
-      if @current_user.nil?
-        if doorkeeper_token
-          # return render text: 'abc'
-          @current_user = User.find(doorkeeper_token.resource_owner_id)
-        elsif ActionController::HttpAuthentication::Basic.has_basic_credentials?(request) # username and password
-          authenticate_with_http_basic do |username, password|
-            if user = User.find_by(username: username) and user.authenticate_with_legacy_support(password)
-              @current_user = user
-            elsif fail_unauthorized
-              self.headers["WWW-Authenticate"] = %(Basic realm="Application", Token realm="Application")
-              raise Smartcitizen::Unauthorized.new "Invalid Username/Password Combination"
-            end
-          end
-        end
-      end
-      @current_user
-    end
-    helper_method :current_user
 
     def check_if_authorized!
       if current_user.nil?

@@ -1,0 +1,13 @@
+<h1>Current user is: <%= current_user %></h1>
+<h1>Cookies:</h1>
+<ul>
+  <% cookies.each do |key, value|%>
+    <li><%= key %>: <%= value %></li>
+  <% end %>
+  <form method="POST" action="/v0/sessions">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <input type="text" name="username">
+    <input type="password" name="password">
+    <input type="submit">
+  </form>
+</ul>
