@@ -7,8 +7,17 @@ Rails.application.routes.draw do
   end
   mount Sidekiq::Web, at: "/sidekiq"
 
+  get "discourse/sso" => 'discourse#sso'
+
+  get 'login', to: 'ui/sessions#new', as: 'login'
+  get 'logout', to: 'ui/sessions#destroy', as: 'logout'
+  get 'password_reset/:token', to: 'ui/sessions#password_reset_landing', as: 'password_reset'
+
+  post 'change_password', to: 'ui/sessions#change_password', as: 'change_password'
+
   namespace "ui" do
-    get "login_test", to: "login_test#show"
+    resources :users, as: "users"
+    resources :sessions, as: "sessions"
   end
 
   api_version(module: "V0", path: {value: "v0"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0"}, default: true, defaults: { format: :json }) do
