@@ -1,7 +1,6 @@
 include:
   - compose/db.yml
   - compose/redis.yml
-  - compose/auth.yml
   - compose/app.yml
   - compose/sidekiq.yml
   - compose/mqtt-task.yml

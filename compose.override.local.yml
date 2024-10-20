@@ -1,6 +1,4 @@
 services:
-  auth:
-    restart: "no"
   app:
     build:
       args: !reset []
