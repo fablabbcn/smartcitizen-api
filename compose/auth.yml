@@ -1,9 +1,0 @@
-services:
-    auth:
-      env_file: ../.env
-      image: smartcitizen/auth
-      ports:
-        - "3001:3000"
-      restart: always
-      environment:
-        db_pool_size: 30
