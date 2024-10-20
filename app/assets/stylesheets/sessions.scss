@@ -1,0 +1,63 @@
+// Place all the styles related to the sessions controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+$blue: #0C2EFB;
+$black: #212121;
+$grey: #E3E3E3;
+$red: #FA5161;
+
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,300italic,400italic,700,700italic|Roboto:400,700,700italic,400italic');
+@import url('https://fonts.googleapis.com/css?family=Kanit:400,500,600,700,900');
+
+*{
+  font-family:'Kanit';
+}
+body{
+  background-color: #e3e3e3;
+}
+h1{
+  font-weight:700 !important;
+}
+.button {
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+}
+.bg-blue{
+  background-color: $blue !important;
+}
+
+.button:hover{
+  cursor: pointer;
+  color: white;
+  text-decoration:underline;
+}
+
+.bg-red{
+  background-color: $red;
+}
+.color-red{
+  color: $red;
+}
+
+input[type=text],input[type=password] {
+  padding:7px;
+  border:none;
+  border-bottom:2px solid #BEBEBE;
+}
+
+#flash_notice{
+  padding:20px;
+  color: white;
+  background-color: $blue;
+}
+
+#flash_alert{
+  padding:20px;
+  color: white;
+  background-color: $red;
+}

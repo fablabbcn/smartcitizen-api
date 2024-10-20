@@ -11,6 +11,7 @@ services:
       - 443:443
       - 443:443/udp
     volumes:
+      - ../public:/app/public
       - ../scripts/nginx-conf/api.smartcitizen.me.conf:/etc/nginx/conf.d/api.smartcitizen.me.conf
       - ../scripts/nginx.conf:/etc/nginx/nginx.conf
       - ../scripts/certs:/etc/ssl:ro

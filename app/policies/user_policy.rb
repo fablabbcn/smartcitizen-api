@@ -21,7 +21,6 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update_password?
-    update?
+    create?
   end
-
 end
