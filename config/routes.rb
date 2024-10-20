@@ -9,15 +9,16 @@ Rails.application.routes.draw do
 
   get "discourse/sso" => 'discourse#sso'
 
-  get 'login', to: 'ui/sessions#new', as: 'login'
-  get 'logout', to: 'ui/sessions#destroy', as: 'logout'
-  get 'password_reset/:token', to: 'ui/sessions#password_reset_landing', as: 'password_reset'
-
-  post 'change_password', to: 'ui/sessions#change_password', as: 'change_password'
+  get "login", to: redirect("/ui/sessions/new")
+  get "logout", to: redirect("/ui/sessions/destroy")
+  get "password_reset/:token", to: redirect("/ui/password_reset/%{token}")
 
   namespace "ui" do
     resources :users, as: "users"
+    get "sessions/destroy", to: "sessions#destroy"
     resources :sessions, as: "sessions"
+    post 'change_password', to: 'sessions#change_password', as: 'change_password'
+    get 'password_reset/:token', to: 'sessions#password_reset_landing', as: 'password_reset'
   end
 
   api_version(module: "V0", path: {value: "v0"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0"}, default: true, defaults: { format: :json }) do

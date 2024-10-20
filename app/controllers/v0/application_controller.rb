@@ -8,7 +8,6 @@ module V0
     include ActionController::ImplicitRender
     include ActionController::Caching
 
-    include Pundit::Authorization
     include PrettyJSON
     include ErrorHandlers
 

@@ -28,7 +28,6 @@ module V0
     # 2/3 - The associated user object is returned, indicating a valid token
     def show
       @user = User.find_by!(password_reset_token: params[:id])
-      @current_user = @user
       authorize @user, :update_password?
       render 'users/show', status: :ok
     end
@@ -36,7 +35,6 @@ module V0
     # 3/3 - The password reset is submitted and committed to the database
     def update
       @user = User.find_by!(password_reset_token: params[:id])
-      @current_user = @user
       authorize @user, :update_password?
       if @user.update({ password: params.require(:password), password_reset_token: nil })
         render 'users/show', status: :ok

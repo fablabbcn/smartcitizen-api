@@ -3,8 +3,5 @@ module Ui
     include SharedControllerMethods
     def index
     end
-
-    def show
-    end
   end
 end

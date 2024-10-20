@@ -1,5 +1,7 @@
 module SharedControllerMethods
 
+  include Pundit::Authorization
+
   def self.included(klass)
     klass.helper_method :current_user
   end
