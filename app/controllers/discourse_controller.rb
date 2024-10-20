@@ -6,7 +6,7 @@ class DiscourseController < ApplicationController
   def sso
     if !current_user
       session[:discourse_url] = request.url
-      redirect_to root_path(goto: request.path), notice: 'Please Log In before using SSO'
+      redirect_to new_ui_session_path(goto: request.path), notice: 'Please Log In before using SSO'
       return
     end
     secret = DISCOURSE_SSO_SECRET
