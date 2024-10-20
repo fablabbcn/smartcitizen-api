@@ -96,6 +96,7 @@ group :development, :test do
   gem 'brakeman', github: 'presidentbeef/brakeman', require: false
   gem 'byebug'
   gem 'cane'
+  gem "capybara"
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'guard-rspec'
