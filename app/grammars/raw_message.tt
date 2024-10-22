@@ -1,0 +1,100 @@
+grammar RawMessage
+  rule message
+    '{' whitespace message_body whitespace '}' {
+      def to_hash
+        { data: [ message_body.to_hash ] }
+      end
+    }
+  end
+
+  rule message_body
+    (pairs:pair*) {
+      def to_hash
+        pairs.elements.inject({ recorded_at: nil, sensors: [] }) { |accum, pair_node|
+          pair = pair_node.to_value
+          if pair[:key] == :t
+            accum.merge(recorded_at: pair[:value])
+          elsif pair && pair[:value]
+            new_sensors_list = accum[:sensors] + [{id: pair[:key], value: pair[:value]}]
+            accum.merge(sensors: new_sensors_list)
+          else
+            accum
+          end
+        }
+      end
+    }
+  end
+
+  rule pair
+    pair:(timestamp_pair / value_pair) whitespace ","? whitespace {
+      def to_value
+        pair.to_value
+      end
+    }
+  end
+
+  rule timestamp_pair
+    't' whitespace ':' timestamp {
+      def to_value
+        { key: :t, value: timestamp.to_value }
+      end
+    }
+  end
+
+  rule value_pair
+    number whitespace ':' whitespace optional_value {
+      def to_value
+         { key: number.to_value, value: optional_value.to_value }
+      end
+    }
+  end
+
+  rule optional_value
+    value / null
+  end
+
+  rule value
+    float / number
+  end
+
+  rule null
+    "null" {
+      def to_value
+        nil
+      end
+    }
+  end
+
+  rule float
+    float:(number decimal_part) {
+      def to_value
+        float.text_value
+      end
+    }
+  end
+
+  rule number
+    number:[\-0-9]+ {
+      def to_value
+        number.text_value
+      end
+    }
+  end
+
+  rule decimal_part
+    '.' number
+  end
+
+  rule timestamp
+    timestamp:([0-9] 4..4 '-' [0-9] 2..2 '-' [0-9] 2..2 'T' [0-9] 2..2 ':' [0-9] 2..2 ':' [0-9] 2..2 'Z') {
+      def to_value
+        timestamp.text_value
+      end
+    }
+  end
+
+  rule whitespace
+    ' '*
+  end
+
+end
