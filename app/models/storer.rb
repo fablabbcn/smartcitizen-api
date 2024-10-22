@@ -23,18 +23,20 @@ class Storer
 
   def update_device(device, parsed_ts, sql_data)
     return if parsed_ts <= Time.at(0)
+    device.transaction do
+      device.lock!
+      if device.reload.last_reading_at.present?
+        # Comparison errors if device.last_reading_at is nil (new devices).
+        # Devices can post multiple readings, in a non-sorted order.
+        # Do not update data with an older timestamp.
+        return if parsed_ts < device.last_reading_at
+      end
 
-    if device.last_reading_at.present?
-      # Comparison errors if device.last_reading_at is nil (new devices).
-      # Devices can post multiple readings, in a non-sorted order.
-      # Do not update data with an older timestamp.
-      return if parsed_ts < device.last_reading_at
+      sql_data = device.data.present? ? device.data.merge(sql_data) : sql_data
+      device.update_columns(last_reading_at: parsed_ts, data: sql_data, state: 'has_published')
+      sensor_ids = sql_data.select { |k, v| k.is_a?(Integer) }.keys.compact.uniq
+      device.update_component_timestamps(parsed_ts, sensor_ids)
     end
-
-    sql_data = device.data.present? ? device.data.merge(sql_data) : sql_data
-    device.update_columns(last_reading_at: parsed_ts, data: sql_data, state: 'has_published')
-    sensor_ids = sql_data.select { |k, v| k.is_a?(Integer) }.keys.compact.uniq
-    device.update_component_timestamps(parsed_ts, sensor_ids)
   end
 
   def kairos_publish(reading_data)

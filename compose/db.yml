@@ -1,6 +1,7 @@
 services:
    db:
     image: postgres:10
+    command: -c max_connections=200
     volumes:
       - sck-postgres:/var/lib/postgresql/data
     env_file: ../.env

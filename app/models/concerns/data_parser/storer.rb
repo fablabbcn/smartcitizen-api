@@ -54,7 +54,7 @@ module DataParser
       end
 
       def sensor_reading(device, sensor)
-        component = device.find_or_create_component_for_sensor_reading(sensor)
+        component = device.create_or_find_component_for_sensor_reading(sensor)
         return nil if component.nil?
         value = component.normalized_value( (Float(sensor['value']) rescue sensor['value']) )
         {

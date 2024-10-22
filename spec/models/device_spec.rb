@@ -645,19 +645,19 @@ RSpec.describe Device, :type => :model do
     end
   end
 
-  describe "#find_or_create_component_by_sensor_id" do
+  describe "#create_or_find_component_by_sensor_id" do
     context "when the sensor exists and a component already exists for this device" do
       it "returns the existing component" do
         sensor = create(:sensor)
         component = create(:component, sensor: sensor, device: device)
-        expect(device.find_or_create_component_by_sensor_id(sensor.id)).to eq(component)
+        expect(device.create_or_find_component_by_sensor_id(sensor.id)).to eq(component)
       end
     end
 
     context "when the sensor exists and a component does not already exist for this device" do
       it "returns a new valid component with the correct sensor and device" do
         sensor = create(:sensor)
-        component = device.find_or_create_component_by_sensor_id(sensor.id)
+        component = device.create_or_find_component_by_sensor_id(sensor.id)
         expect(component).not_to be_blank
         expect(component).to be_a Component
         expect(component.valid?).to be(true)
@@ -670,13 +670,13 @@ RSpec.describe Device, :type => :model do
     context "when no sensor exists with this id" do
       it "returns nil" do
         create(:sensor, id: 12345)
-        expect(device.find_or_create_component_by_sensor_id(54321)).to be_blank
+        expect(device.create_or_find_component_by_sensor_id(54321)).to be_blank
       end
     end
 
     context "when the id is nil" do
       it "returns nil" do
-        expect(device.find_or_create_component_by_sensor_id(nil)).to be_blank
+        expect(device.create_or_find_component_by_sensor_id(nil)).to be_blank
       end
     end
   end
