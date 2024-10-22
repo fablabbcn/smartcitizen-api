@@ -59,10 +59,9 @@ RSpec.describe RawMqttMessageParser do
     expect(parsed).to eq({ data: [ { recorded_at: "2024-09-25T13:19:38Z", sensors: [{id: "100", value: "-2000.12345"}] }]})
   end
 
-  it "returns nil if no valid message parsed" do
+  it "raises an error if no valid message parsed" do
     message = "ceci n'est pas un message"
-    parsed = parser.parse(message)
-    expect(parsed).to eq(nil)
+    expect {parser.parse(message)}.to raise_error(RuntimeError)
   end
 
   it "parses timestamps at any position in the packet" do
