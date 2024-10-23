@@ -5,6 +5,11 @@ gem 'rails', '6.1.7.3'
 gem 'sidekiq', '~> 6'
 gem 'doorkeeper', '~> 5'
 
+gem 'jquery-rails'
+gem 'sass-rails'
+gem 'turbolinks'
+gem 'uglifier'
+
 # To resize active storage images:
 # Revise if this is needed after Rails 6.0
 gem 'image_processing'
@@ -91,6 +96,7 @@ group :development, :test do
   gem 'brakeman', github: 'presidentbeef/brakeman', require: false
   gem 'byebug'
   gem 'cane'
+  gem "capybara"
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'guard-rspec'

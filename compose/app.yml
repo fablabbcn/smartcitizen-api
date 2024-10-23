@@ -12,7 +12,6 @@ services:
     depends_on:
       # We disable some containers in production
       - db
-      - auth
       - redis
       - sidekiq
       - mqtt-task-main-1
