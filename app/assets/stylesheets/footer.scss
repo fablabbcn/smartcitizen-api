@@ -1,0 +1,13 @@
+footer {
+  width: 100%;
+  a {
+    color: $primary;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .outlined-box {
+    border: 2px solid $white;
+  }
+}
