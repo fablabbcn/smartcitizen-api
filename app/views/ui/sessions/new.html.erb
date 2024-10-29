@@ -2,11 +2,17 @@
         <%= f.text_field :username_or_email, value: params[:username_or_email], autofocus: params[:username_or_email].blank? %>
         <%= f.password_field :password %>
     <%= f.hidden_field :goto, value: params[:goto] %>
-    <%= f.submit "Sign into your account" %>
-
-    <h3 class="my-3">Don't have an account?</h3>
-    <a class="btn btn-secondary" href="https://www.smartcitizen.me/signup">Sign up</a>
-
-    <h3 class="my-3">Forgot your password?</h3>
-    <%= f.submit "Reset password",  name: 'send_password_email' %>
+    <div class="mt-4">
+      <%= f.primary "Sign into your account" %>
+    </div>
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <h4 class="my-3">Don't have an account?</h4>
+        <a class="btn btn-secondary" href="https://www.smartcitizen.me/signup">Sign up</a>
+      </div>
+      <div class="col-md-6">
+        <h4 class="my-3">Forgot your password?</h4>
+        <%= f.submit "Reset password",  name: 'send_password_email' %>
+      </div>
+    </div>
 <% end %>
