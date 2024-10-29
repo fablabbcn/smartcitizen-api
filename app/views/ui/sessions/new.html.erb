@@ -1,17 +1,14 @@
 <h2>Welcome!</h2>
 
-<%= form_tag ui_sessions_path do %>
-        <%= label_tag :username_or_email, "Username or Email" %>
-        <%= text_field_tag :username_or_email, params[:username_or_email], autofocus: params[:username_or_email].blank? %>
-        <%= label_tag :password %>
-        <%= password_field_tag :password %>
-    <%= hidden_field_tag :goto, params[:goto] %>
-    <%= submit_tag "Sign into your account" %>
+<%= bootstrap_form_tag url: ui_sessions_path do |f| %>
+        <%= f.text_field :username_or_email, value: params[:username_or_email], autofocus: params[:username_or_email].blank? %>
+        <%= f.password_field :password %>
+    <%= f.hidden_field :goto, value: params[:goto] %>
+    <%= f.submit "Sign into your account" %>
 
     <h3>Don't have an account?</h3>
     <a href="https://www.smartcitizen.me/signup">Sign up</a>
 
     <h3 class="">Forgot your password?</h3>
-    <%= submit_tag "Reset Password",  name: 'send_password_email' %>
-  </div>
+    <%= f.submit "Reset Password",  name: 'send_password_email' %>
 <% end %>
