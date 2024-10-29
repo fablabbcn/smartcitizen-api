@@ -16,6 +16,7 @@ body{
 }
 
 .btn {
+  text-transform: uppercase;
   font-family: "Kanit";
   font-weight: 600;
   &.btn-primary {
@@ -49,8 +50,6 @@ body{
 }
 
 .form-label {
-  font-family: "Kanit";
-  font-weight: 600;
   margin-left: 1.5rem;
 }
 
