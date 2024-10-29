@@ -6,6 +6,7 @@ module Ui
     require 'net/https'
 
     def new
+      @title = "Welcome!"
       redirect_to ui_users_url if current_user
     end
 
@@ -49,6 +50,7 @@ module Ui
     end
 
     def password_reset_landing
+      @title = "Change password"
       @token = params[:token]
     end
 
