@@ -11,6 +11,7 @@ gem 'turbolinks'
 gem 'uglifier'
 gem "autoprefixer-rails"
 gem "bootstrap", "~> 5.3.3"
+gem "bootstrap_form", "~> 5.4"
 # To resize active storage images:
 # Revise if this is needed after Rails 6.0
 gem 'image_processing'
