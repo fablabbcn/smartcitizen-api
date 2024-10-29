@@ -93,6 +93,8 @@ GEM
     api-pagination (5.0.0)
     api_cache (0.3.0)
     ast (2.4.2)
+    autoprefixer-rails (10.4.19.0)
+      execjs (~> 2)
     awesome_print (1.9.2)
     aws-eventstream (1.2.0)
     aws-partitions (1.769.0)
@@ -113,6 +115,9 @@ GEM
     bcrypt (3.1.18)
     bootsnap (1.9.4)
       msgpack (~> 1.0)
+    bootstrap (5.3.3)
+      autoprefixer-rails (>= 9.1.0)
+      popper_js (>= 2.11.8, < 3)
     browser (5.3.1)
     builder (3.2.4)
     byebug (11.1.3)
@@ -323,6 +328,7 @@ GEM
       activerecord (>= 5.2)
       activesupport (>= 5.2)
     polyglot (0.3.5)
+    popper_js (2.11.8)
     premailer (1.21.0)
       addressable
       css_parser (>= 1.12.0)
@@ -569,10 +575,12 @@ DEPENDENCIES
   ancestry
   api-pagination
   api_cache
+  autoprefixer-rails
   awesome_print
   aws-sdk-s3
   bcrypt
   bootsnap (~> 1.9.4)
+  bootstrap (~> 5.3.3)
   brakeman!
   browser
   byebug
