@@ -1,5 +1,3 @@
-<h2>Welcome!</h2>
-
 <%= bootstrap_form_tag url: ui_sessions_path do |f| %>
         <%= f.text_field :username_or_email, value: params[:username_or_email], autofocus: params[:username_or_email].blank? %>
         <%= f.password_field :password %>

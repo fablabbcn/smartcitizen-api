@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>SmartCitizen Platform</title>
+    <title><%= ["SmartCitizen Platform", @title].compact.join(" – ") %></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
@@ -11,6 +11,9 @@
   <body>
     <%= render partial: "layouts/flashes" %>
     <div class="container bg-white mt-5 px-4 pb-4 pt-3">
+      <% if @title %>
+        <h1 class="mb-4"><%= @title %></h1>
+      <% end %>
       <%= yield %>
     </div>
   </body>
