@@ -6,9 +6,9 @@
     <%= f.hidden_field :goto, value: params[:goto] %>
     <%= f.submit "Sign into your account" %>
 
-    <h3>Don't have an account?</h3>
+    <h3 class="my-3">Don't have an account?</h3>
     <a href="https://www.smartcitizen.me/signup">Sign up</a>
 
-    <h3 class="">Forgot your password?</h3>
-    <%= f.submit "Reset Password",  name: 'send_password_email' %>
+    <h3 class="my-3">Forgot your password?</h3>
+    <%= f.submit "Reset password",  name: 'send_password_email' %>
 <% end %>
