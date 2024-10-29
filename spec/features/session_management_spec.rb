@@ -7,71 +7,71 @@ feature "User logs in" do
 
   scenario "user logs in with email" do
     visit "/login"
-    fill_in "Username or Email", with: user.email
+    fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_on "SIGN IN TO YOUR ACCOUNT"
+    click_on "Sign into your account"
     expect(page).to have_current_path(ui_users_path)
     expect(page).to have_content("You have been successfully logged in!")
   end
 
   scenario "user logs in with username" do
     visit "/login"
-    fill_in "Username or Email", with: user.username
+    fill_in "Username or email", with: user.username
     fill_in "Password", with: password
-    click_on "SIGN IN TO YOUR ACCOUNT"
+    click_on "Sign into your account"
     expect(page).to have_current_path(ui_users_path)
     expect(page).to have_content("You have been successfully logged in!")
   end
 
   scenario "user logs in with erroneous password" do
     visit "/login"
-    fill_in "Username or Email", with: user.username
+    fill_in "Username or email", with: user.username
     fill_in "Password", with: "notarealpassword"
-    click_on "SIGN IN TO YOUR ACCOUNT"
+    click_on "Sign into your account"
     expect(page).to have_current_path(ui_sessions_path)
     expect(page).to have_content("Email or password is invalid")
   end
 
   scenario "user logs in with erroneous username" do
     visit "/login"
-    fill_in "Username or Email", with: "notarealusername"
+    fill_in "Username or email", with: "notarealusername"
     fill_in "Password", with: password
-    click_on "SIGN IN TO YOUR ACCOUNT"
+    click_on "Sign into your account"
     expect(page).to have_current_path(ui_sessions_path)
     expect(page).to have_content("Email or password is invalid")
   end
 
   scenario "user logs out" do
     visit "/login"
-    fill_in "Username or Email", with: user.email
+    fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_on "SIGN IN TO YOUR ACCOUNT"
-    click_on "Log Out"
+    click_on "Sign into your account"
+    click_on "Log out"
     expect(page).to have_current_path(new_ui_session_path)
     expect(page).to have_content("Logged out!")
   end
 
   scenario "user resets email" do
     visit "/login"
-    fill_in "Username or Email", with: user.email
-    click_on "RESET PASSWORD"
+    fill_in "Username or email", with: user.email
+    click_on "Reset password"
     expect(page).to have_content("Please check your email to reset the password")
     visit "/password_reset/#{user.reload.password_reset_token}"
     fill_in "Password", with: "newpassword456"
     fill_in "Confirm new password", with: "newpassword456"
     click_on "Change my password"
     expect(page).to have_content("Changed password for: #{user.username}")
-    fill_in "Username or Email", with: user.username
+    fill_in "Username or email", with: user.username
     fill_in "Password", with: "newpassword456"
-    click_on "SIGN IN TO YOUR ACCOUNT"
+    click_on "Sign into your account"
     expect(page).to have_current_path(ui_users_path)
     expect(page).to have_content("You have been successfully logged in!")
   end
 
   scenario "user resets email but gives incorrect password confirmation" do
     visit "/login"
-    fill_in "Username or Email", with: user.email
-    click_on "RESET PASSWORD"
+    fill_in "Username or email", with: user.email
+    click_on "Reset password"
     expect(page).to have_content("Please check your email to reset the password")
     visit "/password_reset/#{user.reload.password_reset_token}"
     fill_in "Password", with: "newpassword456"
@@ -100,10 +100,10 @@ feature "User logs in" do
     visit "/discourse/sso?sso=#{CGI.escape(payload)}&sig=#{signature}"
     expect(page).to have_current_path(new_ui_session_path + "?goto=%2Fdiscourse%2Fsso")
     expect(page).to have_content("Please Log In before using SSO")
-    fill_in "Username or Email", with: user.email
+    fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     begin
-      click_on "SIGN IN TO YOUR ACCOUNT"
+      click_on "Sign into your account"
     # The next doesn't exist, we just want to check the URL is correct:
     rescue ActionController::RoutingError
       expect(page.current_url).to match(/^#{DiscourseController::DISCOURSE_ENDPOINT}/)
