@@ -9,10 +9,9 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <% flash.each do |name, msg| %>
-      <%= content_tag :div, msg, id: "flash_#{name}" %>
-    <% end %>
-
-    <%= yield %>
+    <%= render partial: "layouts/flashes" %>
+    <div class="container bg-white mt-5 px-4 pb-4 pt-3">
+      <%= yield %>
+    </div>
   </body>
 </html>

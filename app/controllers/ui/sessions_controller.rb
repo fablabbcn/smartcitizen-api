@@ -28,7 +28,8 @@ module Ui
         if params[:goto].include? 'discourse'
           redirect_to session[:discourse_url]
         else
-          redirect_to (session[:user_return_to] || ui_users_path), notice: "You have been successfully logged in!"
+          flash[:success] = "You have been successfully logged in!"
+          redirect_to (session[:user_return_to] || ui_users_path)
         end
       else
         flash.now.alert = "Email or password is invalid"
@@ -64,7 +65,7 @@ module Ui
       if @user
         authorize @user, :update_password?
         @user.update({ password: params.require(:password), password_reset_token: nil })
-        flash[:notice] = "Changed password for: #{@user.username}"
+        flash[:success] = "Changed password for: #{@user.username}"
         redirect_to new_ui_session_path
       else
         flash[:alert] = 'Your reset code might be too old or have been used before.'
