@@ -23,18 +23,16 @@ body{
     background-color: $black;
     color: $white;
     border: 3px solid black;
-    &:hover, &:active, &:focus {
-      color: $primary;
-      outline: $primary solid 3px;
-    }
   }
   &.btn-secondary {
     color: $black;
+    background-color: $white;
+    border: 3px solid $black;
+  }
+  &:hover, &:active, &:focus {
     background-color: $primary;
-    border: 3px solid $primary;
-    &:hover, &:active, &:focus {
-      outline: $black solid 3px;
-    }
+    color: $black;
+    outline: none !important;
   }
 }
 
