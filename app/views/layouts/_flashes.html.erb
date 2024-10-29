@@ -1,3 +1,3 @@
 <% flash.each do |name, msg| %>
-  <%= content_tag :div, msg, class: flash_class(name) %>
+  <%= content_tag :div, msg, class: [flash_class(name), "mb-0"].join(" ") %>
 <% end %>
