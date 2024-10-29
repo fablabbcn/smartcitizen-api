@@ -29,10 +29,12 @@ body{
     background-color: $white;
     border: 3px solid $black;
   }
-  &:hover, &:active, &:focus {
-    background-color: $primary;
-    color: $black;
+  &:hover, &:active, &:focus, &:focus-visible {
+    background-color: $primary !important;
+    color: $black !important;
+    border: 3px solid $black !important;
     outline: none !important;
+    box-shadow: none !important;
   }
 }
 
