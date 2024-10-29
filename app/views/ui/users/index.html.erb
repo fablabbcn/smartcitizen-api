@@ -4,8 +4,8 @@
   <p>Logged in as <%= current_user.email %>. </p>
   <p>Your access token:
   <br /><code><%= current_user.access_token.token %></code></p>
-  <p><%= link_to "Log out", logout_path %></p>
+  <p><%= link_to "Log out", logout_path, class: "btn btn-secondary" %></p>
 <% else %>
   <p>Not logged in!</p>
-  <a href="<%= new_ui_session_path %>">Go back</a>
+  <a class="btn btn-secondary" href="<%= new_ui_session_path %>">Go back</a>
 <% end %>

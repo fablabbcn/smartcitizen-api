@@ -20,12 +20,9 @@ $info: $purple;
 
 $enable-dark-mode: false;
 
-$body-bg: $grey-200;
-
 $link-color: $blue;
 
 $border-color: $black;
-$border-width: 3px;
 
 $font-family-sans-serif: "Roboto Condensed", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
@@ -33,3 +30,5 @@ $headings-font-family: "Kanit";
 $headings-font-weight: 600;
 
 $code-color: $purple;
+
+$input-border-radius: 0;
