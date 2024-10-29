@@ -1,31 +1,17 @@
-<h1 class="my-3">WELCOME!</h1>
+<h2>Welcome!</h2>
 
 <%= form_tag ui_sessions_path do %>
-  <div class="card">
-
-    <div class="card-body" id="userinfo">
-      <div class="mt-3">
-        <%= label_tag :username_or_email, "Username or Email" %><br />
+        <%= label_tag :username_or_email, "Username or Email" %>
         <%= text_field_tag :username_or_email, params[:username_or_email], autofocus: params[:username_or_email].blank? %>
-      </div>
-      <div class="mt-3">
-        <%= label_tag :password %><br />
+        <%= label_tag :password %>
         <%= password_field_tag :password %>
-      </div>
-    </div>
     <%= hidden_field_tag :goto, params[:goto] %>
-    <%= submit_tag "SIGN IN TO YOUR ACCOUNT", class: 'button bg-blue', style: 'width:100%' %>
-  </div>
+    <%= submit_tag "Sign into your account" %>
 
-  <div class="card mt-5">
-    <h5 class="my-4">Don't have an account?</h5>
-    <a class="button bg-blue" href="https://www.smartcitizen.me/signup">SIGN UP</a>
-  </div>
+    <h3>Don't have an account?</h3>
+    <a href="https://www.smartcitizen.me/signup">Sign up</a>
 
-  <div class="card mt-5">
-    <div class="card-body">
-      <h5 class="d-inline">Forgot your password?</h5>
-    </div>
-    <%= submit_tag "RESET PASSWORD",  name: 'send_password_email', class: 'button bg-red' %>
+    <h3 class="">Forgot your password?</h3>
+    <%= submit_tag "Reset Password",  name: 'send_password_email' %>
   </div>
 <% end %>

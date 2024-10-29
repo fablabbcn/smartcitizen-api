@@ -1,25 +1,11 @@
-<h1 class="my-3">User info</h1>
+<h2>User information</h2>
 
-<div class="card">
-  <div class="card-body">
-
-    <%= link_to "Smartcitizen Website", "https://www.smartcitizen.me/" %><br />
-    <%= link_to "Smartcitizen Forum", "https://forum.smartcitizen.me/" %><br />
-    <%= link_to "Smartcitizen API", "https://api.smartcitizen.me/" %><br />
-    <%= link_to "Smartcitizen Developer documentation", "https://developer.smartcitizen.me/" %><br />
-    <%= link_to "See JSON user data from example.smartcitizen.me", "http://example.smartcitizen.me" %>
-
-    <hr />
-
-    <% if current_user %>
-      <p>Logged in as <%= current_user.email %>. </p>
-      <p>Your access token:
-      <br /><code><%= current_user.access_token.token %></code></p>
-      <p><%= link_to "Log Out", logout_path, class: 'button bg-red' %></p>
-    <% else %>
-      <p class="color-red">Not logged in!</p>
-      <a class="button bg-blue" href="<%= new_ui_session_path %>">GO BACK</a>
-    <% end %>
-
-  </div>
-</div>
+<% if current_user %>
+  <p>Logged in as <%= current_user.email %>. </p>
+  <p>Your access token:
+  <br /><code><%= current_user.access_token.token %></code></p>
+  <p><%= link_to "Log out", logout_path %></p>
+<% else %>
+  <p>Not logged in!</p>
+  <a href="<%= new_ui_session_path %>">Go back</a>
+<% end %>
