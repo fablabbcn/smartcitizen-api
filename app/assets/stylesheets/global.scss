@@ -8,8 +8,16 @@ body{
   background-image: image-url("sck_bg.png");
   background-repeat: repeat;
   background-size: 65px;
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
+
+body > .container {
+  flex-grow: 1;
+}
+
 
 .border-thick {
   border-width: 3px !important;

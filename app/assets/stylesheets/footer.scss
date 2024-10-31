@@ -1,7 +1,5 @@
 footer {
   width: 100%;
-  position: absolute;
-  bottom: -8px; /* I have no idea why this negative offset is needed here, nothing has any margin or anything */
   a {
     color: $primary;
     &:hover {
