@@ -99,7 +99,7 @@ feature "User logs in" do
     signature = OpenSSL::HMAC.hexdigest("sha256", secret, payload)
     visit "/discourse/sso?sso=#{CGI.escape(payload)}&sig=#{signature}"
     expect(page).to have_current_path(new_ui_session_path + "?goto=%2Fdiscourse%2Fsso")
-    expect(page).to have_content("Please Log In before using SSO")
+    expect(page).to have_content("Please log in before using SSO")
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     begin

@@ -6,7 +6,7 @@ module Ui
     require 'net/https'
 
     def new
-      @title = "Welcome!"
+      @title = I18n.t(:new_session_title)
       redirect_to ui_users_url if current_user
     end
 
@@ -29,11 +29,11 @@ module Ui
         if params[:goto].include? 'discourse'
           redirect_to session[:discourse_url]
         else
-          flash[:success] = "You have been successfully logged in!"
+          flash[:success] = I18n.t(:new_session_success)
           redirect_to (session[:user_return_to] || ui_users_path)
         end
       else
-        flash.now.alert = "Email or password is invalid"
+        flash.now.alert = I18n.t(:new_session_failure)
         render "new"
       end
     end
@@ -46,11 +46,11 @@ module Ui
         authorize user, :request_password_reset?
         user.send_password_reset
       end
-      flash[:notice] = 'Please check your email to reset the password.'
+      flash[:notice] = I18n.t(:password_reset_notice)
     end
 
     def password_reset_landing
-      @title = "Change password"
+      @title = I18n.t(:password_reset_landing_title)
       @token = params[:token]
     end
 
@@ -58,7 +58,7 @@ module Ui
       @token = params.require(:token)
 
       if params.require(:password) != params.require(:password_confirmation)
-        flash[:alert] ="Your password doesn't match the confirmation"
+        flash[:alert] = I18n.t(:password_reset_failure)
         render "password_reset_landing"
         return
       end
@@ -67,17 +67,17 @@ module Ui
       if @user
         authorize @user, :update_password?
         @user.update({ password: params.require(:password), password_reset_token: nil })
-        flash[:success] = "Changed password for: #{@user.username}"
+        flash[:success] = I18n.t(:password_reset_success, username: @user.username)
         redirect_to new_ui_session_path
       else
-        flash[:alert] = 'Your reset code might be too old or have been used before.'
+        flash[:alert] = I18n.t(:password_reset_invalid)
         render "password_reset_landing"
       end
     end
 
     def destroy
       session[:user_id] = nil
-      redirect_to login_url, notice: "Logged out!"
+      redirect_to login_url, notice: I18n.t(:destroy_session_success)
     end
   end
 end
