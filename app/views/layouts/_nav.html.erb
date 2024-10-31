@@ -1,24 +1,24 @@
 <nav class="navbar navbar-dark navbar-expand-md bg-black m-2 sticky-top rounded-4">
   <div class="container px-4 px-md-0">
     <a class="navbar-brand" href="https://www.smartcitizen.me">
-      <img src="<%= image_url("smartcitizen_logo.svg") %>" alt="SmartCitizen" width="36" height ="36" />
+      <img src="<%= image_url("smartcitizen_logo.svg") %>" alt="<%= t :logo_alt %>" width="36" height ="36" />
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenuToggle" aria-controls="navbarMenuToggle" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenuToggle" aria-controls="navbarMenuToggle" aria-expanded="false" aria-label="<%= t :hamburger_label %>">
       <i class="fas fa-bars"></i>
     </button>
     <div class="collapse navbar-collapse ms-auto" id="navbarMenuToggle">
       <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
         <li class="nav-item">
-          <a class="nav-link w-100 w-md-auto text-center" href="https://smartcitizen.me/kits/">Home</a>
+          <a class="nav-link w-100 w-md-auto text-center" href="<%= t :home_link_url %>"><%= t :home_link_text %></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link w-100 w-md-auto text-center" href="https://docs.smartcitizen.me">Documentation</a>
+          <a class="nav-link w-100 w-md-auto text-center" href="<%= t :documentation_link_url%>"><%= t :documentation_link_text %></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link w-100 w-md-auto text-center" href="https://forum.smartcitizen.me">Forum</a>
+          <a class="nav-link w-100 w-md-auto text-center" href="<%= t :forum_link_url %>"><%= t :forum_link_text %></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link btn btn-navbar w-100 w-md-auto ms-md-3 mt-3 mt-md-0 mb-2 mb-md-0" href="https://smartcitizen.me#get-your-kit">Get your kit</a>
+          <a class="nav-link btn btn-navbar w-100 w-md-auto ms-md-3 mt-3 mt-md-0 mb-2 mb-md-0" href="<%= t :kit_link_url %>"><%= t :kit_link_text %></a>
         </li>
       </ul>
     </div>

@@ -1,9 +1,9 @@
 <% if current_user %>
-  <p>Logged in as <%= current_user.email %>. </p>
-  <p>Your access token:
+  <p><%= t :users_index_logged_in_message, username: current_user.username %></p>
+  <p><%= t :users_index_access_token_label  %>
   <br /><code><%= current_user.access_token.token %></code></p>
-  <p><%= link_to "Log out", logout_path, class: "btn btn-secondary w-100 w-md-auto" %></p>
+  <p><%= link_to t(:users_index_log_out_submit), logout_path, class: "btn btn-secondary w-100 w-md-auto" %></p>
 <% else %>
-  <p>Not logged in!</p>
-  <a class="btn btn-secondary w-100 w-md-auto" href="<%= new_ui_session_path %>">Go back</a>
+  <p><%= t :users_index_not_logged_in_message %></p>
+  <a class="btn btn-secondary w-100 w-md-auto" href="<%= new_ui_session_path %>"><%= t :users_index_log_in_link %></a>
 <% end %>
