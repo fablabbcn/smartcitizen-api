@@ -197,6 +197,8 @@ GEM
     fog-xml (0.1.4)
       fog-core
       nokogiri (>= 1.5.11, < 2.0.0)
+    font-awesome-sass (4.6.2)
+      sass (>= 3.2)
     formatador (1.1.0)
     friendly_id (5.5.0)
       activerecord (>= 4.0.0)
@@ -469,6 +471,11 @@ GEM
     rufus-scheduler (3.8.2)
       fugit (~> 1.1, >= 1.1.6)
     safe_yaml (1.0.5)
+    sass (3.7.4)
+      sass-listen (~> 4.0.0)
+    sass-listen (4.0.0)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -601,6 +608,7 @@ DEPENDENCIES
   faker
   fast_blank
   fog-aws (~> 3.19.0)
+  font-awesome-sass (~> 4.6.2)
   friendly_id
   geocoder
   guard-rspec
