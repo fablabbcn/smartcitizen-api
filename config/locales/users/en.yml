@@ -1,0 +1,6 @@
+en:
+  users_index_logged_in_message: "Logged in as %{username}."
+  users_index_access_token_label: "Your access token:"
+  users_index_log_out_submit: "Log out"
+  users_index_not_logged_in_message: "Not logged in!"
+  users_index_log_in_link: "Go back"

@@ -3,16 +3,16 @@
         <%= f.password_field :password %>
     <%= f.hidden_field :goto, value: params[:goto] %>
     <div class="mt-4">
-      <%= f.primary "Sign into your account", class: "btn btn-primary w-100 w-md-auto" %>
+      <%= f.primary t(:new_session_submit), class: "btn btn-primary w-100 w-md-auto" %>
     </div>
     <div class="row mt-4">
       <div class="col-md-6">
-        <h4 class="my-3">Don't have an account?</h4>
-        <a class="btn btn-secondary w-100 w-md-auto" href="https://www.smartcitizen.me/signup">Sign up</a>
+        <h4 class="my-3"><%= t :new_account_heading %></h4>
+        <a class="btn btn-secondary w-100 w-md-auto" href="https://www.smartcitizen.me/signup"><%= t :new_account_submit %></a>
       </div>
       <div class="col-md-6">
-        <h4 class="my-3">Forgot your password?</h4>
-        <%= f.submit "Reset password",  name: 'send_password_email', class: "btn btn-secondary w-100 w-md-auto" %>
+        <h4 class="my-3"><%= t :forgot_password_heading %></h4>
+        <%= f.submit t(:forgot_password_submit),  name: 'send_password_email', class: "btn btn-secondary w-100 w-md-auto" %>
       </div>
     </div>
 <% end %>

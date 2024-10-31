@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= ["SmartCitizen Platform", @title].compact.join(" – ") %></title>
+    <title><%= [t(:title), @title].compact.join(" – ") %></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
@@ -11,7 +11,7 @@
   <body>
     <%= render partial: "layouts/flashes" %>
     <%= render partial: "layouts/nav" %>
-    <div class="container mx-2 mx-md-auto w-auto w-md-100 mt-5 g-0">
+    <div class="container mx-2 mx-md-auto w-auto w-md-100 mt-2 md-md-5 g-0">
       <div class="bg-white w-100 px-4 pb-5 pt-4 border border-thick">
         <% if @title %>
           <header>
