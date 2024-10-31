@@ -1,3 +1,53 @@
-.navbar.sticky-top {
-  top: 0.5rem;
+.navbar {
+  &.sticky-top {
+    top: 0.5rem;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-link {
+    text-transform: uppercase;
+    color: $white;
+    font-family: "Kanit";
+    font-weight: 600;
+
+    &:hover {
+      color: $primary;
+    }
+
+  }
+
+  .navbar-toggler {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+
+    i {
+      color: white;
+      font-size: 28px;
+    }
+
+    &:hover, &[aria-expanded="true"] {
+      i {
+        color: $primary;
+      }
+    }
+  }
+
+  .nav-link.btn-navbar {
+    border: 2px solid $white !important;
+    color: $white;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    &:hover, &:active, &:focus, &:focus-visible {
+      border: 2px solid $primary !important;
+      color: $primary !important;
+      background-color: $black !important;
+      outline: none !important;
+    }
+  }
 }
