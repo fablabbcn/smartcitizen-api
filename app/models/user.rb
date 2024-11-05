@@ -24,11 +24,10 @@ class User < ActiveRecord::Base
 
   has_secure_password validations: false
 
-  validates :password, presence: { on: :create }, length: { minimum: 5, allow_blank: true }
-  validates :username, :email, presence: true
-  validates :username, uniqueness: true, if: :username?
-  validates :username, length: { in: 3..30 }, allow_nil: true
-  validates :email, format: { with: /@/ }, uniqueness: true
+  validates_acceptance_of :ts_and_cs, on: :create
+  validates :password, presence: { on: :create }, length: { minimum: 5 }, confirmation: true, if: :password
+  validates :username, format: { with: /\A@?[^@]+\z/ , if: :username }, length: { in: 3..30 }, presence: true, uniqueness: true
+  validates :email, format: { with: /@/ }, uniqueness: true, presence: true
   validates :url, format: URI::regexp(%w(http https)), allow_nil: true, allow_blank: true, on: :create
 
   has_many :devices, foreign_key: 'owner_id', after_add: :update_cached_device_ids!, after_remove: :update_cached_device_ids!
