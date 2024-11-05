@@ -8,7 +8,6 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "curl http://app:3000"]
       timeout: 10s
-      start-period: 5s
     restart: always
     ports:
       - 80:80
