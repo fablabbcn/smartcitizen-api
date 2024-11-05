@@ -10,4 +10,5 @@ en:
     password_reset_invalid: "Your reset code might be too old or have been used before."
     destroy_session_success: "Logged out!"
     users_index_title: "User information"
+    new_user_title: "Sign up"
 
