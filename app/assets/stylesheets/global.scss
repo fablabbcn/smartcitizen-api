@@ -57,8 +57,33 @@ body > .container {
   }
 }
 
+.form-check .form-check-input {
+  border-radius: 0.33rem;
+  float: none;
+  margin-right: 0.5rem;
+  font-size: 2rem;
+  border: 2px solid $black;
+  vertical-align: middle;
+  display: inline-block;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  margin-left: -0.5rem;
+  color: $black;
+  &:focus {
+    outline: $primary solid 3px;
+    box-shadow: none;
+    border: 3px solid black;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+input:checked[type="checkbox"] {
+  --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%231C1C1C' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
+}
+
 .form-label {
-  margin-left: 1.5rem;
+  margin-left: 1rem;
 }
 
 .width-fit-content {
