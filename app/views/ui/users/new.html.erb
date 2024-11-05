@@ -1,0 +1,12 @@
+<%= bootstrap_form_for @user, url: ui_users_path do |f| %>
+  <%= f.text_field :email %>
+  <%= f.text_field :username %>
+  <%= f.password_field :password %>
+  <%= f.password_field :password_confirmation %>
+  <div class="mt-4">
+    <%= f.check_box :ts_and_cs, label: t(:new_user_ts_and_cs_label_html) %>
+  </div>
+  <div class="mt-4">
+    <%= f.primary t(:new_user_submit), class: "btn btn-primary w-100 w-md-auto" %>
+  </div>
+<% end %>
