@@ -66,7 +66,7 @@ module Ui
       @user = User.find_by(password_reset_token: @token)
       if @user
         authorize @user, :update_password?
-        @user.update({ password: params.require(:password), password_reset_token: nil })
+        @user.update(params.permit(:password, :password_confirmation).merge(password_reset_token: nil))
         flash[:success] = I18n.t(:password_reset_success, username: @user.username)
         redirect_to new_ui_session_path
       else
