@@ -64,7 +64,6 @@ body > .container {
   font-size: 2rem;
   border: 2px solid $black;
   vertical-align: middle;
-  display: inline-block;
   margin-top: 1px;
   margin-bottom: 1px;
   margin-left: -0.5rem;
@@ -84,6 +83,10 @@ input:checked[type="checkbox"] {
 
 .form-label {
   margin-left: 1rem;
+}
+
+.form-check-label {
+  display: inline;
 }
 
 .width-fit-content {
