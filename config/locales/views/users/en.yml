@@ -5,3 +5,4 @@ en:
   new_user_failure: "Some errors prevented us from creating your account. Please check below and try again!"
   new_user_login_heading: "Already have an account?"
   new_user_login_link: "Log in"
+  new_user_not_allowed_for_logged_in_users: "Sorry, logged in users can't create new accounts. Please log out and try again."
