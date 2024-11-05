@@ -11,16 +11,22 @@ module Ui
     end
 
     def create
-      @user = User.create(params.permit(
+      @user = User.new(params.require(:user).permit(
         :username,
         :email,
         :password,
         :password_confirmation,
         :ts_and_cs,
       ))
-      session[:user_id] = @user.id
-      flash[:success] = I18n.t(:new_user_success)
-      redirect_to ui_users_path
+      if @user.valid?
+        @user.save
+        session[:user_id] = @user.id
+        flash[:success] = I18n.t(:new_user_success)
+        redirect_to ui_users_path
+      else
+        flash[:alert] = I18n.t(:new_user_failure)
+        render :new, status: :unprocessable_entity
+      end
     end
   end
 end
