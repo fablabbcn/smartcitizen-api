@@ -55,7 +55,7 @@ describe "throttle" do
 
   context "a user with role 'citizen' is logged in" do
     let(:user) {
-      FactoryBot.create(:user, username: username, password: password)
+      FactoryBot.create(:user, username: username, password: password, password_confirmation: password)
     }
 
     context "number of requests is lower than the limit" do
@@ -71,7 +71,7 @@ describe "throttle" do
 
   context "a user with role 'researcher' is logged in" do
     let(:user) {
-      FactoryBot.create(:researcher, username: username, password: password)
+      FactoryBot.create(:researcher, username: username, password: password, password_confirmation: password)
     }
 
     context "number of requests is lower than the limit" do
@@ -87,7 +87,7 @@ describe "throttle" do
 
   context "a user with role 'admin' is logged in" do
     let(:user) {
-      FactoryBot.create(:admin, username: username, password: password)
+      FactoryBot.create(:admin, username: username, password: password, password_confirmation: password)
     }
 
     context "number of requests is lower than the limit" do

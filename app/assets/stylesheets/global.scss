@@ -75,10 +75,14 @@ body > .container {
     margin-top: 0;
     margin-bottom: 0;
   }
+  &.is-invalid {
+    border-color: var(--bs-form-invalid-color);
+  }
 }
 
 input:checked[type="checkbox"] {
   --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%231C1C1C' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
+    background-color: $white !important;
 }
 
 .form-label {
@@ -91,4 +95,8 @@ input:checked[type="checkbox"] {
 
 .width-fit-content {
   width: fit-content !important;
+}
+
+.invalid-feedback {
+  margin-left: 1rem;
 }
