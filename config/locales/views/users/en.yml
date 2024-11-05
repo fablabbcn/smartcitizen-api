@@ -1,0 +1,4 @@
+en:
+  new_user_submit: "Sign up"
+  new_user_ts_and_cs_label_html: "I have read and accept the <a target=\"_blank\" href=\"https://smartcitizen.me/policy\">Terms and Conditions</a>"
+  new_user_success: "Thanks for signing up! You are now logged in."

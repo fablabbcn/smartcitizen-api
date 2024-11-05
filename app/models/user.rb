@@ -40,6 +40,8 @@ class User < ActiveRecord::Base
   before_save :generate_forwarding_tokens
 
 
+  attr_accessor :ts_and_cs
+
   def self.forwarding_subscription_authorized?(token, username)
     User.find_by_forwarding_token(token)&.forwarding_username == username
   end
