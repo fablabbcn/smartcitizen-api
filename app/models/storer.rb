@@ -2,23 +2,24 @@ class Storer
   include DataParser::Storer
   include MessageForwarding
 
-  def store device, reading, do_update = true
-    begin
-      parsed_reading = Storer.parse_reading(device, reading)
-      kairos_publish(parsed_reading[:_data])
+  def store device, readings
+    readings_to_forward = []
+    readings.sort_by {|a| a['recorded_at']}.reverse.each_with_index do |reading, index|
+      begin
+        parsed_reading = Storer.parse_reading(device, reading)
+        kairos_publish(parsed_reading[:_data])
+        readings_to_forward << parsed_reading[:sql_data]
+        if index == 0
+          update_device(device, parsed_reading[:parsed_ts], parsed_reading[:sql_data])
+        end
 
-      if do_update
-        update_device(device, parsed_reading[:parsed_ts], parsed_reading[:sql_data])
+
+      rescue Exception => e
+        Sentry.capture_exception(e)
+        raise e if Rails.env.test?
       end
-
-      forward_reading(device, parsed_reading[:sql_data])
-
-    rescue Exception => e
-      Sentry.capture_exception(e)
-      raise e if Rails.env.test?
     end
-
-    raise e unless e.nil?
+    forward_readings(device, readings_to_forward)
   end
 
   def update_device(device, parsed_ts, sql_data)

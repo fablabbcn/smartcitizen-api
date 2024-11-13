@@ -5,7 +5,7 @@ class MQTTForwarder
     @suffix = suffix
   end
 
-  def forward_reading(token, device_id, reading)
+  def forward_readings(token, device_id, reading)
     topic = topic_path(token, device_id)
     client.publish(topic, reading)
   end
