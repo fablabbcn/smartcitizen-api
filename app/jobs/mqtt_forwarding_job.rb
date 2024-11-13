@@ -2,9 +2,10 @@ class MQTTForwardingJob < ApplicationJob
 
   queue_as :mqtt_forward
 
-  def perform(device_id, readings)
+  def perform(device_id, data)
+    readings = data[:readings]
+    device = Device.find(device_id)
     begin
-      device = Device.find(device_id)
       forwarder = MQTTForwarder.new(mqtt_client)
       payload = payload_for(device, readings)
       forwarder.forward_readings(device.forwarding_token, device.id, payload)
