@@ -18,11 +18,11 @@ module Presenters
     end
 
     def email
-      user.email if authorized?
+      authorize!(:email) { user.email }
     end
 
     def legacy_api_key
-      user.legacy_api_key if authorized?
+      authorize!(:legacy_api_key) { user.legacy_api_key }
     end
 
     def devices

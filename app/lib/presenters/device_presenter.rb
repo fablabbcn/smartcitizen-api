@@ -5,10 +5,8 @@ module Presenters
     def default_options
       {
         with_owner: true,
-        with_data: true,
         with_postprocessing: true,
         with_location: true,
-        slim_owner: false,
         never_authorized: false,
         readings: nil
       }
@@ -41,11 +39,13 @@ module Presenters
     end
 
     def data_policy
-      {
-        is_private: authorized? ? device.is_private : "[FILTERED]",
-        enable_forwarding: authorized? ? device.enable_forwarding : "[FILTERED]",
-        precise_location: authorized? ? device.precise_location : "[FILTERED]"
-      }
+      authorize!(:data_policy) do
+        {
+          is_private: device.is_private,
+          enable_forwarding: device.enable_forwarding,
+          precise_location: device.precise_location
+        }
+      end
     end
 
     def hardware
@@ -54,7 +54,7 @@ module Presenters
         type: device.hardware_type,
         version: device.hardware_version,
         slug: device.hardware_slug,
-        last_status_message: authorized? ? device.hardware_info : "[FILTERED]",
+        last_status_message: authorize!(:hardware, :last_status_message) { device.hardware_info },
       }
     end
 
@@ -69,11 +69,11 @@ module Presenters
     end
 
     def device_token
-      authorized? ? device.device_token : "[FILTERED]"
+      authorize!(:device_token) { device.device_token }
     end
 
     def mac_address
-      authorized? ? device.mac_address : "[FILTERED]"
+      authorize!(:mac_address) { device.mac_address }
     end
 
     def components

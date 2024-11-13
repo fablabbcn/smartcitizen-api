@@ -2,10 +2,8 @@ module Presenters
   # This is work in progress we're releasing early so
   # that it can be used in forwarding to send the current
   # values as they're received.
-  # TODO: add presenter tests, finish refactor following
-  # spec in your spreadsheet, remove unneeded options,
-  # use in appropriate views, add unauthorized_fields logic
-  # delete unneeded code in models and views.
+  # TODO: add presenter tests
+  # use in appropriate views, delete unneeded code in models and views.
   PRESENTERS = {
     Device => Presenters::DevicePresenter,
     User => Presenters::UserPresenter,
