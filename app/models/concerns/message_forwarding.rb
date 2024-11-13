@@ -4,7 +4,7 @@ module MessageForwarding
 
   def forward_readings(device, readings)
     if device.forward_readings?
-      MQTTForwardingJob.perform_later(device.id, readings)
+      MQTTForwardingJob.perform_later(device.id, readings: readings)
     end
   end
 

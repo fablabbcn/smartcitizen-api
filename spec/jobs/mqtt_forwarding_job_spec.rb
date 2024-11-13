@@ -37,7 +37,7 @@ RSpec.describe MQTTForwardingJob, type: :job do
   end
 
   it "creates an mqtt client with a clean session and no client id" do
-    MQTTForwardingJob.perform_now(device.id, readings)
+    MQTTForwardingJob.perform_now(device.id, readings: readings)
     expect(MQTTClientFactory).to have_received(:create_client).with({
       clean_session: true,
       client_id: nil
@@ -45,22 +45,22 @@ RSpec.describe MQTTForwardingJob, type: :job do
   end
 
   it "creates a forwarder with the mqtt client" do
-    MQTTForwardingJob.perform_now(device.id, readings)
+    MQTTForwardingJob.perform_now(device.id, readings: readings)
     expect(MQTTForwarder).to have_received(:new).with(mqtt_client)
   end
 
   it "renders the device json for the given device and reading, as the device owner" do
-    MQTTForwardingJob.perform_now(device.id, readings)
+    MQTTForwardingJob.perform_now(device.id, readings: readings)
     expect(Presenters).to have_received(:present).with(device, device.owner, renderer, readings: readings)
   end
 
   it "forwards using the device's id and forwarding token, with the rendered json payload" do
-    MQTTForwardingJob.perform_now(device.id, readings)
+    MQTTForwardingJob.perform_now(device.id, readings: readings)
     expect(forwarder).to have_received(:forward_readings).with(forwarding_token, device.id, device_json)
   end
 
   it "disconnects the MQTT client" do
-    MQTTForwardingJob.perform_now(device.id, readings)
+    MQTTForwardingJob.perform_now(device.id, readings: readings)
     expect(mqtt_client).to have_received(:disconnect)
   end
 
