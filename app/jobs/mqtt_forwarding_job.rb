@@ -17,17 +17,13 @@ class MQTTForwardingJob < ApplicationJob
   private
 
   def payload_for(device, readings)
-    Presenters.present(device, device.owner, renderer, readings: readings)
+    Presenters.present(device, device.owner, nil, readings: readings)
   end
 
   def mqtt_client
     @mqtt_client ||= MQTTClientFactory.create_client({
       clean_session: true, client_id: nil
     })
-  end
-
-  def renderer
-    @renderer ||= ActionController::Base.new.view_context
   end
 
   def disconnect_mqtt!

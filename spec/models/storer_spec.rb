@@ -82,9 +82,9 @@ RSpec.describe Storer, type: :model do
         double(:device_json)
       }
 
-      it "forwards the message with the forwarding token and the device's id" do
+      it "forwards the readings for the device, ensuring reading keys are passed as strings" do
         allow(device).to receive(:forward_readings?).and_return(true)
-        expect(MQTTForwardingJob).to receive(:perform_later).with(device.id, readings: [@sql_data])
+        expect(MQTTForwardingJob).to receive(:perform_later).with(device.id, readings: [@sql_data.stringify_keys])
         storer.store(device, [@data])
       end
     end
