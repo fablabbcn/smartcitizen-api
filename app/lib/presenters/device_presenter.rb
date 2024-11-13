@@ -60,7 +60,7 @@ module Presenters
 
     def owner
       if options[:with_owner] && device.owner
-        present(device.owner, with_devices: false)
+        return present(device.owner, with_devices: false)
       end
     end
 
@@ -77,7 +77,7 @@ module Presenters
     end
 
     def components
-      present(device.components)
+      present(device.components, readings: options[:readings])
     end
 
     private

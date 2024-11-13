@@ -8,7 +8,7 @@ module Presenters
     end
 
     def exposed_fields
-      %i{key sensor last_reading_at latest_value previous_value readings}
+      %i{sensor last_reading_at latest_value previous_value readings}
     end
 
     def sensor
