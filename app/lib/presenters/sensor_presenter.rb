@@ -4,7 +4,7 @@ module Presenters
     alias_method :sensor, :model
 
     def exposed_fields
-      %i{id parent_id name description unit created_at updated_at uuid default_key datasheet unit_definition measurement tags}
+      %i{id parent_id name description unit created_at updated_at uuid datasheet unit_definition measurement tags}
     end
 
     def measurement
