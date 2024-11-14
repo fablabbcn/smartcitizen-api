@@ -12,6 +12,7 @@ json.(
   :state,
   :system_tags,
   :user_tags,
+  :first_reading_at,
   :last_reading_at,
   :created_at,
   :updated_at

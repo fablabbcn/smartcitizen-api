@@ -91,6 +91,10 @@ describe Presenters::DevicePresenter do
     expect(presenter.as_json[:user_tags]).to eq(device.user_tags)
   end
 
+  it "exposes the first_reading_at date" do
+    expect(presenter.as_json[:first_reading_at]).to eq(device.first_reading_at)
+  end
+
   it "exposes the last_reading_at date" do
     expect(presenter.as_json[:last_reading_at]).to eq(device.last_reading_at)
   end

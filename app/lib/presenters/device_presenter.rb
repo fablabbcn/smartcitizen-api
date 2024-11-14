@@ -13,7 +13,7 @@ module Presenters
     end
 
     def exposed_fields
-      %i{id uuid name description state system_tags user_tags last_reading_at created_at updated_at notify device_token mac_address postprocessing location data_policy hardware owner components}
+      %i{id uuid name description state system_tags user_tags first_reading_at last_reading_at created_at updated_at notify device_token mac_address postprocessing location data_policy hardware owner components}
     end
 
     def notify
