@@ -58,7 +58,7 @@ class Kairos
           }
         }
       ]
-    }]
+    }.compact]
 
     data = { metrics: metrics, cache_time: 0 }
 
