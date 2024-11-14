@@ -10,9 +10,12 @@ class Storer
         kairos_publish(parsed_reading[:_data])
         readings_to_forward << parsed_reading[:sql_data]
         if index == 0
-          update_device(device, parsed_reading[:parsed_ts], parsed_reading[:sql_data])
+          update_device_last_data(device, parsed_reading[:parsed_ts], parsed_reading[:sql_data])
         end
 
+        if index == (readings.length - 1)
+          update_device_first_reading_at(device, parsed_reading[:parsed_ts])
+        end
 
       rescue Exception => e
         Sentry.capture_exception(e)
@@ -22,7 +25,17 @@ class Storer
     forward_readings(device, readings_to_forward)
   end
 
-  def update_device(device, parsed_ts, sql_data)
+  def update_device_first_reading_at(device, parsed_ts)
+    return if parsed_ts <= Time.at(0)
+    device.transaction do
+      device.lock!
+      if !device.first_reading_at || parsed_ts < device.first_reading_at
+        device.update_columns(first_reading_at: parsed_ts)
+      end
+    end
+  end
+
+  def update_device_last_data(device, parsed_ts, sql_data)
     return if parsed_ts <= Time.at(0)
     device.transaction do
       device.lock!

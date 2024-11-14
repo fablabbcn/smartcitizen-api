@@ -55,6 +55,35 @@ RSpec.describe Storer, type: :model do
       end.not_to raise_error
     end
 
+    context "when the device has no first_reading_at timestamp" do
+      it "sets the first_reading_at timestamp" do
+        ts = Time.parse(@data["recorded_at"])
+        storer.store(device, [@data])
+        expect(device.reload.first_reading_at).to eq(ts)
+      end
+    end
+
+    context "when the device's first_reading_at timestamp is after the reading timestamp" do
+      it "updates the device's first_reading_at timestamp" do
+        ts = Time.parse(@data["recorded_at"])
+        device.first_reading_at = ts + 1.day
+        device.save
+        storer.store(device, [@data])
+        expect(device.reload.first_reading_at).to eq(ts)
+      end
+    end
+
+    context "when the device's first_reading_at timestamp is before the reading timestamp" do
+      it "does not update the device's first_reading_at timestamp" do
+        ts = Time.parse(@data["recorded_at"])
+        previous_timestamp = device.first_reading_at = ts - 1.day
+        device.save
+        storer.store(device, [@data])
+        expect(device.reload.first_reading_at).to eq(previous_timestamp)
+      end
+    end
+
+
     it "updates the component last_reading_at timestamp for each of the provided sensors" do
        expect(device).to receive(:update_component_timestamps).with(
         Time.parse(@data['recorded_at']),
