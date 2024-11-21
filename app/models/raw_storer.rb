@@ -62,10 +62,6 @@ class RawStorer
         device.update_columns(last_reading_at: parsed_ts, data: sql_data, state: 'has_published')
       end
 
-      if !device.first_reading_at || parsed_ts < device.first_reading_at
-        device.update_columns(first_reading_at: parsed_ts)
-      end
-
       forward_readings(device, [sql_data])
     rescue Exception => e
 

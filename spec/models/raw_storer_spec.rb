@@ -62,34 +62,6 @@ RSpec.describe RawStorer, :type => :model do
     storer.store(json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1", true)
   end
 
-  context "when the device has no first_reading_at timestamp" do
-    it "sets the first_reading_at timestamp" do
-      ts = Time.parse(json[:timestamp])
-      storer.store(json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1", true)
-      expect(device.reload.first_reading_at).to eq(ts)
-    end
-  end
-
-  context "when the device's first_reading_at timestamp is after the reading timestamp" do
-    it "updates the device's first_reading_at timestamp" do
-      ts = Time.parse(json[:timestamp])
-      device.first_reading_at = ts + 1.day
-      device.save
-      storer.store(json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1", true)
-      expect(device.reload.first_reading_at).to eq(ts)
-    end
-  end
-
-  context "when the device's first_reading_at timestamp is before the reading timestamp" do
-    it "does not update the device's first_reading_at timestamp" do
-      ts = Time.parse(json[:timestamp])
-      previous_timestamp = device.first_reading_at = ts - 1.day
-      device.save
-      storer.store(json, device.mac_address, "1.1-0.9.0-A", "127.0.0.1", true)
-      expect(device.reload.first_reading_at).to eq(previous_timestamp)
-    end
-  end
-
   it "will not be created with invalid future timestamp" do
     ts = { timestamp: to_ts(2.days.from_now) }
     includes_proxy = double({ where: double({last: device.reload})})
