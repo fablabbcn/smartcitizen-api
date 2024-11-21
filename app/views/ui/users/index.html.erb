@@ -1,25 +1,9 @@
-<h1 class="my-3">User info</h1>
-
-<div class="card">
-  <div class="card-body">
-
-    <%= link_to "Smartcitizen Website", "https://www.smartcitizen.me/" %><br />
-    <%= link_to "Smartcitizen Forum", "https://forum.smartcitizen.me/" %><br />
-    <%= link_to "Smartcitizen API", "https://api.smartcitizen.me/" %><br />
-    <%= link_to "Smartcitizen Developer documentation", "https://developer.smartcitizen.me/" %><br />
-    <%= link_to "See JSON user data from example.smartcitizen.me", "http://example.smartcitizen.me" %>
-
-    <hr />
-
-    <% if current_user %>
-      <p>Logged in as <%= current_user.email %>. </p>
-      <p>Your access token:
-      <br /><code><%= current_user.access_token.token %></code></p>
-      <p><%= link_to "Log Out", logout_path, class: 'button bg-red' %></p>
-    <% else %>
-      <p class="color-red">Not logged in!</p>
-      <a class="button bg-blue" href="<%= new_ui_session_path %>">GO BACK</a>
-    <% end %>
-
-  </div>
-</div>
+<% if current_user %>
+  <p><%= t :users_index_logged_in_message, username: current_user.username %></p>
+  <p><%= t :users_index_access_token_label  %>
+  <br /><code><%= current_user.access_token.token %></code></p>
+  <p><%= link_to t(:users_index_log_out_submit), logout_path, class: "btn btn-secondary w-100 w-md-auto" %></p>
+<% else %>
+  <p><%= t :users_index_not_logged_in_message %></p>
+  <a class="btn btn-secondary w-100 w-md-auto" href="<%= new_ui_session_path %>"><%= t :users_index_log_in_link %></a>
+<% end %>

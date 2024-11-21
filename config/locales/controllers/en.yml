@@ -1,0 +1,13 @@
+en:
+    login_before_sso_notice: "Please log in before using SSO"
+    new_session_title: "Welcome!"
+    new_session_success:  "You have been successfully logged in!"
+    new_session_failure: "Email or password is invalid."
+    password_reset_notice: "Please check your email to reset the password."
+    password_reset_landing_title: "Change password"
+    password_reset_failure: "Your password doesn't match the confirmation."
+    password_reset_success: "Changed password for: %{username}."
+    password_reset_invalid: "Your reset code might be too old or have been used before."
+    destroy_session_success: "Logged out!"
+    users_index_title: "User information"
+
