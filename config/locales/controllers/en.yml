@@ -11,4 +11,5 @@ en:
     destroy_session_success: "Logged out!"
     users_index_title: "User information"
     new_user_title: "Sign up"
-
+    delete_user_title: "Delete your account"
+    post_delete_user_title: "We are sorry to see you go!"

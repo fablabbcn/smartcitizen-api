@@ -15,6 +15,22 @@ module Ui
       @user = User.new
     end
 
+    def delete
+      @title = I18n.t(:delete_user_title)
+      @user = User.find(params[:id])
+    end
+
+    def destroy
+      @user = User.find(params[:id])
+      @user.archive!
+      session[:user_id] = nil
+      redirect_to post_delete_ui_users_path
+    end
+
+    def post_delete
+      @title = I18n.t(:post_delete_user_title)
+    end
+
     def create
       if current_user
         flash[:alert] = I18n.t(:new_user_not_allowed_for_logged_in_users)
