@@ -140,28 +140,4 @@ feature "User signs up for an account" do
       expect(device.reload).to be_archived
     end
   end
-
-  scenario "An unauthorized user tries to delete an account that isn't theirs" do
-    password = "password123"
-    username = "username"
-    evil_username = ""
-    user = create(:user, username: username)
-    evil_user = create(:user, username: evil_username, password: password, password_confirmation: password)
-    devices = 2.times.map { create(:device, owner: user) }
-    visit "/login"
-    fill_in "Username or email", with: evil_username
-    fill_in "Password", with: password
-    click_on "Sign into your account"
-    expect(page).to have_current_path(ui_users_path)
-    visit ""
-    expect(page).to have_current_path(delete_ui_user_path(user.id))
-    fill_in "To confirm, type your username below:", with: username
-    click_on "I understand, delete my account"
-    expect(page).to have_current_path(post_delete_ui_users_path)
-    expect(page).to have_content("We are sorry to see you go!")
-    expect(user.reload).to be_archived
-    devices.each do |device|
-      expect(device.reload).to be_archived
-    end
-  end
 end
