@@ -80,6 +80,7 @@ group :test do
   gem 'vcr'
   gem 'webmock'
   gem 'zonebie'
+  gem 'rails-controller-testing'
 end
 
 group :development do
