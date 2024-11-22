@@ -4,6 +4,84 @@ describe Ui::UsersController do
 
   let(:user) { create(:user) }
 
+  describe "index" do
+    it "renders the template" do
+        get :index
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:index)
+    end
+  end
+
+  describe "new" do
+    context "when no user is logged in" do
+      it "renders the new user form" do
+        get :new
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:new)
+      end
+    end
+
+    context "when a user is logged in" do
+      it "displays an error message and redirects to the ui users path" do
+        get :new, session: { user_id: user.id }
+        expect(response).to redirect_to(ui_users_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+  end
+
+  describe "create" do
+    let(:user_params) {
+      {
+        username: "test_user",
+        email: "test@example.com",
+        password: "password123",
+        password_confirmation: "password123",
+        ts_and_cs: "1"
+      }
+    }
+    context "when a user is logged in" do
+      it "displays an error message and redirects to the ui users path, without creating a user" do
+        expect_any_instance_of(User).not_to receive(:save)
+        post :create, params: { user: user_params }, session: { user_id: user.id }
+        expect(response).to redirect_to(ui_users_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when no user is logged in" do
+      context "when the parameters provided are valid" do
+        it "creates a user, logs them in, and redirects to the ui user path" do
+          expect_any_instance_of(User).to receive(:save)
+          post :create, params: { user: user_params }, session: { user_id: nil }
+          expect(response).to redirect_to(ui_users_path)
+          expect(flash[:success]).to be_present
+        end
+      end
+
+      context "when the parameters provided are not valid" do
+        let(:user_params) {
+          {
+            username: "test_user",
+            email: "test_example.com",
+            password: "password123",
+            password_confirmation: "anotherpassword",
+            ts_and_cs: nil
+          }
+        }
+
+        it "does not create a user, and renders the new user page" do
+          expect_any_instance_of(User).not_to receive(:save)
+          post :create, params: { user: user_params }, session: { user_id: nil }
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to render_template(:new)
+          expect(flash[:alert]).to be_present
+        end
+      end
+    end
+  end
+
+
   describe "delete" do
     context "when the correct user is logged in" do
       it "displays the delete user form" do
