@@ -43,6 +43,11 @@ body > .container {
     border: 3px solid $black !important;
     outline: none !important;
     box-shadow: none !important;
+    &.btn-danger {
+      background-color: $white !important;
+      color: $red !important;
+      border-color: $red !important;
+    }
   }
 }
 
@@ -99,4 +104,8 @@ input:checked[type="checkbox"] {
 
 .invalid-feedback {
   margin-left: 1rem;
+}
+
+.danger {
+  color: $red;
 }

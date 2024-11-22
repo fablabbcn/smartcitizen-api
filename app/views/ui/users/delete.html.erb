@@ -1,0 +1,8 @@
+<%= bootstrap_form_tag url: ui_user_path(@user.id), method: :delete do |f| %>
+  <%= f.hidden_field :token, value: @token %>
+  <p><%= t(:delete_user_warning_html, username: current_user.username) %></p>
+  <%= f.text_field :username, label: t(:delete_user_username_label)  %>
+  <div class="mt-4">
+    <%= f.primary t(:delete_user_submit), class: "btn btn-danger w-100 w-md-auto" %>
+  </div>
+<% end %>

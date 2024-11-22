@@ -118,4 +118,30 @@ feature "User signs up for an account" do
     expect(page).to have_css("#user_ts_and_cs.is-invalid")
     expect(User.count).to eq(user_count_before)
   end
+
+  scenario "User deletes their account" do
+    password = "password123"
+    username = "username"
+    user = create(:user, username: username, password: password, password_confirmation: password)
+    devices = 2.times.map { create(:device, owner: user) }
+    visit "/login"
+    fill_in "Username or email", with: user.email
+    fill_in "Password", with: password
+    click_on "Sign into your account"
+    expect(page).to have_current_path(ui_users_path)
+    click_on "Permanently delete your account"
+    expect(page).to have_current_path(delete_ui_user_path(user.id))
+    fill_in "To confirm, type your username below:", with: username
+    click_on "I understand, delete my account"
+    expect(page).to have_current_path(post_delete_ui_users_path)
+    expect(page).to have_content("We are sorry to see you go!")
+    expect(user.reload).to be_archived
+    devices.each do |device|
+      expect(device.reload).to be_archived
+    end
+  end
+
+  scenario "An unauthorized user tries to delete an account that isn't theirs"
+  scenario "A user tries to delete their own account but fails to confirm their username"
+
 end
