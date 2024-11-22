@@ -386,6 +386,10 @@ GEM
       bundler (>= 1.15.0)
       railties (= 6.1.7.3)
       sprockets-rails (>= 2.0.0)
+    rails-controller-testing (1.0.5)
+      actionpack (>= 5.0.1.rc1)
+      actionview (>= 5.0.1.rc1)
+      activesupport (>= 5.0.1.rc1)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -640,6 +644,7 @@ DEPENDENCIES
   rack-timeout
   railroady
   rails (= 6.1.7.3)
+  rails-controller-testing
   rails-erd
   ransack
   rdoc
@@ -677,4 +682,4 @@ RUBY VERSION
    ruby 3.0.6p216
 
 BUNDLED WITH
-   2.5.22
+   2.5.23

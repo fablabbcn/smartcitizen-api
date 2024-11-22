@@ -16,12 +16,27 @@ module Ui
     end
 
     def delete
-      @title = I18n.t(:delete_user_title)
       @user = User.find(params[:id])
+      unless authorize? @user, :destroy?
+        flash[:alert] = I18n.t(:delete_user_forbidden)
+        redirect_to current_user ? ui_users_path : login_path
+        return
+      end
+      @title = I18n.t(:delete_user_title)
     end
 
     def destroy
       @user = User.find(params[:id])
+      unless authorize? @user
+        flash[:alert] = I18n.t(:delete_user_forbidden)
+        redirect_to current_user ? ui_users_path : login_path
+        return
+      end
+      if @user.username != params[:username]
+        flash[:alert] = I18n.t(:delete_user_wrong_username)
+        redirect_to delete_ui_user_path(@user.id)
+        return
+      end
       @user.archive!
       session[:user_id] = nil
       redirect_to post_delete_ui_users_path
