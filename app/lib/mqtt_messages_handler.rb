@@ -37,9 +37,7 @@ class MqttMessagesHandler
     parsed = JSON.parse(message) if message
     data = parsed["data"] if parsed
     return nil if data.nil? or data&.empty?
-    data.each do |reading|
-      storer.store(device, reading)
-    end
+    storer.store(device, data)
     return true
   rescue Exception => e
     Sentry.capture_exception(e)
