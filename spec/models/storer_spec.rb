@@ -20,6 +20,13 @@ RSpec.describe Storer, type: :model do
         'sensors'=> [{ 'id'=> sensor.id, 'value'=>21 }]
       }
 
+      # TODO get rid of this fucked-up intermediate representation
+      @sql_data = {
+        "" => Time.parse(@data["recorded_at"]),
+        "#{sensor.id}_raw" => 21,
+        sensor.id => component.calibrated_value(21)
+      }
+
       sensor_key = device.find_sensor_key_by_id(sensor.id)
       normalized_value = component.normalized_value((Float(@data['sensors'][0]['value'])))
       calibrated_value = component.calibrated_value(normalized_value)
@@ -44,7 +51,7 @@ RSpec.describe Storer, type: :model do
       # model/storer.rb is not using Kairos, but Redis -> Telnet
       # expect(Kairos).to receive(:http_post_to).with("/datapoints", @karios_data)
       expect do
-        storer.store(device, @data)
+        storer.store(device, [@data])
       end.not_to raise_error
     end
 
@@ -53,13 +60,13 @@ RSpec.describe Storer, type: :model do
         Time.parse(@data['recorded_at']),
         [sensor.id]
       )
-      storer.store(device, @data)
+      storer.store(device, [@data])
     end
 
     skip 'updates device without touching updated_at' do
       updated_at = device.updated_at
 
-      storer.store(device, @data)
+      storer.store(device, [@data])
 
       expect(device.reload.updated_at).to eq(updated_at)
 
@@ -75,10 +82,10 @@ RSpec.describe Storer, type: :model do
         double(:device_json)
       }
 
-      it "forwards the message with the forwarding token and the device's id" do
+      it "forwards the readings for the device, ensuring reading keys are passed as strings" do
         allow(device).to receive(:forward_readings?).and_return(true)
-        expect(MQTTForwardingJob).to receive(:perform_later).with(device.id, @data)
-        storer.store(device, @data)
+        expect(MQTTForwardingJob).to receive(:perform_later).with(device.id, readings: [@sql_data.stringify_keys])
+        storer.store(device, [@data])
       end
     end
 
@@ -86,7 +93,7 @@ RSpec.describe Storer, type: :model do
       it "does not forward the message" do
         allow(device).to receive(:forward_readings?).and_return(false)
         expect(MQTTForwardingJob).not_to receive(:perform_later)
-        storer.store(device, @data)
+        storer.store(device, [@data])
       end
     end
   end
@@ -103,11 +110,11 @@ RSpec.describe Storer, type: :model do
 
     it 'does raise error' do
       expect(Kairos).not_to receive(:http_post_to).with("/datapoints", anything)
-      expect{ storer.store(device, @bad_data) }.to raise_error(ArgumentError)
+      expect{ storer.store(device, [@bad_data]) }.to raise_error(ArgumentError)
     end
 
     it 'does not update device' do
-      expect{ storer.store(device, @bad_data) }.to raise_error(ArgumentError)
+      expect{ storer.store(device, [@bad_data]) }.to raise_error(ArgumentError)
 
       expect(device.reload.last_reading_at).to eq(nil)
       expect(device.reload.data).to eq(nil)

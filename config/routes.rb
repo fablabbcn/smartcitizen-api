@@ -21,6 +21,10 @@ Rails.application.routes.draw do
     get 'password_reset/:token', to: 'sessions#password_reset_landing', as: 'password_reset'
   end
 
+  api_version(module: "V1", path: { value: "v1" }, header: {name: "Accept", value: "application/vnd.smartcitizen; version=1"}, defaults: { format: :json }) do
+    resources :devices
+  end
+
   api_version(module: "V0", path: {value: "v0"}, header: {name: "Accept", value: "application/vnd.smartcitizen; version=0"}, default: true, defaults: { format: :json }) do
     # devices
     resources :devices do
