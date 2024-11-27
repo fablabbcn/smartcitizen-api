@@ -1,4 +1,6 @@
 en:
+  show_user_headline: "User: %{username}"
+  show_user_profile_pic_alt: "Profile picture for user %{username}"
   new_user_submit: "Sign up"
   new_user_ts_and_cs_label_html: "I accept the <a target=\"_blank\" href=\"https://smartcitizen.me/policy\">terms and conditions</a>"
   new_user_success: "Thanks for signing up! You are now logged in."
@@ -11,6 +13,7 @@ en:
   delete_user_submit: "I understand, delete my account"
   users_index_logged_in_message: "Logged in as %{username}."
   users_index_access_token_label: "Your access token:"
+  users_index_profile_link: "Your profile"
   users_index_log_out_submit: "Log out"
   users_index_delete_account_submit: "Permanently delete your account"
   users_index_not_logged_in_message: "Not logged in!"

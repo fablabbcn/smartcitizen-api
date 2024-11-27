@@ -1,0 +1,30 @@
+<div class="user-profile-header bg-black text-white mx-2 mb-2 rounded-4">
+  <div class="container mx-2 mx-md-auto w-auto w-md-100 my-3 md-md-5 g-0">
+    <header class="row">
+      <div class="col-12 col-md-2 px-3 px-md-0">
+        <div class="circular-image-crop">
+          <%= image_tag @user.profile_picture, alt: t(:show_user_profile_pic_alt, username: @user.username), class: "w-100" %>
+        </div>
+      </div>
+      <div class="col-12 col-md-10 mt-4 mt-md-0 mx-1 mx-md-0">
+        <h1 class="mb-2"><%= t(:show_user_headline, username: @user.username) %></h1>
+        <p class="mb-0 small">
+          <%= image_tag("user_details_icon_light.svg", class: "pe-1") %>
+          <%= @user.role.capitalize %>
+        </p>
+        <% if @user.city || @user.country %>
+          <p class="mb-0 small">
+          <%= image_tag("location_icon_light.svg", class: "pe-1") %>
+          <%= [@user.city, @user.country].join(", ") %>
+          </p>
+        <% end %>
+        <% if @user.url %>
+          <p class="mb-0 small">
+          <%= image_tag("url_icon_light.svg", class: "pe-1") %>
+          <%= link_to(@user.url, @user.url, class: "link-white") %>
+          </p>
+        <% end %>
+      </div>
+    </header>
+  </div>
+</div>
