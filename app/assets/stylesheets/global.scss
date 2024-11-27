@@ -109,3 +109,26 @@ input:checked[type="checkbox"] {
 .danger {
   color: $red;
 }
+
+.circular-image-crop {
+  width: 100%;
+  aspect-ratio: 1;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  img {
+    display: inline;
+    margin: 0 auto;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+}
+
+.link-white {
+  color: $white !important;
+  &:hover, &:active, &:focus, &:focus-visible {
+    color: $yellow !important;
+  }
+}
+

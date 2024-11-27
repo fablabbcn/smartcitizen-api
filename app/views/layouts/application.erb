@@ -1,0 +1,15 @@
+<% content_for :container do %>
+  <div class="container mx-2 mx-md-auto w-auto w-md-100 mt-2 md-md-5 g-0">
+    <div class="bg-white w-100 px-4 pb-5 pt-4 border border-thick">
+      <% if @title %>
+        <header>
+          <h1 class="mb-4"><%= @title %></h1>
+        </header>
+      <% end %>
+      <main>
+        <%= yield %>
+      </main>
+    </div>
+  </div>
+<% end  %>
+<%= render layout: "base" %>
