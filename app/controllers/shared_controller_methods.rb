@@ -6,6 +6,14 @@ module SharedControllerMethods
     klass.helper_method :current_user
   end
 
+  def authorize?(*args)
+    begin
+      return authorize *args
+    rescue Pundit::NotAuthorizedError
+      return false
+    end
+  end
+
   def current_user(fail_unauthorized=true)
     if @current_user.nil?
       if session[:user_id]
