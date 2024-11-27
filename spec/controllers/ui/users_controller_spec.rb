@@ -12,6 +12,14 @@ describe Ui::UsersController do
     end
   end
 
+  describe "show" do
+    it "renders the template" do
+        get :show
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:show)
+    end
+  end
+
   describe "new" do
     context "when no user is logged in" do
       it "renders the new user form" do

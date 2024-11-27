@@ -6,6 +6,11 @@ module Ui
       @title = I18n.t(:users_index_title)
     end
 
+    def show
+      @user = User.find(params[:id])
+      render "show", layout: "base"
+    end
+
     def new
       if current_user
         flash[:alert] = I18n.t(:new_user_not_allowed_for_logged_in_users)
@@ -37,37 +42,38 @@ module Ui
       else
         flash[:alert] = I18n.t(:new_user_failure)
         render :new, status: :unprocessable_entity
+        ned
       end
-    end
-    def delete
-      @user = User.find(params[:id])
-      unless authorize? @user, :destroy?
-        flash[:alert] = I18n.t(:delete_user_forbidden)
-        redirect_to current_user ? ui_users_path : login_path
-        return
+      def delete
+        @user = User.find(params[:id])
+        unless authorize? @user, :destroy?
+          flash[:alert] = I18n.t(:delete_user_forbidden)
+          redirect_to current_user ? ui_users_path : login_path
+          return
+        end
+        @title = I18n.t(:delete_user_title)
       end
-      @title = I18n.t(:delete_user_title)
-    end
 
-    def destroy
-      @user = User.find(params[:id])
-      unless authorize? @user
-        flash[:alert] = I18n.t(:delete_user_forbidden)
-        redirect_to current_user ? ui_users_path : login_path
-        return
+      def destroy
+        @user = User.find(params[:id])
+        unless authorize? @user
+          flash[:alert] = I18n.t(:delete_user_forbidden)
+          redirect_to current_user ? ui_users_path : login_path
+          return
+        end
+        if @user.username != params[:username]
+          flash[:alert] = I18n.t(:delete_user_wrong_username)
+          redirect_to delete_ui_user_path(@user.id)
+          return
+        end
+        @user.archive!
+        session[:user_id] = nil
+        redirect_to post_delete_ui_users_path
       end
-      if @user.username != params[:username]
-        flash[:alert] = I18n.t(:delete_user_wrong_username)
-        redirect_to delete_ui_user_path(@user.id)
-        return
-      end
-      @user.archive!
-      session[:user_id] = nil
-      redirect_to post_delete_ui_users_path
-    end
 
-    def post_delete
-      @title = I18n.t(:post_delete_user_title)
+      def post_delete
+        @title = I18n.t(:post_delete_user_title)
+      end
     end
   end
 end

@@ -140,4 +140,39 @@ feature "User signs up for an account" do
       expect(device.reload).to be_archived
     end
   end
+
+  scenario "User views their own profile" do
+    password = "password123"
+    username = "username"
+    user = create(:user, username: username, password: password, password_confirmation: password)
+    visit "/login"
+    fill_in "Username or email", with: user.email
+    fill_in "Password", with: password
+    click_on "Sign into your account"
+    expect(page).to have_current_path(ui_users_path)
+    click_on "Your profile"
+    expect(page).to have_current_path(ui_user_path(user.id))
+    expect(page).to have_content(user.username)
+  end
+
+  scenario "User edits their own profile" do
+    password = "password123"
+    username = "username"
+    user = create(:user, username: username, password: password, password_confirmation: password)
+    visit "/login"
+    fill_in "Username or email", with: user.email
+    fill_in "Password", with: password
+    click_on "Sign into your account"
+    expect(page).to have_current_path(ui_users_path)
+    click_on "Your profile"
+    expect(page).to have_current_path(ui_user_path(user.id))
+    click_on "Edit your profile"
+    fill_in "Username", with: "my_new_name"
+    fill_in "Website", with: "https://example.com"
+    click_on "Update"
+    expect(page).to have_current_path(ui_user_path(user.id))
+    expect(page).to have_content("my_new_name")
+    expect(page).to have_content("https://example.com")
+    expect(page).to have_content("Your profile has been updated!")
+  end
 end
