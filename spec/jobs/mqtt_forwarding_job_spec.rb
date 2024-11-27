@@ -18,6 +18,12 @@ RSpec.describe MQTTForwardingJob, type: :job do
     double(:device_json)
   }
 
+  let(:device_representation) {
+    double(:device_representation).tap do |device_representation|
+      allow(device_representation).to receive(:to_json).and_return(device_json)
+    end
+  }
+
   let(:forwarder) {
     double(:forwarder).tap do |forwarder|
       allow(forwarder).to receive(:forward_readings)
@@ -26,7 +32,7 @@ RSpec.describe MQTTForwardingJob, type: :job do
 
   before do
     allow(MQTTClientFactory).to receive(:create_client).and_return(mqtt_client)
-    allow(Presenters).to receive(:present).and_return(device_json)
+    allow(Presenters).to receive(:present).and_return(device_representation)
     allow(MQTTForwarder).to receive(:new).and_return(forwarder)
     allow_any_instance_of(Device).to receive(:forwarding_token).and_return(forwarding_token)
   end
