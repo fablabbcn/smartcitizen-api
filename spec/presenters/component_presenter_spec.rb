@@ -65,7 +65,6 @@ describe Presenters::ComponentPresenter do
   context "when readings are supplied" do
     let(:reading_timestamp) { Time.now - 6.hours }
     let(:reading_value) { 1234.1 }
-    let(:reading_raw_value) { 2468.1 }
     let(:options) {
       {
         readings: [
@@ -73,16 +72,15 @@ describe Presenters::ComponentPresenter do
           {
             "" => reading_timestamp,
             "#{component.sensor_id}" => reading_value,
-            "#{component.sensor_id}_raw" => reading_raw_value,
             "#{component.sensor_id + 1}" => 54321.0
           }
         ]
       }
     }
 
-    it "returns the readings formatted with timestamp, value and raw_value" do
+    it "returns the readings formatted with timestamp and value" do
       expect(presenter.as_json[:readings]).to eq([
-        { timestamp: reading_timestamp, value: reading_value, raw_value: reading_raw_value }
+        { timestamp: reading_timestamp, value: reading_value }
       ])
     end
   end

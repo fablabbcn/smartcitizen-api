@@ -17,7 +17,7 @@ class MQTTForwardingJob < ApplicationJob
   private
 
   def payload_for(device, readings)
-    Presenters.present(device, device.owner, nil, readings: readings)
+    Presenters.present(device, device.owner, nil, readings: readings).to_json
   end
 
   def mqtt_client

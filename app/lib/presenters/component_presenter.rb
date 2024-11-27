@@ -37,10 +37,7 @@ module Presenters
     def format_reading(reading)
       timestamp = reading[""]
       value = reading[component.sensor_id.to_s]
-      raw_value = reading["#{component.sensor_id}_raw"]
-      if value || raw_value
-        { timestamp: timestamp, value: value, raw_value: raw_value }.compact
-      end
+      { timestamp: timestamp, value: value } if value
     end
   end
 end
