@@ -37,10 +37,18 @@ body > .container {
     background-color: $white;
     border: 3px solid $black;
   }
+  &.btn-dark {
+    background-color: $black;
+    color: $white;
+    border: 3px solid $white;
+  }
   &:hover, &:active, &:focus, &:focus-visible {
     background-color: $primary !important;
     color: $black !important;
     border: 3px solid $black !important;
+    &.btn-dark {
+      border: 3px solid $primary !important;
+    }
     outline: none !important;
     box-shadow: none !important;
     &.btn-danger {
@@ -88,6 +96,22 @@ body > .container {
 input:checked[type="checkbox"] {
   --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%231C1C1C' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
     background-color: $white !important;
+}
+
+input[type="file"] {
+  padding: 0;
+  &::file-selector-button {
+    padding: 1rem 1rem 1rem 2rem;
+    background-color: $black;
+    color: $white;
+    border-right: 2px solid $black;
+  }
+  &:hover {
+    &::file-selector-button {
+      background-color: $primary !important;
+      color: $black;
+    }
+  }
 }
 
 .form-label {

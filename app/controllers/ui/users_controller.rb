@@ -7,7 +7,8 @@ module Ui
     end
 
     def show
-      @user = User.find(params[:id])
+      @user = User.friendly.find(params[:id])
+      @title = I18n.t(:users_show_title, username: @user.username)
       render "show", layout: "base"
     end
 
@@ -42,38 +43,65 @@ module Ui
       else
         flash[:alert] = I18n.t(:new_user_failure)
         render :new, status: :unprocessable_entity
-        ned
       end
-      def delete
-        @user = User.find(params[:id])
-        unless authorize? @user, :destroy?
-          flash[:alert] = I18n.t(:delete_user_forbidden)
-          redirect_to current_user ? ui_users_path : login_path
-          return
-        end
-        @title = I18n.t(:delete_user_title)
-      end
+    end
 
-      def destroy
-        @user = User.find(params[:id])
-        unless authorize? @user
-          flash[:alert] = I18n.t(:delete_user_forbidden)
-          redirect_to current_user ? ui_users_path : login_path
-          return
-        end
-        if @user.username != params[:username]
-          flash[:alert] = I18n.t(:delete_user_wrong_username)
-          redirect_to delete_ui_user_path(@user.id)
-          return
-        end
-        @user.archive!
-        session[:user_id] = nil
-        redirect_to post_delete_ui_users_path
-      end
+    def edit
+      @user = User.friendly.find(params[:id])
+      @title = I18n.t(:edit_user_title)
+    end
 
-      def post_delete
-        @title = I18n.t(:post_delete_user_title)
+    def update
+      @user = User.friendly.find(params[:id])
+      @user.update(params.require(:user).permit(
+        :profile_picture,
+        :username,
+        :email,
+        :password,
+        :password_confirmation,
+        :city,
+        :country_code,
+        :url
+      ))
+      if @user.valid?
+        @user.save
+        flash[:success] = I18n.t(:update_user_success)
+        redirect_to ui_user_path(@user.username)
+      else
+        flash[:alert] = I18n.t(:update_user_failure)
+        redirect_to edit_ui_user_path(@user.username)
       end
+    end
+
+    def delete
+      @user = User.friendly.find(params[:id])
+      unless authorize? @user, :destroy?
+        flash[:alert] = I18n.t(:delete_user_forbidden)
+        redirect_to current_user ? ui_users_path : login_path
+        return
+      end
+      @title = I18n.t(:delete_user_title)
+    end
+
+    def destroy
+      @user = User.friendly.find(params[:id])
+      unless authorize? @user
+        flash[:alert] = I18n.t(:delete_user_forbidden)
+        redirect_to current_user ? ui_users_path : login_path
+        return
+      end
+      if @user.username != params[:username]
+        flash[:alert] = I18n.t(:delete_user_wrong_username)
+        redirect_to delete_ui_user_path(@user.username)
+        return
+      end
+      @user.archive!
+      session[:user_id] = nil
+      redirect_to post_delete_ui_users_path
+    end
+
+    def post_delete
+      @title = I18n.t(:post_delete_user_title)
     end
   end
 end

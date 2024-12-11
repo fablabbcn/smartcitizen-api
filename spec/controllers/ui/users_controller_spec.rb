@@ -6,17 +6,17 @@ describe Ui::UsersController do
 
   describe "index" do
     it "renders the template" do
-        get :index
-        expect(response).to have_http_status(:success)
-        expect(response).to render_template(:index)
+      get :index
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template(:index)
     end
   end
 
   describe "show" do
     it "renders the template" do
-        get :show
-        expect(response).to have_http_status(:success)
-        expect(response).to render_template(:show)
+      get :show, params: { id: user.id }
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template(:show)
     end
   end
 
@@ -36,7 +36,7 @@ describe Ui::UsersController do
         expect(flash[:alert]).to be_present
       end
     end
-  end
+    end
 
   describe "create" do
     let(:user_params) {
@@ -86,8 +86,8 @@ describe Ui::UsersController do
           expect(flash[:alert]).to be_present
         end
       end
+      end
     end
-  end
 
 
   describe "delete" do
@@ -115,7 +115,7 @@ describe Ui::UsersController do
         expect(flash[:alert]).to be_present
       end
     end
-  end
+    end
 
   describe "destroy" do
     context "when the correct user is logged in" do
@@ -136,46 +136,46 @@ describe Ui::UsersController do
           delete :destroy,
             params: { id: user.id, username: "a wrong username" },
             session: { user_id: user.id }
-          expect(response).to redirect_to(delete_ui_user_path(user.id))
+          expect(response).to redirect_to(delete_ui_user_path(user.username))
           expect(flash[:alert]).to be_present
           expect(session[:user_id]).to eq(user.id)
         end
       end
-    end
+      end
 
     context "when a different user is logged in" do
 
       let(:other_user) { create(:user) }
 
       it "does not archive the user and redirects to the ui users page" do
-          expect_any_instance_of(User).not_to receive(:archive!)
-          delete :destroy,
-            params: { id: user.id, username: user.username },
-            session: { user_id: other_user.id }
-          expect(response).to redirect_to(ui_users_path)
-          expect(flash[:alert]).to be_present
-          expect(session[:user_id]).to eq(other_user.id)
+        expect_any_instance_of(User).not_to receive(:archive!)
+        delete :destroy,
+          params: { id: user.id, username: user.username },
+          session: { user_id: other_user.id }
+        expect(response).to redirect_to(ui_users_path)
+        expect(flash[:alert]).to be_present
+        expect(session[:user_id]).to eq(other_user.id)
       end
     end
 
     context "when no user is logged in" do
       it "does not archive the user and redirets to the login page" do
-          expect_any_instance_of(User).not_to receive(:archive!)
-          delete :destroy,
-            params: { id: user.id, username: user.username },
-            session: { user_id: nil }
-          expect(response).to redirect_to(login_path)
-          expect(flash[:alert]).to be_present
-          expect(session[:user_id]).to be_nil
+        expect_any_instance_of(User).not_to receive(:archive!)
+        delete :destroy,
+          params: { id: user.id, username: user.username },
+          session: { user_id: nil }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+        expect(session[:user_id]).to be_nil
       end
     end
-  end
+    end
 
   describe "post_delete" do
     it "renders the template" do
-        get :post_delete
-        expect(response).to have_http_status(:success)
-        expect(response).to render_template(:post_delete)
+      get :post_delete
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template(:post_delete)
     end
   end
 end

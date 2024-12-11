@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resources :users, as: "users" do
       member do
         get :delete
+        get :edit
       end
       collection do
         get :post_delete

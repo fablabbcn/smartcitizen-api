@@ -129,8 +129,10 @@ feature "User signs up for an account" do
     fill_in "Password", with: password
     click_on "Sign into your account"
     expect(page).to have_current_path(ui_users_path)
+    click_on "Your profile"
+    click_on "Edit your profile"
     click_on "Permanently delete your account"
-    expect(page).to have_current_path(delete_ui_user_path(user.id))
+    expect(page).to have_current_path(delete_ui_user_path(user.username))
     fill_in "To confirm, type your username below:", with: username
     click_on "I understand, delete my account"
     expect(page).to have_current_path(post_delete_ui_users_path)
@@ -151,7 +153,7 @@ feature "User signs up for an account" do
     click_on "Sign into your account"
     expect(page).to have_current_path(ui_users_path)
     click_on "Your profile"
-    expect(page).to have_current_path(ui_user_path(user.id))
+    expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content(user.username)
   end
 
@@ -165,12 +167,12 @@ feature "User signs up for an account" do
     click_on "Sign into your account"
     expect(page).to have_current_path(ui_users_path)
     click_on "Your profile"
-    expect(page).to have_current_path(ui_user_path(user.id))
+    expect(page).to have_current_path(ui_user_path(user.username))
     click_on "Edit your profile"
     fill_in "Username", with: "my_new_name"
     fill_in "Website", with: "https://example.com"
     click_on "Update"
-    expect(page).to have_current_path(ui_user_path(user.id))
+    expect(page).to have_current_path(ui_user_path(user.reload.username))
     expect(page).to have_content("my_new_name")
     expect(page).to have_content("https://example.com")
     expect(page).to have_content("Your profile has been updated!")
