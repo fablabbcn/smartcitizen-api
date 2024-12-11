@@ -1,29 +1,42 @@
 <div class="user-profile-header bg-black text-white mx-2 mb-2 rounded-4">
-  <div class="container mx-2 mx-md-auto w-auto w-md-100 my-3 md-md-5 g-0">
+  <div class="container mx-2 mx-sm-auto w-auto w-sm-100 my-3 px-sm-3 g-0">
     <header class="row">
-      <div class="col-12 col-md-2 px-3 px-md-0">
+      <div class="col-12 col-sm-6 col-md-3 col-lg-2 px-3 px-sm-0">
         <div class="circular-image-crop">
-          <%= image_tag @user.profile_picture, alt: t(:show_user_profile_pic_alt, username: @user.username), class: "w-100" %>
+          <%= image_tag(
+            @user.profile_picture.present? ? @user.profile_picture : "default_avatar.svg",
+            alt: t(:show_user_profile_pic_alt, username: @user.username),
+            class: "w-100"
+          ) %>
         </div>
       </div>
-      <div class="col-12 col-md-10 mt-4 mt-md-0 mx-1 mx-md-0">
-        <h1 class="mb-2"><%= t(:show_user_headline, username: @user.username) %></h1>
-        <p class="mb-0 small">
+      <div class="col-12 col-sm-6 col-md-9 col-lg-10 mt-4 mt-sm-0 mx-2 mx-sm-0 mb-2 mb-sm-0 px-2 px-sm-0 ps-sm-3 ps-md-4 justify-content-between d-flex g-0 flex-column">
+        <div class="meta">
+          <h1 class="mb-2"><%= t(:show_user_headline, username: @user.username) %></h1>
+          <p class="mb-0 small">
           <%= image_tag("user_details_icon_light.svg", class: "pe-1") %>
           <%= @user.role.capitalize %>
-        </p>
-        <% if @user.city || @user.country %>
-          <p class="mb-0 small">
-          <%= image_tag("location_icon_light.svg", class: "pe-1") %>
-          <%= [@user.city, @user.country].join(", ") %>
           </p>
-        <% end %>
-        <% if @user.url %>
-          <p class="mb-0 small">
-          <%= image_tag("url_icon_light.svg", class: "pe-1") %>
-          <%= link_to(@user.url, @user.url, class: "link-white") %>
-          </p>
-        <% end %>
+          <% if @user.city || @user.country %>
+            <p class="mb-0 small">
+            <%= image_tag("location_icon_light.svg", class: "pe-1") %>
+            <%= [@user.city, @user.country].join(", ") %>
+            </p>
+          <% end %>
+          <% if @user.url %>
+            <p class="mb-0 small">
+            <%= image_tag("url_icon_light.svg", class: "pe-1") %>
+            <%= link_to(@user.url, @user.url, class: "link-white") %>
+            </p>
+          <% end %>
+        </div>
+        <div class="actions">
+          <% if authorize? @user, :update? %>
+            <p class="mb-0">
+            <%= link_to(t(:show_user_edit_cta), edit_ui_user_path(@user), class: "btn btn-dark mt-3 mt-sm-0") %>
+            </p>
+          <% end %>
+        </div>
       </div>
     </header>
   </div>

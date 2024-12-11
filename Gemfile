@@ -26,6 +26,7 @@ gem "bootsnap", '~> 1.9.4'
 gem 'browser'
 gem 'c_geohash', require: false
 gem 'countries'
+gem "country_select"
 gem 'dalli'
 gem 'date_validator'
 gem 'diffy', require: false
