@@ -14,7 +14,7 @@ describe Ui::UsersController do
 
   describe "show" do
     it "renders the template" do
-      get :show, params: { id: user.id }
+      get :show, params: { id: user.username }
       expect(response).to have_http_status(:success)
       expect(response).to render_template(:show)
     end
@@ -36,7 +36,7 @@ describe Ui::UsersController do
         expect(flash[:alert]).to be_present
       end
     end
-    end
+  end
 
   describe "create" do
     let(:user_params) {
@@ -86,14 +86,97 @@ describe Ui::UsersController do
           expect(flash[:alert]).to be_present
         end
       end
+    end
+  end
+
+
+  describe "edit" do
+    context "when the correct user is logged in" do
+      it "displays the edit user form" do
+        get :edit, params: { id: user.username }, session: { user_id: user.id }
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:edit)
       end
     end
 
+    context "when an different user is logged in" do
+      let(:other_user) { create(:user) }
+      it "redirects to the ui users page" do
+        get :edit, params: { id: user.username }, session: { user_id: other_user.id }
+        expect(response).to redirect_to(ui_user_path(user.username))
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when no user is logged in" do
+      it "redirects to the login page" do
+        get :edit, params: { id: user.username }, session: { user_id: nil }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+  end
+
+  describe "update" do
+    context "when the correct user is logged in" do
+      context "when the provided data is valid" do
+        it "updates the user and redirects back to the profile" do
+          put :update,
+            params: {
+              id: user.username,
+              user: { city: "Tarragona" }
+            },
+            session: { user_id: user.id }
+          expect(response).to redirect_to(ui_user_path(user.username))
+          expect(flash[:success]).to be_present
+        end
+      end
+
+      context "when the provided data is invalid" do
+        it "does not update the user, and redirects back to the form" do
+          old_email = user.email
+          put :update,
+            params: {
+              id: user.username,
+              user: { email: "not_an_email"}
+            },
+            session: { user_id: user.id }
+          expect(user.reload.email).to eq(old_email)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to render_template(:new)
+          expect(flash[:alert]).to be_present
+        end
+      end
+    end
+
+    context "when a different user is logged in" do
+      let(:other_user) { create(:user) }
+      it "does not update the user and redirects to the user profile page" do
+        expect_any_instance_of(User).not_to receive(:update)
+        put :update,
+          params: { id: user.username, user: { city: "Tarragona", country_code: "ES" } },
+          session: { user_id: other_user.id }
+        expect(response).to redirect_to(ui_user_path(user.username))
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "whn no user is logged in" do
+      it "does not update the user and redirects to the user profile page" do
+        expect_any_instance_of(User).not_to receive(:update)
+        put :update,
+          params: { id: user.username, user: { city: "Tarragona", country_code: "ES" } },
+          session: { user_id: nil }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+  end
 
   describe "delete" do
     context "when the correct user is logged in" do
       it "displays the delete user form" do
-        get :delete, params: { id: user.id }, session: { user_id: user.id }
+        get :delete, params: { id: user.username }, session: { user_id: user.id }
         expect(response).to have_http_status(:success)
         expect(response).to render_template(:delete)
       end
@@ -102,7 +185,7 @@ describe Ui::UsersController do
     context "when a different user is logged in" do
       let(:other_user) { create(:user) }
       it "redirects to the ui users page" do
-        get :delete, params: { id: user.id }, session: { user_id: other_user.id }
+        get :delete, params: { id: user.username }, session: { user_id: other_user.id }
         expect(response).to redirect_to(ui_users_path)
         expect(flash[:alert]).to be_present
       end
@@ -110,12 +193,12 @@ describe Ui::UsersController do
 
     context "when no user is logged in" do
       it "redirects to the login page" do
-        get :delete, params: { id: user.id }, session: { user_id: nil }
+        get :delete, params: { id: user.username }, session: { user_id: nil }
         expect(response).to redirect_to(login_path)
         expect(flash[:alert]).to be_present
       end
     end
-    end
+  end
 
   describe "destroy" do
     context "when the correct user is logged in" do
@@ -123,7 +206,7 @@ describe Ui::UsersController do
         it "archives the user, logs out and redirects to the post delete page" do
           expect_any_instance_of(User).to receive(:archive!)
           delete :destroy,
-            params: { id: user.id, username: user.username },
+            params: { id: user.username, username: user.username },
             session: { user_id: user.id }
           expect(response).to redirect_to(post_delete_ui_users_path)
           expect(session[:user_id]).to be_nil
@@ -134,14 +217,14 @@ describe Ui::UsersController do
         it "does not archive the user and redirects to the delete page" do
           expect_any_instance_of(User).not_to receive(:archive!)
           delete :destroy,
-            params: { id: user.id, username: "a wrong username" },
+            params: { id: user.username, username: "a wrong username" },
             session: { user_id: user.id }
           expect(response).to redirect_to(delete_ui_user_path(user.username))
           expect(flash[:alert]).to be_present
           expect(session[:user_id]).to eq(user.id)
         end
       end
-      end
+    end
 
     context "when a different user is logged in" do
 
@@ -150,7 +233,7 @@ describe Ui::UsersController do
       it "does not archive the user and redirects to the ui users page" do
         expect_any_instance_of(User).not_to receive(:archive!)
         delete :destroy,
-          params: { id: user.id, username: user.username },
+          params: { id: user.username, username: user.username },
           session: { user_id: other_user.id }
         expect(response).to redirect_to(ui_users_path)
         expect(flash[:alert]).to be_present
@@ -162,14 +245,14 @@ describe Ui::UsersController do
       it "does not archive the user and redirets to the login page" do
         expect_any_instance_of(User).not_to receive(:archive!)
         delete :destroy,
-          params: { id: user.id, username: user.username },
+          params: { id: user.username, username: user.username },
           session: { user_id: nil }
         expect(response).to redirect_to(login_path)
         expect(flash[:alert]).to be_present
         expect(session[:user_id]).to be_nil
       end
     end
-    end
+  end
 
   describe "post_delete" do
     it "renders the template" do
