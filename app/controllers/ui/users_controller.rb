@@ -48,12 +48,22 @@ module Ui
 
     def edit
       @user = User.friendly.find(params[:id])
+      unless authorize? @user, :update?
+        flash[:alert] = I18n.t(:edit_user_forbidden)
+        redirect_to current_user ? ui_user_path(@user.username) : login_path
+        return
+      end
       @title = I18n.t(:edit_user_title)
     end
 
     def update
       @user = User.friendly.find(params[:id])
-      @user.update(params.require(:user).permit(
+      unless authorize? @user, :update?
+        flash[:alert] = I18n.t(:edit_user_forbidden)
+        redirect_to current_user ? ui_user_path(@user.username) : login_path
+        return
+      end
+      if @user.update(params.require(:user).permit(
         :profile_picture,
         :username,
         :email,
@@ -63,13 +73,11 @@ module Ui
         :country_code,
         :url
       ))
-      if @user.valid?
-        @user.save
         flash[:success] = I18n.t(:update_user_success)
         redirect_to ui_user_path(@user.username)
       else
         flash[:alert] = I18n.t(:update_user_failure)
-        redirect_to edit_ui_user_path(@user.username)
+        render :new, status: :unprocessable_entity
       end
     end
 
@@ -85,7 +93,7 @@ module Ui
 
     def destroy
       @user = User.friendly.find(params[:id])
-      unless authorize? @user
+      unless authorize? @user, :destroy?
         flash[:alert] = I18n.t(:delete_user_forbidden)
         redirect_to current_user ? ui_users_path : login_path
         return
