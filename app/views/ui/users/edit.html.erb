@@ -1,0 +1,23 @@
+<%= bootstrap_form_for @user, url: ui_user_path(@user.username) do |f| %>
+  <div>
+    <h2 class="mb-3"><%= t(:edit_user_account_details_subhead) %></h2>
+    <%= f.text_field :email %>
+    <%= f.text_field :username %>
+    <%= f.password_field :password %>
+    <%= f.password_field :password_confirmation %>
+  </div>
+  <div class="mt-5">
+    <h2 class="mb-3"><%= t(:edit_user_public_profile_subhead) %></h2>
+    <%= f.file_field :profile_picture %>
+    <%= f.text_field :city %>
+    <%= f.form_group :country_code, label: { text: t(:edit_user_country_code_label) } do %>
+      <%= f.country_select :country_code, { include_blank: t(:edit_user_country_code_cta) } , { class: 'form-control' } %>
+    <% end %>
+    <%= f.text_field :url, label: t(:edit_user_url_label) %>
+  </div>
+  <div class="mt-5">
+    <%= f.primary t(:edit_user_submit), class: "btn btn-primary w-100 w-md-auto" %>
+  </div>
+  <h2 class="mt-5 mb-3"><%= t(:edit_user_other_actions_subhead) %></h2>
+  <div><%= link_to t(:edit_user_delete_account_submit), delete_ui_user_path(@user.username), class: "btn btn-danger w-100 w-md-auto" %></div>
+<% end %>

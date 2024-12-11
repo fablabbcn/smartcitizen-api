@@ -4,6 +4,7 @@ module SharedControllerMethods
 
   def self.included(klass)
     klass.helper_method :current_user
+    klass.helper_method :authorize?
   end
 
   def authorize?(*args)

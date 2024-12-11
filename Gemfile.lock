@@ -142,6 +142,8 @@ GEM
     connection_pool (2.4.1)
     countries (5.4.0)
       unaccent (~> 0.3)
+    country_select (9.0.0)
+      countries (> 5.0, < 7.0)
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -603,6 +605,7 @@ DEPENDENCIES
   cane
   capybara
   countries
+  country_select
   dalli
   date_validator
   diffy
