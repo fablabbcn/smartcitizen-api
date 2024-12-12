@@ -50,4 +50,12 @@
       outline: none !important;
     }
   }
+
+  .navbar-profile-image {
+    height: 2.4rem;
+    border: 3px solid $white;
+    &:hover {
+      border: 3px solid $yellow;
+    }
+  }
 }
