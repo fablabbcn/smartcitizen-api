@@ -14,6 +14,12 @@ body{
   flex-direction: column;
 }
 
+
+::selection {
+  background-color: $yellow;
+  color: $black;
+}
+
 body > .container {
   flex-grow: 1;
 }
@@ -42,6 +48,16 @@ body > .container {
     color: $white;
     border: 3px solid $white;
   }
+  &.btn-right {
+    border-radius: 0 $btn-border-radius $btn-border-radius 0;
+    border: 2px solid $black;
+    border-left: none;
+    padding-left: 1rem;
+    &:hover, &:active, &:focus, &:focus-visible {
+      border-left: none !important;
+      border-width: 2px !important;
+    }
+  }
   &:hover, &:active, &:focus, &:focus-visible {
     background-color: $primary !important;
     color: $black !important;
@@ -61,6 +77,9 @@ body > .container {
 
 .form-control {
   border-radius: 2rem;
+  .input-group-lg & {
+    border-radius: 2rem;
+  }
   padding: 0.75rem 1.5rem;
   border-width: 2px;
   &:focus {
@@ -155,4 +174,3 @@ input[type="file"] {
     color: $yellow !important;
   }
 }
-

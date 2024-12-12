@@ -23,4 +23,8 @@ class UserPolicy < ApplicationPolicy
   def update_password?
     create?
   end
+
+  def show_secrets?
+    user == record
+  end
 end

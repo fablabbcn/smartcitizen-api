@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       member do
         get :delete
         get :edit
+        get :secrets
       end
       collection do
         get :post_delete
