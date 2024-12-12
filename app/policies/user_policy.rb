@@ -27,4 +27,8 @@ class UserPolicy < ApplicationPolicy
   def show_private_info?
     update?
   end
+
+  def show_secrets?
+    user == record
+  end
 end

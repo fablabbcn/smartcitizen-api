@@ -177,4 +177,20 @@ feature "User signs up for an account" do
     expect(page).to have_content("https://example.com")
     expect(page).to have_content("Your profile has been updated!")
   end
+
+  scenario "User views their secrets" do
+    password = "password123"
+    username = "username"
+    user = create(:user, username: username, password: password, password_confirmation: password)
+    visit "/login"
+    fill_in "Username or email", with: user.email
+    fill_in "Password", with: password
+    click_on "Sign into your account"
+    expect(page).to have_current_path(ui_users_path)
+    click_on "Your profile"
+    expect(page).to have_current_path(ui_user_path(user.username))
+    click_on "Show your API keys"
+    expect(page).to have_current_path(secrets_ui_user_path(user.username))
+    expect(page).to have_content(user.access_token.token)
+  end
 end
