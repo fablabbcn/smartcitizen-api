@@ -9,6 +9,5 @@ function setupCopyableInputs() {
       input.select();
       navigator.clipboard.writeText(input.val());
     });
-    console.log(input, button);
   });
 }
