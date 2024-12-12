@@ -5,10 +5,19 @@ describe Ui::UsersController do
   let(:user) { create(:user) }
 
   describe "index" do
-    it "renders the template" do
-      get :index
-      expect(response).to have_http_status(:success)
-      expect(response).to render_template(:index)
+
+    context "when a user is logged in" do
+      it "redirects to the logged in user's profile page" do
+        get :index, session: { user_id: user.id }
+        expect(response).to redirect_to(ui_user_path(user.username))
+      end
+    end
+
+    context "when no user is logged in" do
+      it "redirects to the login page" do
+        get :index, session: { user_id: nil }
+        expect(response).to redirect_to(login_path)
+      end
     end
   end
 
@@ -30,7 +39,7 @@ describe Ui::UsersController do
     end
 
     context "when a user is logged in" do
-      it "displays an error message and redirects to the ui users path" do
+      it "displays an error message and redirects to the user's profile page" do
         get :new, session: { user_id: user.id }
         expect(response).to redirect_to(ui_user_path(user.username))
         expect(flash[:alert]).to be_present
@@ -49,7 +58,7 @@ describe Ui::UsersController do
       }
     }
     context "when a user is logged in" do
-      it "displays an error message and redirects to the ui users path, without creating a user" do
+      it "displays an error message and redirects to the user's profile page, without creating a user" do
         expect_any_instance_of(User).not_to receive(:save)
         post :create, params: { user: user_params }, session: { user_id: user.id }
         expect(response).to redirect_to(ui_user_path(user.username))
