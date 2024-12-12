@@ -2,6 +2,16 @@ en:
   show_user_headline: "User: %{username}"
   show_user_profile_pic_alt: "Profile picture for user %{username}"
   show_user_edit_cta: "Edit your profile"
+  show_user_secrets_cta: "Show your API keys"
+  show_user_log_out_cta: "Sign out"
+  secrets_user_blurb_html: This key gives you access to your data in the SmartCitizen platform using the <a href="https://developer.smartcitizen.me/" target="_blank">REST API</a>. <strong>Please keep it safe and do not share with anyone, just as you would with a password</strong>.
+
+
+  secrets_user_api_key_label: API key
+  secrets_user_forwarding_heading: Your MQTT Forwarding Keys
+  secrets_user_forwarding_blurb_html: Your account has MQTT forwarding enabled, so you can connect directly to our MQTT broker to receive new readings from your devices as they are posted. You will need the following username and token to authenticate. <strong>As above, please treat these credentials as if they were your password, and do not share them with anyone.</strong>.
+  secrets_user_forwarding_token_label: MQTT forwarding token
+  secrets_user_forwarding_username_label: MQTT forwarding username
   new_user_submit: "Sign up"
   new_user_ts_and_cs_label_html: "I accept the <a target=\"_blank\" href=\"https://smartcitizen.me/policy\">terms and conditions</a>"
   new_user_login_heading: "Already have an account?"

@@ -32,7 +32,7 @@ describe Ui::UsersController do
     context "when a user is logged in" do
       it "displays an error message and redirects to the ui users path" do
         get :new, session: { user_id: user.id }
-        expect(response).to redirect_to(ui_users_path)
+        expect(response).to redirect_to(ui_user_path(user.username))
         expect(flash[:alert]).to be_present
       end
     end
@@ -52,7 +52,7 @@ describe Ui::UsersController do
       it "displays an error message and redirects to the ui users path, without creating a user" do
         expect_any_instance_of(User).not_to receive(:save)
         post :create, params: { user: user_params }, session: { user_id: user.id }
-        expect(response).to redirect_to(ui_users_path)
+        expect(response).to redirect_to(ui_user_path(user.username))
         expect(flash[:alert]).to be_present
       end
     end
@@ -62,7 +62,7 @@ describe Ui::UsersController do
         it "creates a user, logs them in, and redirects to the ui user path" do
           expect_any_instance_of(User).to receive(:save)
           post :create, params: { user: user_params }, session: { user_id: nil }
-          expect(response).to redirect_to(ui_users_path)
+          expect(response).to redirect_to(ui_user_path(user_params[:username]))
           expect(flash[:success]).to be_present
         end
       end
@@ -89,6 +89,33 @@ describe Ui::UsersController do
     end
   end
 
+
+  describe "secrets" do
+    context "when the correct user is logged in" do
+      it "displays the edit user form" do
+        get :secrets, params: { id: user.username }, session: { user_id: user.id }
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:secrets)
+      end
+    end
+
+    context "when an different user is logged in" do
+      let(:other_user) { create(:user) }
+      it "redirects to the ui users page" do
+        get :secrets, params: { id: user.username }, session: { user_id: other_user.id }
+        expect(response).to redirect_to(ui_user_path(user.username))
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when no user is logged in" do
+      it "redirects to the login page" do
+        get :secrets, params: { id: user.username }, session: { user_id: nil }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+  end
 
   describe "edit" do
     context "when the correct user is logged in" do
@@ -186,7 +213,7 @@ describe Ui::UsersController do
       let(:other_user) { create(:user) }
       it "redirects to the ui users page" do
         get :delete, params: { id: user.username }, session: { user_id: other_user.id }
-        expect(response).to redirect_to(ui_users_path)
+        expect(response).to redirect_to(ui_user_path(user.username))
         expect(flash[:alert]).to be_present
       end
     end
@@ -235,7 +262,7 @@ describe Ui::UsersController do
         delete :destroy,
           params: { id: user.username, username: user.username },
           session: { user_id: other_user.id }
-        expect(response).to redirect_to(ui_users_path)
+        expect(response).to redirect_to(ui_user_path(user.username))
         expect(flash[:alert]).to be_present
         expect(session[:user_id]).to eq(other_user.id)
       end

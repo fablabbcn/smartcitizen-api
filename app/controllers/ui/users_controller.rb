@@ -8,14 +8,24 @@ module Ui
 
     def show
       @user = User.friendly.find(params[:id])
-      @title = I18n.t(:users_show_title, username: @user.username)
+      @title = I18n.t(:show_user_title, username: @user.username)
       render "show", layout: "base"
+    end
+
+    def secrets
+      @user = User.friendly.find(params[:id])
+      unless authorize? @user, :show_secrets?
+        flash[:alert] = I18n.t(:edit_user_forbidden)
+        redirect_to current_user ? ui_user_path(@user.username) : login_path
+        return
+      end
+      @title = I18n.t(:secrets_user_title, username: @user.username)
     end
 
     def new
       if current_user
         flash[:alert] = I18n.t(:new_user_not_allowed_for_logged_in_users)
-        redirect_to ui_users_path
+        redirect_to ui_user_path(current_user.username)
         return
       end
       @title = I18n.t(:new_user_title)
@@ -25,7 +35,7 @@ module Ui
     def create
       if current_user
         flash[:alert] = I18n.t(:new_user_not_allowed_for_logged_in_users)
-        redirect_to ui_users_path
+        redirect_to ui_user_path(current_user.username)
         return
       end
       @user = User.new(params.require(:user).permit(
@@ -39,7 +49,7 @@ module Ui
         @user.save
         session[:user_id] = @user.id
         flash[:success] = I18n.t(:new_user_success)
-        redirect_to ui_users_path
+        redirect_to ui_user_path(@user.username)
       else
         flash[:alert] = I18n.t(:new_user_failure)
         render :new, status: :unprocessable_entity
@@ -85,7 +95,7 @@ module Ui
       @user = User.friendly.find(params[:id])
       unless authorize? @user, :destroy?
         flash[:alert] = I18n.t(:delete_user_forbidden)
-        redirect_to current_user ? ui_users_path : login_path
+        redirect_to current_user ? ui_user_path(@user) : login_path
         return
       end
       @title = I18n.t(:delete_user_title)
@@ -95,7 +105,7 @@ module Ui
       @user = User.friendly.find(params[:id])
       unless authorize? @user, :destroy?
         flash[:alert] = I18n.t(:delete_user_forbidden)
-        redirect_to current_user ? ui_users_path : login_path
+        redirect_to current_user ? ui_user_path(@user) : login_path
         return
       end
       if @user.username != params[:username]
