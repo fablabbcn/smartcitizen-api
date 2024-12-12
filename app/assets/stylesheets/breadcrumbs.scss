@@ -1,0 +1,17 @@
+.breadcrumbs {
+  color: $white;
+  a {
+    color: $white;
+    &:hover {
+      color: $yellow;
+      text-decoration: none;
+    }
+  }
+
+  .active a {
+    text-decoration: none;
+    &:hover {
+      color: $white;
+    }
+  }
+}

@@ -9,6 +9,7 @@ module Ui
     def show
       find_user!
       @title = I18n.t(:show_user_title, username: @user.username)
+      add_breadcrumb(@title, ui_user_path(@user.username))
       render "show", layout: "base"
     end
 
@@ -16,6 +17,10 @@ module Ui
       find_user!
       return unless authorize_user!
       @title = I18n.t(:secrets_user_title, username: @user.username)
+      add_breadcrumbs(
+        [I18n.t(:show_user_title, username: @user.username), ui_user_path(@user.username)],
+        [@title, secrets_ui_user_path(@user.username)]
+      )
     end
 
     def new
@@ -56,6 +61,10 @@ module Ui
       find_user!
       return unless authorize_user!
       @title = I18n.t(:edit_user_title)
+      add_breadcrumbs(
+        [I18n.t(:show_user_title, username: @user.username), ui_user_path(@user.username)],
+        [@title, edit_ui_user_path(@user.username)]
+      )
     end
 
     def update
@@ -83,6 +92,11 @@ module Ui
       find_user!
       return unless authorize_user!
       @title = I18n.t(:delete_user_title)
+      add_breadcrumbs(
+        [I18n.t(:show_user_title, username: @user.username), ui_user_path(@user.username)],
+        [I18n.t(:edit_user_title, username: @user.username), edit_ui_user_path(@user.username)],
+        [@title, delete_ui_user_path(@user.username)]
+      )
     end
 
     def destroy
