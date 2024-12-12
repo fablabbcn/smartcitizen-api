@@ -10,7 +10,7 @@ feature "User logs in" do
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     click_on "Sign into your account"
-    expect(page).to have_current_path(ui_users_path)
+    expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content("You have been successfully logged in!")
   end
 
@@ -19,7 +19,7 @@ feature "User logs in" do
     fill_in "Username or email", with: user.username
     fill_in "Password", with: password
     click_on "Sign into your account"
-    expect(page).to have_current_path(ui_users_path)
+    expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content("You have been successfully logged in!")
   end
 
@@ -46,7 +46,7 @@ feature "User logs in" do
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     click_on "Sign into your account"
-    click_on "Log out"
+    click_on "Sign out"
     expect(page).to have_current_path(new_ui_session_path)
     expect(page).to have_content("Logged out!")
   end
@@ -64,7 +64,7 @@ feature "User logs in" do
     fill_in "Username or email", with: user.username
     fill_in "Password", with: "newpassword456"
     click_on "Sign into your account"
-    expect(page).to have_current_path(ui_users_path)
+    expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content("You have been successfully logged in!")
   end
 

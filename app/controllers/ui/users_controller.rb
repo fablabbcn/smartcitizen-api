@@ -3,22 +3,18 @@ module Ui
     include SharedControllerMethods
 
     def index
-      @title = I18n.t(:users_index_title)
+      redirect_to current_user ? ui_user_path(current_user.username) : login_path
     end
 
     def show
-      @user = User.friendly.find(params[:id])
+      find_user!
       @title = I18n.t(:show_user_title, username: @user.username)
       render "show", layout: "base"
     end
 
     def secrets
-      @user = User.friendly.find(params[:id])
-      unless authorize? @user, :show_secrets?
-        flash[:alert] = I18n.t(:edit_user_forbidden)
-        redirect_to current_user ? ui_user_path(@user.username) : login_path
-        return
-      end
+      find_user!
+      return unless authorize_user!
       @title = I18n.t(:secrets_user_title, username: @user.username)
     end
 
@@ -57,22 +53,14 @@ module Ui
     end
 
     def edit
-      @user = User.friendly.find(params[:id])
-      unless authorize? @user, :update?
-        flash[:alert] = I18n.t(:edit_user_forbidden)
-        redirect_to current_user ? ui_user_path(@user.username) : login_path
-        return
-      end
+      find_user!
+      return unless authorize_user!
       @title = I18n.t(:edit_user_title)
     end
 
     def update
-      @user = User.friendly.find(params[:id])
-      unless authorize? @user, :update?
-        flash[:alert] = I18n.t(:edit_user_forbidden)
-        redirect_to current_user ? ui_user_path(@user.username) : login_path
-        return
-      end
+      find_user!
+      return unless authorize_user!
       if @user.update(params.require(:user).permit(
         :profile_picture,
         :username,
@@ -92,22 +80,14 @@ module Ui
     end
 
     def delete
-      @user = User.friendly.find(params[:id])
-      unless authorize? @user, :destroy?
-        flash[:alert] = I18n.t(:delete_user_forbidden)
-        redirect_to current_user ? ui_user_path(@user) : login_path
-        return
-      end
+      find_user!
+      return unless authorize_user!
       @title = I18n.t(:delete_user_title)
     end
 
     def destroy
-      @user = User.friendly.find(params[:id])
-      unless authorize? @user, :destroy?
-        flash[:alert] = I18n.t(:delete_user_forbidden)
-        redirect_to current_user ? ui_user_path(@user) : login_path
-        return
-      end
+      find_user!
+      return unless authorize_user!
       if @user.username != params[:username]
         flash[:alert] = I18n.t(:delete_user_wrong_username)
         redirect_to delete_ui_user_path(@user.username)
@@ -120,6 +100,19 @@ module Ui
 
     def post_delete
       @title = I18n.t(:post_delete_user_title)
+    end
+
+    private
+
+    def find_user!
+      @user = User.friendly.find(params[:id])
+    end
+
+    def authorize_user!
+      return true if authorize? @user, :destroy?
+      flash[:alert] = I18n.t(:delete_user_forbidden)
+      redirect_to current_user ? ui_user_path(@user) : login_path
+      return false
     end
   end
 end

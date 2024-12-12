@@ -128,8 +128,6 @@ feature "User signs up for an account" do
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     click_on "Sign into your account"
-    expect(page).to have_current_path(ui_users_path)
-    click_on "Your profile"
     click_on "Edit your profile"
     click_on "Permanently delete your account"
     expect(page).to have_current_path(delete_ui_user_path(user.username))
@@ -151,8 +149,6 @@ feature "User signs up for an account" do
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     click_on "Sign into your account"
-    expect(page).to have_current_path(ui_users_path)
-    click_on "Your profile"
     expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content(user.username)
   end
@@ -165,8 +161,6 @@ feature "User signs up for an account" do
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     click_on "Sign into your account"
-    expect(page).to have_current_path(ui_users_path)
-    click_on "Your profile"
     expect(page).to have_current_path(ui_user_path(user.username))
     click_on "Edit your profile"
     fill_in "Username", with: "my_new_name"
@@ -186,8 +180,6 @@ feature "User signs up for an account" do
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     click_on "Sign into your account"
-    expect(page).to have_current_path(ui_users_path)
-    click_on "Your profile"
     expect(page).to have_current_path(ui_user_path(user.username))
     click_on "Show your API keys"
     expect(page).to have_current_path(secrets_ui_user_path(user.username))
