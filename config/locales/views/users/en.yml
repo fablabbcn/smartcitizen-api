@@ -9,7 +9,7 @@ en:
 
   secrets_user_api_key_label: API key
   secrets_user_forwarding_heading: Your MQTT Forwarding Keys
-  secrets_user_forwarding_blurb_html: Your account has MQTT forwarding enabled, so you can connect directly to our MQTT broker to receive new readings from your devices as they are posted. You will need the following username and token to authenticate. <strong>As above, please treat these credentials as if they were your password, and do not share them with anyone.</strong>.
+  secrets_user_forwarding_blurb_html: Your account has MQTT forwarding enabled, so you can connect directly to our MQTT broker to receive new readings from your devices as they are posted. You will need the following username and token to authenticate. <strong>As above, please treat these credentials as if they were your password, and do not share them with anyone</strong>.
   secrets_user_forwarding_token_label: MQTT forwarding token
   secrets_user_forwarding_username_label: MQTT forwarding username
   new_user_submit: "Sign up"
