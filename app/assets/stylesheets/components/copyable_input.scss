@@ -1,0 +1,15 @@
+.copyable-input {
+  input {
+    color: $black;
+    font-family: $font-family-monospace;
+    &:active, &:focus, &:focus-visible {
+      outline-offset: -5px;
+      border-width: 2px;
+    }
+  }
+  svg {
+    vertical-align: top;
+    height: 1rem;
+    margin-top: 3px;
+  }
+}

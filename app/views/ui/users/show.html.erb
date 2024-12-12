@@ -10,7 +10,7 @@
           ) %>
         </div>
       </div>
-      <div class="col-12 col-sm-6 col-md-9 col-lg-10 mt-4 mt-sm-0 mx-2 mx-sm-0 mb-2 mb-sm-0 px-2 px-sm-0 ps-sm-3 ps-md-4 justify-content-between d-flex g-0 flex-column">
+      <div class="col-12 col-sm-6 col-md-9 col-lg-10 mt-4 mt-sm-0 mb-2 mb-sm-0 px-3 justify-content-between d-flex g-0 flex-column">
         <div class="meta">
           <h1 class="mb-2"><%= t(:show_user_headline, username: @user.username) %></h1>
           <p class="mb-0 small">
@@ -30,12 +30,18 @@
             </p>
           <% end %>
         </div>
-        <div class="actions">
-          <% if authorize? @user, :update? %>
+        <div class="actions mt-3">
             <p class="mb-0">
-            <%= link_to(t(:show_user_edit_cta), edit_ui_user_path(@user), class: "btn btn-dark mt-3 mt-sm-0") %>
+              <% if authorize? @user, :update? %>
+                <%= link_to(t(:show_user_edit_cta), edit_ui_user_path(@user), class: "btn btn-dark me-md-2 w-100 w-md-auto") %>
+              <% end %>
+              <% if authorize? @user, :show_secrets? %>
+                <%= link_to(t(:show_user_secrets_cta), secrets_ui_user_path(@user), class: "btn btn-dark me-md-2 mt-3 mt-md-0 w-100 w-md-auto") %>
+              <% end %>
+              <% if @user %>
+                <%= link_to(t(:show_user_log_out_cta), logout_path, class: "btn btn-dark mt-3 mt-lg-0 w-100 w-md-auto") %>
+              <% end %>
             </p>
-          <% end %>
         </div>
       </div>
     </header>

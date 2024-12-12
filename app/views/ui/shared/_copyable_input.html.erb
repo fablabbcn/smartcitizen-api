@@ -1,0 +1,9 @@
+<label class="form-label" for="copyable-input-<%= id %>"><%= name %></label>
+<div class="copyable-input input-group input-group-lg mb-3">
+  <input type="text" class="form-control" placeholder="<%= name %>" value="<%= value %>" id="copyable-input-<%= id%>">
+  <div class="input-group-append">
+    <button class="btn btn-primary btn-right" title="<%= t(:copyable_input_button_title) %>" id="api-key-copy-button" type="button" aria-controls="copyable-input-<%= id %>">
+      <%= show_svg("clipboard_icon.svg") %>
+    </button>
+  </div>
+</div>
