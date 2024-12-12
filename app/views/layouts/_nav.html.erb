@@ -1,48 +1,55 @@
-<nav class="navbar navbar-dark navbar-expand-md bg-black m-2 sticky-top rounded-4">
-  <div class="container px-3 px-sm-0">
-    <a class="navbar-brand" href="https://www.smartcitizen.me">
-      <img src="<%= image_url("smartcitizen_logo.svg") %>" alt="<%= t :logo_alt %>" width="36" height ="36" />
-    </a>
-    <button class="navbar-toggler ms-auto me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenuToggle" aria-controls="navbarMenuToggle" aria-expanded="false" aria-label="<%= t :hamburger_label %>">
-      <i class="fas fa-bars"></i>
-    </button>
-    <div class="collapse navbar-collapse ms-auto" id="navbarMenuToggle">
-      <ul class="navbar-nav ms-auto mt-2 mt-md-0">
-        <li class="nav-item">
-          <a class="nav-link w-100 w-md-auto text-center" href="<%= t :home_link_url %>"><%= t :home_link_text %></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link w-100 w-md-auto text-center" href="<%= t :documentation_link_url%>"><%= t :documentation_link_text %></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link w-100 w-md-auto text-center" href="<%= t :forum_link_url %>"><%= t :forum_link_text %></a>
-        </li>
-        <% unless current_user %>
+<div class="bg-black m-2 sticky-top rounded-4">
+  <nav class="navbar navbar-dark navbar-expand-md ">
+    <div class="container px-3 px-sm-0">
+      <a class="navbar-brand" href="https://www.smartcitizen.me">
+        <img src="<%= image_url("smartcitizen_logo.svg") %>" alt="<%= t :logo_alt %>" width="36" height ="36" />
+      </a>
+      <button class="navbar-toggler ms-auto me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenuToggle" aria-controls="navbarMenuToggle" aria-expanded="false" aria-label="<%= t :hamburger_label %>">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse ms-auto" id="navbarMenuToggle">
+        <ul class="navbar-nav ms-auto mt-2 mt-md-0">
           <li class="nav-item">
-            <a class="nav-link w-100 w-md-auto text-center" href="<%= login_url %>"><%= t :login_link_text %></a>
+            <a class="nav-link w-100 w-md-auto text-center" href="<%= t :home_link_url %>"><%= t :home_link_text %></a>
           </li>
-        <% end %>
-        <li class="nav-item">
+          <li class="nav-item">
+            <a class="nav-link w-100 w-md-auto text-center" href="<%= t :documentation_link_url%>"><%= t :documentation_link_text %></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link w-100 w-md-auto text-center" href="<%= t :forum_link_url %>"><%= t :forum_link_text %></a>
+          </li>
           <% unless current_user %>
-            <a class="nav-link btn btn-navbar w-100 w-md-auto ms-md-3 mt-3 mt-md-0 mb-2 mb-md-0" href="<%= t :kit_link_url %>"><%= t :kit_link_text %></a>
+            <li class="nav-item">
+              <a class="nav-link w-100 w-md-auto text-center" href="<%= login_url %>"><%= t :login_link_text %></a>
+            </li>
           <% end %>
-        </li>
-      </ul>
+          <li class="nav-item">
+            <% unless current_user %>
+              <a class="nav-link btn btn-navbar w-100 w-md-auto ms-md-3 mt-3 mt-md-0 mb-2 mb-md-0" href="<%= t :kit_link_url %>"><%= t :kit_link_text %></a>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+      <% if current_user %>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link ms-md-2" title="<%= t :profile_pic_alt_text %>" href="<%= ui_user_path(current_user.username) %>">
+              <div class="circular-image-crop navbar-profile-image">
+                <%= image_tag(
+                  @user.profile_picture.present? ? @user.profile_picture : "default_avatar.svg",
+                  alt: t(:profile_pic_alt_text),
+                  class: "w-100"
+                ) %>
+            </div>
+            </a>
+          </li>
+        </ul>
+      <% end %>
     </div>
-    <% if current_user %>
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link ms-md-2" title="<%= t :profile_pic_alt_text %>" href="<%= ui_user_path(current_user.username) %>">
-            <div class="circular-image-crop navbar-profile-image">
-              <%= image_tag(
-                @user.profile_picture.present? ? @user.profile_picture : "default_avatar.svg",
-                alt: t(:profile_pic_alt_text),
-                class: "w-100"
-              ) %>
-          </div>
-          </a>
-        </li>
-      </ul>
-    <% end %>
-  </div>
-</nav>
+  </nav>
+  <% if breadcrumbs.length > 1 %>
+    <div class="container px-3 px-sm-2 px-md-0">
+      <%= render partial: "layouts/breadcrumbs" %>
+    </div>
+  <% end %>
+</div>
