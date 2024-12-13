@@ -18,6 +18,8 @@
   <div class="mt-5">
     <%= f.primary t(:edit_user_submit), class: "btn btn-primary w-100 w-md-auto" %>
   </div>
-  <h2 class="mt-5 mb-3"><%= t(:edit_user_other_actions_subhead) %></h2>
-  <div><%= link_to t(:edit_user_delete_account_submit), delete_ui_user_path(@user.username), class: "btn btn-danger w-100 w-md-auto" %></div>
+  <% if authorize? @user, :destroy? %>
+    <h2 class="mt-5 mb-3"><%= t(:edit_user_other_actions_subhead) %></h2>
+    <div><%= link_to t(:edit_user_delete_account_submit, owner: possessive(@user, current_user)), delete_ui_user_path(@user.username), class: "btn btn-danger w-100 w-md-auto" %></div>
+  <%  end %>
 <% end %>

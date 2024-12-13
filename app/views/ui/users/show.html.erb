@@ -33,12 +33,12 @@
         <div class="actions mt-3">
             <p class="mb-0">
               <% if authorize? @user, :update? %>
-                <%= link_to(t(:show_user_edit_cta), edit_ui_user_path(@user), class: "btn btn-dark me-md-2 w-100 w-md-auto") %>
+                <%= link_to(t(:show_user_edit_cta, owner: possessive(@user, current_user)), edit_ui_user_path(@user), class: "btn btn-dark me-md-2 w-100 w-md-auto") %>
               <% end %>
               <% if authorize? @user, :show_secrets? %>
-                <%= link_to(t(:show_user_secrets_cta), secrets_ui_user_path(@user), class: "btn btn-dark me-md-2 mt-3 mt-md-0 w-100 w-md-auto") %>
+                <%= link_to(t(:show_user_secrets_cta, owner: possessive(@user, current_user)), secrets_ui_user_path(@user), class: "btn btn-dark me-md-2 mt-3 mt-md-0 w-100 w-md-auto") %>
               <% end %>
-              <% if @user %>
+              <% if current_user == @user %>
                 <%= link_to(t(:show_user_log_out_cta), logout_path, class: "btn btn-dark mt-3 mt-lg-0 w-100 w-md-auto") %>
               <% end %>
             </p>
