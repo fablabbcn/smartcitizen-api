@@ -4,6 +4,15 @@ module SharedControllerMethods
 
   def self.included(klass)
     klass.helper_method :current_user
+    klass.helper_method :authorize?
+  end
+
+  def authorize?(*args)
+    begin
+      return authorize *args
+    rescue Pundit::NotAuthorizedError
+      return false
+    end
   end
 
   def current_user(fail_unauthorized=true)

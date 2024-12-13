@@ -11,6 +11,7 @@ RSpec.describe User, :type => :model do
   it { is_expected.to validate_uniqueness_of(:username) }
   it { is_expected.to validate_length_of(:username).is_at_least(3).is_at_most(30) }
 
+  it { is_expected.to validate_confirmation_of(:password) }
   it { is_expected.to have_many(:oauth_applications) }
 
   it { is_expected.to have_many(:devices) }
@@ -27,6 +28,10 @@ RSpec.describe User, :type => :model do
 
   it "is invalid with an email which isn't an email adddress" do
     expect(build(:user, email: "not an email")).to be_invalid
+  end
+
+  it "is invalid with a username which is like an email adddress" do
+    expect(build(:user, username: "anemail@email.com")).to be_invalid
   end
 
   it "is invalid without an email" do

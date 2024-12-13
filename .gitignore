@@ -20,6 +20,7 @@
 /config/application.yml
 
 /public/api
+/public/assets
 /public/coverage
 /coverage
 *.rdb
