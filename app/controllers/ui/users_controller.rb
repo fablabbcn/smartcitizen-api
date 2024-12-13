@@ -1,6 +1,7 @@
 module Ui
   class UsersController < ApplicationController
     include SharedControllerMethods
+    include UserHelper
 
     def index
       redirect_to current_user ? ui_user_path(current_user.username) : login_path
@@ -8,17 +9,17 @@ module Ui
 
     def show
       find_user!
-      @title = I18n.t(:show_user_title, username: @user.username)
+      @title = I18n.t(:show_user_title, owner: owner(true))
       add_breadcrumb(@title, ui_user_path(@user.username))
       render "show", layout: "base"
     end
 
     def secrets
       find_user!
-      return unless authorize_user!
-      @title = I18n.t(:secrets_user_title, username: @user.username)
+      return unless authorize_user! :show_secrets?, :secrets_user_forbidden
+      @title = I18n.t(:secrets_user_title, owner: owner)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, username: @user.username), ui_user_path(@user.username)],
+        [I18n.t(:show_user_title, owner: owner(true)), ui_user_path(@user.username)],
         [@title, secrets_ui_user_path(@user.username)]
       )
     end
@@ -59,17 +60,17 @@ module Ui
 
     def edit
       find_user!
-      return unless authorize_user!
-      @title = I18n.t(:edit_user_title)
+      return unless authorize_user! :update?, :edit_user_forbiden
+      @title = I18n.t(:edit_user_title, owner: owner)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, username: @user.username), ui_user_path(@user.username)],
+        [I18n.t(:show_user_title, owner: owner(true)), ui_user_path(@user.username)],
         [@title, edit_ui_user_path(@user.username)]
       )
     end
 
     def update
       find_user!
-      return unless authorize_user!
+      return unless authorize_user! :update?, :edit_user_forbiden
       if @user.update(params.require(:user).permit(
         :profile_picture,
         :username,
@@ -90,18 +91,18 @@ module Ui
 
     def delete
       find_user!
-      return unless authorize_user!
-      @title = I18n.t(:delete_user_title)
+      return unless authorize_user! :destroy?, :delete_user_forbidden
+      @title = I18n.t(:delete_user_title, owner: owner)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, username: @user.username), ui_user_path(@user.username)],
-        [I18n.t(:edit_user_title, username: @user.username), edit_ui_user_path(@user.username)],
+        [I18n.t(:show_user_title, owner: owner(true)), ui_user_path(@user.username)],
+        [I18n.t(:edit_user_title, owner: owner), edit_ui_user_path(@user.username)],
         [@title, delete_ui_user_path(@user.username)]
       )
     end
 
     def destroy
       find_user!
-      return unless authorize_user!
+      return unless authorize_user! :destroy?, :delete_user_forbidden
       if @user.username != params[:username]
         flash[:alert] = I18n.t(:delete_user_wrong_username)
         redirect_to delete_ui_user_path(@user.username)
@@ -122,11 +123,15 @@ module Ui
       @user = User.friendly.find(params[:id])
     end
 
-    def authorize_user!
-      return true if authorize? @user, :destroy?
-      flash[:alert] = I18n.t(:delete_user_forbidden)
+    def authorize_user!(action, alert)
+      return true if authorize? @user, action
+      flash[:alert] = I18n.t(alert)
       redirect_to current_user ? ui_user_path(@user) : login_path
       return false
+    end
+
+    def owner(capitalize=false)
+      possessive(@user, current_user, capitalize: capitalize)
     end
   end
 end
