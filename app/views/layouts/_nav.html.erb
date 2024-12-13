@@ -36,7 +36,7 @@
             <a class="nav-link ms-md-2" title="<%= t :profile_pic_alt_text %>" href="<%= ui_user_path(current_user.username) %>">
               <div class="circular-image-crop navbar-profile-image">
                 <%= image_tag(
-                  @user.profile_picture.present? ? @user.profile_picture : "default_avatar.svg",
+                  current_user.profile_picture.present? ? current_user.profile_picture : "default_avatar.svg",
                   alt: t(:profile_pic_alt_text),
                   class: "w-100"
                 ) %>
