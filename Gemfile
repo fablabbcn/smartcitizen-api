@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '6.1.7.3'
 gem 'sidekiq', '~> 6'
 gem 'doorkeeper', '~> 5'
-
+gem "webpacker"
 gem 'jquery-rails'
 gem 'sass-rails'
 gem 'turbolinks'
