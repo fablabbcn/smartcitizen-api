@@ -1,0 +1,37 @@
+.device {
+  position: relative;
+
+  .device-link {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      z-index: 0;
+  }
+
+  .device-map {
+    width:100%;
+    height: 100%;
+    aspect-ratio: 1.66;
+  }
+
+  &:has(:hover) {
+    h3 {
+      text-decoration: underline;
+    }
+    .device-map {
+
+      background-color: $yellow;
+
+      .leaflet-pane {
+        mix-blend-mode: multiply;
+      }
+
+      .leaflet-marker-icon {
+        filter: brightness(0) saturate(100%);
+      }
+    }
+  }
+}

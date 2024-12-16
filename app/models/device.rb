@@ -75,7 +75,7 @@ class Device < ActiveRecord::Base
     end
   end
 
-  scope :for_world_map, ->(authorized_user=nil) {
+  scope :for_user, ->(authorized_user=nil) {
     privacy_conditions = if authorized_user && authorized_user.is_admin?
                            []
                          elsif authorized_user
@@ -83,7 +83,15 @@ class Device < ActiveRecord::Base
                          else
                            ["is_private IS NOT true"]
                          end
-    where.not(latitude: nil).where.not(last_reading_at: nil).where(is_test: false).where(privacy_conditions).includes(:owner, :tags)
+    where(privacy_conditions)
+  }
+
+  scope :for_world_map, ->(authorized_user=nil) {
+    for_user(authorized_user).
+    where.not(latitude: nil).
+    where.not(last_reading_at: nil).
+    where(is_test: false).
+    includes(:owner, :tags)
   }
 
   def self.ransackable_attributes(auth_object = nil)
@@ -166,6 +174,10 @@ class Device < ActiveRecord::Base
       ('test_device' if is_test?),
       ((last_reading_at.present? and last_reading_at > 60.minutes.ago) ? 'online' : 'offline') # state
     ].reject(&:blank?).sort
+  end
+
+  def all_tags
+    system_tags + user_tags
   end
 
   def to_s
