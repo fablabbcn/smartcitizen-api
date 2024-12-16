@@ -1,0 +1,10 @@
+<% content_for :profile_header_image do %>
+  IMAGE
+<% end %>
+<% content_for :profile_header_meta do %>
+  META
+<% end %>
+<% content_for :profile_header_actions do %>
+  ACTIONS
+<% end %>
+<%= render partial: "ui/shared/profile_header", locals: { title: t(:show_device_headline, username: @device.name) } %>
