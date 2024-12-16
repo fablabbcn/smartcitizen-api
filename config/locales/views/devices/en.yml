@@ -1,0 +1,4 @@
+en:
+  device_link_screen_reader_text: "Device: %${name}"
+  device_last_reading_at: "Last reading %{time} ago"
+  device_no_readings_message: "No readings received yet!"
