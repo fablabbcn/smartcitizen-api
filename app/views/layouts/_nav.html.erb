@@ -34,13 +34,11 @@
         <ul class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link ms-md-2" title="<%= t :profile_pic_alt_text %>" href="<%= ui_user_path(current_user.username) %>">
-              <div class="circular-image-crop navbar-profile-image">
-                <%= image_tag(
-                  current_user.profile_picture.present? ? current_user.profile_picture : "default_avatar.svg",
-                  alt: t(:profile_pic_alt_text),
-                  class: "w-100"
-                ) %>
-            </div>
+              <%= render partial: "ui/users/profile_image", locals: {
+                user: current_user,
+                alt: t(:profile_pic_alt_text),
+                class: "navbar-profile-image"
+              } %>
             </a>
           </li>
         </ul>

@@ -2,13 +2,7 @@
   <div class="container mx-2 mx-sm-auto w-auto w-sm-100 my-3 px-sm-3 g-0">
     <header class="row">
       <div class="col-12 col-sm-6 col-md-3 col-lg-2 px-3 px-sm-0 pe-md-3">
-        <div class="circular-image-crop">
-          <%= image_tag(
-            @user.profile_picture.present? ? @user.profile_picture : "default_avatar.svg",
-            alt: t(:show_user_profile_pic_alt, username: @user.username),
-            class: "w-100"
-          ) %>
-        </div>
+        <%= render partial: "ui/users/profile_image", locals: { user: @user }  %>
       </div>
       <div class="col-12 col-sm-6 col-md-9 col-lg-10 mt-4 mt-sm-0 mb-2 mb-sm-0 px-3 px-sm-0 justify-content-between d-flex g-0 flex-column">
         <div class="meta">

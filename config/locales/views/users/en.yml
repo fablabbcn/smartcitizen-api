@@ -1,6 +1,5 @@
 en:
   show_user_headline: "User: %{username}"
-  show_user_profile_pic_alt: "Profile picture for user %{username}"
   show_user_edit_cta: "Edit %{owner} profile"
   show_user_secrets_cta: "Show %{owner} API keys"
   show_user_log_out_cta: "Sign out"
@@ -39,3 +38,4 @@ en:
   no_device_kit_link_text: "Get your kit"
   no_device_onboarding_link_url: "https://start.smartcitizen.me/wizard/landing?lang=eng"
   no_device_onboarding_link_text: "Connect an existing kit"
+  profile_image_alt: "Profile picture for user %{username}"
