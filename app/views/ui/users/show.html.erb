@@ -55,9 +55,9 @@
           <% if current_user == @user && @user.devices.length < 1 %>
             <%= render partial: "no_device_cta" %>
           <% else %>
-            <h2>Devices</h2>
+            <h2><%= t :show_user_devices_heading %></h2>
             <% if @user.devices.length < 1 %>
-              <p><%= @user.username %> has no devices yet!</p>
+              <p><%= t :show_user_no_devices_message, username: @user.username %></p>
             <% end %>
           <% end %>
         </div>
