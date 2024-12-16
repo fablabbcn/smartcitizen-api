@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get "password_reset/:token", to: redirect("/ui/password_reset/%{token}")
 
   namespace "ui" do
+    get "/", to: redirect("/ui/users")
     resources :users, as: "users" do
       member do
         get :delete
@@ -24,6 +25,7 @@ Rails.application.routes.draw do
         get :post_delete
       end
     end
+    resources :devices
     get "sessions/destroy", to: "sessions#destroy"
     resources :sessions, as: "sessions"
     post 'change_password', to: 'sessions#change_password', as: 'change_password'

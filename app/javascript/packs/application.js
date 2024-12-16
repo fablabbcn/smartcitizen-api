@@ -18,6 +18,8 @@
 import Rails from "@rails/ujs";
 import * as ActiveStorage from "@rails/activestorage";
 import "bootstrap";
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
 
 import setupApplication from "../application";
 

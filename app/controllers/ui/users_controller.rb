@@ -60,7 +60,7 @@ module Ui
 
     def edit
       find_user!
-      return unless authorize_user! :update?, :edit_user_forbiden
+      return unless authorize_user! :update?, :edit_user_forbidden
       @title = I18n.t(:edit_user_title, owner: owner)
       add_breadcrumbs(
         [I18n.t(:show_user_title, owner: owner(true)), ui_user_path(@user.username)],
@@ -70,7 +70,7 @@ module Ui
 
     def update
       find_user!
-      return unless authorize_user! :update?, :edit_user_forbiden
+      return unless authorize_user! :update?, :edit_user_forbidden
       if @user.update(params.require(:user).permit(
         :profile_picture,
         :username,

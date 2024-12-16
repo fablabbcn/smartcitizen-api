@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "User signs up for an account" do
+feature "User and account managment" do
   scenario "User signs up for an account with correct details" do
     user_count_before = User.count
     visit "/login"

@@ -10,7 +10,7 @@
           ) %>
         </div>
       </div>
-      <div class="col-12 col-sm-6 col-md-9 col-lg-10 mt-4 mt-sm-0 mb-2 mb-sm-0 px-3 justify-content-between d-flex g-0 flex-column">
+      <div class="col-12 col-sm-6 col-md-9 col-lg-10 mt-4 mt-sm-0 mb-2 mb-sm-0 px-3 px-sm-0 justify-content-between d-flex g-0 flex-column">
         <div class="meta">
           <h1 class="mb-2"><%= t(:show_user_headline, username: @user.username) %></h1>
           <p class="mb-0 small">
@@ -19,7 +19,7 @@
           </p>
           <% if @user.city || @user.country %>
             <p class="mb-0 small">
-            <%= image_tag("location_icon_light.svg", class: "pe-1") %>
+            <span class="pe-1"><%= show_svg("location_icon.svg") %></span>
             <%= [@user.city, @user.country].join(", ") %>
             </p>
           <% end %>
@@ -48,10 +48,20 @@
   </div>
 </div>
 <div class="container g-0 px-2">
-  <div class="row">
+  <div class="row g-0">
     <div class="col-12 col-lg-10 offset-lg-2">
-      <%= render layout: "ui/shared/box" do %>
-        <%= render partial: "no_device_cta" %>
+      <%= render layout: "ui/shared/box", locals: { no_padding: true } do %>
+        <div class="p-3">
+          <% if current_user == @user && @user.devices.length < 1 %>
+            <%= render partial: "no_device_cta" %>
+          <% else %>
+            <h2>Devices</h2>
+            <% if @user.devices.length < 1 %>
+              <p><%= @user.username %> has no devices yet!</p>
+            <% end %>
+          <% end %>
+        </div>
+        <%= render partial: "ui/devices/device", collection: @user.devices.for_user(current_user) %>
       <% end %>
     </div>
   </div>
