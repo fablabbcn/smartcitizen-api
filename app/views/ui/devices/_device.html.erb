@@ -1,6 +1,6 @@
 <div class="device row border-top g-0">
   <%= link_to(ui_device_path(device.id), class: "device-link") do %>
-    <span class="sr-only"><%= t :device_link_screen_reader_text, name: device.name %></span>
+    <span class="sr-only"><%= device.name %></span>
   <% end %>
   <div class="col-12 col-md-3">
     <div class="device-map" data-latitude="<%= device.latitude %>" data-longitude="<%= device.longitude %>" data-marker-url="<%= asset_url("map-pin.svg") %>" data-marker-shadow-url="<%= asset_url("map-pin-shadow.png") %>"></div>

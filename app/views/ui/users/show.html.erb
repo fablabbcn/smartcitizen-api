@@ -1,46 +1,14 @@
-<div class="user-profile-header bg-black text-white mx-2 mb-2 rounded-4 mb-md-5">
-  <div class="container mx-2 mx-sm-auto w-auto w-sm-100 my-3 px-sm-3 g-0">
-    <header class="row">
-      <div class="col-12 col-sm-6 col-md-3 col-lg-2 px-3 px-sm-0 pe-md-3">
-        <%= render partial: "ui/users/profile_image", locals: { user: @user }  %>
-      </div>
-      <div class="col-12 col-sm-6 col-md-9 col-lg-10 mt-4 mt-sm-0 mb-2 mb-sm-0 px-3 px-sm-0 justify-content-between d-flex g-0 flex-column">
-        <div class="meta">
-          <h1 class="mb-2"><%= t(:show_user_headline, username: @user.username) %></h1>
-          <p class="mb-0 small">
-          <%= image_tag("user_details_icon_light.svg", class: "pe-1") %>
-          <%= @user.role.capitalize %>
-          </p>
-          <% if @user.city || @user.country %>
-            <p class="mb-0 small">
-            <span class="pe-1"><%= show_svg("location_icon.svg") %></span>
-            <%= [@user.city, @user.country].join(", ") %>
-            </p>
-          <% end %>
-          <% if @user.url %>
-            <p class="mb-0 small">
-            <%= image_tag("url_icon_light.svg", class: "pe-1") %>
-            <%= link_to(@user.url, @user.url, class: "link-white") %>
-            </p>
-          <% end %>
-        </div>
-        <div class="actions mt-3">
-            <p class="mb-0">
-              <% if authorize? @user, :update? %>
-                <%= link_to(t(:show_user_edit_cta, owner: possessive(@user, current_user)), edit_ui_user_path(@user), class: "btn btn-dark me-md-2 w-100 w-md-auto") %>
-              <% end %>
-              <% if authorize? @user, :show_secrets? %>
-                <%= link_to(t(:show_user_secrets_cta, owner: possessive(@user, current_user)), secrets_ui_user_path(@user), class: "btn btn-dark me-md-2 mt-3 mt-md-0 w-100 w-md-auto") %>
-              <% end %>
-              <% if current_user == @user %>
-                <%= link_to(t(:show_user_log_out_cta), logout_path, class: "btn btn-dark mt-3 mt-lg-0 w-100 w-md-auto") %>
-              <% end %>
-            </p>
-        </div>
-      </div>
-    </header>
-  </div>
-</div>
+<% content_for :profile_header_image do %>
+  <%= render partial: "ui/users/profile_image", locals: { user: @user }  %>
+<% end %>
+<% content_for :profile_header_meta do %>
+  <%= render partial: "ui/users/meta",  locals: { user: @user } %>
+<% end %>
+<% content_for :profile_header_actions do %>
+  <%= render partial: "ui/users/actions", locals: { user: @user } %>
+<% end %>
+<%= render partial: "ui/shared/profile_header", locals: { title: t(:show_user_headline, username: @user.username) } %>
+
 <div class="container g-0 px-2">
   <div class="row g-0">
     <div class="col-12 col-lg-10 offset-lg-2">
