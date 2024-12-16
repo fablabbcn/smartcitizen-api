@@ -4,6 +4,8 @@ en:
   show_user_edit_cta: "Edit %{owner} profile"
   show_user_secrets_cta: "Show %{owner} API keys"
   show_user_log_out_cta: "Sign out"
+  show_user_devices_heading: "Devices"
+  show_user_no_devices_message: "%{username} has no devices yet!"
   secrets_user_blurb_html: This key gives you access to your data in the SmartCitizen platform using the <a href="https://developer.smartcitizen.me/" target="_blank">REST API</a>. <strong>Please keep it safe and do not share with anyone, just as you would with a password</strong>.
   secrets_user_api_key_label: API key
   secrets_user_forwarding_heading: "%{owner} MQTT Forwarding Keys"
