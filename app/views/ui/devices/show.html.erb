@@ -1,8 +1,10 @@
 <% content_for :profile_header_image do %>
-  IMAGE
+  <div class="circular-image-crop">
+    <%= render partial: "ui/devices/map", locals: { device: @device } %>
+  </div>
 <% end %>
 <% content_for :profile_header_meta do %>
-  META
+  <%= render partial: "ui/devices/meta", locals: { device: @device } %>
 <% end %>
 <% content_for :profile_header_actions do %>
   ACTIONS
