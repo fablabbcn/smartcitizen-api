@@ -3,7 +3,7 @@ module Ui
     layout "application"
     include SharedControllerMethods
 
-    include UserHelper
+    private
 
     def add_breadcrumbs(*crumbs)
       crumbs.each do |crumb|

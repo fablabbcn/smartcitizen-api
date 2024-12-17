@@ -86,6 +86,11 @@ class Device < ActiveRecord::Base
     where(privacy_conditions)
   }
 
+  scope :by_last_reading, -> {
+    order("last_reading_at DESC NULLS LAST, created_at DESC")
+  }
+
+
   scope :for_world_map, ->(authorized_user=nil) {
     for_user(authorized_user).
     where.not(latitude: nil).

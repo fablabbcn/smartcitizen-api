@@ -1,7 +1,6 @@
 module Ui
   class UsersController < ApplicationController
     include SharedControllerMethods
-    include UserHelper
 
     def index
       redirect_to current_user ? ui_user_path(current_user.username) : login_path
@@ -131,7 +130,7 @@ module Ui
     end
 
     def owner(capitalize=false)
-      possessive(@user, current_user, capitalize: capitalize)
+      helpers.possessive(@user, current_user, capitalize: capitalize)
     end
   end
 end

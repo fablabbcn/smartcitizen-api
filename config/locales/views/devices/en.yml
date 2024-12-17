@@ -1,3 +1,5 @@
 en:
+  show_device_headline: "Device: %{name}"
+  show_device_edit_cta: "Edit device settings"
   device_meta_last_reading_at: "Last reading %{time} ago"
   device_meta_no_readings_message: "No readings received yet!"
