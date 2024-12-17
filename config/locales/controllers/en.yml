@@ -24,3 +24,6 @@ en:
     delete_user_forbidden: "You are not allowed to delete that user account!"
     delete_user_wrong_username: "That username did not match! Please try again."
     show_device_title: "Device: %{name}"
+    show_device_forbidden: "You are not allowed to view that device!"
+    edit_device_title: "Edit device: %{name}"
+    edit_device_forbidden: "You are not allowed to edit settings for that device!"

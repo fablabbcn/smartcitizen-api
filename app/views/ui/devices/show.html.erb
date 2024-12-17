@@ -7,6 +7,6 @@
   <%= render partial: "ui/devices/meta", locals: { device: @device } %>
 <% end %>
 <% content_for :profile_header_actions do %>
-  ACTIONS
+  <%= render partial: "ui/devices/actions", locals: { device: @device } %>
 <% end %>
-<%= render partial: "ui/shared/profile_header", locals: { title: t(:show_device_headline, username: @device.name) } %>
+<%= render partial: "ui/shared/profile_header", locals: { title: t(:show_device_headline, name: @device.name) } %>

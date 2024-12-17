@@ -31,6 +31,7 @@ body > .container {
 
 .btn {
   text-transform: uppercase;
+  text-decoration: none !important;
   font-family: "Kanit";
   font-weight: 600;
   &.btn-primary {
