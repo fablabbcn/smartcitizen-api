@@ -1,6 +1,14 @@
-.user-profile-header {
+.profile-header {
   h1 {
     line-height: 1.6rem !important;
     padding-bottom: 0.4rem !important;
+  }
+
+  a {
+    color: $white !important;
+    text-decoration: underline;
+    &:hover {
+      text-decoration: none;
+    }
   }
 }
