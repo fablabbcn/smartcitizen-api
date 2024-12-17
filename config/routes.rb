@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
   namespace "ui" do
     get "/", to: redirect("/ui/users")
+
     resources :users, as: "users" do
       member do
         get :delete
@@ -25,7 +26,13 @@ Rails.application.routes.draw do
         get :post_delete
       end
     end
-    resources :devices
+
+    resources :devices, as: "devices" do
+      member do
+        get :edit
+      end
+    end
+
     get "sessions/destroy", to: "sessions#destroy"
     resources :sessions, as: "sessions"
     post 'change_password', to: 'sessions#change_password', as: 'change_password'

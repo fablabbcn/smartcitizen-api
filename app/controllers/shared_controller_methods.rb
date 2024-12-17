@@ -7,6 +7,8 @@ module SharedControllerMethods
     klass.helper_method :authorize?
   end
 
+  private
+
   def authorize?(*args)
     begin
       return authorize *args

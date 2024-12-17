@@ -23,7 +23,7 @@
             <% end %>
           <% end %>
         </div>
-        <%= render partial: "ui/devices/device", collection: @user.devices.for_user(current_user), locals: { hide_owner: true } %>
+        <%= render partial: "ui/devices/device", collection: @user.devices.for_user(current_user).by_last_reading, locals: { hide_owner: true } %>
       <% end %>
     </div>
   </div>

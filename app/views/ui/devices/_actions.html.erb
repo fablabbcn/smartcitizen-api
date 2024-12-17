@@ -1,0 +1,5 @@
+<p class="mb-0">
+  <% if authorize? device, :update? %>
+    <%= link_to(t(:show_device_edit_cta, name: device.name), edit_ui_device_path(device), class: "btn btn-dark me-md-2 w-100 w-md-auto") %>
+  <% end %>
+</p>
