@@ -1,0 +1,23 @@
+<p class="mb-0 small"><strong><%= device.hardware_name %></strong></p>
+<% unless local_assigns[:hide_owner] %>
+  <p class="mb-0 small">
+  <span class="pe-1"><%= show_svg("user_details_icon_light.svg") %></span>
+    <%= link_to(device.owner.username, ui_user_path(device.owner.username)) %>
+  </p>
+<% end %>
+<p class="mb-0 small">
+  <span class="pe-1"><%= show_svg("location_icon.svg") %></span>
+  <%= [device.city, device.country_name].compact.join(", ") %>
+</p>
+<p class="mb-0 small">
+  <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
+  <% if device.last_reading_at %>
+    <%= t :device_meta_last_reading_at, time: time_ago_in_words(device.last_reading_at) %>
+  <% else %>
+    <%= t :device_meta_no_readings_message %>
+  <% end %>
+</p>
+<p class="mb-0 small">
+  <span class="pe-1"><%= show_svg("tag_icon.svg") %></span>
+  <%= device.all_tags.join(", ") %>
+</p>

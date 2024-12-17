@@ -3,26 +3,10 @@
     <span class="sr-only"><%= device.name %></span>
   <% end %>
   <div class="col-12 col-md-3">
-    <div class="device-map" data-latitude="<%= device.latitude %>" data-longitude="<%= device.longitude %>" data-marker-url="<%= asset_url("map-pin.svg") %>" data-marker-shadow-url="<%= asset_url("map-pin-shadow.png") %>"></div>
+    <%= render partial: "ui/devices/map", locals: { device: device} %>
   </div>
   <div class="col-12 col-md-9 p-3 pb-4">
     <h3 class="mb-1"><%= device.name %></h3>
-    <p class="mb-0 small"><strong><%= device.hardware_name %></strong></p>
-    <p class="mb-0 small">
-      <%= image_tag("location_icon.svg", class: "pe-1") %>
-      <%= [device.city, device.country_name].compact.join(", ") %>
-    </p>
-    <p class="mb-0 small">
-      <%= image_tag("clock-fill.svg", class: "pe-1") %>
-      <% if device.last_reading_at %>
-        <%= t :device_last_reading_at, time: time_ago_in_words(device.last_reading_at) %>
-      <% else %>
-        <%= t :device_no_readings_message %>
-      <% end %>
-    </p>
-    <p class="mb-0 small">
-      <%= image_tag("tag_icon.svg", class: "pe-1") %>
-      <%= device.all_tags.join(", ") %>
-    </p>
+    <%= render partial: "ui/devices/meta", locals: { device: device, hide_owner: local_assigns[:hide_owner] } %>
   </div>
 </div>
