@@ -19,7 +19,7 @@ export function setupDeviceMaps() {
     });
     const map = L.map(element, {
       center: [latitude, longitude],
-      zoom: 13,
+      zoom: 7,
       attributionControl: false,
       zoomControl: false,
       scrollWheelZoom: false,

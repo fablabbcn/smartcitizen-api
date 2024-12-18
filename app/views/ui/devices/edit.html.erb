@@ -8,7 +8,9 @@
   <div class="mt-5">
     <h2 class="mb-0" ><%= t(:edit_device_location_subhead) %></h2>
     <p class="mb-3"> <%= t(:edit_device_location_blurb) %></p>
-    <p style="color: red;"><strong>TODO</strong> implement map</p>
+    <%= f.hidden_field :latitude %>
+    <%= f.hidden_field :longitude %>
+    <%= render partial: "ui/shared/map_location_picker", locals: { latitude_input_id: "device_latitude", longitude_input_id: "device_longitude"} %>
   </div>
   <div class="mt-5">
     <h2 class="mb-0"><%= t(:edit_device_open_data_subhead) %></h2>
