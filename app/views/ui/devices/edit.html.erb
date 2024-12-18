@@ -1,0 +1,43 @@
+<%= bootstrap_form_for @device, url: ui_device_path(@device) do |f| %>
+  <div>
+    <h2 class="mb-3"><%= t(:edit_device_details_subhead) %></h2>
+    <%= f.text_field :name %>
+    <%= f.text_field :description %>
+    <%= f.select :exposure, options_for_select(Device::EXPOSURE_VALUES.map { |v| [v.capitalize, v]}, @device.exposure) %>
+  </div>
+  <div class="mt-5">
+    <h2 class="mb-0" ><%= t(:edit_device_location_subhead) %></h2>
+    <p class="mb-3"> <%= t(:edit_device_location_blurb) %></p>
+    <p style="color: red;"><strong>TODO</strong> implement map</p>
+  </div>
+  <div class="mt-5">
+    <h2 class="mb-0"><%= t(:edit_device_open_data_subhead) %></h2>
+    <p class="mb-3"> <%= t(:edit_device_open_data_blurb) %></p>
+    <%= f.check_box :is_private, label: t(:edit_device_is_private_label) %>
+    <%= f.check_box :precise_location, label: t(:edit_device_precise_location_label) %>
+    <% if @device.owner.forward_device_readings? %>
+      <%= f.check_box :enable_forwarding, label: t(:edit_device_enable_forwarding_label) %>
+    <% end %>
+  </div>
+  <div class="mt-5">
+    <h2 class="mb-0"><%= t(:edit_device_notifications_subhead) %></h2>
+    <p class="mb-3"> <%= t(:edit_device_notifications_blurb) %></p>
+    <%= f.check_box :notify_low_battery, label: t(:edit_device_notify_low_battery_label) %>
+    <%= f.check_box :notify_stopped_publishing, label: t(:edit_device_notify_stopped_publishing_label) %>
+  </div>
+  <div class="mt-5">
+    <h2 class="mb-0"><%= t(:edit_device_tags_subhead) %></h2>
+    <p class="mb-3"> <%= t(:edit_device_tags_blurb) %></p>
+    <p style="color: red;"><strong>TODO</strong> implement tags</p>
+  </div>
+  <div class="mt-5">
+    <h2 class="mb-0"><%= t(:edit_device_postprocessing_subhead) %></h2>
+    <p class="mb-3"> <%= t(:edit_device_postprocessing_blurb) %></p>
+    <%= f.fields_for :postprocessing, @device.postprocessing || Postprocessing.new do |fp| %>
+      <%= fp.text_field :hardware_url %>
+    <% end %>
+  </div>
+  <div class="mt-5">
+    <%= f.primary t(:edit_user_submit), class: "btn btn-primary w-100 w-md-auto" %>
+  </div>
+<% end %>

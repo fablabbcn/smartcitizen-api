@@ -22,7 +22,36 @@ module Ui
       )
     end
 
+    def update
+      find_device!
+      return unless authorize_device! :update?, :edit_device_forbidden
+      if @device.update(device_params)
+        flash[:success] = I18n.t(:update_device_success)
+        redirect_to ui_device_path(@device.id)
+      else
+        flash[:alert] = I18n.t(:update_device_failure)
+        render :edit, status: :unprocessable_entity
+      end
+    end
+
     private
+
+    def device_params
+      params.require(:device).permit(
+        :name,
+        :description,
+        :exposure,
+        :latitude,
+        :longitude,
+        :is_private,
+        :precise_location,
+        :enable_forwarding,
+        :tags,
+        :notify_low_battery,
+        :notify_stopped_publishing,
+        {  :postprocessing => :hardware_url }
+      )
+    end
 
     def find_device!
       @device = Device.find(params[:id])

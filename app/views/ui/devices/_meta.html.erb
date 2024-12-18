@@ -1,4 +1,7 @@
-<p class="mb-0 small"><strong><%= device.hardware_name %></strong></p>
+<p class="mb-<%= device.description.present? ? 0 : 2  %> small"><strong><%= device.hardware_name %></strong></p>
+<% if device.description.present? %>
+  <p class="mb-2 small"> <%= device.description %></p>
+<% end %>
 <% unless local_assigns[:hide_owner] %>
   <p class="mb-0 small">
   <span class="pe-1"><%= show_svg("user_details_icon_light.svg") %></span>

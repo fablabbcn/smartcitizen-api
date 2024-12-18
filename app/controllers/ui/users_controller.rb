@@ -70,21 +70,12 @@ module Ui
     def update
       find_user!
       return unless authorize_user! :update?, :edit_user_forbidden
-      if @user.update(params.require(:user).permit(
-        :profile_picture,
-        :username,
-        :email,
-        :password,
-        :password_confirmation,
-        :city,
-        :country_code,
-        :url
-      ))
+      if @user.update(user_params)
         flash[:success] = I18n.t(:update_user_success)
         redirect_to ui_user_path(@user.username)
       else
         flash[:alert] = I18n.t(:update_user_failure)
-        render :new, status: :unprocessable_entity
+        render :edit, status: :unprocessable_entity
       end
     end
 
@@ -117,6 +108,19 @@ module Ui
     end
 
     private
+
+    def user_params
+      params.require(:user).permit(
+        :profile_picture,
+        :username,
+        :email,
+        :password,
+        :password_confirmation,
+        :city,
+        :country_code,
+        :url
+      )
+    end
 
     def find_user!
       @user = User.friendly.find(params[:id])

@@ -7,6 +7,8 @@ require 'geohash'
 
 class Device < ActiveRecord::Base
 
+  EXPOSURE_VALUES = %w{indoor outdoor}
+
   default_scope { with_active_state }
 
   include ActiveModel::Dirty
@@ -39,6 +41,8 @@ class Device < ActiveRecord::Base
 
   validates_format_of :mac_address,
     with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
+
+  validates_inclusion_of :exposure, in: EXPOSURE_VALUES, allow_nil: true
 
   before_save :nullify_other_mac_addresses, if: :mac_address
   before_save :truncate_and_fuzz_location!, if: :location_changed?
