@@ -165,6 +165,7 @@ describe Ui::UsersController do
             session: { user_id: user.id }
           expect(response).to redirect_to(ui_user_path(user.username))
           expect(flash[:success]).to be_present
+          expect(user.reload.city).to eq("Tarragona")
         end
       end
 
@@ -179,7 +180,7 @@ describe Ui::UsersController do
             session: { user_id: user.id }
           expect(user.reload.email).to eq(old_email)
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(response).to render_template(:new)
+          expect(response).to render_template(:edit)
           expect(flash[:alert]).to be_present
         end
       end

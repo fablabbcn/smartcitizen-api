@@ -76,7 +76,7 @@ body > .container {
   }
 }
 
-.form-control {
+.form-control, .form-select {
   border-radius: 2rem;
   .input-group-lg & {
     border-radius: 2rem;
@@ -90,26 +90,29 @@ body > .container {
   }
 }
 
-.form-check .form-check-input {
-  border-radius: 0.33rem;
-  float: none;
-  margin-right: 0.5rem;
-  font-size: 2rem;
-  border: 2px solid $black;
-  vertical-align: middle;
-  margin-top: 1px;
-  margin-bottom: 1px;
-  margin-left: -0.5rem;
-  color: $black;
-  &:focus {
-    outline: $primary solid 3px;
-    box-shadow: none;
-    border: 3px solid $black;
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-  &.is-invalid {
-    border-color: var(--bs-form-invalid-color);
+.form-check {
+  padding-left: 0.5rem;
+  .form-check-input {
+    border-radius: 0.33rem;
+    float: none;
+    margin-right: 0.5rem;
+    font-size: 2rem;
+    border: 2px solid $black;
+    vertical-align: middle;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    margin-left: -0.5rem;
+    color: $black;
+    &:focus {
+      outline: $primary solid 3px;
+      box-shadow: none;
+      border: 3px solid $black;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    &.is-invalid {
+      border-color: var(--bs-form-invalid-color);
+    }
   }
 }
 
