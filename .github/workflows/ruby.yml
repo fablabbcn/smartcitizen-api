@@ -8,6 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Copy .env file
+        uses: canastro/copy-file-action@master
+        with:
+          source: "env.example"
+          target: ".env"
       - uses: cloudposse/github-action-docker-compose-test-run@main
         with:
           file: "./compose.yml"
