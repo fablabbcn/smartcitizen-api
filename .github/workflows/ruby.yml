@@ -46,8 +46,8 @@ jobs:
       run: sudo apt-get install libpq-dev build-essential postgresql-client apt-transport-https ca-certificates curl git libssl-dev wget
 
     - name: Install node
-      run:
-        sudo curl https://raw.githubusercontent.com/creationix/nvm/v0.40.1/install.sh | bash
+      run: |
+        sudo curl https://raw.githubusercontent.com/creationix/nvm/v0.40.1/install.sh \| bash
         . $NVM_DIR/nvm.sh
         sudo nvm install $NODE_VERSION
         sudo nvm alias default $NODE_VERSION
