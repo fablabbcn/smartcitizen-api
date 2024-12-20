@@ -49,6 +49,7 @@ jobs:
       run: |
         RAILS_ENV=test bundle exec rails db:create
         RAILS_ENV=test bundle exec rails db:schema:load
+        RAILS_ENV=test bundle exec rake assets:compile
         bundle exec rake
       env:
         #Note: DATABASE_URL does not work in TEST env.
