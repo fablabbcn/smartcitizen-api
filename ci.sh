@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -e
 source $NVM_DIR/nvm.sh
 unset DATABASE_URL
