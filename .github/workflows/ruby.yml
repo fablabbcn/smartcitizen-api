@@ -1,5 +1,10 @@
 name: Ruby
 
+# Enable Buildkit and let compose use it to speed up image building
+env:
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
 on: [push]
 
 jobs:
@@ -13,11 +18,12 @@ jobs:
         with:
           source: "env.example"
           target: ".env"
-      - uses: cloudposse/github-action-docker-compose-test-run@main
-        with:
-          file: "./compose.yml"
-          entrypoint: "./entrypoint.sh"
-          workdir: "./"
-          service: app
-          command: "./ci.sh"
-          docker-compose-version: "2.27.0"
+
+      - name: Build the Stack
+        run: "docker compose build"
+
+      - name: Run all tests
+        run: docker compose run app -- bundle exec bin/rake spec
+
+      - name: Tear down the Stack
+        run: docker compose down
