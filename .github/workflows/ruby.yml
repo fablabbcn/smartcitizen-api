@@ -16,7 +16,7 @@ jobs:
       - uses: cloudposse/github-action-docker-compose-test-run@main
         with:
           file: "./compose.yml"
-          entrypoint: "./ci.sh"
+          entrypoint: "./entrypoint.sh"
           service: app
           command: "./ci.sh"
           docker-compose-version: "2.27.0"
