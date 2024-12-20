@@ -23,7 +23,7 @@ jobs:
         run: "docker compose build"
 
       - name: Start dependencies
-        run: "doccker compose up -d --no-deps db redis"
+        run: "docker compose up -d --no-deps db redis"
 
       - name: Run all tests
         run: "docker compose run --no-deps app -- ./ci.sh"
