@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -Eeuo pipefail
 git config --global --add safe.directory /app
 bundle exec bin/rake db:create
 bundle exec bin/rake db:schema:load
