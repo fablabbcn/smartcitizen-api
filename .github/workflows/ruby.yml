@@ -13,3 +13,4 @@ jobs:
           file: "./compose.yml"
           service: app
           command: "./ci.sh"
+          docker-compose-version: "2.27.0"
