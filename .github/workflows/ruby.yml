@@ -61,6 +61,7 @@ jobs:
 
     - name: Test
       run: |
+        source ~/.nvm/nvm.sh
         RAILS_ENV=test bundle exec rails db:create
         RAILS_ENV=test bundle exec rails db:schema:load
         RAILS_ENV=test yarn install
