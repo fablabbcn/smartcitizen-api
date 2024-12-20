@@ -42,6 +42,10 @@ ARG BUNDLE_WITHOUT
 ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 RUN bundle install
 
+
+COPY package.json yarn.lock /app/
+RUN . $NVM_DIR/nvm.sh && nvm use default && yarn install
+
 # Copy the Rails application into place
 COPY . /app
 

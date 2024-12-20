@@ -1,7 +1,5 @@
 services:
   app:
-    build:
-      args: !reset []
     restart: "no"
   sidekiq:
     restart: "no"

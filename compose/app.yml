@@ -2,10 +2,6 @@ services:
   app:
     build:
       context: ../.
-      # Skip installing development & test gems in production, saves 20s build time.
-      # If developing with Docker, this line might need to be commented out.
-      args:
-        - BUNDLE_WITHOUT=test development
     env_file: ../.env
     ports:
       - "3000:3000"
