@@ -30,13 +30,13 @@
   <div class="mt-5">
     <h2 class="mb-0"><%= t(:edit_device_tags_subhead) %></h2>
     <p class="mb-3"> <%= t(:edit_device_tags_blurb) %></p>
-    <p style="color: red;"><strong>TODO</strong> implement tags</p>
+    <%= f.select :tag_ids, options_from_collection_for_select(Tag.all, :id, :name, { selected: @device.tag_ids }), { label: t(:edit_device_tags_label)},  { multiple: true, class: "tag-select" } %>
   </div>
   <div class="mt-5">
     <h2 class="mb-0"><%= t(:edit_device_postprocessing_subhead) %></h2>
     <p class="mb-3"> <%= t(:edit_device_postprocessing_blurb) %></p>
     <%= f.fields_for :postprocessing, @device.postprocessing || Postprocessing.new do |fp| %>
-      <%= fp.text_field :hardware_url %>
+      <%= fp.text_field :hardware_url, label: t(:edit_device_hardware_url_label) %>
     <% end %>
   </div>
   <div class="mt-5">
