@@ -1,10 +1,5 @@
 name: Ruby
 
-# Enable Buildkit and let compose use it to speed up image building
-env:
-  DOCKER_BUILDKIT: 1
-  COMPOSE_DOCKER_CLI_BUILD: 1
-
 on: [push]
 
 jobs:
@@ -23,7 +18,7 @@ jobs:
         run: "docker compose build"
 
       - name: Start dependencies
-        run: "docker compose up -d --no-deps db redis"
+        run: "doct ker compose up -d --no-deps db redis"
 
       - name: Run all tests
         run: "docker compose run --no-deps app -- ./ci.sh"
