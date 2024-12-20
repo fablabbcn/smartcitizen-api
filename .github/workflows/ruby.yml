@@ -3,90 +3,13 @@ name: Ruby
 on: [push]
 
 jobs:
-  docker_build:
-    name: Build Dockerfile
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3.5.2
-      - name: Build the Dockerfile
-        run: docker build -t app .
   build:
-    name: The Build
+    name: Build and test
     runs-on: ubuntu-latest
-
-    services:
-      redis:
-        image: redis:4
-        ports:
-          - 6379:6379
-      postgres:
-        image: postgres:10
-        env:
-          POSTGRES_DB: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_USER: postgres
-        ports: ["5432:5432"]
-        # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
-    - uses: actions/checkout@v3.5.2
-
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
-
-    - name: Show available Ruby versions
-      run: |
-        ls $RUNNER_TOOL_CACHE/Ruby
-        uname -a
-        cat /etc/os-release
-
-    - name: Install required packages
-      run: sudo apt-get install libpq-dev build-essential postgresql-client apt-transport-https ca-certificates curl git libssl-dev wget
-
-    - name: Install nvm
-      run: |
-        curl https://raw.githubusercontent.com/creationix/nvm/v0.40.1/install.sh | bash
-
-    - name: Install node
-      run: |
-        source ~/.nvm/nvm.sh
-        nvm install $NODE_VERSION
-        nvm alias default $NODE_VERSION
-        nvm use default
-        npm install -g yarn
-      env:
-        NODE_VERSION: 22.12.0
-
-    - name: Test
-      run: |
-        source ~/.nvm/nvm.sh
-        nvm use default
-        RAILS_ENV=test bundle exec rails db:create
-        RAILS_ENV=test bundle exec rails db:schema:load
-        RAILS_ENV=test yarn install
-        RAILS_ENV=test bundle exec rake webpacker:compile
-        bundle exec rake
-      env:
-        #Note: DATABASE_URL does not work in TEST env.
-        TEST_DB_HOST: localhost
-        TEST_DB_USERNAME: postgres
-        TEST_DB_PASSWORD: postgres
-        TEST_DB_NAME: postgres
-        discourse_sso_secret: "secret"
-        discourse_endpoint: "https://example.com"
-        PG_PORT: ${{ job.services.postgres.ports['5432'] }}
-
-    #- name: Deploy to server via SSH
-      #uses: appleboy/ssh-action@master
-      #with:
-        #host: ${{ secrets.HOST }}
-        #key: ${{ secrets.KEY }}
-        #port: ${{ secrets.PORT }}
-        #username: ${{ secrets.USERNAME }}
-        #script: |
-          #cd smartcitizen-api
-          #pwd
-          #./scripts/deploy.sh
-      #if: github.ref == 'refs/heads/master' && job.status == 'success'
+      - uses: actions/checkout@v3
+      - uses: cloudposse/github-action-docker-compose-test-run@main
+        with:
+          file: "./compose.yml"
+          service: app
+          command: "./ci.sh"
