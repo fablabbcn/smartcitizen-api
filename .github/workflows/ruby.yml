@@ -17,6 +17,7 @@ jobs:
         with:
           file: "./compose.yml"
           entrypoint: "./entrypoint.sh"
+          workdir: "./"
           service: app
           command: "./ci.sh"
           docker-compose-version: "2.27.0"
