@@ -23,7 +23,7 @@ jobs:
         run: "docker compose build"
 
       - name: Run all tests
-        run: docker compose run app -- ./ci.sh
+        run: "docker compose run app -- ./ci.sh"
 
       - name: Tear down the Stack
-        run: docker compose down
+        run: "docker compose down"
