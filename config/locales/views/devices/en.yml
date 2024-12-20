@@ -17,6 +17,7 @@ en:
   edit_device_notify_stopped_publishing_label: "Kit stops publishing"
   edit_device_tags_subhead: "Tags"
   edit_device_tags_blurb: "Kits can be grouped by tags. Choose from the available tags or submit a tag request on the Forum."
+  edit_device_tags_label: "Tags"
   edit_device_postprocessing_subhead: "Postprocessing information"
   edit_device_postprocessing_blurb: "Follow the instructions here to generate a valid JSON containing the postprocessing information for your device. This is an advanced feature and it's not required for standard Smart Citizen Kits!"
-
+  edit_device_hardware_url_label: "Hardware URL"
