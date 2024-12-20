@@ -46,10 +46,10 @@ module Ui
         :is_private,
         :precise_location,
         :enable_forwarding,
-        :tags,
         :notify_low_battery,
         :notify_stopped_publishing,
-        {  :postprocessing => :hardware_url }
+        { :tag_ids => [] },
+        { :postprocessing_attributes => :hardware_url },
       )
     end
 
