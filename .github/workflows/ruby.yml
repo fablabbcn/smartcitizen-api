@@ -18,10 +18,10 @@ jobs:
         run: "docker compose build"
 
       - name: Start dependencies
-        run: "doct ker compose up -d --no-deps db redis"
+        run: "docker compose up -d --no-deps db redis app"
 
       - name: Run all tests
-        run: "docker compose run --no-deps app -- ./ci.sh"
+        run: "docker compose exec app ./ci.sh"
 
       - name: Teardown the stack
         run: "docker compose down"
