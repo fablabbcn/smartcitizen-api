@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe V0::SessionsController do
 
-  let!(:user) { create(:user, username: 'milhouse', password: 'greatpass', email: 'mil@house.com') }
+  let!(:user) { create(:user, username: 'milhouse', password: 'greatpass', password_confirmation: 'greatpass', email: 'mil@house.com') }
 
   it "gets access_token with valid parameters" do
     j = api_post 'sessions', { username: 'milhouse', password: 'greatpass'}

@@ -1,0 +1,16 @@
+<nav aria-label="breadcrumb" class="breadcrumbs mb-2">
+  <ul class="breadcrumb">
+    <% breadcrumbs.each_with_index do |breadcrumb, index| %>
+      <% active = index == breadcrumbs.length - 1 %>
+      <li class="breadcrumb-item <%= "active" if breadcrumb.active? %>" <%= "aria-current=\"page\"" if breadcrumb.active? %>>
+        <% if breadcrumb.url %>
+          <a href="<%= breadcrumb.url %>">
+            <%= breadcrumb.label %>
+          </a>
+        <% else %>
+          <%= breadcrumb.label %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</nav>

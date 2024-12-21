@@ -1,0 +1,12 @@
+<div class="device row border-top g-0">
+  <%= link_to(ui_device_path(device.id), class: "device-link") do %>
+    <span class="sr-only"><%= device.name %></span>
+  <% end %>
+  <div class="col-12 col-md-3">
+    <%= render partial: "ui/devices/map", locals: { device: device} %>
+  </div>
+  <div class="col-12 col-md-9 p-3 pb-4">
+    <h3 class="mb-1"><%= device.name %></h3>
+    <%= render partial: "ui/devices/meta", locals: { device: device, hide_owner: local_assigns[:hide_owner] } %>
+  </div>
+</div>

@@ -1,0 +1,205 @@
+h1, h2, h3, h4, h5, h6 {
+  text-transform: uppercase;
+}
+
+
+body{
+  background-color: $grey-300;
+  background-image: image-url("sck_bg.png");
+  background-repeat: repeat;
+  background-size: 65px;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+::selection {
+  background-color: $yellow;
+  color: $black;
+}
+
+body > .container {
+  flex-grow: 1;
+}
+
+.border-medium {
+  border-width: 2px !important;
+}
+
+.border-thick {
+  border-width: 3px !important;
+}
+
+.btn {
+  text-transform: uppercase;
+  text-decoration: none !important;
+  font-family: "Kanit";
+  font-weight: 600;
+  &.btn-primary {
+    background-color: $black;
+    color: $white;
+    border: 3px solid $black;
+  }
+  &.btn-secondary {
+    color: $black;
+    background-color: $white;
+    border: 3px solid $black;
+  }
+  &.btn-dark {
+    background-color: $black;
+    color: $white;
+    border: 3px solid $white;
+  }
+  &.btn-right {
+    border-radius: 0 $btn-border-radius $btn-border-radius 0;
+    border: 2px solid $black;
+    border-left: none;
+    padding-left: 1rem;
+    &:hover, &:active, &:focus, &:focus-visible {
+      border-left: none !important;
+      border-width: 2px !important;
+    }
+  }
+  &:hover, &:active, &:focus, &:focus-visible {
+    background-color: $primary !important;
+    color: $black !important;
+    border: 3px solid $black !important;
+    &.btn-dark {
+      border: 3px solid $primary !important;
+    }
+    outline: none !important;
+    box-shadow: none !important;
+    &.btn-danger {
+      background-color: $white !important;
+      color: $red !important;
+      border-color: $red !important;
+    }
+  }
+}
+
+.form-control, .form-select {
+  border-radius: 2rem;
+  .input-group-lg & {
+    border-radius: 2rem;
+  }
+  padding: 0.75rem 1.5rem;
+  border-width: 2px;
+  &:focus {
+    outline: $primary solid 3px;
+    box-shadow: none;
+    border: 3px solid $black;
+  }
+  &.dropdown {
+    padding: 0.75rem 1.5rem 0.75rem 0.75rem;
+  }
+}
+
+.form-check {
+  padding-left: 0.5rem;
+
+  .form-check-input {
+    border-radius: 0.33rem;
+    float: none;
+    margin-right: 0.5rem;
+    font-size: 2rem;
+    border: 2px solid $black;
+    vertical-align: middle;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    margin-left: -0.5rem;
+    color: $black;
+    &:focus {
+      outline: $primary solid 3px;
+      box-shadow: none;
+      border: 3px solid $black;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    &.is-invalid {
+      border-color: var(--bs-form-invalid-color);
+    }
+  }
+}
+
+input:checked[type="checkbox"] {
+  --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%231C1C1C' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
+    background-color: $white !important;
+}
+
+input[type="file"] {
+  padding: 0;
+  &::file-selector-button {
+    padding: 1rem 1rem 1rem 2rem;
+    background-color: $black;
+    color: $white;
+    border-right: 2px solid $black;
+  }
+  &:hover {
+    &::file-selector-button {
+      background-color: $primary !important;
+      color: $black;
+    }
+  }
+}
+
+.form-label {
+  margin-left: 1rem;
+}
+
+.form-check-label {
+  display: inline;
+}
+
+.width-fit-content {
+  width: fit-content !important;
+}
+
+.invalid-feedback {
+  margin-left: 1rem;
+}
+
+.danger {
+  color: $red;
+}
+
+.circular-image-crop {
+  width: 100%;
+  aspect-ratio: 1;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  img {
+    display: inline;
+    margin: 0 auto;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+}
+
+.link-white {
+  color: $white !important;
+  &:hover, &:active, &:focus, &:focus-visible {
+    color: $yellow !important;
+  }
+}
+
+.inline-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  li {
+    display: inline;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
