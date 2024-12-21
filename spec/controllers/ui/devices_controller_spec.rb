@@ -153,5 +153,85 @@ describe Ui::DevicesController do
       end
     end
   end
+
+  describe "delete" do
+    context "when the device's owner is logged in" do
+      it "displays the delete device form" do
+        get :delete, params: { id: device.id }, session: { user_id: user.try(:id) }
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:delete)
+      end
+    end
+
+    context "when a different user is logged in" do
+      let(:owner) { create(:user) }
+      it "redirects to the ui users page" do
+        get :delete, params: { id: device.id }, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(ui_user_path(user.username))
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when no user is logged in" do
+      let(:user) { nil }
+      it "redirects to the login page" do
+        get :delete, params: { id: device.id }, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+  end
+
+  describe "destroy" do
+    context "when the device's owner is logged in" do
+      context "when the correct device name is provided" do
+        it "archives the devicer, and redirects to the user's profile" do
+          expect_any_instance_of(Device).to receive(:archive!)
+          delete :destroy,
+            params: { id: device.id, name: device.name },
+            session: { user_id: user.try(:id) }
+          expect(response).to redirect_to(ui_user_path(user.username))
+          expect(flash[:success]).to be_present
+        end
+      end
+
+      context "when an incorrect device name is provided" do
+        it "does not archive the device and redirects to the delete page" do
+          expect_any_instance_of(Device).not_to receive(:archive!)
+          delete :destroy,
+            params: { id: device.id, name: "a wrong device name" },
+            session: { user_id: user.try(:id) }
+          expect(response).to redirect_to(delete_ui_device_path(device.id))
+          expect(flash[:alert]).to be_present
+        end
+      end
+    end
+
+    context "when a different user is logged in" do
+      let(:owner) { create(:user) }
+
+      it "does not archive the device and redirects to the ui users page" do
+        expect_any_instance_of(Device).not_to receive(:archive!)
+        delete :destroy,
+          params: { id: device.id, name: device.name },
+          session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(ui_user_path(user.username))
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when no user is logged in" do
+      let(:user) { nil }
+
+      it "does not archive the user and redirets to the login page" do
+        expect_any_instance_of(Device).not_to receive(:archive!)
+        delete :destroy,
+          params: { id: device.id, name: device.name },
+          session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+  end
 end
 

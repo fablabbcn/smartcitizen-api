@@ -34,6 +34,31 @@ module Ui
       end
     end
 
+    def delete
+      find_device!
+      return unless authorize_device! :destroy?, :delete_device_forbidden
+      @title = I18n.t(:delete_device_title, name: @device.name)
+      add_breadcrumbs(
+        [I18n.t(:show_user_title, owner: helpers.possessive(@device.owner, current_user)), ui_user_path(@device.owner.username)],
+        [I18n.t(:show_device_title, name: @device.name), ui_device_path(@device.id)],
+        [I18n.t(:edit_device_title, name: @device.name), edit_ui_device_path(@device.id)],
+        [I18n.t(:delete_device_title, name: @device.name), delete_ui_device_path(@device.id)]
+      )
+    end
+
+    def destroy
+      find_device!
+      return unless authorize_device! :destroy?, :delete_device_forbidden
+      if @device.name != params[:name]
+        flash[:alert] = I18n.t(:delete_device_wrong_name)
+        redirect_to delete_ui_device_path(@device.id)
+        return
+      end
+      @device.archive!
+      flash[:success] = I18n.t(:delete_device_success)
+      redirect_to ui_user_path(current_user.username)
+    end
+
     private
 
     def device_params

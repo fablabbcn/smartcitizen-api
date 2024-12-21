@@ -29,3 +29,7 @@ en:
     edit_device_forbidden: "You are not allowed to edit settings for that kit!"
     update_device_success: "The kit's settings have been updated!"
     update_device_failure: "Some errors prevented us from updating the kit's settings. Please check below and try again!"
+    delete_device_title: "Delete kit: %{name}"
+    delete_device_forbidden: "You are not allowed to delete that kit!"
+    delete_device_success: "The kit has been deleted!"
+    delete_device_wrong_name: "That kit name did not match! Please try again."
