@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     resources :devices, as: "devices" do
       member do
         get :edit
+        get :delete
       end
     end
 

@@ -3,7 +3,7 @@ en:
   show_user_edit_cta: "Edit %{owner} profile"
   show_user_secrets_cta: "Show %{owner} API keys"
   show_user_log_out_cta: "Sign out"
-  show_user_devices_heading: "Devices"
+  show_user_devices_heading: "Kits"
   show_user_no_devices_message: "%{username} has no kits yet!"
   secrets_user_blurb_html: This key gives you access to your data in the SmartCitizen platform using the <a href="https://developer.smartcitizen.me/" target="_blank">REST API</a>. <strong>Please keep it safe and do not share with anyone, just as you would with a password</strong>.
   secrets_user_api_key_label: API key
@@ -24,7 +24,7 @@ en:
   edit_user_public_profile_subhead: "Public profile"
   edit_user_other_actions_subhead: "Other Actions"
   edit_user_delete_account_submit: "Permanently delete %{owner} account"
-  delete_user_warning_html: "🚨<strong>Warning!</strong> This will permanently delete the account <strong>%{username}</strong> and all of its devices.🚨"
+  delete_user_warning_html: "🚨<strong>Warning!</strong> This will permanently delete the account <strong>%{username}</strong> and all of its kits.🚨"
   delete_user_username_label: "To confirm, type %{owner} username below:"
   delete_user_submit: "I understand, delete %{owner} account"
   users_password_reset_landing_confirmation_label: "Confirm new password"
