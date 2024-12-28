@@ -337,6 +337,18 @@ class Device < ActiveRecord::Base
     end
   end
 
+  def csv_export_requested_recently?
+    !!self.csv_export_requested_at && self.csv_export_requested_at > 15.minutes.ago
+  end
+
+  def request_csv_archive_for!(user)
+    return false if self.csv_export_requested_recently?
+    self.update_column(:csv_export_requested_at, Time.now.utc)
+    mailer = UserMailer.device_archive(self.id, user.id)
+    mailer.deliver_later
+    return true
+  end
+
   private
 
     def set_state

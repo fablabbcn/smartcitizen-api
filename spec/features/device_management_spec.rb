@@ -61,4 +61,24 @@ feature "Device management" do
     expect(page).not_to have_content(device_name)
     expect(device.reload).to be_archived
   end
+
+  scenario "User downloads CSV archive for a device" do
+    fake_file = double(:file)
+    allow(fake_file).to receive(:url).and_return("https://example.com")
+    allow(DeviceArchive).to receive(:create).and_return(fake_file)
+    password = "password123"
+    username = "username"
+    device_name = "devicename"
+    user = create(:user, username: username, password: password, password_confirmation: password)
+    device = create(:device, name: device_name, owner: user)
+    visit "/login"
+    fill_in "Username or email", with: user.email
+    fill_in "Password", with: password
+    click_on "Sign into your account"
+    click_on device_name
+    click_on "Download data as CSV"
+    click_on "Request data download"
+    expect(page).to have_current_path(ui_device_path(device.id))
+    expect(page).to have_content("Your CSV download has been requested, you'll shortly receive an email with a download link!")
+  end
 end
