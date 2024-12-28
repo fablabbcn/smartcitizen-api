@@ -59,6 +59,28 @@ module Ui
       redirect_to ui_user_path(current_user.username)
     end
 
+    def download
+      find_device!
+      return unless authorize_device! :download?, :download_device_forbidden
+      @title = I18n.t(:download_device_title)
+      add_breadcrumbs(
+        [I18n.t(:show_user_title, owner: helpers.possessive(@device.owner, current_user)), ui_user_path(@device.owner.username)],
+        [I18n.t(:show_device_title, name: @device.name), ui_device_path(@device.id)],
+        [@title, download_ui_device_path(@device.id)]
+      )
+    end
+
+    def download_confirm
+      find_device!
+      return unless authorize_device! :download?, :download_device_forbidden
+      if @device.request_csv_archive_for!(current_user)
+        flash[:success] = I18n.t(:download_device_success)
+      else
+        flash[:alert] = I18n.t(:download_device_requested_too_soon)
+      end
+      redirect_to ui_device_path(@device.id)
+    end
+
     private
 
     def device_params

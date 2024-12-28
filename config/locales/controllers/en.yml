@@ -33,3 +33,7 @@ en:
     delete_device_forbidden: "You are not allowed to delete that kit!"
     delete_device_success: "The kit has been deleted!"
     delete_device_wrong_name: "That kit name did not match! Please try again."
+    download_device_title: "Data download"
+    download_device_forbidden: "You are not allowed to download data for that kit!"
+    download_device_success: "Your CSV download has been requested, you'll shortly receive an email with a download link!"
+    download_device_requested_too_soon: "Sorry, requests for CSV downloads are rate-limited. Please wait before requesting another download."

@@ -31,6 +31,8 @@ Rails.application.routes.draw do
       member do
         get :edit
         get :delete
+        get :download
+        post :download, to: "devices#download_confirm"
       end
     end
 

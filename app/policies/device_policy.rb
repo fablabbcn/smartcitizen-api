@@ -42,4 +42,8 @@ class DevicePolicy < ApplicationPolicy
   def destroy?
     update?
   end
+
+  def download?
+    update?
+  end
 end

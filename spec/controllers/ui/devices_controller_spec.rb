@@ -233,5 +233,73 @@ describe Ui::DevicesController do
       end
     end
   end
+
+  describe "download" do
+    context "when the device's owner is logged in" do
+      it "displays the download device page" do
+        get :download, params: { id: device.id }, session: { user_id: user.try(:id) }
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:download)
+      end
+    end
+
+    context "when a different user is logged in" do
+      let(:owner) { create(:user) }
+      it "redirects to the ui users page" do
+        get :download, params: { id: device.id }, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(ui_user_path(user.username))
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when no user is logged in" do
+      let(:user) { nil }
+      it "redirects to the login page" do
+        get :download, params: { id: device.id }, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+  end
+
+  describe "download_confirm" do
+    context "when the device's owner is logged in" do
+      context "when a CSV download has not yet been requested during the timeout period" do
+        it "requests a CSV archive and redirects to the device page, setting the success flash" do
+          expect_any_instance_of(Device).to receive(:request_csv_archive_for!).with(user).and_return(true)
+          post :download_confirm, params: { id: device.id }, session: { user_id: user.try(:id) }
+          expect(response).to redirect_to(ui_device_path(device.id))
+          expect(flash[:success]).to be_present
+        end
+      end
+
+      context "when a CSV download has already been requested during the timeout period" do
+        it "requests a CSV archive and redirects to the device page, setting the alert flash" do
+          expect_any_instance_of(Device).to receive(:request_csv_archive_for!).with(user).and_return(false)
+          post :download_confirm, params: { id: device.id }, session: { user_id: user.try(:id) }
+          expect(response).to redirect_to(ui_device_path(device.id))
+          expect(flash[:alert]).to be_present
+        end
+      end
+    end
+
+    context "when a different user is logged in" do
+      let(:owner) { create(:user) }
+      it "redirects to the ui users page" do
+        post :download_confirm, params: { id: device.id }, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(ui_user_path(user.username))
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when no user is logged in" do
+      let(:user) { nil }
+      it "redirects to the login page" do
+        post :download_confirm, params: { id: device.id }, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+  end
 end
 
