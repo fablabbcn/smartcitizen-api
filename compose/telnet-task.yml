@@ -6,3 +6,7 @@ services:
     restart: always
     environment:
       db_pool_size: 2
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
