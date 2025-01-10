@@ -3,6 +3,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
+html {
+  overflow-x: hidden;
+}
+
 body{
   background-color: $grey-300;
   background-image: image-url("sck_bg.png");
@@ -12,6 +16,7 @@ body{
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 

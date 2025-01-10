@@ -16,6 +16,7 @@ class Component < ActiveRecord::Base
   # validates :sensor_id, :uniqueness => { :scope => [:device_id] }
   # validates :key, :uniqueness => { :scope =>  [:device_id] }
 
+  scope :order_by_sensor_id, -> { order("sensor_id ASC") }
 
   before_validation :set_key, on: :create
 
@@ -37,6 +38,35 @@ class Component < ActiveRecord::Base
     matching_keys = other_keys.select { |k| k =~ /^#{default_key}/ }
     ix = matching_keys.length
     ix == 0 ? default_key : "#{default_key}_#{ix}"
+  end
+
+  def measurement_name
+    self&.sensor&.measurement&.name
+  end
+
+  def measurement_description
+    self&.sensor&.measurement&.description
+  end
+
+  def value_unit
+    self&.sensor&.unit
+  end
+
+  def latest_value
+    self.device.data[self.sensor.id.to_s]
+  end
+
+  def previous_value
+    self.device.old_data[self.sensor.id.to_s]
+  end
+
+  def is_raw?
+    sensor&.tags&.include?("raw")
+  end
+
+  def trend
+    return 0 if !self.latest_value || !self.previous_value
+    (self.latest_value - self.previous_value) <=> 0
   end
 
   private
