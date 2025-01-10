@@ -1,4 +1,8 @@
 {
+  "browserslist": [
+    "defaults",
+    "IE 11"
+  ],
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "@rails/activestorage": "^8.0.100",
@@ -6,9 +10,12 @@
     "@rails/webpacker": "5.4.4",
     "bootstrap": "^5.3.3",
     "bootstrap5-tags": "^1.7.6",
+    "d3": "^7.9.0",
     "jquery": "^3.7.1",
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
+    "sorted-btree": "^1.8.1",
+    "strftime": "^0.10.3",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
   },

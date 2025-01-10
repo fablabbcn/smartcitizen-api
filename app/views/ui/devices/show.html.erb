@@ -10,3 +10,11 @@
   <%= render partial: "ui/devices/actions", locals: { device: @device } %>
 <% end %>
 <%= render partial: "ui/shared/profile_header", locals: { title: t(:show_device_headline, name: @device.name) } %>
+
+<%= render layout: "ui/shared/container" do %>
+  <% @device.components.order_by_sensor_id.each do |component| %>
+    <% unless component.is_raw? %>
+        <%= render partial: "ui/shared/reading", locals: { component: component } %>
+    <% end %>
+  <% end %>
+<% end %>
