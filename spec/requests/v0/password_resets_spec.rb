@@ -117,7 +117,6 @@ describe V0::PasswordResetsController do
     it "can reset password with valid token" do
       expect(user.authenticate('newpass')).to be_falsey
       j = api_put "password_resets/#{user.password_reset_token}", { password: 'newpass' }
-      p response
       expect(j["username"]).to eq(user.username)
       expect(response.status).to eq(200)
 

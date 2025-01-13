@@ -15,6 +15,8 @@ class Kairos
     rollup_value = params[:rollup].to_i
     rollup_unit = Kairos.get_timespan( params[:rollup].gsub(rollup_value.to_s,'') )
 
+    limit = params[:limit]&.to_i
+
     device = Device.find(params[:id])
 
     if sensor_key = params[:sensor_key]
@@ -25,6 +27,7 @@ class Kairos
     end
 
     component = device.find_component_by_sensor_id(sensor_id)
+
 
     unless component
       return {
@@ -44,6 +47,7 @@ class Kairos
     metrics = [{
       tags: { device_id: params[:id] },
       name: sensor_key,
+      limit: limit,
       aggregators: [
         {
           name: function,
@@ -54,7 +58,7 @@ class Kairos
           }
         }
       ]
-    }]
+    }.compact]
 
     data = { metrics: metrics, cache_time: 0 }
 
