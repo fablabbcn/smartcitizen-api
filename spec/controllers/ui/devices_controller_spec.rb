@@ -301,5 +301,96 @@ describe Ui::DevicesController do
       end
     end
   end
+
+  describe "register" do
+    context "when no user is logged in" do
+      let(:user) { nil }
+
+      it "redirects to the login page" do
+        get :register, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when a user is logged in" do
+      let(:user) { create(:user) }
+
+      it "displays the register device page" do
+        get :register, session: { user_id: user.try(:id) }
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:register)
+      end
+    end
+  end
+
+  describe "new" do
+    context "when no user is logged in" do
+      let(:user) { nil }
+
+      it "redirects to the login page" do
+        get :new, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when a user is logged in" do
+      let(:user) { create(:user) }
+
+      it "displays the register device page" do
+        get :new, session: { user_id: user.try(:id) }
+        expect(response).to have_http_status(:success)
+        expect(assigns[:device]).to be_present
+        expect(response).to render_template(:new)
+      end
+    end
+  end
+
+  describe "create" do
+    let(:device_params) {
+      { name: "A device", description: "A device description" }
+    }
+
+    context "when no user is logged in" do
+      let(:user) { nil }
+
+      it "redirects to the login page" do
+        post :create, params: { device: device_params }, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when a user is logged in" do
+      let(:user) { create(:user) }
+
+      context "when the parameters provided are valid" do
+        it "creates a device and redirects to the device page" do
+          expect_any_instance_of(Device).to receive(:save).and_call_original
+          post :create, params: { device: device_params }, session: { user_id: user.try(:id) }
+          expect(response).to redirect_to(ui_device_path(Device.last.id))
+          expect(flash[:success]).to be_present
+          expect(Device.last.name).to eq(device_params[:name])
+          expect(Device.last.description).to eq(device_params[:description])
+          expect(Device.last.owner).to eq(user)
+        end
+      end
+
+      context "when the parameters provided are invalid" do
+        let(:device_params) {
+          { name: nil, description: "A device description" }
+        }
+
+        it "does not create a device, and rerenders the new device page" do
+          expect_any_instance_of(Device).not_to receive(:save)
+          post :create, params: { device: device_params }, session: { user_id: user.try(:id) }
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to render_template(:new)
+          expect(flash[:alert]).to be_present
+        end
+      end
+    end
+  end
 end
 

@@ -81,4 +81,28 @@ feature "Device management" do
     expect(page).to have_current_path(ui_device_path(device.id))
     expect(page).to have_content("Your CSV download has been requested, you'll shortly receive an email with a download link!")
   end
+
+  scenario "User adds a new legacy device" do
+    password = "password123"
+    username = "username"
+    device_name = "devicename"
+    user = create(:user, username: username, password: password, password_confirmation: password)
+    visit "/login"
+    fill_in "Username or email", with: user.email
+    fill_in "Password", with: password
+    click_on "Sign into your account"
+    click_on "Register a new kit"
+    click_on "Legacy Smart Citizen Kit version 1.0 and 1.1"
+    fill_in "Name", with: "kit name"
+    fill_in "Description", with: "kit description"
+    fill_in "MAC address", with: "2b:84:b1:3e:24:1b"
+    select "Indoor", from: "Exposure"
+    select "Smart Citizen Kit 1.1", from: "Hardware version"
+    check "Enable precise location"
+    click_on "Register"
+    expect(page).to have_current_path(ui_device_path(Device.last.id))
+    expect(page).to have_content("The kit has been registered!")
+    expect(page).to have_content("kit name")
+    expect(page).to have_content("kit description")
+  end
 end

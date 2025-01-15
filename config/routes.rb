@@ -34,6 +34,11 @@ Rails.application.routes.draw do
         get :download
         post :download, to: "devices#download_confirm"
       end
+      collection do
+        get :register
+        get :new
+        post :create
+      end
     end
 
     get "sessions/destroy", to: "sessions#destroy"
