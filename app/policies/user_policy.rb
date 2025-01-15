@@ -27,4 +27,8 @@ class UserPolicy < ApplicationPolicy
   def show_secrets?
     user.try(:is_admin?) || user == record
   end
+
+  def register_device?
+    user == record
+  end
 end

@@ -8,6 +8,7 @@ require 'geohash'
 class Device < ActiveRecord::Base
 
   EXPOSURE_VALUES = %w{indoor outdoor}
+  HARDWARE_VERSION_OVERRIDE_VALUES = %w{1 1.1}
 
   default_scope { with_active_state }
 

@@ -37,3 +37,9 @@ en:
     download_device_forbidden: "You are not allowed to download data for that kit!"
     download_device_success: "Your CSV download has been requested, you'll shortly receive an email with a download link!"
     download_device_requested_too_soon: "Sorry, requests for CSV downloads are rate-limited. Please wait before requesting another download."
+    register_device_forbidden: "You need to be logged in to register a new kit!"
+    register_device_title: "Register a new kit"
+    new_device_title: "Register a new legacy kit"
+    new_device_success: "The kit has been registered!"
+    new_device_failure: "Some errors prevented us from registering your device. Please check below and try again!"
+

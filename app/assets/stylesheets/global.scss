@@ -153,6 +153,10 @@ input[type="file"] {
   margin-left: 1rem;
 }
 
+.form-text {
+  margin-left: 1rem;
+}
+
 .form-check-label {
   display: inline;
 }
@@ -207,4 +211,18 @@ input[type="file"] {
   width: 1px;
   height: 1px;
   overflow: hidden;
+}
+
+.contain-image {
+  width: 100%;
+  object-fit: contain;
+  aspect-ratio: 1;
+}
+
+a.subtle-link {
+  color: $black;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 }

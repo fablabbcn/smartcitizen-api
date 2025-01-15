@@ -81,6 +81,43 @@ module Ui
       redirect_to ui_device_path(@device.id)
     end
 
+    def register
+      unless current_user
+        flash[:alert] = I18n.t(:register_device_forbidden)
+        redirect_to login_path
+        return
+      end
+      @title = I18n.t(:register_device_title)
+    end
+
+    def new
+      unless current_user
+        flash[:alert] = I18n.t(:register_device_forbidden)
+        redirect_to login_path
+        return
+      end
+      @title = I18n.t(:new_device_title)
+      @device = Device.new(owner: current_user)
+    end
+
+    def create
+      unless current_user
+        flash[:alert] = I18n.t(:register_device_forbidden)
+        redirect_to login_path
+        return
+      end
+      @device = Device.new(device_params)
+      @device.owner = current_user
+      if @device.valid?
+        @device.save
+        flash[:success] = I18n.t(:new_device_success)
+        redirect_to ui_device_path(@device.id)
+      else
+        flash[:alert] = I18n.t(:new_device_failure)
+        render :new, status: :unprocessable_entity
+      end
+    end
+
     private
 
     def device_params
@@ -95,6 +132,8 @@ module Ui
         :enable_forwarding,
         :notify_low_battery,
         :notify_stopped_publishing,
+        :hardware_version_override,
+        :mac_address,
         { :tag_ids => [] },
         { :postprocessing_attributes => :hardware_url },
       )
