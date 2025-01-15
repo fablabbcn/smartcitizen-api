@@ -88,6 +88,10 @@ module Ui
         return
       end
       @title = I18n.t(:register_device_title)
+      add_breadcrumbs(
+        [I18n.t(:show_user_title, owner: helpers.possessive(current_user, current_user, capitalize: true)), ui_user_path(current_user)],
+        [@title, register_ui_devices_path]
+      )
     end
 
     def new
@@ -97,6 +101,11 @@ module Ui
         return
       end
       @title = I18n.t(:new_device_title)
+      add_breadcrumbs(
+        [I18n.t(:show_user_title, owner: helpers.possessive(current_user, current_user, capitalize: true)), ui_user_path(current_user)],
+        [I18n.t(:register_device_title), register_ui_devices_path],
+        [@title, new_ui_device_path]
+      )
       @device = Device.new(owner: current_user)
     end
 
