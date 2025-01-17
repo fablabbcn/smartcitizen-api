@@ -1,6 +1,7 @@
 en:
   show_device_headline: "Kit: %{name}"
   show_device_edit_cta: "Edit kit settings"
+  show_device_upload_cta: "Upload data as CSV"
   show_device_download_cta: "Download data as CSV"
   device_meta_last_reading_at: "Last reading %{time} ago"
   device_meta_no_readings_message: "No readings received yet!"
@@ -46,3 +47,7 @@ en:
   register_device_v2_description_html: "Smart Citizen Kit version 2.0 to 2.3<br />(from 2017 onwards)"
   register_device_v2_registration_link: "https://start.smartcitizen.me"
   new_device_submit: "Register"
+  upload_device_blurb: "If your Smart Citizen kit does not have an internet connection, you can manually upload data from the CSV files stored on its SD card."
+  upload_device_data_files_label: "Choose CSV files"
+  upload_device_data_files_help: "(you can upload multiple files by holding down the shift key while selecting.)"
+  upload_device_submit: "Upload"

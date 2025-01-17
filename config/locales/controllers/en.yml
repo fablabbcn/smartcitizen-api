@@ -42,4 +42,8 @@ en:
     new_device_title: "Register a new legacy kit"
     new_device_success: "The kit has been registered!"
     new_device_failure: "Some errors prevented us from registering your device. Please check below and try again!"
+    upload_device_title: "Data upload"
+    upload_device_forbidden: "You are not allowed to upload data for that kit!"
+    upload_device_success: "Your data has been uploaded succesfully!"
+
 

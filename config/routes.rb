@@ -32,6 +32,8 @@ Rails.application.routes.draw do
         get :edit
         get :delete
         get :download
+        get :upload
+        post :upload, to: "devices#upload_readings"
         post :download, to: "devices#download_confirm"
       end
       collection do

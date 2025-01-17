@@ -127,6 +127,28 @@ module Ui
       end
     end
 
+    def upload
+      find_device!
+      return unless authorize_device! :upload?, :upload_device_forbidden
+      @title = I18n.t(:upload_device_title)
+      add_breadcrumbs(
+        [I18n.t(:show_user_title, owner: helpers.possessive(@device.owner, current_user)), ui_user_path(@device.owner.username)],
+        [I18n.t(:show_device_title, name: @device.name), ui_device_path(@device.id)],
+        [@title, download_ui_device_path(@device.id)]
+      )
+    end
+
+    def upload_readings
+      find_device!
+      return unless authorize_device! :upload?, :upload_device_forbidden
+      params[:data_files].each do |file|
+        CSVUploadJob.perform_later(@device.id, file.read)
+      end
+      flash[:success] = I18n.t(:upload_device_success)
+      redirect_to ui_device_path(@device.id)
+
+    end
+
     private
 
     def device_params

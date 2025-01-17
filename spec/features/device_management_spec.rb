@@ -105,4 +105,22 @@ feature "Device management" do
     expect(page).to have_content("kit name")
     expect(page).to have_content("kit description")
   end
+
+  scenario "User uploads a data CSV for a device" do
+    password = "password123"
+    username = "username"
+    device_name = "devicename"
+    user = create(:user, username: username, password: password, password_confirmation: password)
+    device = create(:device, name: device_name, owner: user)
+    visit "/login"
+    fill_in "Username or email", with: user.email
+    fill_in "Password", with: password
+    click_on "Sign into your account"
+    click_on device_name
+    click_on "Upload data as CSV"
+    attach_file "Choose CSV files", "#{File.dirname(__FILE__)}/../fixtures/fake_device_data.csv"
+    click_on "Upload"
+    expect(page).to have_current_path(ui_device_path(device.id))
+    expect(page).to have_content("Your data has been uploaded succesfully!")
+  end
 end
