@@ -46,4 +46,8 @@ class DevicePolicy < ApplicationPolicy
   def download?
     update?
   end
+
+  def upload?
+    update?
+  end
 end

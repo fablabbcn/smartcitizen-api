@@ -1,8 +1,11 @@
 <p class="mb-0">
   <% if authorize? device, :update? %>
-    <%= link_to(t(:show_device_edit_cta, name: device.name), edit_ui_device_path(device), class: "btn btn-dark me-md-2 w-100 w-md-auto") %>
+    <%= link_to(t(:show_device_edit_cta, name: device.name), edit_ui_device_path(device), class: "btn btn-dark mb-3 mb-lg-0 me-md-2 w-100 w-md-auto") %>
+  <% end %>
+  <% if authorize? device, :upload? %>
+    <%= link_to(t(:show_device_upload_cta), upload_ui_device_path(device), class: "btn btn-dark me-md-2 mb-3 mb-lg-0 w-100 w-md-auto") %>
   <% end %>
   <% if authorize? device, :download? %>
-    <%= link_to(t(:show_device_download_cta), download_ui_device_path(device), class: "btn btn-dark me-md-2 mt-3 mt-md-0 w-100 w-md-auto") %>
+    <%= link_to(t(:show_device_download_cta), download_ui_device_path(device), class: "btn btn-dark me-md-2 mb-3 mb-lg-0 w-100 w-md-auto") %>
   <% end %>
 </p>

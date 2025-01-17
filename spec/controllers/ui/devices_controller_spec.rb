@@ -336,8 +336,6 @@ describe Ui::DevicesController do
     end
 
     context "when a user is logged in" do
-      let(:user) { create(:user) }
-
       it "displays the register device page" do
         get :new, session: { user_id: user.try(:id) }
         expect(response).to have_http_status(:success)
@@ -391,6 +389,91 @@ describe Ui::DevicesController do
         end
       end
     end
+  end
+
+  describe "upload" do
+    context "when no user is logged in" do
+      let(:user) { nil }
+
+      it "redirects to the login page" do
+        get :upload, params: { id: device.id },  session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+
+    context "when no user is logged in" do
+      let(:user) { nil }
+
+      it "redirects to the login page" do
+        get :upload, params: { id: device.id }, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when the logged in user does not have permissions to upload to this device" do
+      let(:owner) { create(:user) }
+
+      it "redirects to the device page" do
+        get :upload, params: { id: device.id }, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(ui_user_path(user.username))
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when the logged in user does have permissions to upload to this device" do
+
+      it "renders the upload page" do
+        get :upload, params: { id: device.id }, session: { user_id: user.try(:id) }
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:upload)
+      end
+    end
+  end
+
+  describe "upload_readings" do
+
+      let(:csv_file) {
+        Rack::Test::UploadedFile.new(
+          "#{File.dirname(__FILE__)}/../../fixtures/fake_device_data.csv",
+          'text/csv',
+          true
+        )
+      }
+
+      context "when no user is logged in" do
+        let(:user) { nil }
+
+        it "redirects to the login page" do
+          post :upload_readings, params: { id: device.id, data_files: [csv_file] }, session: { user_id: user.try(:id) }
+          expect(response).to redirect_to(login_path)
+          expect(flash[:alert]).to be_present
+        end
+
+      end
+
+      context "when a user without permissions on the device is logged in" do
+        let(:owner) { create(:user) }
+
+        it "redirects to the login page" do
+          post :upload_readings, params: { id: device.id, data_files: [csv_file] }, session: { user_id: user.try(:id) }
+          expect(response).to redirect_to(ui_user_path(user.username))
+          expect(flash[:alert]).to be_present
+        end
+
+      end
+
+      context "when a user with permissions is logged in" do
+        it "kicks off csv upload jobs for each passed data file, then redirects to the device path" do
+          expect(CSVUploadJob).to receive(:perform_later).with(device.id, csv_file.read)
+          post :upload_readings, params: { id: device.id, data_files: [csv_file] }, session: { user_id: user.try(:id) }
+          expect(response).to redirect_to(ui_device_path(device.id))
+          expect(flash[:success]).to be_present
+        end
+      end
+
   end
 end
 
