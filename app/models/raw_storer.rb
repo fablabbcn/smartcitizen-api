@@ -62,18 +62,11 @@ class RawStorer
         device.update_columns(last_reading_at: parsed_ts, data: sql_data, state: 'has_published')
       end
 
-      forward_reading(device, data)
+      forward_readings(device, [sql_data])
     rescue Exception => e
 
       success = false
       raise e if raise_errors
-    end
-
-    if !Rails.env.test? and device
-      begin
-        Redis.current.publish("data-received", renderer.render( partial: "v0/devices/device", locals: {device: @device, current_user: nil}))
-      rescue
-      end
     end
   end
 end
