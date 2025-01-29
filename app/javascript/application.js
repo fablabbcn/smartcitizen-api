@@ -1,14 +1,14 @@
 import * as $ from "jquery";
 import Tags from "bootstrap5-tags";
 import {setupCopyableInputs} from "components/copyable_input";
-import {setupDeviceMaps} from "components/device_map";
+import {setupMaps} from "components/map";
 import {setupMapLocationPickers} from "components/map_location_picker";
 import {setupReadings} from "components/reading";
 
 export default function setupApplication() {
   $(function() {
     setupCopyableInputs();
-    setupDeviceMaps();
+    setupMaps();
     setupMapLocationPickers();
     setupReadings();
     Tags.init(".tag-select", {

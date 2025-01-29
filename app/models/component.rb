@@ -40,12 +40,8 @@ class Component < ActiveRecord::Base
     ix == 0 ? default_key : "#{default_key}_#{ix}"
   end
 
-  def measurement_name
-    self&.sensor&.measurement&.name
-  end
-
-  def measurement_description
-    self&.sensor&.measurement&.description
+  def measurement
+    self&.sensor&.measurement
   end
 
   def value_unit
@@ -61,7 +57,7 @@ class Component < ActiveRecord::Base
   end
 
   def is_raw?
-    sensor&.tags&.include?("raw")
+    sensor.is_raw?
   end
 
   def trend

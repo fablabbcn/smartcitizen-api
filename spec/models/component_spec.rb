@@ -31,19 +31,10 @@ RSpec.describe Component, :type => :model do
     end
   end
 
-  describe "measurement_name" do
+  describe "measurement" do
     it "delegates to the sensor's measurement" do
       component.sensor.measurement = create(:measurement)
-      expect(component.sensor.measurement).to receive(:name).and_return("measurement name")
-      expect(component.measurement_name).to eq("measurement name")
-    end
-  end
-
-  describe "measurement_description" do
-    it "delegates to the sensor's description" do
-      component.sensor.measurement = create(:measurement)
-      expect(component.sensor.measurement).to receive(:description).and_return("measurement description")
-      expect(component.measurement_description).to eq("measurement description")
+      expect(component.measurement).to eq(component.sensor.measurement)
     end
   end
 
@@ -69,16 +60,16 @@ RSpec.describe Component, :type => :model do
   end
 
   describe "is_raw?" do
-    describe "when the sensor has the 'raw' tag" do
+    describe "when the sensor is raw" do
       it "returns true" do
-        expect(component.sensor).to receive(:tags).and_return(["raw"])
+        expect(component.sensor).to receive(:is_raw?).and_return(true)
         expect(component.is_raw?).to be(true)
       end
     end
 
-    describe "when the sensor does not have the 'raw' tag" do
+    describe "when the sensor is not raw" do
       it "returns false" do
-        expect(component.sensor).to receive(:tags).and_return(["other"])
+        expect(component.sensor).to receive(:is_raw?).and_return(false)
         expect(component.is_raw?).to be(false)
       end
     end

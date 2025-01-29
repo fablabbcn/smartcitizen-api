@@ -1,0 +1,11 @@
+<%= render partial: "ui/experiments/header", locals: { experiment:  @experiment } %>
+<div class="container g-0 px-2">
+  <div class="row">
+    <div class="col-lg-2 d-none d-lg-flex">
+      <%= render partial: "ui/experiments/page_nav", locals: { experiment:  @experiment } %>
+    </div>
+    <div class="col-12 col-lg-10">
+      <%= render partial: "ui/experiments/devices_collection", locals: { experiment:  @experiment } %>
+    </div>
+  </div>
+</div>

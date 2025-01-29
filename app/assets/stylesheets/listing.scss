@@ -1,28 +1,18 @@
-.device {
+.listing {
   position: relative;
 
-  .device-link {
+  .listing-link {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       box-sizing: border-box;
-      z-index: 1000;
-  }
-
-  .device-map {
-    aspect-ratio: 1.66;
   }
 
   &:has(:hover) {
-    h3 {
-      text-decoration: underline;
-    }
-    .device-map {
-
+    .map  {
       background-color: $yellow;
-
       .leaflet-pane {
         mix-blend-mode: multiply;
       }
@@ -30,6 +20,10 @@
       .leaflet-marker-icon {
         filter: brightness(0) saturate(100%);
       }
+    }
+
+    h3 {
+      text-decoration: underline;
     }
   }
 }

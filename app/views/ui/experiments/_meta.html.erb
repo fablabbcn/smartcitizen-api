@@ -1,0 +1,21 @@
+<% if experiment.description.present? %>
+  <p class="mb-2 small"> <%= experiment.description %></p>
+<% end %>
+<% unless local_assigns[:hide_owner] %>
+  <p class="mb-0 small">
+  <span class="pe-1"><%= show_svg("user_details_icon_light.svg") %></span>
+    <%= link_to(experiment.owner.username, ui_user_path(experiment.owner.username), class: "d-inline-block position-relative subtle-link z-3") %>
+  </p>
+<% end %>
+<p class="mb-0 small">
+  <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
+  <% if experiment.last_reading_at %>
+    <%= t :experiment_meta_last_reading_at, time: time_ago_in_words(experiment.last_reading_at) %>
+  <% else %>
+    <%= t :experiment_meta_no_readings_message %>
+  <% end %>
+</p>
+<p class="mb-0 small">
+  <span class="pe-1"><%= show_svg("tag_icon.svg") %></span>
+  <%= experiment.all_tags.join(", ") %>
+</p>

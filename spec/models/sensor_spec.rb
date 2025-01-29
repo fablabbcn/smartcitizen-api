@@ -13,4 +13,21 @@ RSpec.describe Sensor, :type => :model do
 
   pending "has a min and max expectation"
 
+  describe "is_raw?" do
+    context "when the sensor has the raw tag" do
+      it "returns true" do
+        sensor = create(:sensor)
+        expect(sensor).to receive(:tags).and_return(["raw"])
+        expect(sensor.is_raw?).to be(true)
+      end
+    end
+    context "when the sensor does not have the raw tag" do
+      it "returns false" do
+        sensor = create(:sensor)
+        expect(sensor).to receive(:tags).and_return(["other"])
+        expect(sensor.is_raw?).to be(false)
+      end
+    end
+  end
+
 end

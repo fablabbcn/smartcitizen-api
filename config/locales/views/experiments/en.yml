@@ -1,0 +1,7 @@
+en:
+  experiment_meta_last_reading_at: "Last reading %{time} ago"
+  experiment_meta_no_readings_message: "No readings received yet!"
+  experiment_page_nav_devices: "Kits"
+  experiment_page_nav_readings_heading: "Readings"
+  experiment_devices_collection_heading: "Kits"
+  experiment_devices_collection_no_devices_message: "This experiment has no kits yet!"

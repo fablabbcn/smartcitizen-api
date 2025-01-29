@@ -3,10 +3,9 @@ import L from 'leaflet';
 import 'leaflet-defaulticon-compatibility';
 
 
-export function setupDeviceMaps() {
-  $(".device-map").each(function(ix, element) {
-    const latitude = element.dataset["latitude"];
-    const longitude = element.dataset["longitude"];
+export function setupMaps() {
+  $(".map").each(function(ix, element) {
+    const points = JSON.parse(element.dataset["points"]);
     const markerUrl = element.dataset["markerUrl"];
     const markerShadowUrl = element.dataset["markerShadowUrl"];
     const icon = L.icon({
@@ -17,9 +16,8 @@ export function setupDeviceMaps() {
       iconAnchor: [16, 40],
       shadowAnchor: [10, 59]
     });
+    const featureGroup = L.featureGroup()
     const map = L.map(element, {
-      center: [latitude, longitude],
-      zoom: 7,
       attributionControl: false,
       zoomControl: false,
       scrollWheelZoom: false,
@@ -36,7 +34,13 @@ export function setupDeviceMaps() {
       attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       ext: 'png'
     }).addTo(map);
-    L.marker([latitude, longitude], {icon: icon }).addTo(map);
-    element.style.cursor="default";
+    points.forEach((point) => {
+      if (point.lat && point.lng) {
+        const marker = L.marker([point.lat, point.lng], { icon: icon });
+        marker.addTo(map);
+        marker.addTo(featureGroup);
+      }
+    });
+    map.fitBounds(featureGroup.getBounds(), { padding: L.point(32, 40), maxZoom: 16});
   });
 }

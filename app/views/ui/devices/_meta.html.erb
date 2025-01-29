@@ -5,7 +5,7 @@
 <% unless local_assigns[:hide_owner] %>
   <p class="mb-0 small">
   <span class="pe-1"><%= show_svg("user_details_icon_light.svg") %></span>
-    <%= link_to(device.owner.username, ui_user_path(device.owner.username)) %>
+    <%= link_to(device.owner.username, ui_user_path(device.owner.username), class: "d-inline-block position-relative subtle-link z-3") %>
   </p>
 <% end %>
 <p class="mb-0 small">

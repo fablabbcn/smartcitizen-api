@@ -6,6 +6,8 @@ en:
   show_user_log_out_cta: "Sign out"
   show_user_devices_heading: "Kits"
   show_user_no_devices_message: "%{username} has no kits yet!"
+  show_user_experiments_heading: "Experiments"
+  show_user_no_experiments_message: "%{username} has no experiments yet!"
   secrets_user_blurb_html: This key gives you access to your data in the SmartCitizen platform using the <a href="https://developer.smartcitizen.me/" target="_blank">REST API</a>. <strong>Please keep it safe and do not share with anyone, just as you would with a password</strong>.
   secrets_user_api_key_label: API key
   secrets_user_forwarding_heading: "%{owner} MQTT Forwarding Keys"
@@ -39,4 +41,7 @@ en:
   no_device_kit_link_text: "Get your kit"
   no_device_onboarding_link_url: "https://start.smartcitizen.me/wizard/landing?lang=eng"
   no_device_onboarding_link_text: "Connect an existing kit"
+  no_experiment_cta_heading: "You don't yet have any experiments!"
+  no_experiment_cta_blurb: "Experiments let you manage multiple Smart Citizen kits in one place, and compare their readings."
+  no_experiment_link_text: "Create your first experiment"
   profile_image_alt: "Profile picture for user %{username}"

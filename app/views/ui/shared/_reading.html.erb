@@ -1,27 +1,44 @@
 <div class="reading"
   data-device-id="<%= component.device_id %>"
   data-sensor-id="<%= component.sensor_id %>"
-  data-from-date="<%= local_assigns[:from] || component.last_reading_at - 1.day %>"
-  data-to-date="<%= local_assigns[:to] || component.last_reading_at %>"
+  <% if component.last_reading_at %>
+    data-from-date="<%= local_assigns[:from] || (local_assigns[:to] || component.last_reading_at) - 1.day %>"
+    data-to-date="<%= local_assigns[:to] || component.last_reading_at %>"
+  <% end %>
+  data-sync-all-on-page="<%= local_assigns[:sync_all_on_page] || "" %>"
 >
   <%= render layout: "ui/shared/box", locals: { class: "mb-3 p-3", no_padding: true } do %>
     <div class="row align-items-top mb-3">
-      <div class="col-12 col-md-6 col-lg-4">
-        <h3><%= component.measurement_name %></h3>
-        <p class="date-line"><span data-hovered-text="<%= t(:reading_hover_reading_label) %>" class="label"><%= t(:reading_last_reading_label) %></span>: <span class="date"><%= component.last_reading_at.to_s(:long) %></span></p>
+      <div class="col-12 col-md-6 col-lg-5">
+        <h3 class="text-break">
+            <% if local_assigns[:title_link] %>
+              <%= link_to(local_assigns[:title] || component.measurement&.name, local_assigns[:title_link], class: "subtle-link") %>
+            <% else %>
+              <%= local_assigns[:title] || component.measurement&.name %></h3>
+            <% end %>
+        </h3>
+        <p class="date-line">
+        <% if component.last_reading_at %>
+          <span data-hovered-text="<%= t(:reading_hover_reading_label) %>" data-no-reading-text="<%= t(:reading_no_reading_label) %>" class="label"><%= t(:reading_last_reading_label) %></span>: <span class="date"><%= component.last_reading_at.to_s(:long) %></span>
+        <% else %>
+          <%= t(:reading_no_reading_label) %>
+        <% end %>
+        </p>
       </div>
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="big-number text-md-end text-lg-start">
-          <span class="trend"><% case component.trend %><% when 1 %>▴<% when -1 %>▾<% else %><strong>=</strong><% end %></span> <span class="value"><%= component.latest_value.round(2) %></span><span class="unit"><%= component.value_unit %></span>
-        </div>
+      <div class="col-12 col-md-6 col-lg-3 text-md-end text-lg-start">
+        <% if component.last_reading_at %>
+          <div class="big-number">
+            <span class="trend"><% case component.trend %><% when 1 %>▴<% when -1 %>▾<% else %><strong>=</strong><% end %></span> <span class="value"><%= component.latest_value.round(2) %></span><span class="unit"><%= component.value_unit %></span>
+          </div>
+        <% end %>
       </div>
-      <div class="col-12 col-lg-5">
+      <div class="col-12 col-lg-4">
         <div class="sparkline"></div>
       </div>
     </div>
     <div class="row">
       <div class="col-12">
-        <p><i><%= component.measurement_description %></i></p>
+        <p><i><%= local_assigns[:description] || component.measurement&.description %></i></p>
       </div>
     </div>
   <% end %>

@@ -43,6 +43,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :experiments, as: "experiments" do
+      member do
+        get :readings
+      end
+    end
+
     get "sessions/destroy", to: "sessions#destroy"
     resources :sessions, as: "sessions"
     post 'change_password', to: 'sessions#change_password', as: 'change_password'

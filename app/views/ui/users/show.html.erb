@@ -10,21 +10,13 @@
 <%= render partial: "ui/shared/profile_header", locals: { title: t(:show_user_headline, username: @user.username) } %>
 
 <div class="container g-0 px-2">
-  <div class="row g-0">
-    <div class="col-12 col-lg-10 offset-lg-2">
-      <%= render layout: "ui/shared/box", locals: { no_padding: true } do %>
-        <div class="p-3">
-          <% if current_user == @user && @user.devices.length < 1 %>
-            <%= render partial: "no_device_cta" %>
-          <% else %>
-            <h2><%= t :show_user_devices_heading %></h2>
-            <% if @user.devices.length < 1 %>
-              <p><%= t :show_user_no_devices_message, username: @user.username %></p>
-            <% end %>
-          <% end %>
-        </div>
-        <%= render partial: "ui/devices/device", collection: @user.devices.for_user(current_user).by_last_reading, locals: { hide_owner: true } %>
-      <% end %>
+  <div class="row">
+    <div class="col-lg-2 d-none d-lg-flex">
+      <%= render partial: "ui/users/page_nav" %>
+    </div>
+    <div class="col-12 col-lg-10">
+      <%= render partial: "ui/users/devices_collection", locals: { user: @user } %>
+      <%= render partial: "ui/users/experiments_collection", locals: { user: @user } %>
     </div>
   </div>
 </div>

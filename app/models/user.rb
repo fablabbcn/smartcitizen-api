@@ -33,6 +33,8 @@ class User < ActiveRecord::Base
   has_many :devices, foreign_key: 'owner_id', after_add: :update_cached_device_ids!, after_remove: :update_cached_device_ids!
   has_many :sensors, through: :devices
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
+  has_many :experiments, foreign_key: "owner_id"
+
   has_one_attached :profile_picture
 
   before_create :generate_legacy_api_key
