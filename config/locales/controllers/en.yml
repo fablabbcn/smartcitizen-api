@@ -48,5 +48,9 @@ en:
     show_experiment_title: "Experiment: %{name}"
     show_experiment_forbidden: "You are not allowed to view that experiment!"
     readings_experiment_title: "Experiment readings: %{name}"
+    edit_experiment_title: "Edit experiment: %{name}"
+    edit_experiment_forbidden: "You are not allowed to edit settings for that experiment!"
+    update_experiment_success: "The experiment's settings have been updated!"
+    update_experiment_failure: "Some errors prevented us from updating the experiment's settings. Please check below and try again!"
 
 

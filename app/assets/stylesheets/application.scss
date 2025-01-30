@@ -17,6 +17,7 @@
 @import "bootstrap";
 @import "rails_bootstrap_forms.css";
 @import "font-awesome";
+@import "vendor/flatpickr.min.css";
 @import "global";
 @import "nav";
 @import "breadcrumbs";
@@ -27,3 +28,4 @@
 @import "components/map";
 @import "components/map_location_picker";
 @import "components/reading";
+@import "components/devices_typeahead";

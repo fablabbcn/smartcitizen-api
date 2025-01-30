@@ -24,6 +24,29 @@ module Ui
       render "readings", layout: "base"
     end
 
+    def edit
+      find_experiment!
+      return unless authorize_experiment! :update?, :edit_experiment_forbidden
+      @title = I18n.t(:edit_experiment_title, name: @experiment.name)
+      add_breadcrumbs(
+        [I18n.t(:show_user_title, owner: helpers.possessive(@experiment.owner, current_user)), ui_user_path(@experiment.owner.username)],
+        [I18n.t(:show_experiment_title, name: @experiment.name), ui_experiment_path(@experiment.id)],
+        [@title, edit_ui_experiment_path(@experiment.id)]
+      )
+    end
+
+    def update
+      find_experiment!
+      return unless authorize_experiment! :update?, :edit_experiment_forbidden
+      if @experiment.update(experiment_params)
+        flash[:success] = I18n.t(:update_experiment_success)
+        redirect_to ui_experiment_path(@experiment.id)
+      else
+        flash[:alert] = I18n.t(:update_experiment_failure)
+        render :edit, status: :unprocessable_entity
+      end
+    end
+
     private
 
     def find_experiment!
@@ -46,6 +69,17 @@ module Ui
       flash[:alert] = I18n.t(alert)
       redirect_to current_user ? ui_user_path(current_user.username) : login_path
       return false
+    end
+
+    def experiment_params
+      params.require(:experiment).permit(
+        :name,
+        :description,
+        :is_test,
+        :starts_at,
+        :ends_at,
+        { :device_ids => [] },
+      ).transform_values {|v| v.blank? ? nil : v }
     end
   end
 end

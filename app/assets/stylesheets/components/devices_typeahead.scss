@@ -1,0 +1,21 @@
+.devices-typeahead {
+  .devices-list {
+    border-radius: 2rem !important;
+    .device-select-list-item:last-child {
+      border-bottom: none !important;
+    }
+  }
+  .remove-link {
+    svg {
+      width: 32px;
+      height: 32px;
+      path {
+        fill: $black;
+        &:hover {
+          fill: $primary;
+        }
+      }
+    }
+  }
+
+}

@@ -10,7 +10,7 @@
 <% end %>
 <p class="mb-0 small">
   <span class="pe-1"><%= show_svg("location_icon.svg") %></span>
-  <%= [device.city, device.country_name].compact.join(", ") %>
+  <%= device.location_string %>
 </p>
 <p class="mb-0 small">
   <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>

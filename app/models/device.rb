@@ -240,6 +240,10 @@ class Device < ActiveRecord::Base
     }.compact
   end
 
+  def location_string
+    [city, country_name].compact.join(", ")
+  end
+
   # TODO Remove: Deprevated in API v1
   def formatted_data
     s = {

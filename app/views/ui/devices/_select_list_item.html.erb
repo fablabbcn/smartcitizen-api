@@ -1,0 +1,19 @@
+<div class="row p-2 device-select-list-item border-bottom border-medium">
+  <div class="col-10">
+    <%= hidden_field_tag local_assigns[:name], local_assigns[:value], class: "template-input" %>
+    <p class="mb-1"><strong class="template-title"><%= local_assigns[:title] %></strong></p>
+    <p class="mb-0 small">
+      <span class="pe-1"><%= show_svg("user_details_icon_light.svg") %></span>
+      <span class="template-owner"><%= local_assigns[:owner] %></span>
+    </p>
+    <p class="mb-0 small">
+      <span class="pe-1"><%= show_svg("location_icon.svg") %></span>
+      <span class="template-location"><%= local_assigns[:location] %></span>
+    </p>
+    <p class="mb-0 mt-2 small template-description"><%= local_assigns[:description] %></p>
+  </div>
+  <div class="col-2 text-end align-content-center align-middle">
+    <a class="subtle-link remove-link" href="#"><%= show_svg("close_icon.svg") %></a>
+  </div>
+</div>
+

@@ -26,4 +26,29 @@ feature "Experiment management" do
     expect(page).to have_content(experiment_name)
     expect(page).to have_content(measurement_name)
   end
+
+
+  scenario "User edits an experiment" do
+    password = "password123"
+    username = "username"
+    device_name = "devicename"
+    experiment_name = "experimentname"
+    user = create(:user, username: username, password: password, password_confirmation: password)
+    device = create(:device, name: device_name, owner: user)
+    experiment = create(:experiment, owner: user, devices: [device], name: experiment_name)
+    visit "/login"
+    fill_in "Username or email", with: user.email
+    fill_in "Password", with: password
+    click_on "Sign into your account"
+    expect(page).to have_current_path(ui_user_path(user.username))
+    expect(page).to have_content(experiment_name)
+    click_on experiment_name
+    expect(page).to have_current_path(ui_experiment_path(experiment.id))
+    click_on "Edit experiment settings"
+    expect(page).to have_current_path(edit_ui_experiment_path(experiment.id))
+    fill_in "Name", with: "new experiment name"
+    click_on "Update"
+    expect(page).to have_current_path(ui_experiment_path(experiment.id))
+    expect(page).to have_content("new experiment name")
+  end
 end

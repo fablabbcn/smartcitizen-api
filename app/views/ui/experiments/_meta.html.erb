@@ -7,14 +7,18 @@
     <%= link_to(experiment.owner.username, ui_user_path(experiment.owner.username), class: "d-inline-block position-relative subtle-link z-3") %>
   </p>
 <% end %>
-<p class="mb-0 small">
-  <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
-  <% if experiment.last_reading_at %>
-    <%= t :experiment_meta_last_reading_at, time: time_ago_in_words(experiment.last_reading_at) %>
-  <% else %>
-    <%= t :experiment_meta_no_readings_message %>
-  <% end %>
-</p>
+<% if experiment.starts_at %>
+  <p class="mb-0 small">
+    <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
+    <%= t :experiment_meta_starts_at, time: experiment.starts_at.to_s(:long) %>
+  </p>
+<% end %>
+<% if experiment.ends_at %>
+  <p class="mb-0 small">
+    <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
+    <%= t :experiment_meta_ends_at, time: experiment.ends_at.to_s(:long) %>
+  </p>
+<% end %>
 <p class="mb-0 small">
   <span class="pe-1"><%= show_svg("tag_icon.svg") %></span>
   <%= experiment.all_tags.join(", ") %>
