@@ -1,0 +1,13 @@
+<% if @device.csv_export_requested_recently? %>
+  <p><%= t(:download_device_recently_requested_blurb) %></p>
+  <div class="mt-4">
+    <%= link_to(t(:download_device_back), ui_device_path(@device.id), class: "btn btn-secondary w-100 w-md-auto") %>
+  </div>
+<% else %>
+  <%= bootstrap_form_tag url: download_ui_device_path(@device.id), method: :post do |f| %>
+    <p><%= t(:download_device_confirmation_blurb) %></p>
+    <div class="mt-4">
+      <%= f.primary t(:download_device_submit), class: "btn btn-primary w-100 w-md-auto" %>
+    </div>
+  <% end %>
+<% end %>

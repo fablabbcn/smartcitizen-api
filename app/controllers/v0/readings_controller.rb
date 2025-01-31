@@ -58,13 +58,7 @@ module V0
       @device = Device.find(params[:id])
       authorize @device, :update?
 
-      if !@device.csv_export_requested_at or (@device.csv_export_requested_at < 15.minutes.ago)
-        @device.update_column(:csv_export_requested_at, Time.now.utc)
-        if Rails.env.test?
-          UserMailer.device_archive(@device.id, current_user.id).deliver_now
-        else
-          UserMailer.device_archive(@device.id, current_user.id).deliver_later
-        end
+      if @device.request_csv_archive_for!(current_user)
         render json: { id: "ok", message: "CSV Archive job added to queue", url: "", errors: "" }, status: :ok
       else
         render json: { id: "enhance_your_calm", message: "You can only make this request once every 6 hours, (this is rate-limited)", url: "", errors: "" }, status: 420

@@ -27,4 +27,7 @@ class Sensor < ActiveRecord::Base
     tag_sensors.map(&:name)
   end
 
+  def is_raw?
+    tags&.include?("raw")
+  end
 end

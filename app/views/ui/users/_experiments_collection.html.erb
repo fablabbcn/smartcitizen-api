@@ -1,0 +1,13 @@
+<%= render layout: "ui/shared/box", locals: { no_padding: true, class: "mt-5" } do %>
+  <div class="p-3" id="experiments">
+    <% if current_user == user && user.experiments.length < 1 %>
+      <%= render partial: "no_experiment_cta" %>
+    <% else %>
+      <h2><%= t :show_user_experiments_heading %></h2>
+      <% if user.experiments.length < 1 %>
+        <p><%= t :show_user_no_experiments_message, username: user.username %></p>
+      <% end %>
+    <% end %>
+  </div>
+  <%= render partial: "ui/experiments/experiment", collection: user.experiments, locals: { hide_owner: true } %>
+<% end %>

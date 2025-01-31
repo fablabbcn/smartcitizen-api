@@ -3,72 +3,26 @@ name: Ruby
 on: [push]
 
 jobs:
-  docker_build:
-    name: Build Dockerfile
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3.5.2
-      - name: Build the Dockerfile
-        run: docker build -t app .
   build:
-    name: The Build
+    name: Build and test
     runs-on: ubuntu-latest
-
-    services:
-      redis:
-        image: redis:4
-        ports:
-          - 6379:6379
-      postgres:
-        image: postgres:10
-        env:
-          POSTGRES_DB: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_USER: postgres
-        ports: ["5432:5432"]
-        # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
-    - uses: actions/checkout@v3.5.2
+      - uses: actions/checkout@v3
+      - name: Copy .env file
+        uses: canastro/copy-file-action@master
+        with:
+          source: "env.example"
+          target: ".env"
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
+      - name: Build the Stack
+        run: "docker compose build"
 
-    - name: Show available Ruby versions
-      run: |
-        ls $RUNNER_TOOL_CACHE/Ruby
-        uname -a
-        cat /etc/os-release
+      - name: Start dependencies
+        run: "docker compose up -d --no-deps db redis app"
 
-    - name: Install required packages
-      run: sudo apt-get install libpq-dev
+      - name: Run all tests
+        run: "docker compose exec app ./ci.sh"
 
-    - name: Test
-      run: |
-        RAILS_ENV=test bundle exec rails db:create
-        RAILS_ENV=test bundle exec rails db:schema:load
-        bundle exec rake
-      env:
-        #Note: DATABASE_URL does not work in TEST env.
-        TEST_DB_HOST: localhost
-        TEST_DB_USERNAME: postgres
-        TEST_DB_PASSWORD: postgres
-        TEST_DB_NAME: postgres
-        discourse_sso_secret: "secret"
-        discourse_endpoint: "https://example.com"
-        PG_PORT: ${{ job.services.postgres.ports['5432'] }}
+      - name: Teardown the stack
+        run: "docker compose down"
 
-    #- name: Deploy to server via SSH
-      #uses: appleboy/ssh-action@master
-      #with:
-        #host: ${{ secrets.HOST }}
-        #key: ${{ secrets.KEY }}
-        #port: ${{ secrets.PORT }}
-        #username: ${{ secrets.USERNAME }}
-        #script: |
-          #cd smartcitizen-api
-          #pwd
-          #./scripts/deploy.sh
-      #if: github.ref == 'refs/heads/master' && job.status == 'success'
