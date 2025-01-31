@@ -35,4 +35,8 @@ class UserPolicy < ApplicationPolicy
   def register_device?
     user == record
   end
+
+  def create_experiment?
+    user == record
+  end
 end

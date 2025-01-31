@@ -1,12 +1,15 @@
 <p class="mb-0">
   <% if authorize? user, :update? %>
-    <%= link_to(t(:show_user_edit_cta, owner: possessive(user, current_user)), edit_ui_user_path(user), class: "btn btn-dark me-md-2 mb-3 mb-lg-0 w-100 w-md-auto") %>
+    <%= link_to(t(:show_user_edit_cta, owner: possessive(user, current_user)), edit_ui_user_path(user), class: "btn btn-dark me-md-2 mb-3 w-100 w-md-auto") %>
   <% end %>
   <% if authorize? user, :show_secrets? %>
-    <%= link_to(t(:show_user_secrets_cta, owner: possessive(user, current_user)), secrets_ui_user_path(user), class: "btn btn-dark me-md-2 mb-3 mb-lg-0 w-100 w-md-auto") %>
+    <%= link_to(t(:show_user_secrets_cta, owner: possessive(user, current_user)), secrets_ui_user_path(user), class: "btn btn-dark me-md-2 mb-3 w-100 w-md-auto") %>
   <% end %>
   <% if authorize? user, :register_device? %>
-    <%= link_to(t(:show_user_register_cta), register_ui_devices_path, class: "btn btn-dark me-md-2 mb-3 mb-lg-0 w-100 w-md-auto") %>
+    <%= link_to(t(:show_user_register_cta), register_ui_devices_path, class: "btn btn-dark me-md-2 mb-3 w-100 w-md-auto") %>
+  <% end %>
+  <% if authorize? user, :create_experiment? %>
+    <%= link_to(t(:show_user_new_experiment_cta), new_ui_experiment_path, class: "btn btn-dark me-md-2 mb-3 w-100 w-md-auto") %>
   <% end %>
   <% if current_user == user %>
     <%= link_to(t(:show_user_log_out_cta), logout_path, class: "btn btn-dark w-100 mb-3 mb-lg-0 w-md-auto") %>

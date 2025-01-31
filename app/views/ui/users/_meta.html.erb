@@ -1,5 +1,5 @@
 <p class="mb-0 small">
-  <%= image_tag("user_details_icon_light.svg", class: "pe-1") %>
+  <span class="pe-1"><%= show_svg("user_details_icon_light.svg") %></span>
   <%= user.role.capitalize %>
 </p>
 <% if user.city || user.country %>

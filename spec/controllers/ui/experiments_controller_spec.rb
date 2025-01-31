@@ -190,4 +190,77 @@ describe Ui::ExperimentsController do
       end
     end
   end
+
+  describe "new" do
+    context "when no user is logged in" do
+      let(:user) { nil }
+
+      it "redirects to the login page" do
+        get :new, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when a user is logged in" do
+      it "displays the new experiment page" do
+        get :new, session: { user_id: user.try(:id) }
+        expect(response).to have_http_status(:success)
+        expect(assigns[:experiment]).to be_present
+        expect(response).to render_template(:new)
+      end
+    end
+  end
+
+  describe "create" do
+
+    let(:device) {
+      create(:device)
+    }
+
+    let(:experiment_params) {
+      { name: "A experiment", description: "A experiment description", device_ids: [device.id] }
+    }
+
+    context "when no user is logged in" do
+      let(:user) { nil }
+
+      it "redirects to the login page" do
+        post :create, params: { experiment: experiment_params }, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when a user is logged in" do
+      let(:user) { create(:user) }
+
+      context "when the parameters provided are valid" do
+        it "creates a experiment and redirects to the experiment page" do
+          expect_any_instance_of(Experiment).to receive(:save).and_call_original
+          post :create, params: { experiment: experiment_params }, session: { user_id: user.try(:id) }
+          expect(response).to redirect_to(ui_experiment_path(Experiment.last.id))
+          expect(flash[:success]).to be_present
+          expect(Experiment.last.name).to eq(experiment_params[:name])
+          expect(Experiment.last.description).to eq(experiment_params[:description])
+          expect(Experiment.last.owner).to eq(user)
+          expect(Experiment.last.devices).to include(device)
+        end
+      end
+
+      context "when the parameters provided are invalid" do
+        let(:experiment_params) {
+          { name: nil, description: "A experiment description" }
+        }
+
+        it "does not create a experiment, and rerenders the new experiment page" do
+          expect_any_instance_of(Experiment).not_to receive(:save)
+          post :create, params: { experiment: experiment_params }, session: { user_id: user.try(:id) }
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to render_template(:new)
+          expect(flash[:alert]).to be_present
+        end
+      end
+    end
+  end
 end

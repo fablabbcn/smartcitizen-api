@@ -14,3 +14,4 @@ en:
   experiment_form_devices_subhead: "Kits"
   experiment_form_search_devices_label: "Search for and add a kit"
   experiment_form_is_test_label: "Mark as a test experiment"
+  new_experiment_submit: "Create"

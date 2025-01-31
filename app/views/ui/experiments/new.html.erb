@@ -1,0 +1,5 @@
+<%= bootstrap_form_for @experiment, url: ui_experiments_path do |form| %> <%= render partial: "fields", locals: { experiment: @experiment, form: form, include_hardware_info: true } %>
+  <div class="mt-5">
+    <%= form.primary t(:new_experiment_submit), class: "btn btn-primary w-100 w-md-auto" %>
+  </div>
+<% end %>

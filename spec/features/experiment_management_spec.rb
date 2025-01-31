@@ -51,4 +51,21 @@ feature "Experiment management" do
     expect(page).to have_current_path(ui_experiment_path(experiment.id))
     expect(page).to have_content("new experiment name")
   end
+
+  scenario "User creates an experiment" do
+    password = "password123"
+    username = "username"
+    user = create(:user, username: username, password: password, password_confirmation: password)
+    visit "/login"
+    fill_in "Username or email", with: user.email
+    fill_in "Password", with: password
+    click_on "Sign into your account"
+    expect(page).to have_current_path(ui_user_path(user.username))
+    click_on "Create an experiment"
+    expect(page).to have_current_path(new_ui_experiment_path)
+    fill_in "Name", with: "new experiment name"
+    click_on "Create"
+    expect(page).to have_current_path(ui_experiment_path(Experiment.last.id))
+    expect(page).to have_content("new experiment name")
+  end
 end

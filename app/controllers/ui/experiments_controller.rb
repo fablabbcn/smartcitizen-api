@@ -47,6 +47,38 @@ module Ui
       end
     end
 
+    def new
+      unless current_user
+        flash[:alert] = I18n.t(:create_experiment_forbidden)
+        redirect_to login_path
+        return
+      end
+      @title = I18n.t(:new_experiment_title)
+      add_breadcrumbs(
+        [I18n.t(:show_user_title, owner: helpers.possessive(current_user, current_user, capitalize: true)), ui_user_path(current_user)],
+        [@title, new_ui_experiment_path]
+      )
+      @experiment = Experiment.new(owner: current_user)
+    end
+
+    def create
+      unless current_user
+        flash[:alert] = I18n.t(:create_experiment_forbidden)
+        redirect_to login_path
+        return
+      end
+      @experiment = Experiment.new(experiment_params)
+      @experiment.owner = current_user
+      if @experiment.valid?
+        @experiment.save
+        flash[:success] = I18n.t(:new_experiment_success)
+        redirect_to ui_experiment_path(@experiment.id)
+      else
+        flash[:alert] = I18n.t(:new_experiment_failure)
+        render :new, status: :unprocessable_entity
+      end
+    end
+
     private
 
     def find_experiment!

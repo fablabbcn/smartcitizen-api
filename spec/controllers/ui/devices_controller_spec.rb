@@ -336,7 +336,7 @@ describe Ui::DevicesController do
     end
 
     context "when a user is logged in" do
-      it "displays the register device page" do
+      it "displays the new device page" do
         get :new, session: { user_id: user.try(:id) }
         expect(response).to have_http_status(:success)
         expect(assigns[:device]).to be_present

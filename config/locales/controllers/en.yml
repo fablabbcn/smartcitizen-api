@@ -41,7 +41,7 @@ en:
     register_device_title: "Register a new kit"
     new_device_title: "Register a new legacy kit"
     new_device_success: "The kit has been registered!"
-    new_device_failure: "Some errors prevented us from registering your device. Please check below and try again!"
+    new_device_failure: "Some errors prevented us from registering your kit. Please check below and try again!"
     upload_device_title: "Data upload"
     upload_device_forbidden: "You are not allowed to upload data for that kit!"
     upload_device_success: "Your data has been uploaded succesfully!"
@@ -52,5 +52,9 @@ en:
     edit_experiment_forbidden: "You are not allowed to edit settings for that experiment!"
     update_experiment_success: "The experiment's settings have been updated!"
     update_experiment_failure: "Some errors prevented us from updating the experiment's settings. Please check below and try again!"
+    create_experiment_forbidden: "You need to be logged in in order to create an experiment!"
+    new_experiment_title: "Create an experiment"
+    new_experiment_success: "Your experiment has been created!"
+    new_experiment_failure: "Some errors prevented us from registering your experiment. Please check below and try again!"
 
 
