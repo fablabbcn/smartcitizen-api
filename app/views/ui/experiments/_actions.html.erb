@@ -1,5 +1,5 @@
 <p class="mb-0">
   <% if authorize? experiment, :update? %>
-    <%= link_to(t(:show_experiment_edit_cta, name: experiment.name), edit_ui_experiment_path(experiment), class: "btn btn-dark mb-3 mb-lg-0 me-md-2 w-100 w-md-auto") %>
+    <%= link_to(t(:show_experiment_edit_cta, name: experiment.name), edit_ui_experiment_path(experiment), class: "btn btn-dark mb-0 me-md-2 w-100 w-md-auto") %>
   <% end %>
 </p>

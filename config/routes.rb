@@ -46,6 +46,7 @@ Rails.application.routes.draw do
     resources :experiments, as: "experiments" do
       member do
         get :readings
+        get :delete
       end
     end
 

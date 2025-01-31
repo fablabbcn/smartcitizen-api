@@ -56,5 +56,9 @@ en:
     new_experiment_title: "Create an experiment"
     new_experiment_success: "Your experiment has been created!"
     new_experiment_failure: "Some errors prevented us from registering your experiment. Please check below and try again!"
+    delete_experiment_title: "Delete experiment: %{name}"
+    delete_experiment_forbidden: "You are not allowed to delete that experiment!"
+    delete_experiment_success: "The experiment has been deleted!"
+    delete_experiment_wrong_name: "That experiment name did not match! Please try again."
 
 

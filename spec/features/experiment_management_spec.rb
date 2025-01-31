@@ -68,4 +68,29 @@ feature "Experiment management" do
     expect(page).to have_current_path(ui_experiment_path(Experiment.last.id))
     expect(page).to have_content("new experiment name")
   end
+
+
+  scenario "User deletes an experiment" do
+    password = "password123"
+    username = "username"
+    device_name = "devicename"
+    experiment_name = "experimentname"
+    user = create(:user, username: username, password: password, password_confirmation: password)
+    device = create(:device, name: device_name, owner: user)
+    experiment = create(:experiment, owner: user, devices: [device], name: experiment_name)
+    visit "/login"
+    fill_in "Username or email", with: user.email
+    fill_in "Password", with: password
+    click_on "Sign into your account"
+    click_on experiment_name
+    click_on "Edit experiment settings"
+    click_on "Delete this experiment"
+    expect(page).to have_current_path(delete_ui_experiment_path(experiment.id))
+    fill_in "To confirm, type the experiment name below:", with: experiment_name
+    click_on "I understand, delete the experiment"
+    expect(page).to have_current_path(ui_user_path(username))
+    expect(page).to have_content("The experiment has been deleted!")
+    expect(page).not_to have_content(experiment_name)
+    expect(Experiment.where(id: experiment.id).first).to be_nil
+  end
 end

@@ -263,4 +263,84 @@ describe Ui::ExperimentsController do
       end
     end
   end
+
+  describe "delete" do
+    context "when the experiment's owner is logged in" do
+      it "displays the delete experiment form" do
+        get :delete, params: { id: experiment.id }, session: { user_id: user.try(:id) }
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:delete)
+      end
+    end
+
+    context "when a different user is logged in" do
+      let(:owner) { create(:user) }
+      it "redirects to the ui users page" do
+        get :delete, params: { id: experiment.id }, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(ui_user_path(user.username))
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when no user is logged in" do
+      let(:user) { nil }
+      it "redirects to the login page" do
+        get :delete, params: { id: experiment.id }, session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+  end
+
+  describe "destroy" do
+    context "when the experiment's owner is logged in" do
+      context "when the correct experiment name is provided" do
+        it "destroys the experimentr, and redirects to the user's profile" do
+          expect_any_instance_of(Experiment).to receive(:destroy!)
+          delete :destroy,
+            params: { id: experiment.id, name: experiment.name },
+            session: { user_id: user.try(:id) }
+          expect(response).to redirect_to(ui_user_path(user.username))
+          expect(flash[:success]).to be_present
+        end
+      end
+
+      context "when an incorrect experiment name is provided" do
+        it "does not destroy the experiment and redirects to the delete page" do
+          expect_any_instance_of(Experiment).not_to receive(:destroy!)
+          delete :destroy,
+            params: { id: experiment.id, name: "a wrong experiment name" },
+            session: { user_id: user.try(:id) }
+          expect(response).to redirect_to(delete_ui_experiment_path(experiment.id))
+          expect(flash[:alert]).to be_present
+        end
+      end
+    end
+
+    context "when a different user is logged in" do
+      let(:owner) { create(:user) }
+
+      it "does not destroy the experiment and redirects to the ui users page" do
+        expect_any_instance_of(Experiment).not_to receive(:destroy!)
+        delete :destroy,
+          params: { id: experiment.id, name: experiment.name },
+          session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(ui_user_path(user.username))
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when no user is logged in" do
+      let(:user) { nil }
+
+      it "does not destroy the user and redirets to the login page" do
+        expect_any_instance_of(Experiment).not_to receive(:destroy!)
+        delete :destroy,
+          params: { id: experiment.id, name: experiment.name },
+          session: { user_id: user.try(:id) }
+        expect(response).to redirect_to(login_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+  end
 end

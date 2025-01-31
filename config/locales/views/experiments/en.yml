@@ -15,3 +15,8 @@ en:
   experiment_form_search_devices_label: "Search for and add a kit"
   experiment_form_is_test_label: "Mark as a test experiment"
   new_experiment_submit: "Create"
+  edit_experiment_other_actions_subhead: "Other actions"
+  edit_experiment_delete_experiment_submit: "Delete this experiment"
+  delete_experiment_warning_html: "🚨<strong>Warning!</strong> This will permanently delete the experiment <strong>%{name}</strong>.🚨"
+  delete_experiment_name_label: "To confirm, type the experiment name below:"
+  delete_experiment_submit: "I understand, delete the experiment"

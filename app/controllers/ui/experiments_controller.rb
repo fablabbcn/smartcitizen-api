@@ -79,6 +79,31 @@ module Ui
       end
     end
 
+    def delete
+      find_experiment!
+      return unless authorize_experiment! :destroy?, :delete_experiment_forbidden
+      @title = I18n.t(:delete_experiment_title, name: @experiment.name)
+      add_breadcrumbs(
+        [I18n.t(:show_user_title, owner: helpers.possessive(@experiment.owner, current_user)), ui_user_path(@experiment.owner.username)],
+        [I18n.t(:show_experiment_title, name: @experiment.name), ui_experiment_path(@experiment.id)],
+        [I18n.t(:edit_experiment_title, name: @experiment.name), edit_ui_experiment_path(@experiment.id)],
+        [@title, delete_ui_experiment_path(@experiment.id)]
+      )
+    end
+
+    def destroy
+      find_experiment!
+      return unless authorize_experiment! :destroy?, :delete_experiment_forbidden
+      if @experiment.name != params[:name]
+        flash[:alert] = I18n.t(:delete_experiment_wrong_name)
+        redirect_to delete_ui_experiment_path(@experiment.id)
+        return
+      end
+      @experiment.destroy!
+      flash[:success] = I18n.t(:delete_experiment_success)
+      redirect_to ui_user_path(current_user.username)
+    end
+
     private
 
     def find_experiment!
