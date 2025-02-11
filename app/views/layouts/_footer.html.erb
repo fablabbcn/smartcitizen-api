@@ -4,20 +4,6 @@
       <div class="w-100 w-lg-auto mb-5 mb-lg-0 mx-0 g-0">
         <img style="height: 80px; pointer-events: auto;" src="<%= image_url("smartcitizen_logo2.svg") %>" alt="<%= t :footer_logo_alt %>">
       </div>
-      <div class="w-100 w-lg-auto mb-3 mb-lg-0 mx-0 g-0">
-        <div class="outlined-box p-3 row align-items-center width-lg-fit-content mx-1 mx-lg-0">
-          <div class="col-auto"><%= t :footer_social_links %></div>
-          <a class="col-auto" href="https://twitter.com/smartcitizenkit">
-            <img height="36" src="<%= image_url("tw.svg") %>" alt="<%= t :footer_twitter_alt %>" />
-          </a>
-          <a class="col-auto" href="https://www.facebook.com/smartcitizenBCN/">
-            <img height="36" src="<%= image_url("fb.svg") %>" alt="<%= t :footer_facebook_alt %>" />
-          </a>
-          <a class="col-auto" href="https://www.instagram.com/smartcitizenkit/">
-            <img height="36" src="<%= image_url("in.svg") %>" alt="<%= t :footer_instagram_alt %>" />
-          </a>
-        </div>
-      </div>
       <div class="w-100 w-lg-auto mb-5 mb-lg-0 mx-0 g-0">
         <div class="outlined-box p-3 row align-items-center width-lg-fit-content mx-1 mx-lg-0">
           <div class="col-auto"><%= t :footer_attribution %></div>
@@ -38,6 +24,10 @@
             <p class="mb-0"><small><%= t :footer_funding_html %></small></p>
           </div>
         </div>
+      </div>
+      <div class="w-100 w-lg-auto mb-3 mb-lg-0 mx-0 g-0">
+          <p class="mb-1"><small><%= t :footer_monitoring %></small></p>
+          <a href="<%= t :footer_uptimerobot_url %>" target="_blank"><img height="20" class="w-auto" src="<%= image_url("uptimerobot-logo.svg") %>" alt="UptimeRobot"  /></a>
       </div>
     </div>
     <div class="row text-lg-center px-3 px-lg-0 mx-0 g-0">
