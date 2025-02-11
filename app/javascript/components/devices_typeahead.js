@@ -20,7 +20,7 @@ class DevicesTypeahead {
         const option = $(this.dataList).find(`option[value="${value}"]`)
         if(option.length > 0) {
           this.searchInput.val(null);
-          if($(this.devicesList).find(`input[value="${value}"]`).length == 0) {
+          if(this.devicesList.find(`input[value="${value}"]`).length == 0) {
             const clone = $(this.deviceTemplate[0].content.cloneNode(true));
             clone.find(".template-input").val(option.val());
             clone.find(".template-title").text(option.text());
@@ -28,6 +28,7 @@ class DevicesTypeahead {
             clone.find(".template-location").text(option.data("location"));
             clone.find(".template-description").text(option.data("description"));
             this.devicesList[0].appendChild(clone[0]);
+            this.showOrHideDevicesList();
             this.initRemove(clone[0]);
             return false;
           }
@@ -36,11 +37,20 @@ class DevicesTypeahead {
     });
   }
 
+  showOrHideDevicesList() {
+    if(this.devicesList.find(".device-select-list-item").length == 0) {
+      this.devicesList.addClass("d-none");
+    } else {
+      this.devicesList.removeClass("d-none");
+    }
+  }
+
   initRemove() {
-    $(this.devicesList).find(".device-select-list-item").each((ix, item) =>  {
+    this.devicesList.find(".device-select-list-item").each((ix, item) =>  {
       $(item).find(".remove-link").click((event) => {
         event.preventDefault();
         item.remove();
+        this.showOrHideDevicesList();
       });
     });
   }
