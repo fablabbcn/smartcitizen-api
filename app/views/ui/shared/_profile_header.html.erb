@@ -1,17 +1,20 @@
-<div class="profile-header bg-black text-white mx-2 mb-2 rounded-4 mb-md-5">
-  <div class="container mx-2 mx-sm-auto w-auto w-sm-100 my-3 px-sm-3 g-0">
+<div class="profile-header bg-black text-white mx-2 mb-2 rounded-4 mb-lg-5">
+  <div class="container-lg px-3 my-3 px-lg-0">
     <header class="row">
-      <div class="col-12 col-sm-6 col-md-3 col-lg-2 px-3 px-sm-0 pe-sm-3">
+      <div class="col-3 col-md-3 col-lg-2">
         <%= yield :profile_header_image %>
       </div>
-      <div class="col-12 col-sm-6 col-md-9 col-lg-10 mt-4 mt-sm-0 mb-2 mb-sm-0 px-3 px-sm-0 justify-content-between d-flex g-0 flex-column">
+      <div class="col-9 col-md-9 col-lg-10 mb-2 mb-md-0 justify-content-between d-flex g-0 flex-column">
         <div class="meta">
-          <h1 class="mb-2"><%= title %></h1>
+          <h1 class="mb-0 mb-md-2"><%= title %></h1>
           <%= yield :profile_header_meta %>
         </div>
-        <div class="actions mt-3">
+        <div class="actions mt-3 d-none d-md-flex">
           <%= yield :profile_header_actions %>
         </div>
+      </div>
+      <div class="actions mt-3 col-12 d-md-none">
+          <%= yield :profile_header_actions %>
       </div>
     </header>
   </div>

@@ -1,6 +1,6 @@
 <div class="bg-black m-2 sticky-top rounded-4">
   <nav class="navbar navbar-dark navbar-expand-md ">
-    <div class="container px-3 px-sm-0">
+    <div class="container-lg px-3 px-lg-0">
       <a class="navbar-brand" href="https://www.smartcitizen.me">
         <img src="<%= image_url("smartcitizen_logo.svg") %>" alt="<%= t :logo_alt %>" width="36" height ="36" />
       </a>
@@ -46,7 +46,7 @@
     </div>
   </nav>
   <% if breadcrumbs.length > 1 %>
-    <div class="container px-3 px-sm-2 px-md-0">
+    <div class="container-lg px-3 px-lg-0">
       <%= render partial: "layouts/breadcrumbs" %>
     </div>
   <% end %>

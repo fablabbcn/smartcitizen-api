@@ -16,7 +16,7 @@
       <% end %>
     </datalist>
     <%= hidden_field_tag "experiment[device_ids][]", "" %>
-    <div class="mt-3 container devices-list border border-medium rounded <%= "d-none" unless experiment.devices.any? %>">
+    <div class="mt-3 container-lg devices-list border border-medium rounded <%= "d-none" unless experiment.devices.any? %>">
       <% experiment.devices.each do |device| %>
         <%= render partial: "ui/devices/select_list_item", locals: {
           value: device.id,
