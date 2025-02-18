@@ -5,7 +5,7 @@ module Ui
       return unless authorize_experiment! :show?, :show_experiment_forbidden
       @title = I18n.t(:show_experiment_title, name: @experiment.name)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, owner: helpers.possessive(@experiment.owner, current_user)), ui_user_path(@experiment.owner.username)],
+        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(@experiment.owner.username)],
         [@title, ui_experiment_path(@experiment.id)]
       )
       render "show", layout: "base"
@@ -17,9 +17,9 @@ module Ui
       return unless find_measurement!
       @title = I18n.t(:readings_experiment_title, name: @experiment.name)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, owner: helpers.possessive(@experiment.owner, current_user)), ui_user_path(@experiment.owner.username)],
+        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(@experiment.owner.username)],
         [I18n.t(:show_experiment_title, name: @experiment.name), ui_experiment_path(@experiment.id)],
-        [@title, readings_ui_experiment_path(@experiment.id)]
+        [I18n.t(:readings_breadcrumb), readings_ui_experiment_path(@experiment.id)]
       )
       render "readings", layout: "base"
     end
@@ -29,9 +29,9 @@ module Ui
       return unless authorize_experiment! :update?, :edit_experiment_forbidden
       @title = I18n.t(:edit_experiment_title, name: @experiment.name)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, owner: helpers.possessive(@experiment.owner, current_user)), ui_user_path(@experiment.owner.username)],
+        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(@experiment.owner.username)],
         [I18n.t(:show_experiment_title, name: @experiment.name), ui_experiment_path(@experiment.id)],
-        [@title, edit_ui_experiment_path(@experiment.id)]
+        [I18n.t(:edit_breadcrumb), edit_ui_experiment_path(@experiment.id)]
       )
     end
 
@@ -55,7 +55,7 @@ module Ui
       end
       @title = I18n.t(:new_experiment_title)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, owner: helpers.possessive(current_user, current_user, capitalize: true)), ui_user_path(current_user)],
+        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(current_user)],
         [@title, new_ui_experiment_path]
       )
       @experiment = Experiment.new(owner: current_user)
@@ -84,10 +84,10 @@ module Ui
       return unless authorize_experiment! :destroy?, :delete_experiment_forbidden
       @title = I18n.t(:delete_experiment_title, name: @experiment.name)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, owner: helpers.possessive(@experiment.owner, current_user)), ui_user_path(@experiment.owner.username)],
+        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(@experiment.owner.username)],
         [I18n.t(:show_experiment_title, name: @experiment.name), ui_experiment_path(@experiment.id)],
-        [I18n.t(:edit_experiment_title, name: @experiment.name), edit_ui_experiment_path(@experiment.id)],
-        [@title, delete_ui_experiment_path(@experiment.id)]
+        [I18n.t(:edit_breadcrumb), edit_ui_experiment_path(@experiment.id)],
+        [I18n.t(:delete_breadcrumb), delete_ui_experiment_path(@experiment.id)]
       )
     end
 
@@ -137,6 +137,11 @@ module Ui
         :ends_at,
         { :device_ids => [] },
       ).transform_values {|v| v.blank? ? nil : v }
+    end
+
+    def owner_name(capitalize=true)
+      owner = @experiment&.owner || current_user
+      helpers.possessive(owner, current_user, capitalize: capitalize)
     end
   end
 end

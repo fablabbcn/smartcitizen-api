@@ -16,11 +16,7 @@ module Ui
     end
 
     def breadcrumbs
-      unless @breadcrumbs
-        @breadcrumbs = []
-        @breadcrumbs << Breadcrumb.new(@breadcrumbs, t(:root_breadcrumb))
-      end
-      return @breadcrumbs
+      @breadcrumbs ||= []
     end
 
     helper_method :breadcrumbs

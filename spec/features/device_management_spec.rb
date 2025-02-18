@@ -119,7 +119,7 @@ feature "Device management" do
     click_on device_name
     click_on "Upload data as CSV", match: :first
     attach_file "Choose CSV files", "#{File.dirname(__FILE__)}/../fixtures/fake_device_data.csv"
-    click_on "Upload"
+    click_button "Upload"
     expect(page).to have_current_path(ui_device_path(device.id))
     expect(page).to have_content("Your data has been uploaded succesfully!")
   end

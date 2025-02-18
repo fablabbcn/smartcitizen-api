@@ -1,5 +1,5 @@
-<nav aria-label="breadcrumb" class="breadcrumbs mb-2">
-  <ul class="breadcrumb">
+<nav aria-label="breadcrumb" class="breadcrumbs mb-2 mb-lg-0">
+  <ul class="breadcrumb mb-lg-0 d-lg-flex align-items-center">
     <% breadcrumbs.each_with_index do |breadcrumb, index| %>
       <% active = index == breadcrumbs.length - 1 %>
       <li class="breadcrumb-item <%= "active" if breadcrumb.active? %>" <%= "aria-current=\"page\"" if breadcrumb.active? %>>

@@ -1,4 +1,11 @@
 en:
+    edit_breadcrumb: "Edit"
+    delete_breadcrumb: "Delete"
+    download_breadcrumb: "Download"
+    upload_breadcrumb: "Upload"
+    readings_breadcrumb: "Readings"
+    secrets_breadcrumb: "Secrets"
+    legacy_breadcrumb: "Legacy kits"
     login_before_sso_notice: "Please log in before using SSO"
     new_session_title: "Welcome!"
     new_session_success:  "You have been successfully logged in!"
