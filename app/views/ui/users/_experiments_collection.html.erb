@@ -1,4 +1,4 @@
-<%= render layout: "ui/shared/box", locals: { no_padding: true, class: "mt-5" } do %>
+<%= render layout: "ui/shared/box", locals: { no_padding: true, class: "mt-3" } do %>
   <div class="p-3" id="experiments">
     <% if current_user == user && user.experiments.length < 1 %>
       <%= render partial: "no_experiment_cta" %>
