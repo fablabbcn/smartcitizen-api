@@ -2,7 +2,7 @@ en:
   logo_alt: "SmartCitizen"
   hamburger_label: "Toggle navigation"
   home_link_url: "https://smartcitizen.me/kits/"
-  home_link_text: "Home"
+  home_link_text: "Map"
   documentation_link_url: "https://docs.smartcitizen.me"
   documentation_link_text: "Documentation"
   forum_link_url: "https://forum.smartcitizen.me"
