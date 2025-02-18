@@ -46,7 +46,7 @@ feature "User logs in" do
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     click_on "Sign into your account"
-    click_on "Sign out"
+    click_on "Sign out", match: :first
     expect(page).to have_current_path(new_ui_session_path)
     expect(page).to have_content("Logged out!")
   end

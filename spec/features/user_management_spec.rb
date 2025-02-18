@@ -128,7 +128,7 @@ feature "User and account managment" do
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     click_on "Sign into your account"
-    click_on "Edit your profile"
+    click_on "Edit your profile", match: :first
     click_on "Permanently delete your account"
     expect(page).to have_current_path(delete_ui_user_path(user.username))
     fill_in "To confirm, type your username below:", with: username
@@ -162,7 +162,7 @@ feature "User and account managment" do
     fill_in "Password", with: password
     click_on "Sign into your account"
     expect(page).to have_current_path(ui_user_path(user.username))
-    click_on "Edit your profile"
+    click_on "Edit your profile", match: :first
     fill_in "Username", with: "my_new_name"
     fill_in "Website", with: "https://example.com"
     click_on "Update"
@@ -181,7 +181,7 @@ feature "User and account managment" do
     fill_in "Password", with: password
     click_on "Sign into your account"
     expect(page).to have_current_path(ui_user_path(user.username))
-    click_on "Show your API keys"
+    click_on "Show your API keys", match: :first
     expect(page).to have_current_path(secrets_ui_user_path(user.username))
     expect(page).to have_content(user.access_token.token)
   end
