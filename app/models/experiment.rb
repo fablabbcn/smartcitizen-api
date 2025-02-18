@@ -27,8 +27,8 @@ class Experiment < ApplicationRecord
     devices.map(&:last_reading_at).compact.max
   end
 
-  def all_tags
-    devices.flat_map(&:all_tags).compact.uniq
+  def user_tags
+    devices.flat_map(&:user_tags).compact.uniq
   end
 
   def all_measurements

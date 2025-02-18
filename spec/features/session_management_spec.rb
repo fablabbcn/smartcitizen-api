@@ -14,6 +14,15 @@ feature "User logs in" do
     expect(page).to have_content("You have been successfully logged in!")
   end
 
+  scenario "user logs in, with goto url" do
+    # This tests logins initiated from the legacy angular app.
+    visit "/ui/sessions/new?goto=https%3A%2F%2Fsmartcitizen.me%2F"
+    fill_in "Username or email", with: user.email
+    fill_in "Password", with: password
+    click_on "Sign into your account"
+    expect(page).to have_current_path("https://smartcitizen.me/")
+  end
+
   scenario "user logs in with username" do
     visit "/login"
     fill_in "Username or email", with: user.username
@@ -46,9 +55,21 @@ feature "User logs in" do
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     click_on "Sign into your account"
-    click_on "Sign out"
+    click_on "Sign out", match: :first
     expect(page).to have_current_path(new_ui_session_path)
     expect(page).to have_content("Logged out!")
+  end
+
+  scenario "user signs out directly, with goto url" do
+    # This tests logouts initiated from the legacy angular app.
+    visit "/login"
+    fill_in "Username or email", with: user.email
+    fill_in "Password", with: password
+    click_on "Sign into your account"
+    visit "/ui/sessions/destroy?goto=https%3A%2F%2Fsmartcitizen.me%2F"
+    expect(page).to have_current_path("https://smartcitizen.me")
+    visit "/ui"
+    expect(page).to have_current_path(new_ui_session_path)
   end
 
   scenario "user resets email" do

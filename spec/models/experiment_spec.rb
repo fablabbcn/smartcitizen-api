@@ -156,14 +156,14 @@ RSpec.describe Experiment, type: :model do
     end
   end
 
-  describe "all_tags" do
-    it "returns a unique list of all device tags, without nils" do
+  describe "user_tags" do
+    it "returns a unique list of all device user tags, without nils" do
       device_1 = build(:device)
       device_2 = build(:device)
-      expect(device_1).to receive(:all_tags).and_return(["indoor", "test"])
-      expect(device_2).to receive(:all_tags).and_return(["indoor", "third_floor", nil])
+      expect(device_1).to receive(:user_tags).and_return(["indoor", "test"])
+      expect(device_2).to receive(:user_tags).and_return(["indoor", "third_floor", nil])
       experiment = create(:experiment, devices: [device_1, device_2])
-      expect(experiment.all_tags).to eq(["indoor", "test", "third_floor"])
+      expect(experiment.user_tags).to eq(["indoor", "test", "third_floor"])
     end
   end
 

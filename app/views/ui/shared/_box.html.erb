@@ -1,3 +1,5 @@
-<div class="bg-white w-100 border border-thick <%= "p-3 pb-4 pb-md-5" unless local_assigns[:no_padding] %> <%= local_assigns[:class] || "" %>">
+<div class="w-100 <%= local_assigns[:no_shadow] ? "" : "pe-2" %> <%= local_assigns[:class] || "" %>">
+  <div class="bg-white w-100 border border-thick <%= local_assigns[:no_shadow] ? "mb-3" : "mb-4 drop-shadow" %>  <%= "p-4 pb-md-5" unless local_assigns[:no_padding] %> <%= local_assigns[:inner_class] || "" %>">
     <%= yield %>
   </div>
+</div>

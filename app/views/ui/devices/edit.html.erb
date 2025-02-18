@@ -1,10 +1,11 @@
 <%= bootstrap_form_for @device, url: ui_device_path(@device) do |form| %>
   <%= render partial: "fields", locals: { device: @device, form: form } %>
-  <div class="mt-5">
+  <%= render layout: "ui/shared/back_link", locals: { back_href: ui_device_path(@device.id) } do %>
     <%= form.primary t(:edit_device_submit), class: "btn btn-primary w-100 w-md-auto" %>
-  </div>
+  <% end %>
 <% end %>
 <% if authorize? @device, :destroy? %>
-  <h2 class="mt-5 mb-3"><%= t(:edit_device_other_actions_subhead) %></h2>
-  <div><%= link_to t(:edit_device_delete_device_submit), delete_ui_device_path(@device.id), class: "btn btn-danger w-100 w-md-auto" %></div>
+  <%= render layout: "ui/shared/danger_zone" do %>
+    <div><%= link_to t(:edit_device_delete_device_submit), delete_ui_device_path(@device.id), class: "btn btn-danger w-100 w-md-auto" %></div>
+  <% end %>
 <%  end %>

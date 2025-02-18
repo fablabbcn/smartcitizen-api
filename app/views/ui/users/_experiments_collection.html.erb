@@ -1,5 +1,6 @@
-<%= render layout: "ui/shared/box", locals: { no_padding: true, class: "mt-5" } do %>
-  <div class="p-3" id="experiments">
+<%= render layout: "ui/shared/box", locals: { no_padding: true, class: "mt-3" } do %>
+  <div class="scroll-offset" id="experiments"></div>
+  <div class="p-3">
     <% if current_user == user && user.experiments.length < 1 %>
       <%= render partial: "no_experiment_cta" %>
     <% else %>
@@ -9,5 +10,9 @@
       <% end %>
     <% end %>
   </div>
-  <%= render partial: "ui/experiments/experiment", collection: user.experiments, locals: { hide_owner: true } %>
+  <%=
+    render partial: "ui/experiments/experiment",
+      collection: user.experiments,
+      locals: { hide_owner: true, with_actions: current_user == user }
+  %>
 <% end %>

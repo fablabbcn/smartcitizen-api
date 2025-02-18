@@ -18,7 +18,6 @@ body{
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
 }
 
 
@@ -39,11 +38,34 @@ body > .container {
   border-width: 3px !important;
 }
 
+.drop-shadow {
+  box-shadow: 10px 10px 0px -2.5px $yellow, 10px 10px 0px 0px #1C1C1C;
+}
+
+.drop-shadow-teal {
+  box-shadow: 10px 10px 0px -2.5px $teal, 10px 10px 0px 0px #1C1C1C;
+}
+
+.danger-zone {
+  background-color: $danger-bg-subtle;
+  margin-left: -24px;
+  margin-right: -24px;
+  margin-bottom: -24px;
+}
+
+@include media-breakpoint-up(md) {
+  .danger-zone {
+    margin-bottom: -48px;
+  }
+}
+
 .btn {
   text-transform: uppercase;
   text-decoration: none !important;
-  font-family: "Kanit";
+  font-family: "Roboto Condensed";
   font-weight: 600;
+  letter-spacing: 0.0325em;
+  transition: color 0.5s ease, background-color 0.5s ease, border 0.5s ease;
   &.btn-primary {
     background-color: $black;
     color: $white;
@@ -58,6 +80,14 @@ body > .container {
     background-color: $black;
     color: $white;
     border: 3px solid $white;
+  }
+  &.btn-back {
+    background-color: $blue;
+    color: $white;
+    border: 3px solid $blue;
+  }
+  &.btn-danger {
+    border: 3px solid $red !important;
   }
   &.btn-right {
     border-radius: 0 $btn-border-radius $btn-border-radius 0;
@@ -78,10 +108,20 @@ body > .container {
     }
     outline: none !important;
     box-shadow: none !important;
+    &.btn-secondary {
+      background-color: $black !important;
+      color: $white !important;
+      border: 3px solid $black !important;
+    }
     &.btn-danger {
       background-color: $white !important;
       color: $red !important;
-      border-color: $red !important;
+      border: 3px solid $red !important;
+    }
+    &.btn-back {
+      background-color: $white !important;
+      color: $blue !important;
+      border: 3px solid $blue !important;
     }
   }
 }
@@ -142,6 +182,7 @@ input[type="file"] {
     background-color: $black;
     color: $white;
     border-right: 2px solid $black;
+    transition: background-color 0.5s ease, color 0.5s ease;
   }
   &:hover {
     &::file-selector-button {
@@ -227,4 +268,16 @@ a.subtle-link {
   &:hover {
     text-decoration: underline;
   }
+}
+
+.page-nav {
+  top: 6rem !important;
+}
+
+.scroll-offset {
+  scroll-margin-top: 6.2rem;
+}
+
+.bg-black {
+  background-color: $black !important;
 }

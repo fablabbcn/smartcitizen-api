@@ -31,7 +31,7 @@ feature "Device management" do
     expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content(device_name)
     click_on device_name
-    click_on "Edit kit settings"
+    click_on "Edit kit", match: :first
     expect(page).to have_current_path(edit_ui_device_path(device.id))
     fill_in "Name", with: "new device name"
     click_on "Update"
@@ -51,7 +51,7 @@ feature "Device management" do
     fill_in "Password", with: password
     click_on "Sign into your account"
     click_on device_name
-    click_on "Edit kit settings"
+    click_on "Edit kit", match: :first
     click_on "Delete this kit"
     expect(page).to have_current_path(delete_ui_device_path(device.id))
     fill_in "To confirm, type the kit name below:", with: device_name
@@ -76,7 +76,7 @@ feature "Device management" do
     fill_in "Password", with: password
     click_on "Sign into your account"
     click_on device_name
-    click_on "Download data as CSV"
+    click_on "Download data as CSV", match: :first
     click_on "Request data download"
     expect(page).to have_current_path(ui_device_path(device.id))
     expect(page).to have_content("Your CSV download has been requested, you'll shortly receive an email with a download link!")
@@ -91,7 +91,7 @@ feature "Device management" do
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     click_on "Sign into your account"
-    click_on "Register a new kit"
+    click_on "Register a new kit", match: :first
     click_on "Legacy Smart Citizen Kit version 1.0 and 1.1"
     fill_in "Name", with: "kit name"
     fill_in "Description", with: "kit description"
@@ -117,9 +117,9 @@ feature "Device management" do
     fill_in "Password", with: password
     click_on "Sign into your account"
     click_on device_name
-    click_on "Upload data as CSV"
+    click_on "Upload data as CSV", match: :first
     attach_file "Choose CSV files", "#{File.dirname(__FILE__)}/../fixtures/fake_device_data.csv"
-    click_on "Upload"
+    click_button "Upload"
     expect(page).to have_current_path(ui_device_path(device.id))
     expect(page).to have_content("Your data has been uploaded succesfully!")
   end

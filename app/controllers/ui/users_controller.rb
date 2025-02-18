@@ -16,10 +16,10 @@ module Ui
     def secrets
       find_user!
       return unless authorize_user! :show_secrets?, :secrets_user_forbidden
-      @title = I18n.t(:secrets_user_title, owner: owner)
+      @title = I18n.t(:secrets_user_title, owner: owner(true))
       add_breadcrumbs(
         [I18n.t(:show_user_title, owner: owner(true)), ui_user_path(@user.username)],
-        [@title, secrets_ui_user_path(@user.username)]
+        [I18n.t(:secrets_breadcrumb), secrets_ui_user_path(@user.username)]
       )
     end
 
@@ -50,7 +50,7 @@ module Ui
         @user.save
         session[:user_id] = @user.id
         flash[:success] = I18n.t(:new_user_success)
-        redirect_to ui_user_path(@user.username)
+        redirect_to goto_or(ui_user_path(@user.username))
       else
         flash[:alert] = I18n.t(:new_user_failure)
         render :new, status: :unprocessable_entity
@@ -63,7 +63,7 @@ module Ui
       @title = I18n.t(:edit_user_title, owner: owner)
       add_breadcrumbs(
         [I18n.t(:show_user_title, owner: owner(true)), ui_user_path(@user.username)],
-        [@title, edit_ui_user_path(@user.username)]
+        [I18n.t(:edit_breadcrumb), edit_ui_user_path(@user.username)]
       )
     end
 
@@ -85,8 +85,8 @@ module Ui
       @title = I18n.t(:delete_user_title, owner: owner)
       add_breadcrumbs(
         [I18n.t(:show_user_title, owner: owner(true)), ui_user_path(@user.username)],
-        [I18n.t(:edit_user_title, owner: owner), edit_ui_user_path(@user.username)],
-        [@title, delete_ui_user_path(@user.username)]
+        [I18n.t(:edit_breadcrumb), edit_ui_user_path(@user.username)],
+        [I18n.t(:delete_breadcrumb), delete_ui_user_path(@user.username)]
       )
     end
 

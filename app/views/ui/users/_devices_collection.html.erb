@@ -1,5 +1,6 @@
-<%= render layout: "ui/shared/box", locals: { no_padding: true } do %>
-  <div class="p-3" id="devices">
+<%= render layout: "ui/shared/box", locals: { no_padding: true, class: "mb-5" } do %>
+  <div class="scroll-offset" id="devices"></div>
+  <div class="p-3">
     <% if current_user == user && user.devices.length < 1 %>
       <%= render partial: "no_device_cta" %>
     <% else %>
@@ -9,5 +10,9 @@
       <% end %>
     <% end %>
   </div>
-  <%= render partial: "ui/devices/device", collection: user.devices.for_user(current_user).by_last_reading, locals: { hide_owner: true } %>
+  <%=
+    render partial: "ui/devices/device",
+      collection: user.devices.for_user(current_user).by_last_reading,
+      locals: { hide_owner: true, with_actions: current_user == user }
+    %>
 <% end %>

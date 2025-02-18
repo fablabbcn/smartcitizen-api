@@ -16,6 +16,20 @@ feature "User and account managment" do
     expect(User.count).to eq(user_count_before + 1)
   end
 
+  scenario "User signs up for an account with goto url" do
+    # Used in links from legacy angular app
+    user_count_before = User.count
+    visit "/ui/users/new?goto=https%3A%2F%2Fsmartcitizen.me%2F"
+    fill_in "Email", with: "user@example.com"
+    fill_in "Username", with: "myusername"
+    fill_in "Password", with: "password123"
+    fill_in "Password confirmation", with: "password123"
+    check "I accept the terms and conditions"
+    click_on "Sign up"
+    expect(page).to have_current_path("https://smartcitizen.me")
+    expect(User.count).to eq(user_count_before + 1)
+  end
+
   scenario "User uses invalid email" do
     user_count_before = User.count
     visit "/login"
@@ -128,7 +142,7 @@ feature "User and account managment" do
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     click_on "Sign into your account"
-    click_on "Edit your profile"
+    click_on "Edit your profile", match: :first
     click_on "Permanently delete your account"
     expect(page).to have_current_path(delete_ui_user_path(user.username))
     fill_in "To confirm, type your username below:", with: username
@@ -162,7 +176,7 @@ feature "User and account managment" do
     fill_in "Password", with: password
     click_on "Sign into your account"
     expect(page).to have_current_path(ui_user_path(user.username))
-    click_on "Edit your profile"
+    click_on "Edit your profile", match: :first
     fill_in "Username", with: "my_new_name"
     fill_in "Website", with: "https://example.com"
     click_on "Update"
@@ -176,13 +190,14 @@ feature "User and account managment" do
     password = "password123"
     username = "username"
     user = create(:user, username: username, password: password, password_confirmation: password)
+    user.access_token!
     visit "/login"
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     click_on "Sign into your account"
     expect(page).to have_current_path(ui_user_path(user.username))
-    click_on "Show your API keys"
+    click_on "Show your API keys", match: :first
     expect(page).to have_current_path(secrets_ui_user_path(user.username))
-    expect(page).to have_content(user.access_token.token)
+    expect(page).to have_field("API key", with: user.access_token.token)
   end
 end

@@ -1,5 +1,5 @@
 <div class="w-100">
-  <%= render layout: "ui/shared/box", locals: { no_padding: true, class: "w-100 sticky-top" } do %>
+  <%= render layout: "ui/shared/box", locals: { no_padding: true, class: "w-100 sticky-top z-2 page-nav", no_shadow: true } do %>
     <a href="#devices" class="subtle-link d-block p-3"><%= t :show_user_devices_heading %></a>
     <a href="#experiments" class="subtle-link d-block p-3 border-top"><%= t :show_user_experiments_heading %></a>
   <% end %>

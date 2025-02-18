@@ -1,0 +1,20 @@
+.extra-info {
+  position: relative;
+  .info {
+    position: absolute;
+    width: 80vw;
+    @include media-breakpoint-up(md) {
+      width: 50vw;
+    }
+    display: block;
+    background-color:  $white;
+    text-transform: initial;
+    font-size: var(--bs-body-font-size);
+    letter-spacing: initial;
+    margin-bottom:initial;
+    font-family: var(--bs-body-font-family);
+    font-weight: var(--bs-body-font-weight);
+    line-height: var(--bs-body-line-height);
+    color:  var(--bs-body-color);
+  }
+}

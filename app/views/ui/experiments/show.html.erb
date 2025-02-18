@@ -1,11 +1,11 @@
 <%= render partial: "ui/experiments/header", locals: { experiment:  @experiment } %>
-<div class="container-lg g-0 px-2">
-  <div class="row">
-    <div class="col-lg-2 d-none d-lg-flex">
+
+<% content_for :two_column_sidebar do %>
       <%= render partial: "ui/experiments/page_nav", locals: { experiment:  @experiment } %>
-    </div>
-    <div class="col-12 col-lg-10">
+<% end %>
+
+<% content_for :two_column_main do %>
       <%= render partial: "ui/experiments/devices_collection", locals: { experiment:  @experiment } %>
-    </div>
-  </div>
-</div>
+<% end %>
+
+<%= render partial: "ui/shared/two_column" %>

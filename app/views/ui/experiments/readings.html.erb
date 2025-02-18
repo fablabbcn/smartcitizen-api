@@ -1,28 +1,23 @@
 <%= render partial: "ui/experiments/header", locals: { experiment:  @experiment } %>
-<div class="container-lg g-0 px-2">
-  <div class="row">
-    <div class="col-lg-2 d-none d-lg-flex">
-      <%= render partial: "ui/experiments/page_nav", locals: { experiment:  @experiment } %>
-    </div>
-    <div class="col-12 col-lg-10">
-      <%= render layout: "ui/shared/box", locals: { class: "mb-3 p-3", no_padding: true } do %>
-        <header>
-          <h2 class="mb-3"><%= @measurement.name %></h2>
-        </header>
-        <main>
-          <p class="mb-0"><%= @measurement.description %>
-        </main>
-      <% end %>
-      <% @experiment.components_for_measurement(@measurement).each do |component| %>
-        <%= render partial: "ui/shared/reading", locals: {
-          component: component,
-          title: component.device.name,
-          title_link: ui_device_path(component.device.id),
-          description: component.device.description,
-          to: @experiment.last_reading_at,
-          sync_all_on_page: true
-        } %>
-      <% end %>
-    </div>
-  </div>
-</div>
+
+<% content_for :two_column_sidebar do %>
+  <%= render partial: "ui/experiments/page_nav", locals: { experiment:  @experiment } %>
+<% end %>
+
+<% content_for :two_column_main do %>
+  <%= render layout: "ui/shared/box", locals: { inner_class: "p-3 pb-0", class: "mb-5", no_padding: true } do %>
+    <h2 class="mb-3"><%= @measurement.name %></h2>
+    <p class="mb-5"><%= @measurement.description %>
+    <% @experiment.components_for_measurement(@measurement).each do |component| %>
+      <%= render partial: "ui/shared/reading", locals: {
+        component: component,
+        title: component.device.name,
+        title_link: ui_device_path(component.device.id),
+        description: false,
+        to: @experiment.last_reading_at,
+        sync_all_on_page: true
+      } %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= render partial: "ui/shared/two_column" %>

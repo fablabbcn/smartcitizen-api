@@ -16,11 +16,11 @@ module Ui
     end
 
     def breadcrumbs
-      unless @breadcrumbs
-        @breadcrumbs = []
-        @breadcrumbs << Breadcrumb.new(@breadcrumbs, t(:root_breadcrumb))
-      end
-      return @breadcrumbs
+      @breadcrumbs ||= []
+    end
+
+    def goto_or(url)
+      params[:goto].present? ? params[:goto] : url
     end
 
     helper_method :breadcrumbs

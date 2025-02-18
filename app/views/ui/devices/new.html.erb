@@ -1,6 +1,6 @@
 <%= bootstrap_form_for @device, url: ui_devices_path do |form| %>
   <%= render partial: "fields", locals: { device: @device, form: form, include_hardware_info: true } %>
-  <div class="mt-5">
+  <%= render layout: "ui/shared/back_link", locals: { back_href: register_ui_devices_path } do %>
     <%= form.primary t(:new_device_submit), class: "btn btn-primary w-100 w-md-auto" %>
-  </div>
+  <% end %>
 <% end %>

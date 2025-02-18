@@ -7,14 +7,16 @@
   <%= render partial: "ui/devices/meta", locals: { device: @device } %>
 <% end %>
 <% content_for :profile_header_actions do %>
-  <%= render partial: "ui/devices/actions", locals: { device: @device } %>
+  <%= render partial: "ui/devices/actions", locals: { device: @device, dark_buttons: true } %>
 <% end %>
 <%= render partial: "ui/shared/profile_header", locals: { title: t(:show_device_headline, name: @device.name) } %>
 
 <%= render layout: "ui/shared/container" do %>
-  <% @device.components.order_by_sensor_id.each do |component| %>
-    <% unless component.is_raw? %>
-        <%= render partial: "ui/shared/reading", locals: { component: component } %>
+  <%= render layout: "ui/shared/box", locals: { inner_class: "p-4 pb-0", no_padding: true }  do %>
+    <% @device.components.order_by_sensor_id.each do |component| %>
+      <% unless component.is_raw? %>
+        <%= render partial: "ui/shared/reading", locals: { component: component, sync_all_on_page: true } %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

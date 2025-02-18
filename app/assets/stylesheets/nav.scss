@@ -1,8 +1,9 @@
-.navbar {
-  &.sticky-top {
-    top: 0.5rem;
-  }
 
+.nav-container.sticky-top {
+  top: 0.5rem;
+}
+
+.navbar {
   .nav-item {
     display: flex;
     align-items: center;
@@ -12,9 +13,10 @@
   .nav-link {
     text-transform: uppercase;
     color: $white;
-    font-family: "Kanit";
+    font-family: "Roboto Condensed";
     font-weight: 600;
-
+    letter-spacing: 0.0325em;
+    transition: color 0.5s ease;
     &:hover {
       color: $primary;
     }
@@ -54,6 +56,7 @@
   .navbar-profile-image {
     height: 2.4rem;
     border: 3px solid $white;
+    transition: border 0.5s ease;
     &:hover {
       border: 3px solid $yellow;
     }

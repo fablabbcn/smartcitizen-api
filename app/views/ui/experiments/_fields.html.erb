@@ -1,12 +1,12 @@
 <div class="mb-5">
-  <h2 class="mb-3"><%= t(:experiment_form_details_subhead) %></h2>
+  <h2 class="mb-4"><%= t(:experiment_form_details_subhead) %></h2>
   <%= form.text_field :name %>
   <%= form.text_field :description %>
   <%= form.text_field :starts_at, class: "flatpickr" %>
   <%= form.text_field :ends_at, class: "flatpickr" %>
 </div>
 <div class="mb-5">
-  <h2 class="mb-3"><%= t(:experiment_form_devices_subhead) %></h2>
+  <h2 class="mb-4"><%= t(:experiment_form_devices_subhead) %></h2>
   <div class="devices-typeahead">
     <%= label_tag "device_search", t(:experiment_form_search_devices_label), class: "form-label" %>
     <%= text_field_tag :device_search, "", class: "form-control device-search", list: "all-devices-list" %>
@@ -35,7 +35,7 @@
 </div>
 <% if current_user&.is_admin? %>
   <div class="mb-5">
-    <h2 class="mb-3"><%= t(:experiment_form_admin_options_subhead) %></h2>
+    <h2 class="mb-4"><%= t(:experiment_form_admin_options_subhead) %></h2>
     <%= form.check_box :is_test, label: t(:experiment_form_is_test_label) %>
   </div>
 <% end %>

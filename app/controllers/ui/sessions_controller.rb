@@ -30,7 +30,7 @@ module Ui
           redirect_to session[:discourse_url]
         else
           flash[:success] = I18n.t(:new_session_success)
-          redirect_to (session[:user_return_to] || ui_users_path)
+          redirect_to goto_or(session[:user_return_to] || ui_users_path)
         end
       else
         flash.now.alert = I18n.t(:new_session_failure)
@@ -77,7 +77,7 @@ module Ui
 
     def destroy
       session[:user_id] = nil
-      redirect_to login_url, notice: I18n.t(:destroy_session_success)
+      redirect_to goto_or(login_url), notice: I18n.t(:destroy_session_success)
     end
   end
 end

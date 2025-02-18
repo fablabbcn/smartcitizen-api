@@ -5,21 +5,21 @@
     .trend {
       vertical-align: top;
       line-height: 3.2rem;
-      font-size: 1.6rem;
+      font-size: 1.2rem;
 
     }
     .value {
-      font-size: 3.2rem;
+      font-size: 2.4rem;
       line-height: 3.2rem;
       font-weight: bold;
     }
     .unit {
-      font-size: 1.6rem;
+      font-size: 1.2rem;
       line-height: 3.2rem;
     }
   }
   .sparkline {
-    height: 3.2rem;
+    height: 2.4rem;
     width: 100%;
     svg {
       .cursor {
@@ -29,7 +29,7 @@
       }
 
       .fill {
-        fill: $yellow;
+        fill: $white;
       }
 
       .stroke {

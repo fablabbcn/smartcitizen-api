@@ -9,14 +9,12 @@
 <% end %>
 <%= render partial: "ui/shared/profile_header", locals: { title: t(:show_user_headline, username: @user.username) } %>
 
-<div class="container-lg g-0 px-2">
-  <div class="row">
-    <div class="col-lg-2 d-none d-lg-flex">
-      <%= render partial: "ui/users/page_nav" %>
-    </div>
-    <div class="col-12 col-lg-10">
-      <%= render partial: "ui/users/devices_collection", locals: { user: @user } %>
-      <%= render partial: "ui/users/experiments_collection", locals: { user: @user } %>
-    </div>
-  </div>
-</div>
+<% content_for :two_column_sidebar do %>
+  <%= render partial: "ui/users/page_nav" %>
+<% end %>
+<% content_for :two_column_main do %>
+
+  <%= render partial: "ui/users/devices_collection", locals: { user: @user } %>
+  <%= render partial: "ui/users/experiments_collection", locals: { user: @user } %>
+<% end %>
+<%= render partial: "ui/shared/two_column" %>

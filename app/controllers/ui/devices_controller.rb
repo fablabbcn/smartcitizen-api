@@ -5,7 +5,7 @@ module Ui
       return unless authorize_device! :show?, :show_device_forbidden
       @title = I18n.t(:show_device_title, name: @device.name)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, owner: helpers.possessive(@device.owner, current_user)), ui_user_path(@device.owner.username)],
+        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(@device.owner.username)],
         [@title, ui_device_path(@device.id)]
       )
       render "show", layout: "base"
@@ -16,9 +16,9 @@ module Ui
       return unless authorize_device! :update?, :edit_device_forbidden
       @title = I18n.t(:edit_device_title, name: @device.name)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, owner: helpers.possessive(@device.owner, current_user)), ui_user_path(@device.owner.username)],
+        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(@device.owner.username)],
         [I18n.t(:show_device_title, name: @device.name), ui_device_path(@device.id)],
-        [@title, edit_ui_device_path(@device.id)]
+        [I18n.t(:edit_breadcrumb), edit_ui_device_path(@device.id)]
       )
     end
 
@@ -39,10 +39,10 @@ module Ui
       return unless authorize_device! :destroy?, :delete_device_forbidden
       @title = I18n.t(:delete_device_title, name: @device.name)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, owner: helpers.possessive(@device.owner, current_user)), ui_user_path(@device.owner.username)],
+        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(@device.owner.username)],
         [I18n.t(:show_device_title, name: @device.name), ui_device_path(@device.id)],
-        [I18n.t(:edit_device_title, name: @device.name), edit_ui_device_path(@device.id)],
-        [I18n.t(:delete_device_title, name: @device.name), delete_ui_device_path(@device.id)]
+        [I18n.t(:edit_breadcrumb, name: @device.name), edit_ui_device_path(@device.id)],
+        [I18n.t(:delete_breadcrumb, name: @device.name), delete_ui_device_path(@device.id)]
       )
     end
 
@@ -64,9 +64,9 @@ module Ui
       return unless authorize_device! :download?, :download_device_forbidden
       @title = I18n.t(:download_device_title)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, owner: helpers.possessive(@device.owner, current_user)), ui_user_path(@device.owner.username)],
+        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(@device.owner.username)],
         [I18n.t(:show_device_title, name: @device.name), ui_device_path(@device.id)],
-        [@title, download_ui_device_path(@device.id)]
+        [I18n.t(:download_breadcrumb), download_ui_device_path(@device.id)]
       )
     end
 
@@ -89,7 +89,7 @@ module Ui
       end
       @title = I18n.t(:register_device_title)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, owner: helpers.possessive(current_user, current_user, capitalize: true)), ui_user_path(current_user)],
+        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(current_user)],
         [@title, register_ui_devices_path]
       )
     end
@@ -102,9 +102,9 @@ module Ui
       end
       @title = I18n.t(:new_device_title)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, owner: helpers.possessive(current_user, current_user, capitalize: true)), ui_user_path(current_user)],
+        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(current_user)],
         [I18n.t(:register_device_title), register_ui_devices_path],
-        [@title, new_ui_device_path]
+        [I18n.t(:legacy_breadcrumb), new_ui_device_path]
       )
       @device = Device.new(owner: current_user)
     end
@@ -132,9 +132,9 @@ module Ui
       return unless authorize_device! :upload?, :upload_device_forbidden
       @title = I18n.t(:upload_device_title)
       add_breadcrumbs(
-        [I18n.t(:show_user_title, owner: helpers.possessive(@device.owner, current_user)), ui_user_path(@device.owner.username)],
+        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(@device.owner.username)],
         [I18n.t(:show_device_title, name: @device.name), ui_device_path(@device.id)],
-        [@title, download_ui_device_path(@device.id)]
+        [I18n.t(:upload_breadcrumb), download_ui_device_path(@device.id)]
       )
     end
 
@@ -179,6 +179,11 @@ module Ui
       flash[:alert] = I18n.t(alert)
       redirect_to current_user ? ui_user_path(current_user.username) : login_path
       return false
+    end
+
+    def owner_name(capitalize=true)
+      owner = @device&.owner || current_user
+      helpers.possessive(owner, current_user, capitalize: capitalize)
     end
   end
 end
