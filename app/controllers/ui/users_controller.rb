@@ -50,7 +50,7 @@ module Ui
         @user.save
         session[:user_id] = @user.id
         flash[:success] = I18n.t(:new_user_success)
-        redirect_to ui_user_path(@user.username)
+        redirect_to goto_or(ui_user_path(@user.username))
       else
         flash[:alert] = I18n.t(:new_user_failure)
         render :new, status: :unprocessable_entity

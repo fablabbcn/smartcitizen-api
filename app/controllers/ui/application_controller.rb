@@ -19,6 +19,10 @@ module Ui
       @breadcrumbs ||= []
     end
 
+    def goto_or(url)
+      params[:goto].present? ? params[:goto] : url
+    end
+
     helper_method :breadcrumbs
   end
 end
