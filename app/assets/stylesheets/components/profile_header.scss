@@ -1,0 +1,10 @@
+.profile-header {
+
+  a {
+    color: $white !important;
+    text-decoration: underline;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}

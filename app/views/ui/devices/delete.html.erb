@@ -1,0 +1,7 @@
+<%= bootstrap_form_tag url: ui_device_path(@device.id), method: :delete do |f| %>
+  <p><%= t(:delete_device_warning_html, name: @device.name) %></p>
+  <%= f.text_field :name, label: t(:delete_device_name_label)  %>
+  <div class="mt-4">
+    <%= f.primary t(:delete_device_submit), class: "btn btn-danger w-100 w-md-auto" %>
+  </div>
+<% end %>

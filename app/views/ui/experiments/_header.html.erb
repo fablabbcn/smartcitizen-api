@@ -1,0 +1,12 @@
+<% content_for :profile_header_image do %>
+  <div class="circular-image-crop">
+    <%= render partial: "ui/shared/map", locals: { points: experiment.devices.map { |d| { lat: d.latitude, lng: d.longitude } } } %>
+  </div>
+<% end %>
+<% content_for :profile_header_meta do %>
+  <%= render partial: "ui/experiments/meta",  locals: { experiment: experiment } %>
+<% end %>
+<% content_for :profile_header_actions do %>
+  <%= render partial: "ui/experiments/actions", locals: { experiment: experiment} %>
+<% end %>
+<%= render partial: "ui/shared/profile_header", locals: { title: t(:show_experiment_title, name: experiment.name) } %>

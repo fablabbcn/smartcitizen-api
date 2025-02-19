@@ -1,11 +1,35 @@
 FROM ruby:3.0.6
 
+SHELL ["/bin/bash", "--login", "-c"]
+
+# Set debconf to run non-interactively
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
 # Install essential Linux packages
 RUN apt-get update -qq && apt-get install -y \
     build-essential \
     libpq-dev \
     postgresql-client \
-    nodejs
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    git \
+    libssl-dev \
+    wget
+
+ENV NVM_DIR /usr/local/nvm
+ENV NODE_VERSION 22.12.0
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
+
+RUN mkdir $NVM_DIR
+
+RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.40.1/install.sh | bash \
+    && . $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default \
+    && npm install -g yarn
 
 WORKDIR /app
 
@@ -17,6 +41,10 @@ RUN gem install bundler
 ARG BUNDLE_WITHOUT
 ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 RUN bundle install
+
+
+COPY package.json yarn.lock /app/
+RUN . $NVM_DIR/nvm.sh && nvm use default && yarn install
 
 # Copy the Rails application into place
 COPY . /app
