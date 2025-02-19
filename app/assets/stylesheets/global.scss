@@ -18,7 +18,6 @@ body{
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
 }
 
 
@@ -63,8 +62,9 @@ body > .container {
 .btn {
   text-transform: uppercase;
   text-decoration: none !important;
-  font-family: "Kanit";
+  font-family: "Roboto Condensed";
   font-weight: 600;
+  letter-spacing: 0.0325em;
   &.btn-primary {
     background-color: $black;
     color: $white;
@@ -251,4 +251,16 @@ a.subtle-link {
   &:hover {
     text-decoration: underline;
   }
+}
+
+.page-nav {
+  top: 6rem !important;
+}
+
+.scroll-offset {
+  scroll-margin-top: 6.2rem;
+}
+
+.bg-black {
+  background-color: $black !important;
 }
