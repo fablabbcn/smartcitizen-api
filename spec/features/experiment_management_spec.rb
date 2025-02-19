@@ -44,7 +44,7 @@ feature "Experiment management" do
     expect(page).to have_content(experiment_name)
     click_on experiment_name
     expect(page).to have_current_path(ui_experiment_path(experiment.id))
-    click_on "Edit experiment settings", match: :first
+    click_on "Edit experiment", match: :first
     expect(page).to have_current_path(edit_ui_experiment_path(experiment.id))
     fill_in "Name", with: "new experiment name"
     click_on "Update"
@@ -83,7 +83,7 @@ feature "Experiment management" do
     fill_in "Password", with: password
     click_on "Sign into your account"
     click_on experiment_name
-    click_on "Edit experiment settings", match: :first
+    click_on "Edit experiment", match: :first
     click_on "Delete this experiment"
     expect(page).to have_current_path(delete_ui_experiment_path(experiment.id))
     fill_in "To confirm, type the experiment name below:", with: experiment_name

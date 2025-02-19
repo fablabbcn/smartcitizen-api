@@ -7,7 +7,7 @@ en:
   experiment_page_nav_readings_heading: "Readings"
   experiment_devices_collection_heading: "Kits"
   experiment_devices_collection_no_devices_message: "This experiment has no kits yet!"
-  show_experiment_edit_cta: "Edit experiment settings"
+  show_experiment_edit_cta: "Edit experiment"
   edit_experiment_submit: "Update"
   experiment_form_details_subhead: "Basic information"
   experiment_form_admin_options_subhead: "Administrator options"
