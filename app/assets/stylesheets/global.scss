@@ -47,6 +47,19 @@ body > .container {
   box-shadow: 10px 10px 0px -2.5px $teal, 10px 10px 0px 0px #1C1C1C;
 }
 
+.danger-zone {
+  background-color: $danger-bg-subtle;
+  margin-left: -24px;
+  margin-right: -24px;
+  margin-bottom: -24px;
+}
+
+@include media-breakpoint-up(md) {
+  .danger-zone {
+    margin-bottom: -48px;
+  }
+}
+
 .btn {
   text-transform: uppercase;
   text-decoration: none !important;
@@ -66,6 +79,9 @@ body > .container {
     background-color: $black;
     color: $white;
     border: 3px solid $white;
+  }
+  &.btn-danger {
+    border: 3px solid $red !important;
   }
   &.btn-right {
     border-radius: 0 $btn-border-radius $btn-border-radius 0;
@@ -89,7 +105,7 @@ body > .container {
     &.btn-danger {
       background-color: $white !important;
       color: $red !important;
-      border-color: $red !important;
+      border: 3px solid $red !important;
     }
   }
 }
