@@ -39,6 +39,14 @@ body > .container {
   border-width: 3px !important;
 }
 
+.drop-shadow {
+  box-shadow: 10px 10px 0px -2.5px $yellow, 10px 10px 0px 0px #1C1C1C;
+}
+
+.drop-shadow-teal {
+  box-shadow: 10px 10px 0px -2.5px $teal, 10px 10px 0px 0px #1C1C1C;
+}
+
 .btn {
   text-transform: uppercase;
   text-decoration: none !important;
