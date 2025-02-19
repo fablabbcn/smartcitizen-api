@@ -1,5 +1,6 @@
 en:
   show_device_headline: "Kit: %{name}"
+  show_device_on_map_cta: "Show on map"
   show_device_edit_cta: "Edit kit settings"
   show_device_upload_cta: "Upload data as CSV"
   show_device_download_cta: "Download data as CSV"

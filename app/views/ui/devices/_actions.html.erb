@@ -1,4 +1,5 @@
 <p class="mb-0">
+  <%= link_to(t(:show_device_on_map_cta), "https://smartcitizen.me/kits/#{device.id}", class: "btn btn-dark mb-3 mb-lg-0 me-md-2 w-100 w-md-auto") %>
   <% if authorize? device, :update? %>
     <%= link_to(t(:show_device_edit_cta, name: device.name), edit_ui_device_path(device), class: "btn btn-dark mb-3 mb-lg-0 me-md-2 w-100 w-md-auto") %>
   <% end %>
