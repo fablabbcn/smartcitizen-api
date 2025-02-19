@@ -65,6 +65,7 @@ body > .container {
   font-family: "Roboto Condensed";
   font-weight: 600;
   letter-spacing: 0.0325em;
+  transition: color 0.5s ease, background-color 0.5s ease, border 0.5s ease;
   &.btn-primary {
     background-color: $black;
     color: $white;
@@ -166,6 +167,7 @@ input[type="file"] {
     background-color: $black;
     color: $white;
     border-right: 2px solid $black;
+    transition: background-color 0.5s ease, color 0.5s ease;
   }
   &:hover {
     &::file-selector-button {

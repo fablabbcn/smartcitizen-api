@@ -16,6 +16,7 @@
     font-family: "Roboto Condensed";
     font-weight: 600;
     letter-spacing: 0.0325em;
+    transition: color 0.5s ease;
     &:hover {
       color: $primary;
     }
@@ -55,6 +56,7 @@
   .navbar-profile-image {
     height: 2.4rem;
     border: 3px solid $white;
+    transition: border 0.5s ease;
     &:hover {
       border: 3px solid $yellow;
     }
