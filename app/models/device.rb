@@ -7,6 +7,9 @@ require 'geohash'
 
 class Device < ActiveRecord::Base
 
+  EXPOSURE_VALUES = %w{indoor outdoor}
+  HARDWARE_VERSION_OVERRIDE_VALUES = %w{1 1.1}
+
   default_scope { with_active_state }
 
   include ActiveModel::Dirty
@@ -39,6 +42,8 @@ class Device < ActiveRecord::Base
 
   validates_format_of :mac_address,
     with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
+
+  validates_inclusion_of :exposure, in: EXPOSURE_VALUES, allow_nil: true
 
   before_save :nullify_other_mac_addresses, if: :mac_address
   before_save :truncate_and_fuzz_location!, if: :location_changed?
@@ -75,7 +80,7 @@ class Device < ActiveRecord::Base
     end
   end
 
-  scope :for_world_map, ->(authorized_user=nil) {
+  scope :for_user, ->(authorized_user=nil) {
     privacy_conditions = if authorized_user && authorized_user.is_admin?
                            []
                          elsif authorized_user
@@ -83,7 +88,20 @@ class Device < ActiveRecord::Base
                          else
                            ["is_private IS NOT true"]
                          end
-    where.not(latitude: nil).where.not(last_reading_at: nil).where(is_test: false).where(privacy_conditions).includes(:owner, :tags)
+    where(privacy_conditions)
+  }
+
+  scope :by_last_reading, -> {
+    order("last_reading_at DESC NULLS LAST, created_at DESC")
+  }
+
+
+  scope :for_world_map, ->(authorized_user=nil) {
+    for_user(authorized_user).
+    where.not(latitude: nil).
+    where.not(last_reading_at: nil).
+    where(is_test: false).
+    includes(:owner, :tags)
   }
 
   def self.ransackable_attributes(auth_object = nil)
@@ -168,6 +186,10 @@ class Device < ActiveRecord::Base
     ].reject(&:blank?).sort
   end
 
+  def all_tags
+    system_tags + user_tags
+  end
+
   def to_s
     name
   end
@@ -216,6 +238,10 @@ class Device < ActiveRecord::Base
       country_code: slim ? nil : country_code,
       country: country_name
     }.compact
+  end
+
+  def location_string
+    [city, country_name].compact.join(", ")
   end
 
   # TODO Remove: Deprevated in API v1
@@ -314,6 +340,18 @@ class Device < ActiveRecord::Base
       self.latitude = (self.latitude + lat_fuzz).truncate(total_decimal_places)
       self.longitude = (self.longitude + long_fuzz).truncate(total_decimal_places)
     end
+  end
+
+  def csv_export_requested_recently?
+    !!self.csv_export_requested_at && self.csv_export_requested_at > 15.minutes.ago
+  end
+
+  def request_csv_archive_for!(user)
+    return false if self.csv_export_requested_recently?
+    self.update_column(:csv_export_requested_at, Time.now.utc)
+    mailer = UserMailer.device_archive(self.id, user.id)
+    mailer.deliver_later
+    return true
   end
 
   private

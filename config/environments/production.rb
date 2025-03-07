@@ -32,6 +32,8 @@ Rails.application.configure do
   config.assets.js_compressor = :uglifier
   config.assets.compile = false
   config.assets.digest = true
+  config.public_file_server.enabled = true
+  config.assets.compile = true
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :amazon

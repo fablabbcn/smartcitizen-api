@@ -1,0 +1,18 @@
+<div class="w-100">
+  <%= render layout: "ui/shared/box", locals: { no_padding: true, class: "w-100 sticky-top z-2 page-nav", no_shadow: true } do %>
+    <% if current_page?(controller: :experiments, action: :readings) %>
+      <a href="<%= ui_experiment_path(experiment) %>" class="subtle-link d-block p-3"><%= t :experiment_page_nav_devices %></a>
+      <p class="d-block p-3 mb-0 border-top"><strong><%= t :experiment_page_nav_readings_heading %></strong></p>
+      <% experiment.all_measurements.each do |measurement| %>
+        <% if params[:measurement_id]&.to_i == measurement.id %>
+          <p class="d-block p-3 ps-5 mb-0 border-top"><strong><%= measurement.name %></strong></p>
+        <% else %>
+          <a href="<%= readings_ui_experiment_path(experiment, measurement_id: measurement.id) %>" class="subtle-link d-block p-3 ps-5 border-top"><%= measurement.name %></a>
+        <% end %>
+      <% end %>
+    <% else %>
+      <p class="mb-0 d-block p-3"><strong><%= t :experiment_page_nav_devices %></strong></p>
+      <a href="<%= readings_ui_experiment_path(experiment) %>" class="subtle-link d-block p-3 border-top"><%= t :experiment_page_nav_readings_heading %></a>
+  <% end %>
+<% end %>
+</div>

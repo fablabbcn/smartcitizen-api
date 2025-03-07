@@ -50,4 +50,12 @@ class DevicePolicy < ApplicationPolicy
   def destroy?
     update?
   end
+
+  def download?
+    update?
+  end
+
+  def upload?
+    update?
+  end
 end

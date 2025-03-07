@@ -6,4 +6,15 @@ module UserHelper
       ''
     end
   end
+
+  def possessive(user, current_user, params={})
+    first_person = params[:first_person]
+    capitalize = params[:capitalize]
+    if current_user && current_user == user
+      pronoun = t(first_person ? :first_person_possessive : :second_person_possessive)
+      capitalize ? pronoun.capitalize : pronoun
+    else
+      t :third_person_possessive, username: user.username
+    end
+  end
 end

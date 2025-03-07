@@ -36,7 +36,11 @@ module V0
     def update
       @user = User.find_by!(password_reset_token: params[:id])
       authorize @user, :update_password?
-      if @user.update({ password: params.require(:password), password_reset_token: nil })
+      ActiveSupport::Deprecation.warn(
+        """Creating and updating user passwords in the API without providing a password confirmation
+        is deprecated, and will be removed in an upcomming API release"""
+      )
+      if @user.update({ password: params.require(:password), password_confirmation: params.require(:password), password_reset_token: nil })
         render 'users/show', status: :ok
       else
         raise Smartcitizen::UnprocessableEntity.new @user.errors
