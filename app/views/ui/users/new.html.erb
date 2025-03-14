@@ -1,11 +1,13 @@
-<%= bootstrap_form_for @user, url: ui_users_path do |f| %>
-  <%= hidden_field_tag :goto, params[:goto] %>
-  <%= f.text_field :email %>
-  <%= f.text_field :username %>
-  <%= f.password_field :password %>
-  <%= f.password_field :password_confirmation %>
-  <div class="mt-4">
-    <%= f.check_box :ts_and_cs, label: t(:new_user_ts_and_cs_label_html) %>
-  </div>
-  <%= render partial: "ui/shared/form_buttons", locals: {form: f, back_href: new_ui_session_path, back_label: t(:new_user_login_link), submit_label: t(:new_user_submit) } %>
+<%= render layout: "ui/shared/form_container" do %>
+  <%= bootstrap_form_for @user, url: ui_users_path do |f| %>
+    <%= hidden_field_tag :goto, params[:goto] %>
+    <%= f.text_field :email %>
+    <%= f.text_field :username %>
+    <%= f.password_field :password %>
+    <%= f.password_field :password_confirmation %>
+    <div class="mt-4">
+      <%= f.check_box :ts_and_cs, label: t(:new_user_ts_and_cs_label_html) %>
+    </div>
+    <%= render partial: "ui/shared/form_buttons", locals: {form: f, back_href: new_ui_session_path, back_label: t(:new_user_login_link), submit_label: t(:new_user_submit) } %>
+  <% end %>
 <% end %>

@@ -8,7 +8,6 @@ module Ui
         [I18n.t(:show_user_title, owner: owner_name), ui_user_path(@experiment.owner.username)],
         [@title, ui_experiment_path(@experiment.id)]
       )
-      render "show", layout: "base"
     end
 
     def readings
@@ -21,7 +20,6 @@ module Ui
         [I18n.t(:show_experiment_title, name: @experiment.name), ui_experiment_path(@experiment.id)],
         [I18n.t(:readings_breadcrumb), readings_ui_experiment_path(@experiment.id)]
       )
-      render "readings", layout: "base"
     end
 
     def edit

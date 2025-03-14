@@ -8,7 +8,6 @@ module Ui
         [I18n.t(:show_user_title, owner: owner_name), ui_user_path(@device.owner.username)],
         [@title, ui_device_path(@device.id)]
       )
-      render "show", layout: "base"
     end
 
     def edit

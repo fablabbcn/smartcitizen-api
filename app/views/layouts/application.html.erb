@@ -1,15 +1,19 @@
-<% content_for :container do %>
-  <%= render layout: "ui/shared/container" do %>
-    <%= render layout: "ui/shared/box" do %>
-      <% if @title %>
-        <header>
-          <h1 class="mb-4"><%= @title %></h1>
-        </header>
-      <% end %>
-      <main>
-        <%= yield %>
-      </main>
-    <% end %>
-  <% end %>
-<% end %>
-<%= render "layouts/base" %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= [t(:title), @title].compact.join(" – ") %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <%= render partial: "layouts/flashes" %>
+    <%= render partial: "layouts/nav" %>
+    <main>
+      <%= content_for?(:container) ? yield(:container) : yield %>
+    </main>
+    <%= render partial: "layouts/footer" %>
+  </body>
+</html>

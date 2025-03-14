@@ -1,24 +1,26 @@
-<%= bootstrap_form_for @user, url: ui_user_path(@user.username) do |f| %>
-  <div>
-    <h2 class="mb-4"><%= t(:edit_user_account_details_subhead) %></h2>
-    <%= f.text_field :email %>
-    <%= f.text_field :username %>
-    <%= f.password_field :password %>
-    <%= f.password_field :password_confirmation %>
-  </div>
-  <div class="mt-5">
-    <h2 class="mb-4"><%= t(:edit_user_public_profile_subhead) %></h2>
-    <%= f.file_field :profile_picture %>
-    <%= f.text_field :city %>
-    <%= f.form_group :country_code, label: { text: t(:edit_user_country_code_label) } do %>
-      <%= f.country_select :country_code, { include_blank: t(:edit_user_country_code_cta) } , { class: 'form-control' } %>
-    <% end %>
-    <%= f.text_field :url, label: t(:edit_user_url_label) %>
-  </div>
-  <%= render partial: "ui/shared/form_buttons", locals: {form: f, back_href: ui_user_path(@user.username), submit_label: t(:edit_user_submit) } %>
-  <% if authorize? @user, :destroy? %>
-    <%= render layout: "ui/shared/danger_zone" do %>
-      <div><%= link_to t(:edit_user_delete_account_submit, owner: possessive(@user, current_user)), delete_ui_user_path(@user.username), class: "btn btn-danger w-100 w-md-auto" %></div>
-    <% end %>
-  <%  end %>
+<%= render layout: "ui/shared/form_container" do %>
+  <%= bootstrap_form_for @user, url: ui_user_path(@user.username) do |f| %>
+    <div>
+      <h2 class="mb-4"><%= t(:edit_user_account_details_subhead) %></h2>
+      <%= f.text_field :email %>
+      <%= f.text_field :username %>
+      <%= f.password_field :password %>
+      <%= f.password_field :password_confirmation %>
+    </div>
+    <div class="mt-5">
+      <h2 class="mb-4"><%= t(:edit_user_public_profile_subhead) %></h2>
+      <%= f.file_field :profile_picture %>
+      <%= f.text_field :city %>
+      <%= f.form_group :country_code, label: { text: t(:edit_user_country_code_label) } do %>
+        <%= f.country_select :country_code, { include_blank: t(:edit_user_country_code_cta) } , { class: 'form-control' } %>
+      <% end %>
+      <%= f.text_field :url, label: t(:edit_user_url_label) %>
+    </div>
+    <%= render partial: "ui/shared/form_buttons", locals: {form: f, back_href: ui_user_path(@user.username), submit_label: t(:edit_user_submit) } %>
+    <% if authorize? @user, :destroy? %>
+      <%= render layout: "ui/shared/danger_zone" do %>
+        <div><%= link_to t(:edit_user_delete_account_submit, owner: possessive(@user, current_user)), delete_ui_user_path(@user.username), class: "btn btn-danger w-100 w-md-auto" %></div>
+      <% end %>
+    <%  end %>
+  <% end %>
 <% end %>

@@ -1,7 +1,10 @@
-<%= bootstrap_form_tag url: upload_ui_device_path(@device.id), method: :post, multipart: true do |f| %>
-  <p><%= t(:upload_device_blurb) %></p>
-  <%= f.file_field :data_files, multiple: true, label: t(:upload_device_data_files_label), help: t(:upload_device_data_files_help), name: "data_files[]" %>
-  <div class="mt-4">
-    <%= f.primary t(:upload_device_submit), class: "btn btn-primary w-100 w-md-auto" %>
-  </div>
+<%= render layout: "ui/shared/form_container" do %>
+  <%= bootstrap_form_tag url: upload_ui_device_path(@device.id), method: :post, multipart: true do |f| %>
+    <p><%= t(:upload_device_blurb) %></p>
+    <%= f.file_field :data_files, multiple: true, label: t(:upload_device_data_files_label), help: t(:upload_device_data_files_help), name: "data_files[]" %>
+    <div class="mt-4">
+      <%= f.primary t(:upload_device_submit), class: "btn btn-primary w-100 w-md-auto" %>
+    </div>
+  <% end %>
 <% end %>
+

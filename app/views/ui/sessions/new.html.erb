@@ -1,6 +1,7 @@
-<%= bootstrap_form_tag url: ui_sessions_path do |f| %>
-        <%= f.text_field :username_or_email, value: params[:username_or_email], autofocus: params[:username_or_email].blank? %>
-        <%= f.password_field :password %>
+<%= render layout: "ui/shared/form_container" do %>
+  <%= bootstrap_form_tag url: ui_sessions_path do |f| %>
+    <%= f.text_field :username_or_email, value: params[:username_or_email], autofocus: params[:username_or_email].blank? %>
+    <%= f.password_field :password %>
     <%= f.hidden_field :goto, value: params[:goto] %>
     <%= render partial: "ui/shared/form_buttons", locals: {form: f, submit_label: t(:new_session_submit) } %>
     <div class="row mt-4 mt-md-5">
@@ -13,4 +14,5 @@
         <%= f.submit t(:forgot_password_submit),  name: 'send_password_email', class: "btn btn-secondary w-100 w-md-50" %>
       </div>
     </div>
+  <% end %>
 <% end %>

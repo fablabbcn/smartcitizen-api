@@ -10,7 +10,6 @@ module Ui
       find_user!
       @title = I18n.t(:show_user_title, owner: owner(true))
       add_breadcrumb(@title, ui_user_path(@user.username))
-      render "show", layout: "base"
     end
 
     def secrets

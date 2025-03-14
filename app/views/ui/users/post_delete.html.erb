@@ -1,4 +1,6 @@
-<p><%= t(:post_delete_user_blurb_html)%></p>
-<div class="mt-4">
-  <a href="<%= t(:post_delete_user_cta_link) %>" class="btn btn-primary w-100 w-md-auto"><%= t(:post_delete_user_cta) %></a>
-</div>
+<%= render layout: "ui/shared/form_container" do %>
+  <p><%= t(:post_delete_user_blurb_html)%></p>
+  <div class="mt-4">
+    <a href="<%= t(:post_delete_user_cta_link) %>" class="btn btn-primary w-100 w-md-auto"><%= t(:post_delete_user_cta) %></a>
+  </div>
+<% end %>

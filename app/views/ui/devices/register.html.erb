@@ -1,18 +1,19 @@
-<p><%= t(:register_device_blurb) %></p>
-<div class="row">
-  <div class="col-12 col-md-6 col-lg-3 offset-lg-3">
-    <h2><%= t(:register_device_v1_subheading) %></h2>
-    <%= link_to new_ui_device_path, class: "subtle-link" do %>
-      <%= image_tag("sckit_1.png", alt: t(:register_device_v1_subheading), class: "contain-image") %>
-      <p class="text-center"><%= t(:register_device_v1_description_html) %></p>
-    <% end %>
+<%= render layout: "ui/shared/form_container" do %>
+  <p><%= t(:register_device_blurb) %></p>
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-3 offset-lg-3">
+      <h2><%= t(:register_device_v1_subheading) %></h2>
+      <%= link_to new_ui_device_path, class: "subtle-link" do %>
+        <%= image_tag("sckit_1.png", alt: t(:register_device_v1_subheading), class: "contain-image") %>
+        <p class="text-center"><%= t(:register_device_v1_description_html) %></p>
+      <% end %>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <h2><%= t(:register_device_v2_subheading) %></h2>
+      <%= link_to t(:register_device_v2_registration_link), class: "subtle-link", target: "_blank" do %>
+        <%= image_tag("sckit_2.png", alt: t(:register_device_v2_subheading), class: "contain-image") %>
+        <p class="text-center"><%= t(:register_device_v2_description_html) %></p>
+      <% end %>
+    </div>
   </div>
-  <div class="col-12 col-md-6 col-lg-3">
-    <h2><%= t(:register_device_v2_subheading) %></h2>
-    <%= link_to t(:register_device_v2_registration_link), class: "subtle-link", target: "_blank" do %>
-      <%= image_tag("sckit_2.png", alt: t(:register_device_v2_subheading), class: "contain-image") %>
-      <p class="text-center"><%= t(:register_device_v2_description_html) %></p>
-    <% end %>
-  </div>
-</div>
-
+<% end %>
