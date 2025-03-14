@@ -17,8 +17,7 @@ en:
   secrets_user_forwarding_username_label: MQTT forwarding username
   new_user_submit: "Sign up"
   new_user_ts_and_cs_label_html: "I accept the <a target=\"_blank\" href=\"https://smartcitizen.me/policy\">terms and conditions</a>"
-  new_user_login_heading: "Already have an account?"
-  new_user_login_link: "Log in"
+  new_user_login_link: "Back to log in"
   new_user_not_allowed_for_logged_in_users: "Sorry, logged in users can't create new accounts. Please log out and try again."
   edit_user_submit: "Update"
   edit_user_country_code_label: "Country"

@@ -15,9 +15,7 @@
     <% end %>
     <%= f.text_field :url, label: t(:edit_user_url_label) %>
   </div>
-  <div class="mt-5">
-    <%= f.primary t(:edit_user_submit), class: "btn btn-primary w-100 w-md-auto" %>
-  </div>
+  <%= render partial: "ui/shared/form_buttons", locals: {form: f, back_href: ui_user_path(@user.username), submit_label: t(:edit_user_submit) } %>
   <% if authorize? @user, :destroy? %>
     <%= render layout: "ui/shared/danger_zone" do %>
       <div><%= link_to t(:edit_user_delete_account_submit, owner: possessive(@user, current_user)), delete_ui_user_path(@user.username), class: "btn btn-danger w-100 w-md-auto" %></div>

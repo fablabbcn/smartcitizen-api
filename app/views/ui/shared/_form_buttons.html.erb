@@ -1,0 +1,8 @@
+<div class="mt-5 d-md-flex <%= local_assigns[:back_href] ? "justify-content-between": "justify-content-end" %> gap-3">
+  <% if local_assigns[:back_href] %>
+    <a class="btn btn-back w-100 w-md-25 justify-content-center d-none d-md-flex" href="<%= back_href %>">
+      <%= local_assigns[:back_label] || t(:back) %>
+    </a>
+  <% end %>
+  <%= form.primary submit_label, name: local_assigns[:submit_name],  class: "btn btn-primary w-100 w-md-25 justify-content-center" %>
+</div>

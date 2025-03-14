@@ -144,9 +144,9 @@ body > .container {
 }
 
 .form-check {
-  padding-left: 0.5rem;
-
+  padding-left: 0;
   .form-check-input {
+    margin-left: 1rem;
     border-radius: 0.33rem;
     float: none;
     margin-right: 0.5rem;
@@ -155,7 +155,6 @@ body > .container {
     vertical-align: middle;
     margin-top: 1px;
     margin-bottom: 1px;
-    margin-left: -0.5rem;
     color: $black;
     &:focus {
       outline: $primary solid 3px;

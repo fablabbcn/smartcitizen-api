@@ -10,7 +10,7 @@ feature "Device management" do
     visit "/login"
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_on "Sign into your account"
+    click_button "Sign in"
     expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content(device_name)
     click_on device_name
@@ -27,7 +27,7 @@ feature "Device management" do
     visit "/login"
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_on "Sign into your account"
+    click_button "Sign in"
     expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content(device_name)
     click_on device_name
@@ -49,7 +49,7 @@ feature "Device management" do
     visit "/login"
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_on "Sign into your account"
+    click_button "Sign in"
     click_on device_name
     click_on "Edit kit", match: :first
     click_on "Delete this kit"
@@ -74,7 +74,7 @@ feature "Device management" do
     visit "/login"
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_on "Sign into your account"
+    click_button "Sign in"
     click_on device_name
     click_on "Download data as CSV", match: :first
     click_on "Request data download"
@@ -90,7 +90,7 @@ feature "Device management" do
     visit "/login"
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_on "Sign into your account"
+    click_button "Sign in"
     click_on "Register a new kit", match: :first
     click_on "Legacy Smart Citizen Kit version 1.0 and 1.1"
     fill_in "Name", with: "kit name"
@@ -115,7 +115,7 @@ feature "Device management" do
     visit "/login"
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_on "Sign into your account"
+    click_button "Sign in"
     click_on device_name
     click_on "Upload data as CSV", match: :first
     attach_file "Choose CSV files", "#{File.dirname(__FILE__)}/../fixtures/fake_device_data.csv"

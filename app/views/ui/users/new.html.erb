@@ -7,13 +7,5 @@
   <div class="mt-4">
     <%= f.check_box :ts_and_cs, label: t(:new_user_ts_and_cs_label_html) %>
   </div>
-  <div class="mt-4">
-    <%= f.primary t(:new_user_submit), class: "btn btn-primary w-100 w-md-auto" %>
-  </div>
-  <div class="row mt-4">
-    <div class="col-md-12">
-      <h4 class="my-3"><%= t :new_user_login_heading %></h4>
-      <a class="btn btn-secondary w-100 w-md-auto" href="<%= new_ui_session_path %>"><%= t :new_user_login_link %></a>
-    </div>
-  </div>
+  <%= render partial: "ui/shared/form_buttons", locals: {form: f, back_href: new_ui_session_path, back_label: t(:new_user_login_link), submit_label: t(:new_user_submit) } %>
 <% end %>

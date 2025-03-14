@@ -1,5 +1,4 @@
-<%= bootstrap_form_for @experiment, url: ui_experiments_path do |form| %> <%= render partial: "fields", locals: { experiment: @experiment, form: form, include_hardware_info: true } %>
-  <%= render layout: "ui/shared/back_link", locals: { back_href: ui_user_path(current_user.username) } do %>
-    <%= form.primary t(:new_experiment_submit), class: "btn btn-primary w-100 w-md-auto" %>
-  <% end %>
+<%= bootstrap_form_for @experiment, url: ui_experiments_path do |form| %>
+  <%= render partial: "fields", locals: { experiment: @experiment, form: form, include_hardware_info: true } %>
+  <%= render partial: "ui/shared/form_buttons", locals: { form: form, back_href: ui_user_path(current_user.username), submit_label: t(:new_experiment_submit) } %>
 <% end %>
