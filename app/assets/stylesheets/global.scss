@@ -87,6 +87,7 @@ body > .container {
     border: 3px solid $blue;
   }
   &.btn-danger {
+    background-color: $red !important;
     border: 3px solid $red !important;
   }
   &.btn-right {
