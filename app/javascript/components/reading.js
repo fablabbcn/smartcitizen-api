@@ -10,7 +10,6 @@ class Reading {
   constructor(element) {
     this.element = element;
     this.valueElement = $(this.element).find(".big-number .value")[0];
-    this.dateLabelElement = $(this.element).find(".date-line .label")[0];
     this.dateElement = $(this.element).find(".date-line .date")[0];
     this.trendElement = $(this.element).find(".trend")[0];
     this.deviceId = element.dataset["deviceId"];
@@ -19,9 +18,6 @@ class Reading {
     this.toDate = element.dataset["toDate"] ?? this.getDateString();
     this.syncAllOnPage = element.dataset["syncAllOnPage"] == "true";
     this.initialValue = this.valueElement.innerHTML;
-    this.initialDateLabel = this.dateLabelElement.innerHTML;
-    this.hoveredDateLabel = this.dateLabelElement.dataset["hoveredText"];
-    this.noReadingLabel = this.dateLabelElement.dataset["noReadingText"];
     this.initialDate = this.dateElement.innerHTML;
     Reading.instances.push(this);
   }
@@ -104,7 +100,6 @@ class Reading {
     const enterHandler = (event) => {
         this.cursor.attr("visibility", "visible");
         this.trendElement.style.visibility = "hidden";
-        this.dateLabelElement.innerHTML = this.hoveredDateLabel;
     }
 
     const leaveHandler = (event) => {
@@ -130,12 +125,11 @@ class Reading {
     this.cursor.attr("visibility", "visible");
     this.cursor.attr("transform", `translate(${mouseX}, 0)`);
     this.trendElement.style.visibility = "hidden";
-    this.dateLabelElement.innerHTML = this.hoveredDateLabel;
     if(value) {
       this.dateElement.innerHTML = strftime("%B %d, %Y %H:%M", new Date(timestamp));
       this.valueElement.innerHTML = value.toFixed(2);
     } else {
-      this.dateElement.innerHTML = this.noReadingLabel;
+      this.dateElement.innerHTML = ""
       this.valueElement.innerHTML = "-.--";
     }
   }
@@ -144,7 +138,6 @@ class Reading {
     this.cursor.attr("visibility", "hidden");
     this.valueElement.innerHTML = this.initialValue;
     this.trendElement.style.visibility = "visible";
-    this.dateLabelElement.innerHTML = this.initialDateLabel;
     this.dateElement.innerHTML = this.initialDate;
   }
 }

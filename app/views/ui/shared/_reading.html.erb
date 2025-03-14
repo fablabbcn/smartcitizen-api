@@ -16,10 +16,10 @@
                <% else %>
                  <%= local_assigns[:title] || component.measurement&.name %></h3>
              <% end %>
-
              <% extra_info = local_assigns[:description].nil? ? component.measurement&.description : local_assigns[:description] %>
-             <% if extra_info && extra_info.present? %>
-               <%= render layout: "ui/shared/extra_info" do %>
+             <%= render layout: "ui/shared/extra_info" do %>
+               <p class="<%= (!extra_info || !extra_info.present?) && "mb-0" %>"><strong>Sensor:</strong> <%= component.sensor.name %></p>
+               <% if extra_info && extra_info.present? %>
                  <p class="mb-0"><%= extra_info %></p>
                <% end %>
              <% end %>
@@ -27,7 +27,7 @@
          </h3>
          <p class="date-line mb-0">
          <% if component.last_reading_at %>
-           <span data-hovered-text="<%= t(:reading_hover_reading_label) %>" data-no-reading-text="<%= t(:reading_no_reading_label) %>" class="label"><%= t(:reading_last_reading_label) %></span>: <span class="date"><%= component.last_reading_at.to_s(:long) %></span>
+           <span class="date"><%= component.last_reading_at.to_s(:long) %></span>
          <% else %>
            <%= t(:reading_no_reading_label) %>
          <% end %>
