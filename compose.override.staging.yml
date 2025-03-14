@@ -1,0 +1,27 @@
+services:
+  db:
+    deploy:
+      resources:
+        limits:
+          memory: 2gb
+  app:
+    build:
+      args:
+        - BUNDLE_WITHOUT=test development
+  mqtt:
+    entrypoint: ["echo", "MQTT service disabled on staging"]
+  mqtt-task-main-1:
+    environment:
+      MQTT_CLIENT_ID: smartcitizen-staging-api-main-1
+  mqtt-task-main-2:
+    environment:
+      MQTT_CLIENT_ID: smartcitizen-staging-api-main-2
+  mqtt-task-secondary:
+    environment:
+      MQTT_CLIENT_ID: "smartcitizen-staging-api-secondary"
+
+
+# cassandra-1:
+#   entrypoint: ["echo", "Cassandra service disabled on staging"]
+#  kairos:
+#    depends_on: !reset []

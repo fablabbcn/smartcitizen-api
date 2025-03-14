@@ -14,7 +14,42 @@ Rails.application.routes.draw do
   get "password_reset/:token", to: redirect("/ui/password_reset/%{token}")
 
   namespace "ui" do
-    resources :users, as: "users"
+    get "/", to: redirect("/ui/users")
+
+    resources :users, as: "users" do
+      member do
+        get :delete
+        get :edit
+        get :secrets
+      end
+      collection do
+        get :post_delete
+      end
+    end
+
+    resources :devices, as: "devices" do
+      member do
+        get :edit
+        get :delete
+        get :download
+        get :upload
+        post :upload, to: "devices#upload_readings"
+        post :download, to: "devices#download_confirm"
+      end
+      collection do
+        get :register
+        get :new
+        post :create
+      end
+    end
+
+    resources :experiments, as: "experiments" do
+      member do
+        get :readings
+        get :delete
+      end
+    end
+
     get "sessions/destroy", to: "sessions#destroy"
     resources :sessions, as: "sessions"
     post 'change_password', to: 'sessions#change_password', as: 'change_password'

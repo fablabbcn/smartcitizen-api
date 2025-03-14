@@ -1,0 +1,4 @@
+en:
+  second_person_possessive: "your"
+  third_person_possessive: "%{username}'s"
+  first_person_possessive: "my"

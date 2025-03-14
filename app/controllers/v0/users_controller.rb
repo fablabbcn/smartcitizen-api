@@ -55,7 +55,7 @@ module V0
 private
 
     def user_params
-      params.permit(*[
+      user_params = params.permit(*[
         :email,
         :username,
         :password,
@@ -64,6 +64,11 @@ private
         :url,
         (:role_mask if current_user&.is_admin?)
       ].compact)
+      ActiveSupport::Deprecation.warn(
+        """Creating and updating user passwords in the API without providing a password confirmation
+        is deprecated, and will be removed in an upcomming API release"""
+      )
+      user_params.merge(password_confirmation: user_params[:password])
     end
 
   end

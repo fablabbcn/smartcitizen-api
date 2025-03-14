@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+  app:
+    build:
+      args:
+        - BUNDLE_WITHOUT=test development
+  mqtt:
+    entrypoint: ["echo", "MQTT service disabled in production"]
+  cassandra-1:
+    entrypoint: ["echo", "Cassandra service disabled in production"]
+  kairos:
+    depends_on: !reset []
