@@ -1,13 +1,12 @@
-<% button_class = local_assigns[:dark_buttons] ? "btn-dark" : "btn-secondary" %>
 <p class="mb-0">
-<%= link_to(t(:show_device_on_map_cta), "https://smartcitizen.me/kits/#{device.id}", class: "btn #{button_class} mb-3 mb-lg-0 me-md-2 w-100 w-md-auto") %>
+<%= sc_nav_button_to(t(:show_device_on_map_cta), "https://smartcitizen.me/kits/#{device.id}", local_assigns) %>
   <% if authorize? device, :update? %>
-    <%= link_to(t(:show_device_edit_cta, name: device.name), edit_ui_device_path(device), class: "btn #{button_class} mb-3 mb-lg-0 me-md-2 w-100 w-md-auto") %>
+    <%= sc_nav_button_to(t(:show_device_edit_cta, name: device.name), edit_ui_device_path(device), local_assigns) %>
   <% end %>
   <% if authorize? device, :upload? %>
-    <%= link_to(t(:show_device_upload_cta), upload_ui_device_path(device), class: "btn #{button_class} me-md-2 mb-3 mb-lg-0 w-100 w-md-auto") %>
+    <%= sc_nav_button_to(t(:show_device_upload_cta), upload_ui_device_path(device), local_assigns) %>
   <% end %>
   <% if authorize? device, :download? %>
-    <%= link_to(t(:show_device_download_cta), download_ui_device_path(device), class: "btn #{button_class} me-md-2 mb-3 mb-lg-0 w-100 w-md-auto") %>
+    <%= sc_nav_button_to(t(:show_device_download_cta), download_ui_device_path(device), local_assigns) %>
   <% end %>
 </p>

@@ -1,3 +1,4 @@
+<%= render partial: "ui/users/header", locals: { user:  @user } %>
 <%= render layout: "ui/shared/form_container" do %>
   <%= bootstrap_form_for @user, url: ui_user_path(@user.username) do |f| %>
     <div>

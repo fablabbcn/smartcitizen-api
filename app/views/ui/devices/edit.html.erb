@@ -1,3 +1,4 @@
+<%= render partial: "ui/devices/profile_header", locals: { device: @device } %>
 <%= render layout: "ui/shared/form_container" do %>
   <%= bootstrap_form_for @device, url: ui_device_path(@device) do |form| %>
     <%= render partial: "fields", locals: { device: @device, form: form } %>

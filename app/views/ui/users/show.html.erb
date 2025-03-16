@@ -1,14 +1,4 @@
-<% content_for :profile_header_image do %>
-  <%= render partial: "ui/users/profile_image", locals: { user: @user }  %>
-<% end %>
-<% content_for :profile_header_meta do %>
-  <%= render partial: "ui/users/meta",  locals: { user: @user } %>
-<% end %>
-<% content_for :profile_header_actions do %>
-  <%= render partial: "ui/users/actions", locals: { user: @user } %>
-<% end %>
-<%= render partial: "ui/shared/profile_header", locals: { title: t(:show_user_headline, username: @user.username) } %>
-
+<%= render partial: "ui/users/header", locals: { user:  @user } %>
 <% content_for :two_column_sidebar do %>
   <%= render partial: "ui/users/page_nav" %>
 <% end %>

@@ -1,0 +1,12 @@
+<% content_for :profile_header_image do %>
+  <div class="circular-image-crop">
+    <%= render partial: "ui/shared/map", locals: { points: [{lat: device.latitude, lng: device.longitude}] } %>
+  </div>
+<% end %>
+<% content_for :profile_header_meta do %>
+  <%= render partial: "ui/devices/meta", locals: { device: device } %>
+<% end %>
+<% content_for :profile_header_actions do %>
+  <%= render partial: "ui/devices/actions", locals: { device: device, dark_buttons: true } %>
+<% end %>
+<%= render partial: "ui/shared/profile_header", locals: { title: t(:show_device_headline, name: device.name) } %>

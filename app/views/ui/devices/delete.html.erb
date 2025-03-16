@@ -1,3 +1,4 @@
+<%= render partial: "ui/devices/profile_header", locals: { device: @device } %>
 <%= render layout: "ui/shared/form_container" do %>
   <%= bootstrap_form_tag url: ui_device_path(@device.id), method: :delete do |f| %>
     <p><%= t(:delete_device_warning_html, name: @device.name) %></p>

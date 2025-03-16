@@ -80,6 +80,10 @@ body > .container {
     background-color: $black;
     color: $white;
     border: 3px solid $white;
+    &.btn-active {
+      background-color: $white;
+      color: $black !important;
+    }
   }
   &.btn-back {
     background-color: $blue;
@@ -106,6 +110,11 @@ body > .container {
     border: 3px solid $black !important;
     &.btn-dark {
       border: 3px solid $primary !important;
+      &.btn-active {
+        cursor: default;
+        border: 3px solid $white !important;
+        background-color: $white !important;
+      }
     }
     outline: none !important;
     box-shadow: none !important;

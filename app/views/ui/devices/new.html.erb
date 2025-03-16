@@ -1,3 +1,4 @@
+<%= render partial: "ui/users/header", locals: { user:  current_user } %>
 <%= render layout: "ui/shared/form_container" do %>
   <%= bootstrap_form_for @device, url: ui_devices_path do |form| %>
     <%= render partial: "fields", locals: { device: @device, form: form, include_hardware_info: true } %>
