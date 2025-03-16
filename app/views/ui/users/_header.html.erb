@@ -7,5 +7,5 @@
 <% content_for :profile_header_actions do %>
   <%= render partial: "ui/users/actions", locals: { user: user, dark_buttons: true } %>
 <% end %>
-<%= render partial: "ui/shared/profile_header", locals: { title: t(:show_user_headline, username: user.username) } %>
+<%= render partial: "ui/shared/profile_header", locals: { title: t(:show_user_headline, username: user.username), title_link: ui_user_path(user.username) } %>
 

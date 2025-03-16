@@ -6,7 +6,15 @@
       </div>
       <div class="col-9 col-md-9 col-lg-10 mb-2 mb-md-0 justify-content-between d-flex g-0 flex-column">
         <div class="meta">
-          <h1 class="mb-0 mb-md-2"><%= title %></h1>
+          <h1 class="mb-0 mb-md-2">
+            <% if local_assigns[:title_link] %>
+              <a href="<%= title_link %>" class="subtle-link">
+            <% end %>
+            <%= title %>
+            <% if local_assigns[:title_link] %>
+              </a>
+            <% end %>
+          </h1>
           <%= yield :profile_header_meta %>
         </div>
         <div class="actions mt-3 d-none d-md-flex">

@@ -9,4 +9,4 @@
 <% content_for :profile_header_actions do %>
   <%= render partial: "ui/experiments/actions", locals: { experiment: experiment, dark_buttons: true} %>
 <% end %>
-<%= render partial: "ui/shared/profile_header", locals: { title: t(:show_experiment_title, name: experiment.name) } %>
+<%= render partial: "ui/shared/profile_header", locals: { title: t(:show_experiment_title, name: experiment.name), title_link: ui_experiment_path(experiment.id) } %>

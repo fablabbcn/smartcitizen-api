@@ -9,4 +9,4 @@
 <% content_for :profile_header_actions do %>
   <%= render partial: "ui/devices/actions", locals: { device: device, dark_buttons: true } %>
 <% end %>
-<%= render partial: "ui/shared/profile_header", locals: { title: t(:show_device_headline, name: device.name) } %>
+<%= render partial: "ui/shared/profile_header", locals: { title: t(:show_device_headline, name: device.name), title_link: ui_device_path(device.id) } %>

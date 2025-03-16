@@ -273,9 +273,9 @@ input[type="file"] {
 
 a.subtle-link {
   color: $black;
-  text-decoration: none;
+  text-decoration: none !important;
   &:hover {
-    text-decoration: underline;
+    text-decoration: underline !important;
   }
 }
 
