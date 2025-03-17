@@ -1,7 +1,9 @@
-<p class="mb-<%= device.description.present? ? 0 : 2  %> small"><strong><%= device.hardware_name %></strong></p>
-<% if device.description.present? %>
-  <p class="mb-2 small"> <%= device.description %></p>
-<% end %>
+<% show_description = device.description.present? && !local_assigns[:hide_description] %>
+
+<p class="mb-0 small device-status <%= device.online? ? "online" : "offline" %>">
+  <span class="pe-1"><%= show_svg("status_icon.svg") %></span>
+  <strong><%= device.hardware_name %> (<%= device.online? ? t(:device_meta_online_adjective) : t(:device_meta_offline_adjective) %>)</strong>
+</p>
 <% unless local_assigns[:hide_owner] %>
   <p class="mb-0 small">
   <span class="pe-1"><%= show_svg("user_details_icon_light.svg") %></span>
@@ -12,15 +14,13 @@
   <span class="pe-1"><%= show_svg("location_icon.svg") %></span>
   <%= device.location_string %>
 </p>
-<p class="mb-0 small">
-  <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
-  <% if device.last_reading_at %>
-    <%= t :device_meta_last_reading_at, time: time_ago_in_words(device.last_reading_at) %>
-  <% else %>
-    <%= t :device_meta_no_readings_message %>
-  <% end %>
-</p>
-<p class="mb-0 small">
-  <span class="pe-1"><%= show_svg("tag_icon.svg") %></span>
-  <%= device.user_tags.join(", ") %>
-</p>
+<% unless local_assigns[:hide_last_reading_at] %>
+  <p class="mb-0 small">
+    <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
+    <% if device.last_reading_at %>
+      <%= t :device_meta_last_reading_at, time: time_ago_in_words(device.last_reading_at) %>
+    <% else %>
+      <%= t :device_meta_no_readings_message %>
+    <% end %>
+  </p>
+<% end %>

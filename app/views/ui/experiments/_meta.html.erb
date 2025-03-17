@@ -1,25 +1,18 @@
-<% if experiment.description.present? %>
-  <p class="mb-2 small"> <%= experiment.description %></p>
-<% end %>
+<p class="mb-0 small device-status <%= experiment.all_online? ? "online" : "offline" %>">
+  <span class="pe-1"><%= show_svg("status_icon.svg") %></span>
+  <strong><%= pluralize(experiment.devices.length, t(:experiment_meta_device_noun)) %> (<%= experiment.online_device_count %> <%= t(:experiment_meta_online_adjective) %>)</strong>
+</p>
 <% unless local_assigns[:hide_owner] %>
   <p class="mb-0 small">
   <span class="pe-1"><%= show_svg("user_details_icon_light.svg") %></span>
     <%= link_to(experiment.owner.username, ui_user_path(experiment.owner.username), class: "d-inline-block position-relative subtle-link z-3") %>
   </p>
 <% end %>
-<% if experiment.starts_at %>
-  <p class="mb-0 small">
-    <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
-    <%= t :experiment_meta_starts_at, time: experiment.starts_at.to_s(:long) %>
-  </p>
-<% end %>
-<% if experiment.ends_at %>
-  <p class="mb-0 small">
-    <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
-    <%= t :experiment_meta_ends_at, time: experiment.ends_at.to_s(:long) %>
-  </p>
-<% end %>
 <p class="mb-0 small">
-  <span class="pe-1"><%= show_svg("tag_icon.svg") %></span>
-  <%= experiment.user_tags.join(", ") %>
+  <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
+  <% if experiment.last_reading_at %>
+    <%= t :device_meta_last_reading_at, time: time_ago_in_words(experiment.last_reading_at) %>
+  <% else %>
+    <%= t :device_meta_no_readings_message %>
+  <% end %>
 </p>

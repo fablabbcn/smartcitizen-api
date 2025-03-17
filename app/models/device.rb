@@ -177,12 +177,16 @@ class Device < ActiveRecord::Base
     owner.username if owner
   end
 
+  def online?
+    last_reading_at.present? and last_reading_at > 60.minutes.ago
+  end
+
   def system_tags
     [
       exposure, # indoor / outdoor
       ('new' if created_at > 1.week.ago), # new
       ('test_device' if is_test?),
-      ((last_reading_at.present? and last_reading_at > 60.minutes.ago) ? 'online' : 'offline') # state
+      ( online? ? 'online' : 'offline') # state
     ].reject(&:blank?).sort
   end
 

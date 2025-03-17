@@ -3,6 +3,8 @@ en:
   experiment_meta_no_readings_message: "No readings received yet!"
   experiment_meta_starts_at: "Start: %{time}"
   experiment_meta_ends_at: "End: %{time}"
+  experiment_meta_device_noun: "kit"
+  experiment_meta_online_adjective: "online"
   experiment_page_nav_devices: "Kits"
   experiment_page_nav_readings_heading: "Data"
   experiment_devices_collection_heading: "Kits"
@@ -19,3 +21,4 @@ en:
   delete_experiment_warning_html: "🚨<strong>Warning!</strong> This will permanently delete the experiment <strong>%{name}</strong>.🚨"
   delete_experiment_name_label: "To confirm, type the experiment name below:"
   delete_experiment_submit: "I understand, delete the experiment"
+  show_experiment_details_subheading: "Details"

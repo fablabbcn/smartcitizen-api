@@ -13,6 +13,6 @@
   <%=
     render partial: "ui/experiments/experiment",
       collection: user.experiments,
-      locals: { hide_owner: true, with_actions: current_user == user }
+      locals: { hide_owner: true, with_actions: true }
   %>
 <% end %>

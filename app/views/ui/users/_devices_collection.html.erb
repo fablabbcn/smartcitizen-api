@@ -13,6 +13,6 @@
   <%=
     render partial: "ui/devices/device",
       collection: user.devices.for_user(current_user).by_last_reading,
-      locals: { hide_owner: true, with_actions: current_user == user }
+      locals: { hide_owner: true, with_actions: true }
     %>
 <% end %>

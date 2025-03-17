@@ -41,6 +41,14 @@ class Experiment < ApplicationRecord
     }.uniq
   end
 
+  def all_online?
+    devices.all? { |d| d.online? }
+  end
+
+  def online_device_count
+    devices.filter { |d| d.online? }.length
+  end
+
   private
 
   def cannot_add_private_devices_of_other_users

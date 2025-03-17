@@ -290,3 +290,19 @@ a.subtle-link {
 .bg-black {
   background-color: $black !important;
 }
+
+.device-status {
+  & > strong {
+    vertical-align: middle;
+  }
+
+  &.online {
+    color: $green;
+    fill: $green;
+  }
+
+  &.offline {
+    color: $red;
+    fill: $red;
+  }
+}

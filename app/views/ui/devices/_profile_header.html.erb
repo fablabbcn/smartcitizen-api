@@ -4,7 +4,7 @@
   </div>
 <% end %>
 <% content_for :profile_header_meta do %>
-  <%= render partial: "ui/devices/meta", locals: { device: device } %>
+  <%= render partial: "ui/devices/meta", locals: { device: device,  hide_last_reading_at: true } %>
 <% end %>
 <% content_for :profile_header_actions do %>
   <%= render partial: "ui/devices/actions", locals: { device: device, dark_buttons: true } %>

@@ -5,5 +5,5 @@
       <p><%= t :experiment_devices_collection_no_devices_message %></p>
     <% end %>
   </div>
-  <%= render partial: "ui/devices/device", collection: experiment.devices.by_last_reading %>
+  <%= render partial: "ui/devices/device", collection: experiment.devices.by_last_reading, locals: { with_actions: true } %>
 <% end %>

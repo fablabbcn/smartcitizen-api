@@ -1,12 +1,12 @@
-<div class="profile-header bg-black text-white mx-2 mb-2 py-3 mb-lg-5 z-2 mx-lg-3">
+<div class="profile-header bg-black text-white mx-2 mb-2 pt-3 mb-lg-5 z-2 mx-lg-3">
   <div class="container-lg px-3 px-lg-0">
     <header class="row">
-      <div class="col-3 col-md-3 col-lg-2">
+      <div class="col-3 col-md-3 col-lg-2 pb-3">
         <%= yield :profile_header_image %>
       </div>
       <div class="col-9 col-md-9 col-lg-10 mb-2 mb-md-0 justify-content-between d-flex g-0 flex-column">
         <div class="meta">
-          <h1 class="mb-0 mb-md-2">
+          <h1 class="mb-1">
             <% if local_assigns[:title_link] %>
               <a href="<%= title_link %>" class="subtle-link">
             <% end %>
@@ -21,7 +21,7 @@
           <%= yield :profile_header_actions %>
         </div>
       </div>
-      <div class="actions mt-3 col-12 d-md-none">
+      <div class="actions col-12 d-md-none">
           <%= yield :profile_header_actions %>
       </div>
     </header>
