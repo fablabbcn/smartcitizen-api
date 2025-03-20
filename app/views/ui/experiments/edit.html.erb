@@ -1,5 +1,5 @@
 <%= render partial: "ui/experiments/header", locals: { experiment:  @experiment } %>
-<%= render layout: "ui/shared/form_container", locals: { title: t(:edit_experiment_header) } do %>
+<%= render layout: "ui/shared/form_container", locals: { title: t(:edit_experiment_header), box_inner_class: "drop-shadow-teal" } do %>
   <%= bootstrap_form_for @experiment, url: ui_experiment_path(@experiment) do |form| %>
     <% @experiment.errors.each do |attr, msg| %>
       <%= "#{attr} #{msg}" if @experiment.errors[attr].first == msg %>

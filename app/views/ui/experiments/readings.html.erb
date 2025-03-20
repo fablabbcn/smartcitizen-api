@@ -5,11 +5,12 @@
 <% end %>
 
 <% content_for :two_column_main do %>
-  <%= render layout: "ui/shared/box", locals: { inner_class: "p-3 pb-0", class: "mb-5", no_padding: true } do %>
+  <%= render layout: "ui/shared/box", locals: { inner_class: "p-3 pb-0 drop-shadow-teal", class: "mb-5", no_padding: true } do %>
     <h2 class="mb-3"><%= @measurement.name %></h2>
     <p class="mb-5"><%= @measurement.description %>
     <% @experiment.components_for_measurement(@measurement).each do |component| %>
       <%= render partial: "ui/shared/reading", locals: {
+        class: "experiment",
         component: component,
         title: component.device.name,
         title_link: ui_device_path(component.device.id),

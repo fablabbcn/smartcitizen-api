@@ -42,4 +42,9 @@
       }
     }
   }
+  &.experiment {
+    .sparkline svg .fill {
+      fill: $teal;
+    }
+  }
 }

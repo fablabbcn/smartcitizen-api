@@ -1,6 +1,12 @@
 <% content_for :profile_header_image do %>
   <div class="circular-image-crop">
-    <%= render partial: "ui/shared/map", locals: { points: experiment.devices.map { |d| { lat: d.latitude, lng: d.longitude } } } %>
+    <%= render partial: "ui/shared/map",
+      locals: {
+        points: experiment.devices.map { |d| { lat: d.latitude, lng: d.longitude } },
+        class: "experiment",
+        marker_url: asset_url("map-pin-experiment.svg")
+      }
+    %>
   </div>
 <% end %>
 <% content_for :profile_header_meta do %>

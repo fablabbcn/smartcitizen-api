@@ -6,7 +6,7 @@
 
 <% content_for :two_column_main do %>
 
-  <%= render layout: "ui/shared/box", locals: { class: "mb-5" }  do %>
+  <%= render layout: "ui/shared/box", locals: { class: "mb-5", inner_class: "drop-shadow-teal" }  do %>
     <% if @experiment.description.present? || @experiment.user_tags.any? %>
         <h2 class="mb-2"><%= t :show_experiment_details_subheading %></h2>
         <% if @experiment.description.present? %>

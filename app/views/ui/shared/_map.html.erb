@@ -1,1 +1,1 @@
-<div class="map z-2" data-points="<%= points.to_json %>" data-marker-url="<%= asset_url("map-pin.svg") %>" data-marker-shadow-url="<%= asset_url("map-pin-shadow.png") %>"></div>
+<div class="map z-2 <%= local_assigns[:class] %>" data-points="<%= points.to_json %>" data-marker-url="<%= local_assigns[:marker_url] || asset_url("map-pin.svg") %>" data-marker-shadow-url="<%= asset_url("map-pin-shadow.png") %>"></div>

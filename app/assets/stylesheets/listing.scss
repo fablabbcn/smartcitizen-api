@@ -13,6 +13,10 @@
   &:has(:hover) {
     .map  {
       background-color: $yellow;
+      &.experiment {
+        background-color: $teal;
+      }
+
       .leaflet-pane {
         mix-blend-mode: multiply;
       }

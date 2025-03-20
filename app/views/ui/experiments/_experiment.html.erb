@@ -3,7 +3,13 @@
     <span class="sr-only"><%= experiment.name %></span>
   <% end %>
   <div class="col-12 col-md-3">
-    <%= render partial: "ui/shared/map", locals: { points: experiment.devices.map { |d| { lat: d.latitude, lng: d.longitude } } } %>
+    <%= render partial: "ui/shared/map",
+      locals: {
+        points: experiment.devices.map { |d| { lat: d.latitude, lng: d.longitude } },
+        class: "experiment",
+        marker_url: asset_url("map-pin-experiment.svg")
+      }
+    %>
   </div>
   <div class="col-12 col-md-9 p-3 pb-4">
     <h3 class="mb-1 text-break"><%= experiment.name %></h3>

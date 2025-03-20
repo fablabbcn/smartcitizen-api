@@ -1,5 +1,5 @@
 <%= render layout: "ui/shared/container" do %>
-  <%= render layout: "ui/shared/box" do %>
+  <%= render layout: "ui/shared/box", locals: { inner_class: local_assigns[:box_inner_class] } do %>
     <%= render partial: "ui/shared/title", locals: { title: local_assigns[:title] } %>
     <%= yield %>
   <% end %>

@@ -1,4 +1,4 @@
-<%= render layout: "ui/shared/box", locals: { no_padding: true, class: "mt-3" } do %>
+<%= render layout: "ui/shared/box", locals: { no_padding: true, class: "mt-3", inner_class: "drop-shadow-teal" } do %>
   <div class="scroll-offset" id="experiments"></div>
   <div class="p-3">
     <% if current_user == user && user.experiments.length < 1 %>
