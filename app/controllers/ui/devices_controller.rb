@@ -61,7 +61,7 @@ module Ui
     def download
       find_device!
       return unless authorize_device! :download?, :download_device_forbidden
-      @title = I18n.t(:download_device_title)
+      @title = I18n.t(:download_device_title, name: @device.name)
       add_breadcrumbs(
         [I18n.t(:show_user_title, owner: owner_name), ui_user_path(@device.owner.username)],
         [I18n.t(:show_device_title, name: @device.name), ui_device_path(@device.id)],
@@ -129,7 +129,7 @@ module Ui
     def upload
       find_device!
       return unless authorize_device! :upload?, :upload_device_forbidden
-      @title = I18n.t(:upload_device_title)
+      @title = I18n.t(:upload_device_title, name: @device.name)
       add_breadcrumbs(
         [I18n.t(:show_user_title, owner: owner_name), ui_user_path(@device.owner.username)],
         [I18n.t(:show_device_title, name: @device.name), ui_device_path(@device.id)],

@@ -1,5 +1,5 @@
 <%= render partial: "ui/devices/profile_header", locals: { device: @device } %>
-<%= render layout: "ui/shared/form_container" do %>
+<%= render layout: "ui/shared/form_container", locals: { title: t(:download_device_header) } do %>
   <% if @device.csv_export_requested_recently? %>
     <p><%= t(:download_device_recently_requested_blurb) %></p>
     <div class="mt-4">

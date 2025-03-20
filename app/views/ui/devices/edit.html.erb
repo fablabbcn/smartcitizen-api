@@ -1,5 +1,5 @@
 <%= render partial: "ui/devices/profile_header", locals: { device: @device } %>
-<%= render layout: "ui/shared/form_container" do %>
+<%= render layout: "ui/shared/form_container", locals: { title: t(:edit_device_header) } do %>
   <%= bootstrap_form_for @device, url: ui_device_path(@device) do |form| %>
     <%= render partial: "fields", locals: { device: @device, form: form } %>
     <%= render partial: "ui/shared/form_buttons", locals: { form: form, back_href: ui_device_path(@device.id), submit_label: t(:edit_device_submit) } %>

@@ -1,6 +1,6 @@
 <%= render layout: "ui/shared/container" do %>
   <%= render layout: "ui/shared/box" do %>
-    <%= render partial: "ui/shared/title" %>
+    <%= render partial: "ui/shared/title", locals: { title: local_assigns[:title] } %>
     <%= yield %>
   <% end %>
 <% end %>
