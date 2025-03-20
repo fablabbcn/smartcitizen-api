@@ -18,5 +18,28 @@
       }
     }
   }
-
+}
+//autocompleter.js inserts this at the root of the DOM tree, but we'll keep it in this file as it relates to the device search component.
+.autocomplete {
+  z-index: 2;
+  background-color: $white;
+  border: 2px solid $black;
+  box-sizing: border-box;
+  padding: 0 0.7rem 0 0.7rem;
+  margin-top: 0.5rem;
+  & > div {
+    box-sizing: border-box;
+    &.selected, &:hover {
+      background-color: $yellow;
+      // This compensates for a perceived optical "shrinking"
+      // of the borders when the background colour changes:
+      border-left: 0.25px solid $black;
+      border-right: 0.25px solid $black;
+      padding-left: calc(0.5rem - 1px) !important;
+      padding-right: calc(0.5rem - 1px) !important;
+    }
+    &:last-child {
+      border-bottom: none !important;
+    }
+  }
 }

@@ -13,7 +13,7 @@
     <p class="mb-0 mt-2 small template-description"><%= local_assigns[:description] %></p>
   </div>
   <div class="col-2 text-end align-content-center align-middle">
-    <a class="subtle-link remove-link" href="#"><%= show_svg("close_icon.svg") %></a>
+    <a class="subtle-link remove-link" href="#" style="<%="display: none;" if local_assigns[:hide_remove_button] %>""><%= show_svg("close_icon.svg") %></a>
   </div>
 </div>
 

@@ -9,12 +9,7 @@
   <h2 class="mb-4"><%= t(:experiment_form_devices_subhead) %></h2>
   <div class="devices-typeahead">
     <%= label_tag "device_search", t(:experiment_form_search_devices_label), class: "form-label" %>
-    <%= text_field_tag :device_search, "", class: "form-control device-search", list: "all-devices-list" %>
-    <datalist id="all-devices-list" class="all-devices-list">
-      <% Device.for_user(current_user).includes(:owner).each do |device| %>
-        <option value="<%= device.id %>" data-owner="<%= device.owner&.username %>" data-location="<%= device.location_string %>" data-description="<%= device.description %>"><%= device.name %></option>
-      <% end %>
-    </datalist>
+    <%= text_field_tag :device_search, "", class: "form-control device-search", autocomplete: "off" %>
     <%= hidden_field_tag "experiment[device_ids][]", "" %>
     <div class="mt-3 container-lg devices-list border border-medium rounded <%= "d-none" unless experiment.devices.any? %>">
       <% experiment.devices.each do |device| %>
@@ -29,7 +24,7 @@
       <% end %>
     </div>
     <template id="device-template">
-      <%= render partial: "ui/devices/select_list_item", locals: { name: "experiment[device_ids][]" } %>
+      <%= render partial: "ui/devices/select_list_item", locals: { name: "experiment[device_ids][]", hide_remove_button: true } %>
     </template>
   </div>
 </div>
