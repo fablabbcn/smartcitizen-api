@@ -102,11 +102,11 @@ private
         :meta,
         :user_tags,
         :is_private,
-        postprocessing_attributes: [:blueprint_url, :hardware_url, :latest_postprocessing, :meta, :forwarding_params],
       ]
 
       # Researchers + Admins can update is_test and enable_forwarding
       if current_user.is_admin_or_researcher?
+        params_to_permit.push({postprocessing_attributes: [:blueprint_url, :hardware_url, :latest_postprocessing, :meta, :forwarding_params]})
         params_to_permit.push(:enable_forwarding)
       end
 

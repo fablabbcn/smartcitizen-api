@@ -27,13 +27,15 @@
   <%= render partial: "ui/shared/map_location_picker", locals: { latitude_input_id: "device_latitude", longitude_input_id: "device_longitude"} %>
 </div>
 <div class="mb-5">
-  <h2 class="mb-0"><%= t(:device_form_open_data_subhead) %></h2>
-  <p class="mb-4"> <%= t(:device_form_open_data_blurb) %></p>
+  <h2 class="mb-0"><%= t(:device_form_tags_subhead) %></h2>
+  <p class="mb-4"> <%= t(:device_form_tags_blurb) %></p>
+  <%= form.select :tag_ids, options_from_collection_for_select(Tag.all, :id, :name, { selected: device.tag_ids }), { label: t(:device_form_tags_label)},  { multiple: true, class: "tag-select" } %>
+</div>
+<div class="mb-5">
+  <h2 class="mb-0"><%= t(:device_form_privacy_subhead) %></h2>
+  <p class="mb-4"> <%= t(:device_form_privacy_blurb) %></p>
   <%= form.check_box :is_private, label: t(:device_form_is_private_label) %>
   <%= form.check_box :precise_location, label: t(:device_form_precise_location_label) %>
-  <% if device.owner.forward_device_readings? %>
-    <%= form.check_box :enable_forwarding, label: t(:device_form_enable_forwarding_label) %>
-  <% end %>
 </div>
 <div class="mb-5">
   <h2 class="mb-0"><%= t(:device_form_notifications_subhead) %></h2>
@@ -41,15 +43,14 @@
   <%= form.check_box :notify_low_battery, label: t(:device_form_notify_low_battery_label) %>
   <%= form.check_box :notify_stopped_publishing, label: t(:device_form_notify_stopped_publishing_label) %>
 </div>
-<div class="mb-5">
-  <h2 class="mb-0"><%= t(:device_form_tags_subhead) %></h2>
-  <p class="mb-4"> <%= t(:device_form_tags_blurb) %></p>
-  <%= form.select :tag_ids, options_from_collection_for_select(Tag.all, :id, :name, { selected: device.tag_ids }), { label: t(:device_form_tags_label)},  { multiple: true, class: "tag-select" } %>
-</div>
-<div>
-  <h2 class="mb-0"><%= t(:device_form_postprocessing_subhead) %></h2>
-  <p class="mb-4"> <%= t(:device_form_postprocessing_blurb_html) %></p>
-  <%= form.fields_for :postprocessing, device.postprocessing || Postprocessing.new do |fp| %>
-    <%= fp.text_field :hardware_url, label: t(:device_form_hardware_url_label) %>
-  <% end %>
-</div>
+<% if current_user.is_admin_or_researcher? %>
+  <div>
+    <h2 class="mb-4"><%= t(:device_form_researcher_options_subhead) %></h2>
+    <% if device.owner.forward_device_readings? %>
+      <%= form.check_box :enable_forwarding, label: t(:device_form_enable_forwarding_label) %>
+    <% end %>
+    <%= form.fields_for :postprocessing, device.postprocessing || Postprocessing.new do |fp| %>
+      <%= fp.text_field :hardware_url, label: t(:device_form_hardware_url_label), help: t(:device_form_postprocessing_blurb_html) %>
+    <% end %>
+  </div>
+<% end %>
