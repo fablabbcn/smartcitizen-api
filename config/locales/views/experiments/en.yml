@@ -9,6 +9,7 @@ en:
   experiment_page_nav_readings_heading: "Data"
   experiment_devices_collection_heading: "Kits"
   experiment_devices_collection_no_devices_message: "This experiment has no kits yet!"
+  new_experiment_blurb: "Experiments let you manage multiple Smart Citizen kits in one place, and compare their readings. You can your own kits to your experiments, or public kits owned by any other user on the Smart Citizen platform."
   show_experiment_edit_cta: "Edit experiment"
   edit_experiment_header: "Edit experiment"
   edit_experiment_submit: "Update"
