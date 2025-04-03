@@ -240,6 +240,11 @@ input[type="file"] {
   }
 }
 
+.image-border {
+  border: 4px solid $white;
+
+}
+
 .link-white {
   color: $white !important;
   &:hover, &:active, &:focus, &:focus-visible {
