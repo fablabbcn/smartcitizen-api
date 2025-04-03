@@ -1,15 +1,15 @@
-<p class="mb-0 small">
+<p class="mb-0">
   <span class="pe-1"><%= show_svg("user_details_icon_light.svg") %></span>
   <%= user.role.capitalize %>
 </p>
 <% if user.city || user.country %>
-  <p class="mb-0 small">
+  <p class="mb-0">
     <span class="pe-1"><%= show_svg("location_icon.svg") %></span>
     <%= [user.city, user.country].join(", ") %>
   </p>
 <% end %>
 <% if user.url %>
-  <p class="mb-0 small">
+  <p class="mb-0">
     <%= image_tag("url_icon_light.svg", class: "pe-1") %>
     <%= link_to(user.url, user.url, class: "link-white") %>
   </p>
