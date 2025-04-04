@@ -108,8 +108,14 @@ body > .container {
     background-color: $primary !important;
     color: $black !important;
     border: 3px solid $black !important;
+    &.hover-danger {
+      background-color: $red !important;
+    }
     &.btn-dark {
       border: 3px solid $primary !important;
+      &.hover-danger {
+        border: 3px solid $red !important;
+      }
       &.btn-active {
         cursor: default;
         border: 3px solid $white !important;

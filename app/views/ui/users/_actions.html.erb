@@ -12,6 +12,6 @@
     <%= sc_nav_button_to(t(:show_user_new_experiment_cta), new_ui_experiment_path, local_assigns) %>
   <% end %>
   <% if current_user == user %>
-    <%= sc_nav_button_to(t(:show_user_log_out_cta), logout_path, local_assigns) %>
+    <%= sc_nav_button_to(t(:show_user_log_out_cta), logout_path, local_assigns.merge(class: "hover-danger")) %>
   <% end %>
 </p>
