@@ -8,7 +8,7 @@
        data-sync-all-on-page="<%= local_assigns[:sync_all_on_page] || "" %>"
        >
        <div class="row align-items-top">
-         <div class="col-12 col-md-6 col-lg-3">
+         <div class="col-12 col-md-6 col-lg-4">
            <div class="h5">
              <h5 class="text-break d-inline align-middle mb-0 pb-0">
                <% if local_assigns[:title_link] %>
@@ -17,10 +17,12 @@
                  <%= local_assigns[:title] || component.measurement&.name %></h3>
              <% end %>
              <% extra_info = local_assigns[:description].nil? ? component.measurement&.description : local_assigns[:description] %>
-             <%= render layout: "ui/shared/extra_info" do %>
-               <p class="<%= (!extra_info || !extra_info.present?) && "mb-0" %>"><strong>Sensor:</strong> <%= component.sensor.name %></p>
-               <% if extra_info && extra_info.present? %>
-                 <p class="mb-0"><%= extra_info %></p>
+             <% if extra_info %>
+               <%= render layout: "ui/shared/extra_info" do %>
+                 <p class="<%= (!extra_info || !extra_info.present?) && "mb-0" %>"><strong>Sensor:</strong> <%= component.sensor.name %></p>
+                 <% if extra_info && extra_info.present? %>
+                   <p class="mb-0"><%= extra_info %></p>
+                 <% end %>
                <% end %>
              <% end %>
            </div>
@@ -40,7 +42,7 @@
              </div>
            <% end %>
          </div>
-         <div class="col-12 col-lg-7">
+         <div class="col-12 col-lg-6">
            <div class="sparkline mt-2"></div>
          </div>
        </div>
