@@ -84,9 +84,9 @@ class Device < ActiveRecord::Base
     privacy_conditions = if authorized_user && authorized_user.is_admin?
                            []
                          elsif authorized_user
-                           ["is_private IS NOT true OR owner_id = ?", authorized_user.id]
+                           ["(is_private IS NOT true AND is_test IS NOT TRUE) OR owner_id = ?", authorized_user.id]
                          else
-                           ["is_private IS NOT true"]
+                           ["is_private IS NOT true AND is_test IS NOT TRUE"]
                          end
     where(privacy_conditions)
   }
