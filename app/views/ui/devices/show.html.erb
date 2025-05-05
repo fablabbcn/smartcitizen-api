@@ -27,7 +27,7 @@
       <h2 class="mb-0"><%= t :show_device_data_subheading %></h2>
       <p class="mb-4 small"><%= t :show_device_data_range_blurb %></p>
     <% @device.components.order_by_sensor_id.each do |component| %>
-      <% unless component.is_raw? %>
+      <% if !component.is_raw? && component.sensor.measurement %>
         <%= render partial: "ui/shared/reading", locals: { component: component, sync_all_on_page: true } %>
       <% end %>
     <% end %>
