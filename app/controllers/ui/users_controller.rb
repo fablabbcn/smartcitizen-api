@@ -2,6 +2,8 @@ module Ui
   class UsersController < ApplicationController
     include SharedControllerMethods
 
+    PER_PAGE = 10
+
     def index
       redirect_to current_user ? ui_user_path(current_user.username) : login_path
     end
@@ -10,6 +12,8 @@ module Ui
       find_user!
       @title = I18n.t(:show_user_title, owner: owner(true))
       add_breadcrumb(@title, ui_user_path(@user.username))
+      @devices = @user.devices.for_user(current_user).by_last_reading.page(params[:device_page]).per(PER_PAGE)
+      @experiments = @user.experiments.page(params[:experiment_page]).per(PER_PAGE)
     end
 
     def secrets

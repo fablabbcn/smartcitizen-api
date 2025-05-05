@@ -323,3 +323,8 @@ a.subtle-link {
     fill: $red;
   }
 }
+
+.experiments.pagination-container li.active a {
+  background-color: $teal !important;
+}
+

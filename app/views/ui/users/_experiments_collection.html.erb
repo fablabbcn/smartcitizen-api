@@ -1,18 +1,27 @@
 <%= render layout: "ui/shared/box", locals: { no_padding: true, class: "mt-3", inner_class: "drop-shadow-teal" } do %>
   <div class="scroll-offset" id="experiments"></div>
   <div class="p-3">
-    <% if current_user == user && user.experiments.length < 1 %>
+    <% if current_user == user && experiments.length < 1 %>
       <%= render partial: "no_experiment_cta" %>
     <% else %>
       <h2><%= t :show_user_experiments_heading %></h2>
-      <% if user.experiments.length < 1 %>
+      <% if experiments.length < 1 %>
         <p><%= t :show_user_no_experiments_message, username: user.username %></p>
       <% end %>
     <% end %>
   </div>
-  <%=
-    render partial: "ui/experiments/experiment",
-      collection: user.experiments,
-      locals: { hide_owner: true, with_actions: true }
-  %>
+  <div class="<%= experiments.total_pages > 1 ? "border-bottom" : "" %>">
+    <%=
+      render partial: "ui/experiments/experiment",
+        collection: experiments,
+        locals: { hide_owner: true, with_actions: true }
+      %>
+  </div>
+  <% if experiments.total_pages > 1 %>
+    <div class="w-100 mt-3 experiments pagination-container">
+      <div class="mx-auto width-fit-content">
+        <%= paginate experiments, param_name: :experiment_page, theme: "bootstrap-5" %>
+      </div>
+    </div>
+  <% end %>
 <% end %>

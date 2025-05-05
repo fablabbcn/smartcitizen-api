@@ -4,7 +4,7 @@
 <% end %>
 <% content_for :two_column_main do %>
 
-  <%= render partial: "ui/users/devices_collection", locals: { user: @user } %>
-  <%= render partial: "ui/users/experiments_collection", locals: { user: @user } %>
+  <%= render partial: "ui/users/devices_collection", locals: { user: @user, devices: @devices } %>
+  <%= render partial: "ui/users/experiments_collection", locals: { user: @user, experiments: @experiments } %>
 <% end %>
 <%= render partial: "ui/shared/two_column" %>

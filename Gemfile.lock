@@ -118,6 +118,9 @@ GEM
     bootstrap (5.3.3)
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 2.11.8, < 3)
+    bootstrap5-kaminari-views (0.0.1)
+      kaminari (>= 0.13)
+      rails (>= 3.1)
     bootstrap_form (5.4.0)
       actionpack (>= 6.1)
       activemodel (>= 6.1)
@@ -600,6 +603,7 @@ DEPENDENCIES
   bcrypt
   bootsnap (~> 1.9.4)
   bootstrap (~> 5.3.3)
+  bootstrap5-kaminari-views
   bootstrap_form (~> 5.4)
   brakeman!
   browser
