@@ -125,7 +125,7 @@ class Reading {
     this.cursor.attr("visibility", "visible");
     this.cursor.attr("transform", `translate(${mouseX}, 0)`);
     this.trendElement.style.visibility = "hidden";
-    if(value) {
+    if(value != null) {
       this.dateElement.innerHTML = strftime("%B %d, %Y %H:%M", new Date(timestamp));
       this.valueElement.innerHTML = value.toFixed(2);
     } else {
