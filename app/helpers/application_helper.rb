@@ -18,6 +18,7 @@ module ApplicationHelper
     button_class = opts[:dark_buttons] ? "btn-dark" : "btn-secondary"
     button_class << (" " + opts[:class]) if opts[:class]
     button_class << " btn-active" if current_page?(path)
-    link_to(legend, path, class: "btn #{button_class} me-md-2 mb-3 w-100 w-md-auto")
+    legend << "&emsp;<i class='fa-solid fa-up-right-from-square'></i>" if opts[:external]
+    link_to(legend.html_safe, path, class: "btn #{button_class} me-md-2 mb-3 w-100 w-md-auto", target: opts[:external] ? "_blank" : nil)
   end
 end
