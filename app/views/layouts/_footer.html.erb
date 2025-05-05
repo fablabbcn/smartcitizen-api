@@ -1,11 +1,11 @@
 <footer class="bg-black text-white mt-5 pt-3 pt-lg-5 pb-3">
   <div class="container-lg px-0">
-    <div class="row d-flex flex-lg-row flex-column justify-content-lg-between mb-0 mb-lg-5 px-4 px-lg-0">
-      <div class="w-100 w-lg-auto mb-5 mb-lg-0 mx-0 g-0">
+    <div class="row d-flex flex-lg-row flex-column align-items-center justify-content-lg-between  mb-0 mb-lg-5 px-4 px-lg-0">
+      <div class="w-auto mb-3 mb-lg-0 mx-0 g-0">
         <img style="height: 80px; pointer-events: auto;" src="<%= image_url("smartcitizen_logo2.svg") %>" alt="<%= t :footer_logo_alt %>">
       </div>
-      <div class="w-100 w-lg-auto mb-5 mb-lg-0 mx-0 g-0">
-        <div class="outlined-box p-3 row align-items-center width-lg-fit-content mx-1 mx-lg-0">
+      <div class="w-auto mb-3 mb-lg-0 mx-0 g-0">
+        <div class="outlined-box p-3 row align-items-center width-fit-content mx-1 mx-lg-0">
           <div class="col-auto"><%= t :footer_attribution %></div>
           <div class="col-auto">
             <img height="36" src="<%= image_url("logo_fablab_bcn_small.png") %>" alt="<%= t :footer_fablab_alt %>" />
@@ -15,23 +15,23 @@
           </div>
         </div>
       </div>
-      <div class="w-100 w-lg-auto mb-3 mb-lg-0 mx-0 g-0">
-        <div class="row align-items-center width-lg-fit-content">
-          <div class="col-auto d-flex justify-content-space-around flex-direction-column">
+      <div class="w-auto mb-3 mb-lg-0 mx-0 g-0">
+        <div class="row align-items-center justify-content-center justify-content-lg-space-around width-fit-content">
+          <div class="col-auto d-flex mb-3 mb-lg-0 justify-content-space-around flex-direction-column">
             <img height="48" src="<%= image_url("eu_flag.png") %>" alt="" />
           </div>
-          <div class="col-auto d-flex justify-content-space-around flex-direction-column">
-            <p class="mb-0"><small><%= t :footer_funding_html %></small></p>
+          <div class="col-auto d-flex justify-content-space-around text-center text-lg-start flex-direction-column">
+            <p class="mb-0 ts-and-cs"><%= t :footer_funding_html %></p>
           </div>
         </div>
       </div>
-      <div class="w-100 w-lg-auto mb-3 mb-lg-0 mx-0 g-0">
+      <div class="w-auto mb-5 mb-lg-0 mx-0 g-0">
           <p class="mb-1"><small><%= t :footer_monitoring %></small></p>
           <a href="<%= t :footer_uptimerobot_url %>" target="_blank"><img height="20" class="w-auto" src="<%= image_url("uptimerobot-logo.svg") %>" alt="UptimeRobot"  /></a>
       </div>
     </div>
     <div class="row text-lg-center px-3 px-lg-0 mx-0 g-0">
-      <p><small><%= t :footer_licence_html %></small></p>
+      <p class="ts-and-cs"><%= t :footer_licence_html %></p>
     </div>
   </div>
 </footer>
