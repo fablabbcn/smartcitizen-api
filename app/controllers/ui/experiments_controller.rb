@@ -38,7 +38,7 @@ module Ui
       return unless authorize_experiment! :update?, :edit_experiment_forbidden
       if @experiment.update(experiment_params)
         flash[:success] = I18n.t(:update_experiment_success)
-        redirect_to params[:goto].present? ? params[:goto] : ui_experiment_path(@experiment.id)
+        redirect_to goto_or(ui_experiment_path(@experiment.id))
       else
         flash[:alert] = I18n.t(:update_experiment_failure)
         render :edit, status: :unprocessable_entity
