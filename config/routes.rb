@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   namespace "ui" do
     get "/", to: redirect("/ui/users")
 
+    get "/policy", to: "static#policy"
+
     resources :users, as: "users" do
       member do
         get :delete
