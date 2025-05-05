@@ -26,7 +26,7 @@ module Ui
       return unless authorize_device! :update?, :edit_device_forbidden
       if @device.update(device_params)
         flash[:success] = I18n.t(:update_device_success)
-        redirect_to ui_device_path(@device.id)
+        redirect_to params[:goto].present? ? params[:goto] : ui_device_path(@device.id)
       else
         flash[:alert] = I18n.t(:update_device_failure)
         render :edit, status: :unprocessable_entity
@@ -77,7 +77,7 @@ module Ui
       else
         flash[:alert] = I18n.t(:download_device_requested_too_soon)
       end
-      redirect_to ui_device_path(@device.id)
+      redirect_to params[:goto].present? ? params[:goto] : ui_device_path(@device.id)
     end
 
     def register
@@ -144,7 +144,7 @@ module Ui
         CSVUploadJob.perform_later(@device.id, file.read)
       end
       flash[:success] = I18n.t(:upload_device_success)
-      redirect_to ui_device_path(@device.id)
+      redirect_to params[:goto].present? ? params[:goto] : ui_device_path(@device.id)
 
     end
 

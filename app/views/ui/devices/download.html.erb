@@ -7,6 +7,7 @@
     </div>
   <% else %>
     <%= bootstrap_form_tag url: download_ui_device_path(@device.id), method: :post do |f| %>
+      <%= hidden_field_tag :goto, params[:goto] %>
       <p><%= t(:download_device_confirmation_blurb) %></p>
       <div class="mt-4">
         <%= f.primary t(:download_device_submit), class: "btn btn-primary w-100 w-md-auto" %>

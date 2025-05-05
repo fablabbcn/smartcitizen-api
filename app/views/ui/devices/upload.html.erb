@@ -1,6 +1,7 @@
 <%= render partial: "ui/devices/profile_header", locals: { device: @device } %>
 <%= render layout: "ui/shared/form_container", locals: { title: t(:upload_device_header) } do %>
   <%= bootstrap_form_tag url: upload_ui_device_path(@device.id), method: :post, multipart: true do |f| %>
+    <%= hidden_field_tag :goto, params[:goto] %>
     <p><%= t(:upload_device_blurb) %></p>
     <%= f.file_field :data_files, multiple: true, label: t(:upload_device_data_files_label), help: t(:upload_device_data_files_help), name: "data_files[]" %>
     <div class="mt-4">

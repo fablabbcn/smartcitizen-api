@@ -32,7 +32,7 @@ feature "Device management" do
     expect(page).to have_content(device_name)
     click_on device_name
     click_on "Edit kit", match: :first
-    expect(page).to have_current_path(edit_ui_device_path(device.id))
+    expect(page).to have_current_path(edit_ui_device_path(device.id), ignore_query: true)
     fill_in "Name", with: "new device name"
     click_on "Update"
     expect(page).to have_current_path(ui_device_path(device.id))

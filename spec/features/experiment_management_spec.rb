@@ -45,7 +45,7 @@ feature "Experiment management" do
     click_on experiment_name
     expect(page).to have_current_path(ui_experiment_path(experiment.id))
     click_on "Edit experiment", match: :first
-    expect(page).to have_current_path(edit_ui_experiment_path(experiment.id))
+    expect(page).to have_current_path(edit_ui_experiment_path(experiment.id), ignore_query: true)
     fill_in "Name", with: "new experiment name"
     click_on "Update"
     expect(page).to have_current_path(ui_experiment_path(experiment.id))

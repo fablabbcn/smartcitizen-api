@@ -18,8 +18,10 @@
   &:has(:hover) {
     .map  {
       background-color: $yellow;
+      border-color: $yellow;
       &.experiment {
         background-color: $teal;
+        border-color: $teal;
       }
 
       .leaflet-pane {
