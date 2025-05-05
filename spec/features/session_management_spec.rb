@@ -9,7 +9,7 @@ feature "User logs in" do
     visit "/login"
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_button "Sign in"
+    click_button "Log in"
     expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content("You have been successfully logged in!")
   end
@@ -19,7 +19,7 @@ feature "User logs in" do
     visit "/ui/sessions/new?goto=https%3A%2F%2Fsmartcitizen.me%2F"
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_button "Sign in"
+    click_button "Log in"
     expect(page).to have_current_path("https://smartcitizen.me/")
   end
 
@@ -27,7 +27,7 @@ feature "User logs in" do
     visit "/login"
     fill_in "Username or email", with: user.username
     fill_in "Password", with: password
-    click_button "Sign in"
+    click_button "Log in"
     expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content("You have been successfully logged in!")
   end
@@ -36,7 +36,7 @@ feature "User logs in" do
     visit "/login"
     fill_in "Username or email", with: user.username
     fill_in "Password", with: "notarealpassword"
-    click_button "Sign in"
+    click_button "Log in"
     expect(page).to have_current_path(ui_sessions_path)
     expect(page).to have_content("Email or password is invalid")
   end
@@ -45,7 +45,7 @@ feature "User logs in" do
     visit "/login"
     fill_in "Username or email", with: "notarealusername"
     fill_in "Password", with: password
-    click_button "Sign in"
+    click_button "Log in"
     expect(page).to have_current_path(ui_sessions_path)
     expect(page).to have_content("Email or password is invalid")
   end
@@ -65,7 +65,7 @@ feature "User logs in" do
     visit "/login"
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_button "Sign in"
+    click_button "Log in"
     visit "/ui/sessions/destroy?goto=https%3A%2F%2Fsmartcitizen.me%2F"
     expect(page).to have_current_path("https://smartcitizen.me")
     visit "/ui"
@@ -84,7 +84,7 @@ feature "User logs in" do
     expect(page).to have_content("Changed password for: #{user.username}")
     fill_in "Username or email", with: user.username
     fill_in "Password", with: "newpassword456"
-    click_button "Sign in"
+    click_button "Log in"
     expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content("You have been successfully logged in!")
   end
@@ -124,7 +124,7 @@ feature "User logs in" do
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     begin
-      click_button "Sign in"
+      click_button "Log in"
     # The next doesn't exist, we just want to check the URL is correct:
     rescue ActionController::RoutingError
       expect(page.current_url).to match(/^#{DiscourseController::DISCOURSE_ENDPOINT}/)

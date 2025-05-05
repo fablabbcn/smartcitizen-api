@@ -15,7 +15,7 @@ feature "Experiment management" do
     visit "/login"
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_button "Sign in"
+    click_button "Log in"
     expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content(experiment_name)
     click_on experiment_name
@@ -39,7 +39,7 @@ feature "Experiment management" do
     visit "/login"
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_button "Sign in"
+    click_button "Log in"
     expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content(experiment_name)
     click_on experiment_name
@@ -59,7 +59,7 @@ feature "Experiment management" do
     visit "/login"
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_button "Sign in"
+    click_button "Log in"
     expect(page).to have_current_path(ui_user_path(user.username))
     click_on "Create an experiment", match: :first
     expect(page).to have_current_path(new_ui_experiment_path)
@@ -81,7 +81,7 @@ feature "Experiment management" do
     visit "/login"
     fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_button "Sign in"
+    click_button "Log in"
     click_on experiment_name
     click_on "Edit experiment", match: :first
     click_on "Delete this experiment"
