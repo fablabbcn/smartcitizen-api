@@ -1,44 +1,22 @@
 <div class="bg-black m-2 sticky-top nav-container z-4 py-1 mx-lg-3">
-  <nav class="navbar navbar-dark navbar-expand-lg ">
+  <nav class="navbar navbar-dark">
     <div class="container-lg px-3 px-lg-0">
       <a class="navbar-brand" href="https://www.smartcitizen.me">
         <img src="<%= image_url("smartcitizen_logo.svg") %>" alt="<%= t :logo_alt %>" width="36" height ="36" />
       </a>
-      <% if breadcrumbs.length > 1 %>
+      <% if breadcrumbs.length >= 1 %>
         <div class="px-3 px-lg-0 d-none d-lg-block">
           <%= render partial: "layouts/breadcrumbs" %>
         </div>
       <% end %>
-      <button class="navbar-toggler ms-auto me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenuToggle" aria-controls="navbarMenuToggle" aria-expanded="false" aria-label="<%= t :hamburger_label %>">
-        <i class="fa-solid fa-bars"></i>
-      </button>
-      <div class="collapse navbar-collapse ms-auto" id="navbarMenuToggle">
-        <ul class="navbar-nav ms-auto mt-2 mt-md-0">
-          <li class="nav-item me-lg-4">
-            <a class="nav-link w-100 w-md-auto text-center" href="<%= t :home_link_url %>"><%= t :home_link_text %></a>
-          </li>
-          <li class="nav-item me-lg-4">
-            <a class="nav-link w-100 w-md-auto text-center" href="<%= t :documentation_link_url%>"><%= t :documentation_link_text %></a>
-          </li>
-          <li class="nav-item me-lg-4">
-            <a class="nav-link w-100 w-md-auto text-center" href="<%= t :forum_link_url %>"><%= t :forum_link_text %></a>
-          </li>
-          <% unless current_user %>
-            <li class="nav-item me-lg-4">
-              <a class="nav-link w-100 w-md-auto text-center" href="<%= login_url %>"><%= t :login_link_text %></a>
-            </li>
-          <% end %>
-          <li class="nav-item">
-            <% unless current_user %>
-              <a class="nav-link btn btn-navbar w-100 w-md-auto ms-md-3 mt-3 mt-md-0 mb-2 mb-md-0" href="<%= t :kit_link_url %>"><%= t :kit_link_text %></a>
-            <% end %>
-          </li>
-        </ul>
-      </div>
+
+      <ul class="navbar-nav ms-auto me-2 me-lg-0 d-flex flex-row ">
+      <li class="nav-item d-none d-md-flex">
+        <a class="nav-link btn btn-navbar" target="_blank" href="<%= t :kit_link_url %>"><%= t :kit_link_text %></a>
+      </li>
       <% if current_user %>
-        <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link ms-md-2" title="<%= t :profile_pic_alt_text %>" href="<%= ui_user_path(current_user.username) %>">
+            <a class="nav-link ms-3 ms-lg-5" title="<%= t :profile_pic_alt_text %>" href="<%= ui_user_path(current_user.username) %>">
               <%= render partial: "ui/users/profile_image", locals: {
                 user: current_user,
                 alt: t(:profile_pic_alt_text),
@@ -46,8 +24,68 @@
               } %>
             </a>
           </li>
-        </ul>
+      <% else %>
+        <li class="nav-item me-lg-4">
+          <a class="nav-link ms-3 ms-lg-5" href="<%= login_url %>"><%= t :login_link_text %></a>
+        </li>
       <% end %>
+        </ul>
+      <button class="navbar-toggler pe-0 ps-3 ms-lg-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenuToggle" aria-controls="navbarMenuToggle" aria-expanded="false" aria-label="<%= t :hamburger_label %>">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarMenuToggle">
+        <ul class="navbar-nav ms-auto mt-2 mt-md-0">
+          <li class="nav-item  d-md-none">
+            <a class="nav-link btn btn-navbar w-100 w-md-auto text-center text-lg-end ms-auto" target="_blank" href="<%= t :kit_link_url %>">
+              <span data-bs-toggle="collapse" data-bs-target="#navbarMenuToggle" >
+                <%= t :kit_link_text %>
+              </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link w-100 w-md-auto text-center text-lg-end ms-auto" target="_blank" href="<%= t :map_link_url %>">
+              <span data-bs-toggle="collapse" data-bs-target="#navbarMenuToggle" >
+                <%= t :map_link_text %>
+              </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link w-100 w-md-auto text-center text-lg-end ms-auto" target="_blank" href="<%= t :documentation_link_url %>">
+              <span data-bs-toggle="collapse" data-bs-target="#navbarMenuToggle" >
+                <%= t :documentation_link_text %>
+              </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link w-100 w-md-auto text-center text-lg-end ms-auto" target="_blank" href="<%= t :forum_link_url %>">
+              <span data-bs-toggle="collapse" data-bs-target="#navbarMenuToggle" >
+                <%= t :forum_link_text %>
+              </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link w-100 w-md-auto text-center text-lg-end ms-auto" target="_blank" href="<%= t :api_link_url%>">
+              <span data-bs-toggle="collapse" data-bs-target="#navbarMenuToggle" >
+                <%= t :api_link_text %>
+              </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link w-100 w-md-auto text-center text-lg-end ms-auto" target="_blank" href="<%= t :about_link_url%>">
+              <span data-bs-toggle="collapse" data-bs-target="#navbarMenuToggle" >
+                <%= t :about_link_text %>
+              </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link w-100 w-md-auto text-center text-lg-end ms-auto" href="<%= t :policy_link_url%>">
+              <span data-bs-toggle="collapse" data-bs-target="#navbarMenuToggle" >
+                <%= t :policy_link_text %>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </nav>
   <% if breadcrumbs.length > 1 %>

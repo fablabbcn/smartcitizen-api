@@ -4,7 +4,7 @@ en:
   show_user_secrets_cta: "Show %{owner} API keys"
   show_user_register_cta: "Register a new kit"
   show_user_new_experiment_cta: "Create an experiment"
-  show_user_log_out_cta: "Sign out"
+  show_user_log_out_cta: "Log out"
   show_user_devices_heading: "Kits"
   show_user_no_devices_message: "%{username} has no kits yet!"
   show_user_experiments_heading: "Experiments"

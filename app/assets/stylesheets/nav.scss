@@ -13,7 +13,7 @@
   .nav-link {
     text-transform: uppercase;
     color: $white;
-    font-family: "Roboto Condensed";
+    font-family: "Kanit";
     font-weight: 600;
     letter-spacing: 0.0325em;
     transition: color 0.5s ease;
@@ -41,13 +41,13 @@
   }
 
   .nav-link.btn-navbar {
-    border: 2px solid $white !important;
-    color: $white;
+    border: 2px solid $primary !important;
+    color: $primary;
     padding-left: 1.5rem !important;
     padding-right: 1.5rem !important;
     &:hover, &:active, &:focus, &:focus-visible {
-      border: 2px solid $primary !important;
-      color: $primary !important;
+      border: 2px solid $white !important;
+      color: $white !important;
       background-color: $black !important;
       outline: none !important;
     }
