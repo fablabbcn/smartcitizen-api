@@ -328,3 +328,12 @@ a.subtle-link {
   background-color: $teal !important;
 }
 
+#doorbell form textarea, #doorbell form input[type="email"], #doorbell form input[type="text"] {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  box-sizing: border-box;
+}
+
+#doorbell-feedback {
+  border-radius: 1rem;
+}
