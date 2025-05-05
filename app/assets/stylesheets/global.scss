@@ -152,7 +152,8 @@ body > .container {
   &:focus {
     outline: $primary solid 3px;
     box-shadow: none;
-    border: 3px solid $black;
+    border-color: $black;
+    box-shadow:inset 0px 0px 0px 1px $black
   }
   &.dropdown {
     padding: 0.75rem 1.5rem 0.75rem 0.75rem;
