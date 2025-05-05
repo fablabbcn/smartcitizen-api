@@ -1,4 +1,4 @@
-<%= render layout: "ui/shared/box", locals: { no_padding: true, inner_class: "drop-shadow-teal" } do %>
+<%= render layout: "ui/shared/box", locals: { no_padding: true } do %>
   <div class="p-3" id="devices">
     <h2><%= t :experiment_devices_collection_heading %></h2>
     <% if experiment.devices.length < 1 %>
