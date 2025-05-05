@@ -137,7 +137,7 @@ module Ui
     end
 
     def owner(capitalize=false)
-      helpers.possessive(@user, current_user, capitalize: capitalize)
+      helpers.possessive(@user, current_user, capitalize: capitalize, third_person: true)
     end
   end
 end

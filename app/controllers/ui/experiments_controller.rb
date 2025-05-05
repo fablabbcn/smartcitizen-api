@@ -139,7 +139,7 @@ module Ui
 
     def owner_name(capitalize=true)
       owner = @experiment&.owner || current_user
-      helpers.possessive(owner, current_user, capitalize: capitalize)
+      helpers.possessive(owner, current_user, capitalize: capitalize, third_person: true)
     end
   end
 end
