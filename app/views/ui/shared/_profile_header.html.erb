@@ -4,9 +4,9 @@
       <div class="col-3 col-md-3 col-lg-2 pb-3">
         <%= yield :profile_header_image %>
       </div>
-      <div class="col-9 col-md-9 col-lg-10 mb-2 mb-md-0 justify-content-between d-flex g-0 flex-column">
+      <div class="col-9 col-md-9 col-lg-10 mb-4 mb-md-0 justify-content-between d-flex g-0 flex-column">
         <div class="meta">
-          <h1 class="mb-1 text-break">
+          <h1 class="mb-2 lh-1 lh-md-base mb-md-1 text-break">
             <% if local_assigns[:title_link] %>
               <a href="<%= title_link %>" class="subtle-link">
             <% end %>
