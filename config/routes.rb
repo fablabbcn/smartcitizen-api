@@ -18,14 +18,18 @@ Rails.application.routes.draw do
 
     get "/policy", to: "static#policy"
 
-    resources :users, as: "users" do
-      member do
-        get :delete
-        get :edit
-        get :secrets
-      end
-      collection do
-        get :post_delete
+    constraints id: /[^\/]+/ do
+      # Explicitly override to allow usernames with dots.
+      # See:https://stackoverflow.com/questions/5369654/why-do-routes-with-a-dot-in-a-parameter-fail-to-match
+      resources :users, as: "users" do
+        member do
+          get :delete
+          get :edit
+          get :secrets
+        end
+        collection do
+          get :post_delete
+        end
       end
     end
 
