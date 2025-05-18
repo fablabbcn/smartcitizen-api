@@ -1,9 +1,18 @@
 <%= render layout: "ui/shared/box", locals: { no_padding: true } do %>
   <div class="p-3" id="devices">
     <h2><%= t :experiment_devices_collection_heading %></h2>
-    <% if experiment.devices.length < 1 %>
+    <% if devices.length < 1 %>
       <p><%= t :experiment_devices_collection_no_devices_message %></p>
     <% end %>
   </div>
-  <%= render partial: "ui/devices/device", collection: experiment.devices.by_last_reading, locals: { with_actions: true } %>
+  <div class="<%= devices.total_pages > 1 ? "border-bottom": "" %>">
+  <%= render partial: "ui/devices/device", collection: devices.by_last_reading, locals: { with_actions: true } %>
+  </div>
+  <% if devices.total_pages > 1 %>
+    <div class="w-100 mt-3 pagination-container">
+      <div class="mx-auto width-fit-content">
+        <%= paginate devices, param_name: :device_page, theme: "bootstrap-5" %>
+      </div>
+    </div>
+  <% end %>
 <% end %>

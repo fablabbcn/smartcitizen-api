@@ -1,9 +1,13 @@
 module Ui
   class ExperimentsController < ApplicationController
+
+    PER_PAGE = 10
+
     def show
       find_experiment!
       return unless authorize_experiment! :show?, :show_experiment_forbidden
       @title = I18n.t(:show_experiment_title, name: @experiment.name)
+      @devices = @experiment.devices.for_user(current_user).by_last_reading.page(params[:device_page]).per(PER_PAGE)
       add_breadcrumbs(
         [I18n.t(:show_user_title, owner: owner_name), ui_user_path(@experiment.owner.username)],
         [@title, ui_experiment_path(@experiment.id)]
