@@ -337,3 +337,21 @@ a.subtle-link {
 #doorbell-feedback {
   border-radius: 1rem;
 }
+
+.alert {
+  font-family: "Kanit";
+  letter-spacing: 0.0125rem;
+  color: $black !important;
+  margin-top: -0.5rem !important;
+  top: 5.4rem !important;
+  &.alert-primary {
+    background-color: $teal !important;
+  }
+  &.alert-success {
+    background-color: $green !important;
+  }
+  &.alert-danger {
+    background-color: $red !important;
+  }
+}
+

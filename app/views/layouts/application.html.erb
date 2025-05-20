@@ -9,8 +9,8 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <%= render partial: "layouts/flashes" %>
     <%= render partial: "layouts/nav" %>
+    <%= render partial: "layouts/flashes" %>
     <main>
       <%= content_for?(:container) ? yield(:container) : yield %>
     </main>
