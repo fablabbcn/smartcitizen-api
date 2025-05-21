@@ -379,7 +379,9 @@ describe V0::DevicesController do
       expect(response.status).to eq(422)
     end
 
-    it 'can read and update a jsonb' do
+    it 'can read and update a jsonb when user is researcher' do
+      user.role_mask = 4
+      user.save!
       expect(device.postprocessing).to be_nil
       j = api_put "devices/#{device.id}", { postprocessing_attributes: {"blueprint_url":"999"}, access_token: token.token, name: 'ABBA' }
       expect(response.status).to eq(200)

@@ -1,0 +1,35 @@
+<%= render partial: "ui/devices/profile_header", locals: { device: @device } %>
+<%= render layout: "ui/shared/container" do %>
+  <%= render layout: "ui/shared/box", locals: { inner_class: "p-4 pb-0", no_padding: true }  do %>
+    <% if @device.description.present? || @device.user_tags.any? %>
+      <div class="mb-5">
+        <h2 class="mb-3"><%= t :show_device_details_subheading %></h2>
+        <% if @device.description.present? %>
+          <p class="mb-3"> <%= @device.description %></p>
+        <% end %>
+        <p class="mb-0 small">
+        <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
+        <% if @device.last_reading_at %>
+          <%= t :device_meta_last_reading_at, time: time_ago_in_words(@device.last_reading_at) %>
+        <% else %>
+          <%= t :device_meta_no_readings_message %>
+        <% end %>
+        </p>
+        <% if @device.user_tags.any? %>
+          <p class="small">
+            <span class="pe-1"><%= show_svg("tag_icon.svg") %></span>
+            <%= @device.user_tags.join(", ") %>
+          </p>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="mb-3">
+      <h2 class="mb-0"><%= t :show_device_data_subheading %></h2>
+      <p class="mb-4 small"><%= t :show_device_data_range_blurb %></p>
+    <% @device.components.order_by_sensor_id.each do |component| %>
+      <% if !component.is_raw? && component.sensor.measurement %>
+        <%= render partial: "ui/shared/reading", locals: { component: component, sync_all_on_page: true } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,25 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>SmartCitizen Authentication helper</title>
+    <title><%= [t(:title), @title].compact.join(" – ") %></title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
+    <script defer data-domain="api.smartcitizen.me" src="https://plausible.io/js/script.js"></script>
   </head>
   <body>
-
-    <% flash.each do |name, msg| %>
-      <%= content_tag :div, msg, id: "flash_#{name}" %>
-    <% end %>
-
-    <div class="container">
-      <div class="col-12 col-md-8 my-4 text-center mx-auto">
-        <img class="my-3" src="https://fablabbcn.github.io/assets/images/smartcitizen_logo.svg" style="height:50px" alt="SCK logo">
-        <%= yield %>
-      </div>
-    </div>
-    <small> <%= VERSION_FILE %> </small>
+    <%= render partial: "layouts/nav" %>
+    <%= render partial: "layouts/flashes" %>
+    <main>
+      <%= content_for?(:container) ? yield(:container) : yield %>
+    </main>
+    <%= render partial: "layouts/footer" %>
+    <%= render partial: "layouts/doorbell_embed" %>
   </body>
 </html>

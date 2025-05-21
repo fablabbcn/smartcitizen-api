@@ -1,0 +1,23 @@
+<div class="experiment listing row map-container border-top g-0 z-0">
+  <%= link_to(ui_experiment_path(experiment.id), class: "listing-link z-1") do %>
+    <span class="sr-only"><%= experiment.name %></span>
+  <% end %>
+  <div class="col-12 col-md-3">
+    <%= render partial: "ui/shared/map",
+      locals: {
+        points: experiment.devices.map { |d| { lat: d.latitude, lng: d.longitude } },
+        class: "experiment",
+        marker_url: asset_url("map-pin-experiment.svg")
+      }
+    %>
+  </div>
+  <div class="col-12 col-md-9 p-3 pb-4">
+    <h3 class="mb-1 text-break"><%= experiment.name %></h3>
+    <%= render partial: "ui/experiments/meta", locals: { experiment: experiment, hide_owner: local_assigns[:hide_owner] } %>
+    <% if local_assigns[:with_actions] %>
+      <div class="mt-4 z-2 position-relative">
+        <%= render partial: "ui/experiments/actions", locals: { experiment: experiment } %>
+      </div>
+    <% end %>
+  </div>
+</div>

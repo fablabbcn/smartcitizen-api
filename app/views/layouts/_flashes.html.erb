@@ -1,0 +1,8 @@
+<% flash.each do |name, msg| %>
+  <div class="<%= [flash_class(name), "sticky-top z-5 mx-2 mx-lg-3 mb-3 alert-dismissable fade show"].join(" ") %>">
+    <div class="container-lg px-0 d-flex justify-content-between">
+      <%= msg %>
+      <button type="button" class="btn-close" data-bs-dismiss=alert aria-label="Close"></button>
+    </div>
+  </div>
+<% end %>

@@ -720,4 +720,84 @@ RSpec.describe Device, :type => :model do
     end
   end
 
+  describe "#csv_export_requested_recently?" do
+    context "when no CSV export has ever been requested" do
+      it "returns false" do
+        device.csv_export_requested_at = nil
+        expect(device.csv_export_requested_recently?).to be(false)
+      end
+    end
+
+    context "when a CSV export has been requested in the last 15 minutes" do
+      it "returns true" do
+        device.csv_export_requested_at = 14.minutes.ago
+        expect(device.csv_export_requested_recently?).to be(true)
+      end
+    end
+
+    context "when a CSV export has been requested, but more than 15 minutes ago" do
+      it "returns false" do
+        device.csv_export_requested_at = 16.minutes.ago
+        expect(device.csv_export_requested_recently?).to be(false)
+      end
+    end
+  end
+
+  describe "#request_csv_archive_for!" do
+    let(:current_user) { FactoryBot.create(:user) }
+
+    context "when a CSV export has been requested recently" do
+      before do
+        allow(device).to receive(:csv_export_requested_recently?).and_return(true)
+      end
+
+      it "does not update the csv_export_requested_at column" do
+        expect(device).not_to receive(:update_column)
+        device.request_csv_archive_for!(current_user)
+      end
+
+      it "does not create a device archive mailer" do
+        expect(UserMailer).not_to receive(:device_archive)
+        device.request_csv_archive_for!(current_user)
+      end
+
+      it "returns false" do
+        expect(device.request_csv_archive_for!(current_user)).to be(false)
+      end
+    end
+
+    context "when no CSV export has been requested recently" do
+
+      let(:mailer) {
+        double(:mailer).tap do |mailer|
+          allow(mailer).to receive(:deliver_later)
+        end
+      }
+
+      before do
+        allow(device).to receive(:csv_export_requested_recently?).and_return(false)
+        allow(UserMailer).to receive(:device_archive).and_return(mailer)
+      end
+
+      it "updates the csv_export_requested_at column" do
+        expect(device).to receive(:update_column).with(:csv_export_requested_at, anything)
+        device.request_csv_archive_for!(current_user)
+      end
+
+      it "creates a device archive mailer" do
+        expect(UserMailer).to receive(:device_archive).with(device.id, current_user.id)
+        device.request_csv_archive_for!(current_user)
+      end
+
+      it "delivers the device archive mailer" do
+        expect(mailer).to receive(:deliver_later)
+        device.request_csv_archive_for!(current_user)
+      end
+
+      it "returns true" do
+        expect(device.request_csv_archive_for!(current_user)).to be(true)
+      end
+    end
+  end
+
 end

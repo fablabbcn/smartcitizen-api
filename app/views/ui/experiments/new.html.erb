@@ -1,0 +1,8 @@
+<%= render partial: "ui/users/header", locals: { user:  current_user } %>
+<%= render layout: "ui/shared/form_container" do %>
+  <p class="mb-4"><%= t(:new_experiment_blurb) %></p>
+  <%= bootstrap_form_for @experiment, url: ui_experiments_path do |form| %>
+    <%= render partial: "fields", locals: { experiment: @experiment, form: form, include_hardware_info: true } %>
+    <%= render partial: "ui/shared/form_buttons", locals: { form: form, back_href: ui_user_path(current_user.username), submit_label: t(:new_experiment_submit) } %>
+  <% end %>
+<% end %>

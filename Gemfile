@@ -4,12 +4,16 @@ source 'https://rubygems.org'
 gem 'rails', '6.1.7.3'
 gem 'sidekiq', '~> 6'
 gem 'doorkeeper', '~> 5'
-
+gem "webpacker"
 gem 'jquery-rails'
 gem 'sass-rails'
 gem 'turbolinks'
 gem 'uglifier'
-
+gem "autoprefixer-rails"
+gem "bootstrap", "~> 5.3.3"
+gem "bootstrap_form", "~> 5.4"
+gem 'bootstrap5-kaminari-views'
+gem "font-awesome-sass", "~> 6.7.2"
 # To resize active storage images:
 # Revise if this is needed after Rails 6.0
 gem 'image_processing'
@@ -23,6 +27,7 @@ gem "bootsnap", '~> 1.9.4'
 gem 'browser'
 gem 'c_geohash', require: false
 gem 'countries'
+gem "country_select"
 gem 'dalli'
 gem 'date_validator'
 gem 'diffy', require: false
@@ -77,6 +82,7 @@ group :test do
   gem 'vcr'
   gem 'webmock'
   gem 'zonebie'
+  gem 'rails-controller-testing'
 end
 
 group :development do

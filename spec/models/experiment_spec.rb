@@ -142,4 +142,94 @@ RSpec.describe Experiment, type: :model do
       end
     end
   end
+
+  describe "last_reading_at" do
+    it "returns the latest reading of all the devices" do
+      time = Time.now - 5.minutes
+      experiment = build(:experiment, devices: [
+        build(:device, last_reading_at: time - 1.hour),
+        build(:device, last_reading_at: time),
+        build(:device, last_reading_at: nil),
+        build(:device, last_reading_at: time - 30.minutes)
+      ])
+      expect(experiment.last_reading_at).to eq(time)
+    end
+  end
+
+  describe "user_tags" do
+    it "returns a unique list of all device user tags, without nils" do
+      device_1 = build(:device)
+      device_2 = build(:device)
+      expect(device_1).to receive(:user_tags).and_return(["indoor", "test"])
+      expect(device_2).to receive(:user_tags).and_return(["indoor", "third_floor", nil])
+      experiment = create(:experiment, devices: [device_1, device_2])
+      expect(experiment.user_tags).to eq(["indoor", "test", "third_floor"])
+    end
+  end
+
+  describe "all_measurements" do
+    it "returns a unique list of all measurements for non-raw sensors of all devices" do
+      measurement_1 = create(:measurement)
+      sensor_1 = create(:sensor, measurement: measurement_1)
+
+      measurement_2 = create(:measurement)
+      sensor_2 = create(:sensor, measurement: measurement_2)
+
+      measurement_3 = create(:measurement)
+      sensor_3 = create(:sensor, measurement: measurement_3)
+
+      raw_measurement = create(:measurement)
+      raw_sensor = create(:sensor, measurement: raw_measurement, tag_sensors: [build(:tag_sensor, name: "raw" )])
+
+      device_1 = create(:device, components: [
+        create(:component, sensor: sensor_1),
+        create(:component, sensor: sensor_2)
+      ])
+
+      device_2 = create(:device, components: [
+        create(:component, sensor: sensor_2),
+        create(:component, sensor: sensor_3),
+        create(:component, sensor: raw_sensor)
+      ])
+
+      experiment = create(:experiment, devices: [device_1, device_2])
+
+      expect(experiment.all_measurements).to eq(
+        [measurement_1, measurement_2, measurement_3]
+      )
+    end
+  end
+
+  describe "components_for_measurement" do
+    it "returns all non-raw components for the given measurement" do
+
+      measurement_1 = create(:measurement)
+      sensor_1 = create(:sensor, measurement: measurement_1)
+
+      measurement_2 = create(:measurement)
+      sensor_2 = create(:sensor, measurement: measurement_2)
+      sensor_3 = create(:sensor,
+        measurement: measurement_2,
+        tag_sensors: [build(:tag_sensor, name: "raw")]
+      )
+
+      component_1 = create(:component, sensor: sensor_1)
+      component_2 = create(:component, sensor: sensor_2)
+      device_1 = create(:device, components: [component_1, component_2])
+
+      component_3 = create(:component, sensor: sensor_3)
+      component_4 = create(:component, sensor: sensor_2)
+      device_2 = create(:device, components: [component_3, component_4])
+
+      component_5 = create(:component, sensor: sensor_3)
+      device_3 = create(:device, components: [component_5])
+
+
+      experiment = create(:experiment, devices: [device_1, device_2, device_3])
+
+      expect(experiment.components_for_measurement(measurement_2)).to eq(
+        [component_2, component_4]
+      )
+    end
+  end
 end

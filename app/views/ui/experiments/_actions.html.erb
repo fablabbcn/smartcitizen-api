@@ -1,0 +1,6 @@
+<% button_class = local_assigns[:dark_buttons] ? "btn-dark" : "btn-secondary" %>
+<p class="mb-0">
+  <% if authorize? experiment, :update? %>
+    <%= sc_nav_button_to(t(:show_experiment_edit_cta, name: experiment.name), edit_ui_experiment_path(experiment, goto: request.path), local_assigns) %>
+  <% end %>
+</p>

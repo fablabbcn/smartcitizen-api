@@ -1,0 +1,10 @@
+<%= render partial: "ui/experiments/header", locals: { experiment:  @experiment } %>
+<%= render layout: "ui/shared/form_container", locals: { title: t(:delete_experiment_header), box_inner_class: "drop-shadow-teal" } do %>
+  <%= bootstrap_form_tag url: ui_experiment_path(@experiment.id), method: :delete do |f| %>
+    <p><%= t(:delete_experiment_warning_html, name: @experiment.name) %></p>
+    <%= f.text_field :name, label: t(:delete_experiment_name_label)  %>
+    <div class="mt-4">
+      <%= f.primary t(:delete_experiment_submit), class: "btn btn-danger w-100 w-md-auto" %>
+    </div>
+  <% end %>
+<% end %>

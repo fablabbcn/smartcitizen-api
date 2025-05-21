@@ -1,0 +1,50 @@
+.reading {
+  .big-number {
+    font-family: "Kanit";
+    letter-spacing: 0.03em;
+    line-height: 3.2rem;
+    height: 4rem;
+    .trend {
+      vertical-align: top;
+      line-height: 3.2rem;
+      font-size: 1.2rem;
+
+    }
+    .value {
+      font-size: 2.4rem;
+      line-height: 3.2rem;
+      font-weight: bold;
+    }
+    .unit {
+      font-size: 1.2rem;
+      line-height: 3.2rem;
+    }
+  }
+  .sparkline {
+    height: 2.4rem;
+    width: 100%;
+    svg {
+      .cursor {
+        stroke: $black;
+        fill: none;
+        stroke-width: 1.5;
+      }
+
+      .fill {
+        fill: $yellow;
+        fill-opacity: 0.25;
+      }
+
+      .stroke {
+        stroke: $black;
+        fill: none;
+        stroke-width: 1;
+      }
+    }
+  }
+  &.experiment {
+    .sparkline svg .fill {
+      fill: $teal;
+    }
+  }
+}

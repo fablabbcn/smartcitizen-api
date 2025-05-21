@@ -1,0 +1,40 @@
+.listing {
+  position: relative;
+
+  .listing-link {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+  }
+
+  .leaflet-container {
+    border-top: 1px solid $white;
+    border-bottom: 1px solid $white;
+  }
+
+  &:has(:hover) {
+    .map  {
+      background-color: $yellow;
+      border-color: $yellow;
+      &.experiment {
+        background-color: $teal;
+        border-color: $teal;
+      }
+
+      .leaflet-pane {
+        mix-blend-mode: multiply;
+      }
+
+      .leaflet-marker-icon {
+        filter: brightness(0) saturate(100%);
+      }
+    }
+
+    h3 {
+      text-decoration: underline;
+    }
+  }
+}

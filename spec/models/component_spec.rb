@@ -6,16 +6,16 @@ RSpec.describe Component, :type => :model do
   it { is_expected.to validate_presence_of(:device) }
   it { is_expected.to validate_presence_of(:sensor) }
 
+  let(:component) {
+    create(:component, device: create(:device), sensor: create(:sensor))
+  }
+
   it "validates uniqueness of board to sensor" do
     component = create(:component, device: create(:device), sensor: create(:sensor))
     expect{ create(:component, device: component.device, sensor: component.sensor) }.to raise_error(ActiveRecord::RecordNotUnique)
   end
 
   describe "creating a unique sensor key" do
-    let(:component) {
-      create(:component, device: create(:device), sensor: create(:sensor))
-    }
-
     describe "when the given key is not in the list of existing keys" do
       it "uses the key as is" do
         generated_key = component.get_unique_key("key", ["other"])
@@ -31,4 +31,73 @@ RSpec.describe Component, :type => :model do
     end
   end
 
+  describe "measurement" do
+    it "delegates to the sensor's measurement" do
+      component.sensor.measurement = create(:measurement)
+      expect(component.measurement).to eq(component.sensor.measurement)
+    end
+  end
+
+  describe "value_unit" do
+    it "delegates to the sensor" do
+      expect(component.sensor).to receive(:unit).and_return("unit")
+      expect(component.value_unit).to eq("unit")
+    end
+  end
+
+  describe "latest_value" do
+    it "gets the corresponding value for the sensor from the device" do
+      component.device.data = { component.sensor.id.to_s => 123 }
+      expect(component.latest_value).to eq(123)
+    end
+  end
+
+  describe "previous_value" do
+    it "gets the corresponding old value for the sensor from the device" do
+      component.device.old_data = { component.sensor.id.to_s => 124 }
+      expect(component.previous_value).to eq(124)
+    end
+  end
+
+  describe "is_raw?" do
+    describe "when the sensor is raw" do
+      it "returns true" do
+        expect(component.sensor).to receive(:is_raw?).and_return(true)
+        expect(component.is_raw?).to be(true)
+      end
+    end
+
+    describe "when the sensor is not raw" do
+      it "returns false" do
+        expect(component.sensor).to receive(:is_raw?).and_return(false)
+        expect(component.is_raw?).to be(false)
+      end
+    end
+  end
+
+  describe "trend" do
+    context "when the latest_value is greater than the previous value" do
+      it "returns +1" do
+        component.device.data = { component.sensor.id.to_s => 123 }
+        component.device.old_data = { component.sensor.id.to_s => 120 }
+        expect(component.trend).to eq(1)
+      end
+    end
+
+    context "when the latest_value is equal to the previous value" do
+      it "returns 0" do
+        component.device.data = { component.sensor.id.to_s => 123 }
+        component.device.old_data = { component.sensor.id.to_s => 123 }
+        expect(component.trend).to eq(0)
+      end
+    end
+
+    context "when the latest_value is less than the previous value" do
+      it "returns -1" do
+        component.device.data = { component.sensor.id.to_s => 123 }
+        component.device.old_data = { component.sensor.id.to_s => 130 }
+        expect(component.trend).to eq(-1)
+      end
+    end
+  end
 end

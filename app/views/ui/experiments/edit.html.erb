@@ -1,0 +1,16 @@
+<%= render partial: "ui/experiments/header", locals: { experiment:  @experiment } %>
+<%= render layout: "ui/shared/form_container", locals: { title: t(:edit_experiment_header), box_inner_class: "drop-shadow-teal" } do %>
+  <%= bootstrap_form_for @experiment, url: ui_experiment_path(@experiment) do |form| %>
+    <%= hidden_field_tag :goto, params[:goto] %>
+    <% @experiment.errors.each do |attr, msg| %>
+      <%= "#{attr} #{msg}" if @experiment.errors[attr].first == msg %>
+    <% end %>
+    <%= render partial: "fields", locals: { experiment: @experiment, form: form } %>
+    <%= render partial: "ui/shared/form_buttons", locals: { form: form, back_href: ui_experiment_path(@experiment.id), submit_label: t(:edit_experiment_submit) } %>
+  <% end %>
+  <% if authorize? @experiment, :destroy? %>
+    <%= render layout: "ui/shared/danger_zone" do %>
+      <div><%= link_to t(:edit_experiment_delete_experiment_submit), delete_ui_experiment_path(@experiment.id), class: "btn btn-danger w-100 w-md-25 justify-content-center" %></div>
+    <% end %>
+  <%  end %>
+<% end %>

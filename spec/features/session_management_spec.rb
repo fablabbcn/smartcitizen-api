@@ -7,71 +7,92 @@ feature "User logs in" do
 
   scenario "user logs in with email" do
     visit "/login"
-    fill_in "Username or Email", with: user.email
+    fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_on "SIGN IN TO YOUR ACCOUNT"
-    expect(page).to have_current_path(ui_users_path)
+    click_button "Log in"
+    expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content("You have been successfully logged in!")
+  end
+
+  scenario "user logs in, with goto url" do
+    # This tests logins initiated from the legacy angular app.
+    visit "/ui/sessions/new?goto=https%3A%2F%2Fsmartcitizen.me%2F"
+    fill_in "Username or email", with: user.email
+    fill_in "Password", with: password
+    click_button "Log in"
+    expect(page).to have_current_path("https://smartcitizen.me/")
   end
 
   scenario "user logs in with username" do
     visit "/login"
-    fill_in "Username or Email", with: user.username
+    fill_in "Username or email", with: user.username
     fill_in "Password", with: password
-    click_on "SIGN IN TO YOUR ACCOUNT"
-    expect(page).to have_current_path(ui_users_path)
+    click_button "Log in"
+    expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content("You have been successfully logged in!")
   end
 
   scenario "user logs in with erroneous password" do
     visit "/login"
-    fill_in "Username or Email", with: user.username
+    fill_in "Username or email", with: user.username
     fill_in "Password", with: "notarealpassword"
-    click_on "SIGN IN TO YOUR ACCOUNT"
+    click_button "Log in"
     expect(page).to have_current_path(ui_sessions_path)
     expect(page).to have_content("Email or password is invalid")
   end
 
   scenario "user logs in with erroneous username" do
     visit "/login"
-    fill_in "Username or Email", with: "notarealusername"
+    fill_in "Username or email", with: "notarealusername"
     fill_in "Password", with: password
-    click_on "SIGN IN TO YOUR ACCOUNT"
+    click_button "Log in"
     expect(page).to have_current_path(ui_sessions_path)
     expect(page).to have_content("Email or password is invalid")
   end
 
   scenario "user logs out" do
     visit "/login"
-    fill_in "Username or Email", with: user.email
+    fill_in "Username or email", with: user.email
     fill_in "Password", with: password
-    click_on "SIGN IN TO YOUR ACCOUNT"
-    click_on "Log Out"
+    click_button "Log in"
+    click_on "Log out", match: :first
     expect(page).to have_current_path(new_ui_session_path)
     expect(page).to have_content("Logged out!")
   end
 
+  scenario "user signs out directly, with goto url" do
+    # This tests logouts initiated from the legacy angular app.
+    visit "/login"
+    fill_in "Username or email", with: user.email
+    fill_in "Password", with: password
+    click_button "Log in"
+    visit "/ui/sessions/destroy?goto=https%3A%2F%2Fsmartcitizen.me%2F"
+    expect(page).to have_current_path("https://smartcitizen.me")
+    visit "/ui"
+    expect(page).to have_current_path(new_ui_session_path)
+  end
+
   scenario "user resets email" do
     visit "/login"
-    fill_in "Username or Email", with: user.email
-    click_on "RESET PASSWORD"
+    fill_in "Username or email", with: user.email
+    click_on "Reset password"
     expect(page).to have_content("Please check your email to reset the password")
     visit "/password_reset/#{user.reload.password_reset_token}"
     fill_in "Password", with: "newpassword456"
     fill_in "Confirm new password", with: "newpassword456"
     click_on "Change my password"
     expect(page).to have_content("Changed password for: #{user.username}")
-    fill_in "Username or Email", with: user.username
+    fill_in "Username or email", with: user.username
     fill_in "Password", with: "newpassword456"
-    click_on "SIGN IN TO YOUR ACCOUNT"
-    expect(page).to have_current_path(ui_users_path)
+    click_button "Log in"
+    expect(page).to have_current_path(ui_user_path(user.username))
     expect(page).to have_content("You have been successfully logged in!")
   end
 
   scenario "user resets email but gives incorrect password confirmation" do
     visit "/login"
-    fill_in "Username or Email", with: user.email
-    click_on "RESET PASSWORD"
+    fill_in "Username or email", with: user.email
+    click_on "Reset password"
     expect(page).to have_content("Please check your email to reset the password")
     visit "/password_reset/#{user.reload.password_reset_token}"
     fill_in "Password", with: "newpassword456"
@@ -99,11 +120,11 @@ feature "User logs in" do
     signature = OpenSSL::HMAC.hexdigest("sha256", secret, payload)
     visit "/discourse/sso?sso=#{CGI.escape(payload)}&sig=#{signature}"
     expect(page).to have_current_path(new_ui_session_path + "?goto=%2Fdiscourse%2Fsso")
-    expect(page).to have_content("Please Log In before using SSO")
-    fill_in "Username or Email", with: user.email
+    expect(page).to have_content("Please log in before using SSO")
+    fill_in "Username or email", with: user.email
     fill_in "Password", with: password
     begin
-      click_on "SIGN IN TO YOUR ACCOUNT"
+      click_button "Log in"
     # The next doesn't exist, we just want to check the URL is correct:
     rescue ActionController::RoutingError
       expect(page.current_url).to match(/^#{DiscourseController::DISCOURSE_ENDPOINT}/)

@@ -23,6 +23,32 @@ class Experiment < ApplicationRecord
     (!starts_at || Time.now >= starts_at) && (!ends_at || Time.now <= ends_at)
   end
 
+  def last_reading_at
+    devices.map(&:last_reading_at).compact.max
+  end
+
+  def user_tags
+    devices.flat_map(&:user_tags).compact.uniq
+  end
+
+  def all_measurements
+    devices.flat_map(&:sensors).filter {|s| !s.is_raw? }.map(&:measurement).uniq
+  end
+
+  def components_for_measurement(measurement)
+    devices.flat_map(&:components).filter {
+      |c| c.measurement == measurement && !c.is_raw?
+    }.uniq
+  end
+
+  def all_online?
+    devices.all? { |d| d.online? }
+  end
+
+  def online_device_count
+    devices.filter { |d| d.online? }.length
+  end
+
   private
 
   def cannot_add_private_devices_of_other_users
@@ -38,5 +64,4 @@ class Experiment < ApplicationRecord
       errors.add(:ends_at, "is before starts_at")
     end
   end
-
 end

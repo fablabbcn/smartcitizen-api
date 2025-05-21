@@ -1,0 +1,49 @@
+<div class="reading mb-4 <%= local_assigns[:class] %>"
+     data-device-id="<%= component.device_id %>"
+     data-sensor-id="<%= component.sensor_id %>"
+     <% if component.last_reading_at %>
+       data-from-date="<%= local_assigns[:from] || (local_assigns[:to] || component.last_reading_at) - 1.day %>"
+       data-to-date="<%= local_assigns[:to] || component.last_reading_at %>"
+     <% end %>
+       data-sync-all-on-page="<%= local_assigns[:sync_all_on_page] || "" %>"
+       >
+       <div class="row align-items-top">
+         <div class="col-12 col-md-6 col-lg-4">
+           <div class="h5">
+             <h5 class="text-break d-inline align-middle mb-0 pb-0">
+               <% if local_assigns[:title_link] %>
+                 <%= link_to(local_assigns[:title] || component.measurement&.name, local_assigns[:title_link], class: "subtle-link") %>
+               <% else %>
+                 <%= local_assigns[:title] || component.measurement&.name %></h3>
+             <% end %>
+             <% extra_info = local_assigns[:description].nil? ? component.measurement&.description : local_assigns[:description] %>
+             <% if extra_info %>
+               <%= render layout: "ui/shared/extra_info" do %>
+                 <p class="<%= (!extra_info || !extra_info.present?) && "mb-0" %>"><strong>Sensor:</strong> <%= component.sensor.name %></p>
+                 <% if extra_info && extra_info.present? %>
+                   <p class="mb-0"><%= extra_info %></p>
+                 <% end %>
+               <% end %>
+             <% end %>
+           </div>
+         </h3>
+         <p class="date-line mb-0">
+         <% if component.last_reading_at %>
+           <span class="date"><%= component.last_reading_at.to_s(:long) %></span>
+         <% else %>
+           <%= t(:reading_no_reading_label) %>
+         <% end %>
+         </p>
+         </div>
+         <div class="col-12 col-md-6 col-lg-2 text-md-end text-lg-start">
+           <% if component.last_reading_at %>
+             <div class="big-number mt-1">
+               <span class="trend d-none"><% case component.trend %><% when 1 %>▴<% when -1 %>▾<% else %><strong>=</strong><% end %></span> <span class="value"><%= component.latest_value.round(2) %></span><span class="unit"><%= component.value_unit %></span>
+             </div>
+           <% end %>
+         </div>
+         <div class="col-12 col-lg-6">
+           <div class="sparkline mt-2"></div>
+         </div>
+       </div>
+</div>

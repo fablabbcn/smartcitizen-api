@@ -1,0 +1,33 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ */
+// Custom bootstrap variables must be set or imported *before* bootstrap.
+@import "fonts";
+@import "bootstrap_variables";
+@import "bootstrap";
+@import "rails_bootstrap_forms.css";
+@import "font-awesome";
+@import "vendor/flatpickr.min.css";
+@import "flatpickr_overrides";
+@import "global";
+@import "nav";
+@import "breadcrumbs";
+@import "footer";
+@import "listing";
+@import "components/profile_header";
+@import "components/copyable_input";
+@import "components/map";
+@import "components/map_location_picker";
+@import "components/reading";
+@import "components/devices_typeahead";
+@import "components/extra_info";

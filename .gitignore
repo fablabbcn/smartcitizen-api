@@ -20,6 +20,7 @@
 /config/application.yml
 
 /public/api
+/public/assets
 /public/coverage
 /coverage
 *.rdb
@@ -54,3 +55,10 @@ scripts/emqt
 .tool-versions
 
 compose.override.yml
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

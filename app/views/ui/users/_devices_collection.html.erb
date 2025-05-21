@@ -1,0 +1,27 @@
+<%= render layout: "ui/shared/box", locals: { no_padding: true, class: "mb-5" } do %>
+  <div class="scroll-offset" id="devices"></div>
+  <div class="p-3">
+    <% if current_user == user && devices.length < 1 %>
+      <%= render partial: "no_device_cta" %>
+    <% else %>
+      <h2><%= t :show_user_devices_heading %></h2>
+      <% if devices.length < 1 %>
+        <p><%= t :show_user_no_devices_message, username: user.username %></p>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="<%= devices.total_pages > 1 ? "border-bottom": "" %>">
+  <%=
+    render partial: "ui/devices/device",
+      collection: devices,
+      locals: { hide_owner: true, with_actions: true }
+    %>
+  </div>
+  <% if devices.total_pages > 1 %>
+    <div class="w-100 mt-3 pagination-container">
+      <div class="mx-auto width-fit-content">
+        <%= paginate devices, param_name: :device_page, theme: "bootstrap-5" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

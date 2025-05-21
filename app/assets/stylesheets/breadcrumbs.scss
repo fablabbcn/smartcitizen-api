@@ -1,0 +1,19 @@
+.breadcrumbs {
+  font-family: "Kanit";
+  letter-spacing: 0.0125rem;
+  color: $white;
+  a {
+    color: $white;
+    &:hover {
+      color: $yellow;
+      text-decoration: none;
+    }
+  }
+
+  .active a {
+    text-decoration: none;
+    &:hover {
+      color: $white;
+    }
+  }
+}

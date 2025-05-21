@@ -1,0 +1,64 @@
+
+.nav-container.sticky-top {
+  top: 0.5rem;
+}
+
+.navbar {
+  .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-link {
+    text-transform: uppercase;
+    color: $white;
+    font-family: "Kanit";
+    font-weight: 600;
+    letter-spacing: 0.0325em;
+    transition: color 0.5s ease;
+    &:hover {
+      color: $primary;
+    }
+
+  }
+
+  .navbar-toggler {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+
+    i {
+      color: white;
+      font-size: 28px;
+    }
+
+    &:hover, &[aria-expanded="true"] {
+      i {
+        color: $primary;
+      }
+    }
+  }
+
+  .nav-link.btn-navbar {
+    border: 2px solid $primary !important;
+    color: $primary;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    &:hover, &:active, &:focus, &:focus-visible {
+      border: 2px solid $white !important;
+      color: $white !important;
+      background-color: $black !important;
+      outline: none !important;
+    }
+  }
+
+  .navbar-profile-image {
+    height: 2.4rem;
+    border: 3px solid $white;
+    transition: border 0.5s ease;
+    &:hover {
+      border: 3px solid $yellow;
+    }
+  }
+}

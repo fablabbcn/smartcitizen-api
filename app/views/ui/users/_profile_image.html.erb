@@ -1,0 +1,7 @@
+<div class="<%= ["circular-image-crop image-border", local_assigns[:class]].compact.join(" ") %>">
+  <%= image_tag(
+    user.profile_picture.present? ? user.profile_picture : "default_avatar.svg",
+    alt: local_assigns[:alt] || t(:profile_image_alt, username: user.username),
+    class: "w-100"
+  ) %>
+</div>

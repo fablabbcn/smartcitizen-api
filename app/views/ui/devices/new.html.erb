@@ -1,0 +1,7 @@
+<%= render partial: "ui/users/header", locals: { user:  current_user } %>
+<%= render layout: "ui/shared/form_container" do %>
+  <%= bootstrap_form_for @device, url: ui_devices_path do |form| %>
+    <%= render partial: "fields", locals: { device: @device, form: form, include_hardware_info: true } %>
+    <%= render partial: "ui/shared/form_buttons", locals: { form: form, back_href: register_ui_devices_path, submit_label: t(:new_device_submit) } %>
+  <% end %>
+<% end %>

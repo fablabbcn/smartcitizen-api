@@ -1,0 +1,81 @@
+
+/* Override bootstrap width class definitions to make them responsive,
+   allowing things like w-md-100 etc */
+@import "bootstrap/functions";
+@import "bootstrap/variables";
+@import "bootstrap/maps";
+@import "bootstrap/mixins";
+@import "bootstrap/utilities";
+
+$utilities: map-merge(
+  $utilities, ( "width": map-merge(
+    map-get( $utilities, "width"), ( responsive: true ),
+  ),)
+);
+
+/* END override bootstrap width class definitions */
+
+$black: #1C1C1C;
+$grey-900: #252525;
+$grey-800: #4F4F4F;
+$grey-700: #606060;
+$grey-600: #7E7E7E;
+$grey-500: #9A9A9B;
+$grey-400: #AEABAC;
+$grey-300: #D2D3D5;
+$grey-200: #ECECEE;
+$grey-100: #F9F9FB;
+
+$blue: #0019FF;
+$purple: #3f51b5;
+$red: #FF3D4C;
+$green: #00E597;
+$teal: #2CB5AE;
+$yellow: #FFC100;
+
+$primary: $yellow;
+$info: $purple;
+
+$enable-dark-mode: false;
+
+$link-color: $blue;
+
+$border-color: $black;
+
+$font-family-sans-serif: "Roboto Condensed", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+$headings-font-family: "Kanit";
+$headings-font-weight: 800;
+
+$code-color: $purple;
+
+$input-border-radius: 0;
+
+$btn-border-radius: 2rem;
+$btn-padding-x: 1.25rem;
+$btn-padding-y: 0.65rem;
+$btn-transition: none;
+
+$breadcrumb-divider-color: $white;
+$breadcrumb-color: $white;
+
+$form-check-input-checked-color:          $black;
+$form-check-input-checked-bg-color:       $yellow;
+
+$pagination-color: $black;
+$pagination-focus-color: $black;
+$pagination-hover-color: $black;
+$pagination-active-bg: $yellow;
+$pagination-active-color: $black;
+$pagination-border-width: 0;
+$pagination-disabled-bg: transparent;
+
+$alert-padding-y:               $spacer;
+$alert-padding-x:               $spacer;
+$alert-margin-bottom:           1rem;
+$alert-border-radius:           0;
+$alert-link-font-weight:        $font-weight-bold;
+$alert-border-width:            0;
+$alert-bg-scale:                -80%;
+$alert-border-scale:            -80%;
+$alert-color-scale:             40%;

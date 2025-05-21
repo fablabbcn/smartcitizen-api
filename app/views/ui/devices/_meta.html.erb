@@ -1,0 +1,26 @@
+<% show_description = device.description.present? && !local_assigns[:hide_description] %>
+
+<p class="mb-0 device-status <%= device.online? ? "online" : "offline" %>">
+  <span class="pe-1"><%= show_svg("status_icon.svg") %></span>
+  <strong><%= device.hardware_name %> (<%= device.online? ? t(:device_meta_online_adjective) : t(:device_meta_offline_adjective) %>)</strong>
+</p>
+<% unless local_assigns[:hide_owner] %>
+  <p class="mb-0">
+  <span class="pe-1"><%= show_svg("user_details_icon_light.svg") %></span>
+    <%= link_to(device.owner.username, ui_user_path(device.owner.username), class: "d-inline-block position-relative subtle-link z-3") %>
+  </p>
+<% end %>
+<p class="mb-0">
+  <span class="pe-1"><%= show_svg("location_icon.svg") %></span>
+  <%= device.location_string %>
+</p>
+<% unless local_assigns[:hide_last_reading_at] %>
+  <p class="mb-0">
+    <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
+    <% if device.last_reading_at %>
+      <%= t :device_meta_last_reading_at, time: time_ago_in_words(device.last_reading_at) %>
+    <% else %>
+      <%= t :device_meta_no_readings_message %>
+    <% end %>
+  </p>
+<% end %>

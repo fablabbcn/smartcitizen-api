@@ -1,0 +1,19 @@
+<div class="device listing row border-top g-0 z-0">
+  <%= link_to(ui_device_path(device.id), class: "listing-link z-1") do %>
+    <span class="sr-only"><%= device.name %></span>
+  <% end %>
+  <div class="col-12 col-md-3">
+    <% if device.latitude && device.longitude %>
+      <%= render partial: "ui/shared/map", locals: { points: [{lat: device.latitude, lng: device.longitude}] } %>
+    <% end %>
+  </div>
+  <div class="col-12 col-md-9 p-3 pb-4">
+    <h3 class="mb-1 text-break"><%= device.name %></h3>
+    <%= render partial: "ui/devices/meta", locals: { device: device, hide_owner: local_assigns[:hide_owner] } %>
+    <% if local_assigns[:with_actions] %>
+      <div class="mt-4 z-2 position-relative">
+        <%= render partial: "ui/devices/actions", locals: { device: device } %>
+      </div>
+    <% end %>
+  </div>
+</div>
