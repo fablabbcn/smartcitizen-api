@@ -84,6 +84,15 @@
               </span>
             </a>
           </li>
+          <% if current_user %>
+            <li class="nav-item">
+              <a class="nav-link w-100 w-md-auto text-center text-lg-end ms-auto link-danger" href="<%= logout_path %>">
+                <span data-bs-toggle="collapse" data-bs-target="#navbarMenuToggle" >
+                  <%= t :logout_link_text %>
+                </span>
+              </a>
+            </li>
+          <% end %>
         </ul>
       </div>
     </div>
