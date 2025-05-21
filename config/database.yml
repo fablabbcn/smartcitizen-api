@@ -91,4 +91,4 @@ production:
   timeout: 6000
   encoding: utf8
   reconnect: false
-  pool: <%= ENV.fetch('db_pool_size') { 20 } %>
+  pool: <%= ENV.fetch('db_pool_size') { 50 } %>

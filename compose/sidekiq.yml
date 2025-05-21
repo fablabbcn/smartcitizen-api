@@ -2,12 +2,12 @@ services:
   sidekiq:
     build: ../.
     env_file: ../.env
-    command: bundle exec sidekiq -c 50
+    command: bundle exec sidekiq -c 100
     restart: always
     volumes:
       - "../log:/app/log"
     environment:
-      db_pool_size: 30
+      db_pool_size: 100
     logging:
       driver: "json-file"
       options:
@@ -15,4 +15,4 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2G
+          memory: 4G
