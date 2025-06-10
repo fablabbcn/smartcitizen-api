@@ -4,3 +4,5 @@ capybara-*.html
 coverage
 tmp/cache
 sck-cassandra
+sck-cassandra-old
+sck-cassandra-old*
