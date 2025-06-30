@@ -11,7 +11,7 @@
 
 #require: rubocop-rails
 
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: false
   Exclude:
     - 'db/schema.rb'
@@ -45,3 +45,8 @@ Layout/EmptyLines:
   StyleGuide: '#two-or-more-empty-lines'
   Enabled: false
 
+Layout/MethodLength:
+  Enabled: false
+
+Layout/ClassLength:
+  Enabled: false
