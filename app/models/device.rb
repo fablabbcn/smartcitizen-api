@@ -29,6 +29,7 @@ class Device < ActiveRecord::Base
   has_many :sensors, through: :components
   has_one :postprocessing, dependent: :destroy
   has_many :ingest_errors, dependent: :destroy
+  has_many :identifiers, class_name: "DeviceIdentifier", dependent: :destroy
 
   has_and_belongs_to_many :experiments
 
@@ -45,7 +46,6 @@ class Device < ActiveRecord::Base
 
   validates_inclusion_of :exposure, in: EXPOSURE_VALUES, allow_nil: true
 
-  before_save :nullify_other_mac_addresses, if: :mac_address
   before_save :truncate_and_fuzz_location!, if: :location_changed?
   before_save :calculate_geohash
   after_validation :do_geocoding
@@ -119,6 +119,11 @@ class Device < ActiveRecord::Base
       "pg_search_document" , "postprocessing", "sensors",
        "tags"
     ]
+  end
+
+
+  def self.find_by_identifier(namespace, id, archived=false)
+    DeviceIdentifier.where(namespace: namespace, identifier: id, is_archived: archived).first&.device
   end
 
   def sensor_keys
@@ -199,15 +204,13 @@ class Device < ActiveRecord::Base
   end
 
   def archive
-    update({mac_address: nil, old_mac_address: mac_address, archived_at: Time.now})
+    identifiers.find_by(namespace: :mac_address, is_archived: false)&.archive!
+    update({ archived_at: Time.now })
   end
 
   def unarchive
-    updates = { archived_at: nil }
-    unless Device.unscoped.where(mac_address: old_mac_address).exists?
-      updates.merge!({mac_address: old_mac_address, old_mac_address: nil})
-    end
-    update(updates)
+    identifiers.find_by(namespace: :mac_address, is_archived: true)&.unarchive!
+    update({ archived_at: nil })
   end
 
   def firmware
@@ -279,7 +282,7 @@ class Device < ActiveRecord::Base
   end
 
   def remove_mac_address_for_newly_registered_device!
-    update(old_mac_address: mac_address, mac_address: nil)
+    identifiers.find_by(namespace: :mac_address, is_archived: false)&.archive!
   end
 
   def update_component_timestamps(timestamp, sensor_ids)
@@ -290,6 +293,32 @@ class Device < ActiveRecord::Base
       end
     end
   end
+
+  def mac_address
+    identifiers.find_by(namespace: :mac_address, is_archived: false)&.identifier
+  end
+
+  def mac_address=(address)
+    identifiers.find_or_initialize_by(namespace: :mac_address, is_archived: false) do |identifier|
+      DeviceIdentifier.archive_all(:mac_address, mac_address)
+      identifier.namespace = :mac_address
+      identifier.is_archived = false
+      identifier.identifier = address
+    end
+  end
+
+  def old_mac_address
+    identifiers.find_by(namespace: :mac_address, is_archived: true)&.identifier
+  end
+
+  def old_mac_address=(address)
+    identifiers.find_or_initialize_by(namespace: :mac_address, is_archived: false) do |identifier|
+      identifier.namespace = :mac_address
+      identifier.is_archived = true
+      identifier.identifier = address
+    end
+  end
+
 
   # TODO Remove: Deprevated in API v1
   def data_policy(authorized=false)
@@ -379,11 +408,4 @@ class Device < ActiveRecord::Base
     def do_geocoding
       reverse_geocode if (latitude_changed? or longitude_changed?) or city.blank?
     end
-
-    def nullify_other_mac_addresses
-      if mac_address_changed?
-        Device.unscoped.where(mac_address: mac_address).map(&:remove_mac_address_for_newly_registered_device!)
-      end
-    end
-
 end

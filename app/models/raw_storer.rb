@@ -13,7 +13,7 @@ class RawStorer
       readings = {}
 
       mac = mac.downcase.strip
-      device = Device.includes(:components).where(mac_address: mac).last
+      device = Device.find_by_identifier(:mac_address, mac)
 
       identifier = version.split('-').first
 
