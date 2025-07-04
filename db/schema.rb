@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_05_05_081245) do
+ActiveRecord::Schema.define(version: 2025_07_03_094510) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -71,11 +71,21 @@ ActiveRecord::Schema.define(version: 2025_05_05_081245) do
     t.index ["device_id", "sensor_id"], name: "unique_sensor_for_device", unique: true
   end
 
+  create_table "device_identifiers", force: :cascade do |t|
+    t.bigint "device_id", null: false
+    t.string "namespace", null: false
+    t.string "identifier", null: false
+    t.boolean "is_archived", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["device_id"], name: "index_device_identifiers_on_device_id"
+    t.index ["is_archived", "namespace", "identifier"], name: "index_devices_by_archived_ns_id"
+  end
+
   create_table "devices", id: :serial, force: :cascade do |t|
     t.integer "owner_id"
     t.string "name"
     t.text "description"
-    t.macaddr "mac_address"
     t.float "latitude"
     t.float "longitude"
     t.datetime "created_at", null: false
@@ -92,7 +102,6 @@ ActiveRecord::Schema.define(version: 2025_05_05_081245) do
     t.jsonb "migration_data"
     t.string "workflow_state"
     t.datetime "csv_export_requested_at"
-    t.macaddr "old_mac_address"
     t.string "state"
     t.string "device_token"
     t.jsonb "hardware_info"
@@ -346,6 +355,7 @@ ActiveRecord::Schema.define(version: 2025_05_05_081245) do
   add_foreign_key "api_tokens", "users", column: "owner_id"
   add_foreign_key "components", "devices"
   add_foreign_key "components", "sensors"
+  add_foreign_key "device_identifiers", "devices"
   add_foreign_key "devices_experiments", "devices"
   add_foreign_key "devices_experiments", "experiments"
   add_foreign_key "devices_tags", "devices"
