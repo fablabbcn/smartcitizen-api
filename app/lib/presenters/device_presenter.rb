@@ -13,7 +13,7 @@ module Presenters
     end
 
     def exposed_fields
-      %i{id uuid name description state system_tags user_tags last_reading_at created_at updated_at notify device_token mac_address postprocessing location data_policy hardware owner components}
+      %i{id uuid name description state system_tags user_tags last_reading_at created_at updated_at notify device_token mac_address meshtastic_id postprocessing location data_policy hardware owner components}
     end
 
     def notify
@@ -74,6 +74,10 @@ module Presenters
 
     def mac_address
       authorize!(:mac_address) { device.mac_address }
+    end
+
+    def meshtastic_id
+      authorize!(:meshtastic_id) { device.meshtastic_id }
     end
 
     def components

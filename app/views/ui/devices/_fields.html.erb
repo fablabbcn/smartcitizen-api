@@ -15,7 +15,7 @@
         device.hardware_version_override
       ),
       required: true, label: t(:device_form_hardware_version_override_label) %>
-    <%= form.text_field :mac_address, required: true, label: t(:device_form_mac_address_label), pattern: "^([0-9A-Fa-f]{2}[:\\-]){5}([0-9A-Fa-f]{2})$", help: t(:device_form_mac_address_help) %>
+    <%= form.text_field :mac_address, required: !current_user.is_admin_or_researcher?, label: t(:device_form_mac_address_label), pattern: "(?:^([0-9A-Fa-f]{2}[:\\-]){5}([0-9A-Fa-f]{2})$)?", help: t(:device_form_mac_address_help) %>
   </div>
 <% end %>
 
@@ -49,6 +49,7 @@
     <% if device.owner.forward_device_readings? %>
       <%= form.check_box :enable_forwarding, label: t(:device_form_enable_forwarding_label) %>
     <% end %>
+    <%= form.text_field :meshtastic_id, label: t(:device_form_meshtastic_id_label) %>
     <%= form.fields_for :postprocessing, device.postprocessing || Postprocessing.new do |fp| %>
       <%= fp.text_field :hardware_url, label: t(:device_form_hardware_url_label), help: t(:device_form_postprocessing_blurb_html) %>
     <% end %>

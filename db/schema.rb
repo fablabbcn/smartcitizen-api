@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_05_05_081245) do
+ActiveRecord::Schema.define(version: 2025_07_04_115254) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -109,9 +109,11 @@ ActiveRecord::Schema.define(version: 2025_05_05_081245) do
     t.string "hardware_slug_override"
     t.boolean "precise_location", default: true, null: false
     t.boolean "enable_forwarding", default: false, null: false
+    t.string "meshtastic_id"
     t.index ["device_token"], name: "index_devices_on_device_token", unique: true
     t.index ["geohash"], name: "index_devices_on_geohash"
     t.index ["last_reading_at"], name: "index_devices_on_last_reading_at"
+    t.index ["meshtastic_id"], name: "index_devices_on_meshtastic_id", unique: true
     t.index ["owner_id"], name: "index_devices_on_owner_id"
     t.index ["state"], name: "index_devices_on_state"
     t.index ["workflow_state", "is_test", "last_reading_at", "latitude"], name: "world_map_request"

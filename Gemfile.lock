@@ -93,6 +93,7 @@ GEM
     api-pagination (5.0.0)
     api_cache (0.3.0)
     ast (2.4.2)
+    attribute_normalizer (1.2.0)
     autoprefixer-rails (10.4.19.0)
       execjs (~> 2)
     awesome_print (1.9.2)
@@ -597,6 +598,7 @@ DEPENDENCIES
   ancestry
   api-pagination
   api_cache
+  attribute_normalizer
   autoprefixer-rails
   awesome_print
   aws-sdk-s3

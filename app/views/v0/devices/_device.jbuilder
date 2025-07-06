@@ -27,6 +27,7 @@ authorized = (current_user && (current_user.is_admin? || (device.owner_id && cur
 if authorized
   json.merge! device_token: device.device_token
   json.merge! mac_address: device.mac_address if device.mac_address
+  json.merge! meshtastic_id: device.meshtastic_id if device.meshtastic_id
 else
   json.merge! device_token: '[FILTERED]'
 end
@@ -34,7 +35,6 @@ json.merge!(postprocessing: device.postprocessing)
 json.merge!(location: device.formatted_location) if local_assigns[:with_location]
 json.merge!(data_policy: device.data_policy(authorized))
 json.merge!(hardware: device.hardware(authorized))
-
 if local_assigns[:with_owner] && device.owner
   json.owner do
     json.id device.owner.id

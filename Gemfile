@@ -20,6 +20,7 @@ gem 'image_processing'
 gem 'ancestry'
 gem 'api-pagination'
 gem 'api_cache'
+gem 'attribute_normalizer'
 gem 'awesome_print', require: false
 gem 'aws-sdk-s3'
 gem 'bcrypt'

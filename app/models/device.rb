@@ -8,7 +8,7 @@ require 'geohash'
 class Device < ActiveRecord::Base
 
   EXPOSURE_VALUES = %w{indoor outdoor}
-  HARDWARE_VERSION_OVERRIDE_VALUES = %w{1 1.1}
+  HARDWARE_VERSION_OVERRIDE_VALUES = ["1", "1.1", "Meshtastic"].freeze
 
   default_scope { with_active_state }
 
@@ -34,11 +34,14 @@ class Device < ActiveRecord::Base
 
   accepts_nested_attributes_for :postprocessing, update_only: true
 
+  normalize_attributes :mac_address, :meshtastic_id
+
   validates_presence_of :name
   validates_presence_of :owner, on: :create
   #validates_uniqueness_of :name, scope: :owner_id, on: :create
 
   validates_uniqueness_of :device_token, allow_nil: true
+  validates_uniqueness_of :meshtastic_id, allow_nil: true
 
   validates_format_of :mac_address,
     with: /\A([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\z/, allow_nil: true
