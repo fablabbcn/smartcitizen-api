@@ -7,7 +7,18 @@ module V0
       @device = Device.includes(
         :owner, :tags, { sensors: :measurement }
       ).find_by(meshtastic_id: params[:meshtastic_id])
-      render json: { token: @device.device_token }
+      render json: { token: @device.device_token } if @device
+    end
+
+    def sensor_id
+      @sensor = Sensor.joins(
+        :devices, :measurement
+      ).where(
+        measurement: { meshtastic_id: params[:measurement_meshtastic_id] },
+        devices: { meshtastic_id: params[:device_meshtastic_id] }
+      ).first
+      @sensor ||= Measurement.find_by(meshtastic_id: params[:measurement_meshtastic_id])&.meshtastic_default_sensor
+      render json: { id: @sensor.id } if @sensor
     end
 
     private

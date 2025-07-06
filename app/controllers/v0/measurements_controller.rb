@@ -34,7 +34,7 @@ module V0
 private
 
     def measurement_params
-      params.permit( :name, :description, :unit, :definition)
+      params.permit(:name, :description, :unit, :definition, :meshtastic_id, :meshtastic_default_sensor_id)
     end
 
     def set_measurement

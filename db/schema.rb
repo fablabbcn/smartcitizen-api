@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_07_04_115254) do
+ActiveRecord::Schema.define(version: 2025_07_06_133001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -184,6 +184,10 @@ ActiveRecord::Schema.define(version: 2025_07_04_115254) do
     t.datetime "updated_at", null: false
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.string "definition"
+    t.string "meshtastic_id"
+    t.bigint "meshtastic_default_sensor_id"
+    t.index ["meshtastic_default_sensor_id"], name: "index_measurements_on_meshtastic_default_sensor_id"
+    t.index ["meshtastic_id"], name: "index_measurements_on_meshtastic_id", unique: true
   end
 
   create_table "oauth_access_grants", id: :serial, force: :cascade do |t|
@@ -354,6 +358,7 @@ ActiveRecord::Schema.define(version: 2025_07_04_115254) do
   add_foreign_key "devices_tags", "tags"
   add_foreign_key "experiments", "users", column: "owner_id"
   add_foreign_key "ingest_errors", "devices"
+  add_foreign_key "measurements", "sensors", column: "meshtastic_default_sensor_id"
   add_foreign_key "postprocessings", "devices"
   add_foreign_key "sensors", "measurements"
   add_foreign_key "uploads", "users"

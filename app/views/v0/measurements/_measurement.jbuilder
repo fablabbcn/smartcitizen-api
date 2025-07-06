@@ -1,5 +1,5 @@
 json.(measurement,
-  :id, :uuid, :name, :description, :definition, :created_at, :updated_at
+  :id, :uuid, :name, :description, :definition, :meshtastic_id, :meshtastic_default_sensor_id, :created_at, :updated_at
   # :is_childless?,
 )
 

@@ -126,6 +126,7 @@ Rails.application.routes.draw do
     get "/test_error" => "errors#test_error"
 
     get "meshtastic/device_token", to: "meshtastic#device_token"
+    get "meshtastic/sensor_id", to: "meshtastic#sensor_id"
 
     # Active Storage cannot show the correct url if using catchall matchers
     # https://github.com/rails/rails/issues/31228
