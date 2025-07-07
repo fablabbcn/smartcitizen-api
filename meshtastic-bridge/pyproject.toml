@@ -1,0 +1,10 @@
+[project]
+name = "smartcitizen-meshtastic-bridge"
+version = "0.0.1"
+description = "Prototype bridge from meshtastic to the smartcitizen data pipeline"
+dependencies = [
+  "cryptography==45.0.5",
+  "meshtastic==2.6.4",
+  "paho-mqtt==2.1.0",
+  "requests==2.32.4",
+]

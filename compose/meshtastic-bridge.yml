@@ -1,0 +1,18 @@
+services:
+  meshtastic-bridge:
+    build:
+      context: ../meshtastic-bridge
+    env_file: ../.env
+    depends_on:
+      - mqtt-task-main-1
+      - mqtt-task-main-2
+      - mqtt-task-secondary
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 2gb
+    volumes:
+      - "../meshtastic-bridge:/app"
+    environment:
+      PYTHON_UNBUFFERED: 1
