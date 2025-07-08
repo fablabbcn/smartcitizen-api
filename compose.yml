@@ -10,4 +10,3 @@ include:
   - compose/kairos.yml
   - compose/cassandra.yml
   - compose/grafana.yml
-  - compose/meshtastic-bridge.yml
