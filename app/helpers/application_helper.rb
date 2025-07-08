@@ -13,6 +13,9 @@ module ApplicationHelper
     end
   end
 
+  def map_base_url
+    ENV.fetch("MAP_BASE_URL", "https://smartcitizen.me/kits/")
+  end
 
   def sc_nav_button_to(legend, path, opts={})
     button_class = opts[:dark_buttons] ? "btn-dark" : "btn-secondary"

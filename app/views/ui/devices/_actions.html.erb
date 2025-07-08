@@ -1,5 +1,5 @@
 <p class="mb-0">
-<%= sc_nav_button_to(t(:show_device_on_map_cta), "https://smartcitizen.me/kits/#{device.id}", local_assigns.merge(external: true)) %>
+<%= sc_nav_button_to(t(:show_device_on_map_cta), "#{map_base_url}#{device.id}", local_assigns.merge(external: true)) %>
   <% if authorize? device, :update? %>
     <%= sc_nav_button_to(t(:show_device_edit_cta, name: device.name), edit_ui_device_path(device, goto: request.path), local_assigns) %>
   <% end %>
