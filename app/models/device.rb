@@ -50,6 +50,7 @@ class Device < ActiveRecord::Base
 
   before_save :nullify_other_mac_addresses, if: :mac_address
   before_save :truncate_and_fuzz_location!, if: :location_changed?
+  before_save :set_device_token, if: :meshtastic_id
   before_save :calculate_geohash
   after_validation :do_geocoding
 
@@ -387,6 +388,10 @@ class Device < ActiveRecord::Base
       if mac_address_changed?
         Device.unscoped.where(mac_address: mac_address).map(&:remove_mac_address_for_newly_registered_device!)
       end
+    end
+
+    def set_device_token
+      self.device_token ||= SecureRandom.alphanumeric(6).downcase
     end
 
 end
