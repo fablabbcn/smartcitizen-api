@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_05_05_081245) do
+ActiveRecord::Schema.define(version: 2025_07_15_180503) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -109,7 +109,9 @@ ActiveRecord::Schema.define(version: 2025_05_05_081245) do
     t.string "hardware_slug_override"
     t.boolean "precise_location", default: true, null: false
     t.boolean "enable_forwarding", default: false, null: false
+    t.bigint "forwarding_destination_id"
     t.index ["device_token"], name: "index_devices_on_device_token", unique: true
+    t.index ["forwarding_destination_id"], name: "index_devices_on_forwarding_destination_id"
     t.index ["geohash"], name: "index_devices_on_geohash"
     t.index ["last_reading_at"], name: "index_devices_on_last_reading_at"
     t.index ["owner_id"], name: "index_devices_on_owner_id"
@@ -148,6 +150,13 @@ ActiveRecord::Schema.define(version: 2025_05_05_081245) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["owner_id"], name: "index_experiments_on_owner_id"
+  end
+
+  create_table "forwarding_destinations", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_forwarding_destinations_on_name", unique: true
   end
 
   create_table "friendly_id_slugs", id: :serial, force: :cascade do |t|
@@ -346,6 +355,7 @@ ActiveRecord::Schema.define(version: 2025_05_05_081245) do
   add_foreign_key "api_tokens", "users", column: "owner_id"
   add_foreign_key "components", "devices"
   add_foreign_key "components", "sensors"
+  add_foreign_key "devices", "forwarding_destinations"
   add_foreign_key "devices_experiments", "devices"
   add_foreign_key "devices_experiments", "experiments"
   add_foreign_key "devices_tags", "devices"

@@ -43,8 +43,9 @@ module Presenters
         {
           is_private: device.is_private,
           enable_forwarding: device.enable_forwarding,
-          precise_location: device.precise_location
-        }
+          precise_location: device.precise_location,
+          forwarding_destination: device.forwarding_destination&.name
+        }.compact
       end
     end
 

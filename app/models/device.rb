@@ -22,6 +22,7 @@ class Device < ActiveRecord::Base
   multisearchable :against => [:name, :description, :city, :country_name], if: :active?
 
   belongs_to :owner, class_name: 'User'
+  belongs_to :forwarding_destination, optional: true
 
   has_many :devices_tags, dependent: :destroy
   has_many :tags, through: :devices_tags
@@ -296,7 +297,8 @@ class Device < ActiveRecord::Base
     {
       is_private: is_private,
       enable_forwarding: authorized ? enable_forwarding : "[FILTERED]",
-      precise_location: authorized ? precise_location : "[FILTERED]"
+      precise_location: authorized ? precise_location : "[FILTERED]",
+      forwarding_destination: authorized ? forwarding_destination&.name : "[FILTERED]"
     }
   end
 
