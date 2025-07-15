@@ -118,7 +118,7 @@ class Device < ActiveRecord::Base
     [
       "components", "devices_tags", "owner",
       "pg_search_document" , "postprocessing", "sensors",
-       "tags"
+       "tags", "forwarding_destination"
     ]
   end
 
