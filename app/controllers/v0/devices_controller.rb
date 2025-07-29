@@ -106,8 +106,19 @@ private
 
       # Researchers + Admins can update is_test and enable_forwarding
       if current_user.is_admin_or_researcher?
-        params_to_permit.push({postprocessing_attributes: [:blueprint_url, :hardware_url, :latest_postprocessing, :meta, :forwarding_params]})
+        params_to_permit.push(
+          {
+            postprocessing_attributes: [
+              :blueprint_url,
+              :hardware_url,
+              :latest_postprocessing,
+              :meta,
+              :forwarding_params
+            ]
+          }
+        )
         params_to_permit.push(:enable_forwarding)
+        params_to_permit.push(:forwarding_destination_id)
       end
 
       if current_user.is_admin?

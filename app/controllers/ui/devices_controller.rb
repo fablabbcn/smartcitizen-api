@@ -164,6 +164,7 @@ module Ui
         :notify_stopped_publishing,
         :hardware_version_override,
         :mac_address,
+        :forwarding_destination_id,
         { :tag_ids => [] },
         { :postprocessing_attributes => :hardware_url },
       )
