@@ -38,14 +38,18 @@ class Reading {
     });
     const timestamps = response.readings.map(x => Date.parse(x[0]));
     const values = response.readings.map(x => x[1]);
+    const validTimestamps = [];
     this.dataTree = new BTree();
     this.data = values.map((value, i) => {
-      const timestamp = timestamps[i];
-      this.dataTree.set(timestamp, value);
-      return { value: value, time: timestamp };
+      if(value >= 0) {
+        const timestamp = timestamps[i];
+        this.dataTree.set(timestamp, value);
+        validTimestamps.push(timestamp);
+        return { value: value, time: timestamp };
+      }
     });
-    this.minTimestamp = Math.min(...timestamps);
-    this.maxTimestamp = Math.max(...timestamps);
+    this.minTimestamp = Math.min(...validTimestamps);
+    this.maxTimestamp = Math.max(...validTimestamps);
     this.maxValue = Math.max(...values)
   }
 
