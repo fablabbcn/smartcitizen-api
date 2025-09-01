@@ -15,19 +15,19 @@
       <% if @experiment.starts_at %>
         <p class="mb-0 small">
           <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
-          <%= t :experiment_meta_starts_at, time: @experiment.starts_at.to_s(:long) %>
+          <%= t :experiment_meta_starts_at, time: local_time_zone.at(@experiment.starts_at).to_s(:long) %>
         </p>
       <% end %>
       <% if @experiment.ends_at %>
         <p class="mb-0 small">
           <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
-          <%= t :experiment_meta_ends_at, time: @experiment.ends_at.to_s(:long) %>
+          <%= t :experiment_meta_ends_at, time: local_time_zone.at(@experiment.ends_at).to_s(:long) %>
         </p>
       <% end %>
         <p class="mb-0 small">
         <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
         <% if @experiment.last_reading_at %>
-          <%= t :device_meta_last_reading_at, time: time_ago_in_words(@experiment.last_reading_at) %>
+          <%= t :device_meta_last_reading_at, time: time_ago_in_words(local_time_zone.at(@experiment.last_reading_at)) %>
         <% else %>
           <%= t :device_meta_no_readings_message %>
         <% end %>

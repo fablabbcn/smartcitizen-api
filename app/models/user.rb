@@ -151,6 +151,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def time_zone
+    preferred_time_zone && ActiveSupport::TimeZone[preferred_time_zone] || ActiveSupport::TimeZone["Etc/UTC"]
+  end
+
 private
 
   def check_if_users_have_valid_email

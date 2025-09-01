@@ -33,7 +33,7 @@ class Reading {
 
   async initData() {
     const response = await $.ajax({
-      url:`/devices/${this.deviceId}/readings?rollup=5m&sensor_id=${this.sensorId}&from=${this.fromDate}&to=${this.toDate}`,
+      url:`/devices/${this.deviceId}/readings?rollup=5m&sensor_id=${this.sensorId}&from=${this.fromDate}&to=${this.toDate}&localtimes=1`,
       method: "GET",
     });
     const timestamps = response.readings.map(x => Date.parse(x[0]));

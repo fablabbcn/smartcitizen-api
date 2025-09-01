@@ -11,8 +11,14 @@ module V0
       check_missing_params("rollup", "sensor_key||sensor_id") # sensor_key or sensor_id
       return unless check_date_param_format("from")
       return unless check_date_param_format("to")
-      render json: Kairos.query(params)
+      data = Kairos.query(params)
+      if params["localtimes"] == "1"
+        render json: convert_to_local_times(data)
+      else
+        render json: data
+      end
     end
+
 
     def create
       check_missing_params("data")
@@ -36,13 +42,12 @@ module V0
     end
 
     def legacy_create
-
       if request.headers['X-SmartCitizenData']
         storer = RawStorer.new
         JSON.parse(request.headers['X-SmartCitizenData']).each do |raw_reading|
           mac = request.headers['X-SmartCitizenMacADDR']
           version = request.headers['X-SmartCitizenVersion']
-          ip = (request.headers['X-SmartCitizenIP'] || request.remote_ip)
+          ip = request.headers['X-SmartCitizenIP'] || request.remote_ip
           storer.store(raw_reading,mac,version,ip)
         end
       end
@@ -63,6 +68,19 @@ module V0
       else
         render json: { id: "enhance_your_calm", message: "You can only make this request once every 6 hours, (this is rate-limited)", url: "", errors: "" }, status: 420
       end
+    end
+
+
+    private
+
+    def convert_to_local_times(data)
+      tz = current_user&.time_zone || ActiveSupport::TimeZone["Etc/UTC"]
+      from = tz.at(data["from"])
+      to = tz.at(data["to"])
+      readings = data["readings"].map {|reading|
+        [tz.at(reading[0]), reading[1]]
+      }
+      data.merge({ from: from, to: to, readings: readings })
     end
 
   end
