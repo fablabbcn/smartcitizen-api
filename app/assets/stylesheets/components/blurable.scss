@@ -1,0 +1,33 @@
+.blurable {
+  position: relative;
+  .blurable-inner {
+    filter: blur(0.25rem);
+  }
+  .blurable-cta-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    .blurable-cta {
+      display: block;
+      background-color: $yellow;
+      color: $black;
+      padding: 0.5rem 1rem;
+      margin: 0 auto;
+      width: fit-content;
+      border-radius: 1rem;
+      filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.5));
+      font-weight: 600;
+      border: 1px solid #1c1c1c;
+      text-transform: uppercase;
+      font-family: "Kanit";
+      text-decoration: none;
+      &:hover, &:active {
+        text-decoration: underline;
+      }
+    }
+  }
+}

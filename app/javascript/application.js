@@ -8,6 +8,7 @@ import {setupReadings} from "components/reading";
 import {setupDevicesTypeahead} from "components/devices_typeahead";
 import {setupExtraInfos} from "components/extra_info";
 import {setupAutoFillTimeZone} from "components/auto_fill_time_zone";
+import {setupBlurables} from "components/blurable";
 
 export default function setupApplication() {
   $(function() {
@@ -23,5 +24,6 @@ export default function setupApplication() {
     setupDevicesTypeahead();
     setupReadings();
     setupAutoFillTimeZone();
+    setupBlurables();
   });
 }

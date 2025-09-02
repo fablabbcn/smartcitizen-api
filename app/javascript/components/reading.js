@@ -17,8 +17,12 @@ class Reading {
     this.fromDate = element.dataset["fromDate"] ?? this.getDateString(-24 * 60 * 60 * 1000);
     this.toDate = element.dataset["toDate"] ?? this.getDateString();
     this.syncAllOnPage = element.dataset["syncAllOnPage"] == "true";
-    this.initialValue = this.valueElement.innerHTML;
-    this.initialDate = this.dateElement.innerHTML;
+    if (this.valueElement) {
+      this.initialValue = this.valueElement.innerHTML;
+    }
+    if (this.dateElement) {
+      this.initialDate = this.dateElement.innerHTML;
+    }
     Reading.instances.push(this);
   }
 
@@ -27,8 +31,10 @@ class Reading {
   }
 
   async init() {
-    await this.initData();
-    this.initSparkline();
+    if(this.valueElement && this.dateElement) {
+      await this.initData();
+      this.initSparkline();
+    }
   }
 
   async initData() {
