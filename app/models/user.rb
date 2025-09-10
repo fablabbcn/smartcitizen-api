@@ -155,8 +155,8 @@ class User < ActiveRecord::Base
     preferred_time_zone && ActiveSupport::TimeZone[preferred_time_zone] || ActiveSupport::TimeZone["Etc/UTC"]
   end
 
-  def all_devices_online?
-    devices.all? { |d| d.online? }
+  def any_devices_online?
+    devices.any? { |d| d.online? }
   end
 
   def online_device_count
