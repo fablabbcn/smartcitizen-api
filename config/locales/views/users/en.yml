@@ -44,3 +44,5 @@ en:
   no_experiment_cta_blurb: "Experiments let you manage multiple Smart Citizen kits in one place, and compare their readings."
   no_experiment_link_text: "Create your first experiment"
   profile_image_alt: "Profile picture for user %{username}"
+  user_meta_device_noun: "kit"
+  user_meta_online_adjective: "online"

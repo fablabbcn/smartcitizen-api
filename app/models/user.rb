@@ -155,6 +155,13 @@ class User < ActiveRecord::Base
     preferred_time_zone && ActiveSupport::TimeZone[preferred_time_zone] || ActiveSupport::TimeZone["Etc/UTC"]
   end
 
+  def all_devices_online?
+    devices.all? { |d| d.online? }
+  end
+
+  def online_device_count
+    devices.filter { |d| d.online? }.length
+  end
 private
 
   def check_if_users_have_valid_email
