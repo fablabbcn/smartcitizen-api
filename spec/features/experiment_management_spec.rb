@@ -21,7 +21,7 @@ feature "Experiment management" do
     click_on experiment_name
     expect(page).to have_current_path(ui_experiment_path(experiment.id))
     expect(page).to have_content(experiment_name)
-    click_on "Data"
+    click_on "Data", match: :first
     expect(page).to have_current_path(readings_ui_experiment_path(experiment.id, measurement_id: measurement.id))
     expect(page).to have_content(experiment_name)
     expect(page).to have_content(measurement_name)
