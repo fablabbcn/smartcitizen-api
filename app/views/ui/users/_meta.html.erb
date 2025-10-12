@@ -10,7 +10,7 @@
     <%= link_to(user.url, user.url, class: "link-white") %>
   </p>
 <% end %>
-  <p class="mb-0 device-status <%= user.any_devices_online? ? "online" : "offline" %>">
+  <p class="mb-0 device-status <%= device_collection_status_class(user) %>">
     <span class="pe-1"><%= show_svg("status_icon.svg") %></span>
     <strong>
       <%= pluralize(user.devices.length, t(:user_meta_device_noun)) %>

@@ -41,8 +41,12 @@ class Experiment < ApplicationRecord
     }.uniq
   end
 
-  def all_online?
+  def all_devices_online?
     devices.all? { |d| d.online? }
+  end
+
+  def all_devices_offline?
+    devices.all? { |d| !d.online? }
   end
 
   def online_device_count

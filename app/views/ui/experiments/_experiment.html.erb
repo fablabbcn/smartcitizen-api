@@ -11,7 +11,7 @@
       }
     %>
   </div>
-  <div class="col-12 col-md-9 p-3 pb-4">
+  <div class="col-12 col-md-9 p-3 pb-4 darker">
     <h3 class="mb-1 text-break"><%= experiment.name %></h3>
     <%= render partial: "ui/experiments/meta", locals: { experiment: experiment, hide_owner: local_assigns[:hide_owner] } %>
     <% if local_assigns[:with_actions] %>

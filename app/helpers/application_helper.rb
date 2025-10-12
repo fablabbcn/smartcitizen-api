@@ -14,6 +14,16 @@ module ApplicationHelper
     end
   end
 
+  def device_collection_status_class(container)
+    if container.all_devices_online?
+      "online"
+    elsif container.all_devices_offline?
+      "offline"
+    else
+      "partially-online"
+    end
+  end
+
   def local_time_zone
     current_user&.time_zone || ActiveSupport::TimeZone["Etc/UTC"]
   end
