@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_09_01_145513) do
+ActiveRecord::Schema.define(version: 2025_09_22_093907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "adminpack"
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 2025_09_01_145513) do
     t.index ["owner_id"], name: "index_api_tokens_on_owner_id"
   end
 
-  create_table "components", id: :serial, force: :cascade do |t|
+  create_table "components", force: :cascade do |t|
     t.integer "sensor_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
