@@ -34,13 +34,15 @@ export function setupMaps() {
       attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       ext: 'png'
     }).addTo(map);
-    points.forEach((point) => {
-      if (point.lat && point.lng) {
-        const marker = L.marker([point.lat, point.lng], { icon: icon });
-        marker.addTo(map);
-        marker.addTo(featureGroup);
-      }
-    });
-    map.fitBounds(featureGroup.getBounds(), { padding: L.point(32, 40), maxZoom: 16});
+    if(points.length > 0) {
+      points.forEach((point) => {
+        if (point.lat && point.lng) {
+          const marker = L.marker([point.lat, point.lng], { icon: icon });
+          marker.addTo(map);
+          marker.addTo(featureGroup);
+        }
+      });
+      map.fitBounds(featureGroup.getBounds(), { padding: L.point(32, 40), maxZoom: 16});
+    }
   });
 }
