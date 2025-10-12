@@ -34,6 +34,7 @@ class Reading {
     if(this.valueElement && this.dateElement) {
       await this.initData();
       this.initSparkline();
+      this.initialized = true;
     }
   }
 
@@ -97,26 +98,32 @@ class Reading {
       .attr("d", `M 0,0 L 0,${height} Z`)
 
     const moveHandler = (event) => {
-        if (window.TouchEvent && event instanceof TouchEvent) event = event.touches[event.touches.length -1];
-        const mouseX = d3.pointer(event)[0];
-        const time = x.invert(mouseX).getTime();
-        if(this.syncAllOnPage) {
-          Reading.instances.forEach((instance) => { instance.showSpecificTime(time, mouseX) });
-        } else {
-          this.showSpecificTime(time, mouseX)
-        }
+      if(this.initialized) {
+          if (window.TouchEvent && event instanceof TouchEvent) event = event.touches[event.touches.length -1];
+          const mouseX = d3.pointer(event)[0];
+          const time = x.invert(mouseX).getTime();
+          if(this.syncAllOnPage) {
+            Reading.instances.forEach((instance) => { instance.showSpecificTime(time, mouseX) });
+          } else {
+            this.showSpecificTime(time, mouseX)
+          }
+      }
     }
 
     const enterHandler = (event) => {
-        this.cursor.attr("visibility", "visible");
-        this.trendElement.style.visibility = "hidden";
+        if(this.initialized) {
+            this.cursor.attr("visibility", "visible");
+            this.trendElement.style.visibility = "hidden";
+        }
     }
 
     const leaveHandler = (event) => {
-        if(this.syncAllOnPage) {
-          Reading.instances.forEach((instance) => { instance.showLatest() });
-        } else {
-          this.showLatest()
+        if(this.initialized) {
+            if(this.syncAllOnPage) {
+              Reading.instances.forEach((instance) => { instance.showLatest() });
+            } else {
+              this.showLatest()
+            }
         }
     }
 
@@ -130,25 +137,29 @@ class Reading {
   }
 
   showSpecificTime(time, mouseX) {
-    const timestamp = this.dataTree.nextLowerKey(time);
-    const value = this.dataTree.get(timestamp);
-    this.cursor.attr("visibility", "visible");
-    this.cursor.attr("transform", `translate(${mouseX}, 0)`);
-    this.trendElement.style.visibility = "hidden";
-    if(value != null) {
-      this.dateElement.innerHTML = strftime("%B %d, %Y %H:%M", new Date(timestamp));
-      this.valueElement.innerHTML = value.toFixed(2);
-    } else {
-      this.dateElement.innerHTML = ""
-      this.valueElement.innerHTML = "-.--";
+    if(this.initialized) {
+      const timestamp = this.dataTree.nextLowerKey(time);
+      const value = this.dataTree.get(timestamp);
+      this.cursor.attr("visibility", "visible");
+      this.cursor.attr("transform", `translate(${mouseX}, 0)`);
+      this.trendElement.style.visibility = "hidden";
+      if(value != null) {
+        this.dateElement.innerHTML = strftime("%B %d, %Y %H:%M", new Date(timestamp));
+        this.valueElement.innerHTML = value.toFixed(2);
+      } else {
+        this.dateElement.innerHTML = ""
+        this.valueElement.innerHTML = "-.--";
+      }
     }
   }
 
   showLatest() {
-    this.cursor.attr("visibility", "hidden");
-    this.valueElement.innerHTML = this.initialValue;
-    this.trendElement.style.visibility = "visible";
-    this.dateElement.innerHTML = this.initialDate;
+    if(this.initialized) {
+      this.cursor.attr("visibility", "hidden");
+      this.valueElement.innerHTML = this.initialValue;
+      this.trendElement.style.visibility = "visible";
+      this.dateElement.innerHTML = this.initialDate;
+    }
   }
 }
 
