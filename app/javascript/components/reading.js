@@ -47,13 +47,13 @@ class Reading {
     const values = response.readings.map(x => x[1]);
     const validTimestamps = [];
     this.dataTree = new BTree();
-    this.data = values.map((value, i) => {
-      if(value >= 0) {
-        const timestamp = timestamps[i];
-        this.dataTree.set(timestamp, value);
-        validTimestamps.push(timestamp);
-        return { value: value, time: timestamp };
-      }
+    this.data = values.filter((value) => {
+      return value >= 0
+    }).map((value, i) => {
+      const timestamp = timestamps[i];
+      this.dataTree.set(timestamp, value);
+      validTimestamps.push(timestamp);
+      return { value: value, time: timestamp };
     });
     this.minTimestamp = Math.min(...validTimestamps);
     this.maxTimestamp = Math.max(...validTimestamps);
@@ -148,7 +148,7 @@ class Reading {
         this.valueElement.innerHTML = value.toFixed(2);
       } else {
         this.dateElement.innerHTML = ""
-        this.valueElement.innerHTML = "-.--";
+        this.valueElement.innerHTML = "--";
       }
     }
   }

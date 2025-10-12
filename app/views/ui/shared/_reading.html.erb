@@ -38,7 +38,8 @@
          <div class="col-12 col-md-6 col-lg-2 text-md-end text-lg-start">
            <% if component.last_reading_at %>
              <div class="big-number mt-1">
-               <span class="trend d-none"><% case component.trend %><% when 1 %>▴<% when -1 %>▾<% else %><strong>=</strong><% end %></span> <span class="value"><%= component.latest_value&.round(2) %></span><span class="unit"><%= component.value_unit %></span>
+               <span class="trend d-none"><% case component.trend %><% when 1 %>▴<% when -1 %>▾<% else %><strong>=</strong><% end %></span> <span class="value">
+               <%= component.latest_value >= 0 ? component.latest_value&.round(2) : "--" %></span><span class="unit"><%= component.latest_value >= 0 ? component.value_unit : "" %></span>
              </div>
            <% end %>
          </div>
