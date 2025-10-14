@@ -318,6 +318,16 @@ a.subtle-link {
     fill: $green;
   }
 
+  &.partially-online {
+    color: $yellow;
+    fill: $yellow;
+  }
+
+  .darker &.partially-online {
+    color: $darker-yellow;
+    fill: $darker-yellow;
+  }
+
   &.offline {
     color: $red;
     fill: $red;

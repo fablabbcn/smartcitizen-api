@@ -131,19 +131,29 @@ module Ui
     end
 
     def experiment_params
-      params.require(:experiment).permit(
+      new_params = params.require(:experiment).permit(
         :name,
         :description,
         :is_test,
         :starts_at,
         :ends_at,
-        { :device_ids => [] },
-      ).transform_values {|v| v.blank? ? nil : v }
+        { device_ids: [] }
+      ).transform_values { |v| v.blank? ? nil : v }
+      new_params[:starts_at] = parse_local_time(new_params[:starts_at])
+      new_params[:ends_at] = parse_local_time(new_params[:ends_at])
+      new_params
     end
 
     def owner_name(capitalize=true)
       owner = @experiment&.owner || current_user
       helpers.possessive(owner, current_user, capitalize: capitalize, third_person: true)
+    end
+
+    def parse_local_time(time)
+      tz = current_user&.time_zone || ActiveSupport::TimeZone["Etc/UTC"]
+      time && tz.rfc3339(time)
+    rescue ArgumentError
+      time
     end
   end
 end

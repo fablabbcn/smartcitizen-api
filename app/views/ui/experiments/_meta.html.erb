@@ -1,4 +1,4 @@
-<p class="mb-0 device-status <%= experiment.all_online? ? "online" : "offline" %>">
+<p class="mb-0 device-status <%= device_collection_status_class(experiment) %>">
   <span class="pe-1"><%= show_svg("status_icon.svg") %></span>
   <strong><%= pluralize(experiment.devices.length, t(:experiment_meta_device_noun)) %> (<%= experiment.online_device_count %> <%= t(:experiment_meta_online_adjective) %>)</strong>
 </p>
@@ -11,7 +11,7 @@
 <p class="mb-0">
   <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
   <% if experiment.last_reading_at %>
-    <%= t :device_meta_last_reading_at, time: time_ago_in_words(experiment.last_reading_at) %>
+    <%= t :device_meta_last_reading_at, time: time_ago_in_words(local_time_zone.at(experiment.last_reading_at)) %>
   <% else %>
     <%= t :device_meta_no_readings_message %>
   <% end %>

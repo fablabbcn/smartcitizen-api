@@ -47,6 +47,7 @@ module Ui
         :email,
         :password,
         :password_confirmation,
+        :preferred_time_zone,
         :ts_and_cs,
       ))
       if @user.valid?
@@ -121,7 +122,8 @@ module Ui
         :password_confirmation,
         :city,
         :country_code,
-        :url
+        :url,
+        :preferred_time_zone
       )
     end
 

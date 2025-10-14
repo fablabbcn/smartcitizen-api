@@ -18,7 +18,7 @@
   <p class="mb-0">
     <span class="pe-1"><%= show_svg("clock-fill.svg") %></span>
     <% if device.last_reading_at %>
-      <%= t :device_meta_last_reading_at, time: time_ago_in_words(device.last_reading_at) %>
+      <%= t :device_meta_last_reading_at, time: time_ago_in_words(local_time_zone.at(device.last_reading_at)) %>
     <% else %>
       <%= t :device_meta_no_readings_message %>
     <% end %>

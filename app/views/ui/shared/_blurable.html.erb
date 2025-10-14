@@ -1,0 +1,10 @@
+<div class="blurable">
+  <div class="blurable-inner">
+    <%= yield %>
+  </div>
+  <div class="blurable-cta-container">
+    <a href="#" class="blurable-cta">
+      <%= local_assigns[:cta] || t(:blurable_cta) %>
+    </a>
+  </div>
+</div>

@@ -16,6 +16,7 @@
         <%= f.country_select :country_code, { include_blank: t(:edit_user_country_code_cta) } , { class: 'form-control' } %>
       <% end %>
       <%= f.text_field :url, label: t(:edit_user_url_label) %>
+      <%= f.select :preferred_time_zone, options_for_select(ActiveSupport::TimeZone.all.map {|tz| [tz.to_s, tz.tzinfo.identifier] }, @user.preferred_time_zone) %>
     </div>
     <%= render partial: "ui/shared/form_buttons", locals: {form: f, back_href: ui_user_path(@user.username), submit_label: t(:edit_user_submit) } %>
     <% if authorize? @user, :destroy? %>

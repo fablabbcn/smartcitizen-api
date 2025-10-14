@@ -23,12 +23,25 @@
         <% end %>
       </div>
     <% end %>
-    <div class="mb-3">
+    <div class="mb-5">
       <h2 class="mb-0"><%= t :show_device_data_subheading %></h2>
       <p class="mb-4 small"><%= t :show_device_data_range_blurb %></p>
-    <% @device.components.order_by_sensor_id.each do |component| %>
-      <% if !component.is_raw? && component.sensor.measurement %>
-        <%= render partial: "ui/shared/reading", locals: { component: component, sync_all_on_page: true } %>
+      <% @device.components.order_by_sensor_id.each do |component| %>
+        <% if !component.is_raw? && component.sensor.measurement %>
+          <%= render partial: "ui/shared/reading", locals: { component: component, sync_all_on_page: true } %>
+        <% end %>
+      <% end %>
+    </div>
+    <% if authorize? @device, :show_private_info? %>
+      <%= render layout: "ui/shared/danger_zone", locals: { subhead: t(:show_device_secrets_subheading), class: "mb-0" } do %>
+        <p class="small mb-3"><%= t :show_device_secrets_blurb_html %></p>
+        <%= render layout: "ui/shared/blurable", locals: { cta: t(:show_device_secrets_reveal_cta) } do %>
+          <%= render partial: "ui/shared/copyable_input", locals: {
+            name: t(:show_device_device_token_label),
+            value: @device.device_token,
+            id: "device-token",
+          } %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>

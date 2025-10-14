@@ -4,6 +4,7 @@ module ApplicationHelper
       raw file.read
     end
   end
+
   def flash_class(level)
     case level.to_sym
       when :success then "alert alert-success"
@@ -13,6 +14,19 @@ module ApplicationHelper
     end
   end
 
+  def device_collection_status_class(container)
+    if container.all_devices_online?
+      "online"
+    elsif container.all_devices_offline?
+      "offline"
+    else
+      "partially-online"
+    end
+  end
+
+  def local_time_zone
+    current_user&.time_zone || ActiveSupport::TimeZone["Etc/UTC"]
+  end
 
   def sc_nav_button_to(legend, path, opts={})
     button_class = opts[:dark_buttons] ? "btn-dark" : "btn-secondary"
