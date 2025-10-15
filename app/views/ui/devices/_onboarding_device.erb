@@ -1,0 +1,39 @@
+<%= form.fields_for :device, index: "" do |subform| %>
+  <div class="onboarding-device listing border-top g-0 z-0">
+    <div class="px-3 py-2 row g-3">
+      <div class="col-12 col-md-9">
+        <%= subform.text_field :name, class: "py-3" %>
+      </div>
+      <div class="col-12 col-md-3 pt-3">
+        <%= subform.hidden_field :device_token, id: nil, class: "device-token-field" %>
+        <a class="btn btn-primary w-100 mt-3 py-3 get-device-token" href="#">
+          Get device token
+        </a>
+        <template class="device-token-template">
+          <div class="row mt-3 gx-0 device-token-section bg-primary rounded-5 border border-2">
+            <div class="col-6">
+              <div class="text-start py-3 ps-4">
+                Token: <code class="token fw-bold"></code>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="text-end py-3 pe-4">
+                ⏰ <span class="countdown"></span>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+    <div class="px-3 py-2 row g-3">
+      <div class="col-12 col-md-6 pt-3">
+
+      </div>
+      <div class="col-12 col-md-6 pt-3">
+        <%= subform.hidden_field :latitude, id: "device_latitude" %>
+        <%= subform.hidden_field :longitude, id: "device_longitude" %>
+        <%= render partial: "ui/shared/map_location_picker", locals: { latitude_input_id: "device_latitude", longitude_input_id: "device_longitude"} %>
+      </div>
+    </div>
+  </div>
+<% end %>

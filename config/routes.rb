@@ -46,6 +46,8 @@ Rails.application.routes.draw do
         get :register
         get :new
         post :create
+        get :onboarding
+        post :onboarding, to: "devices#onboarding_create"
       end
     end
 
