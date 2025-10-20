@@ -30,6 +30,22 @@ body > .container {
   flex-grow: 1;
 }
 
+.bg-primary {
+  background-color: $yellow !important;
+}
+
+.bg-danger {
+  background-color: $red !important;
+}
+
+.bg-success {
+  background-color: $green !important;
+}
+
+code {
+  color: $black !important;
+}
+
 .border-medium {
   border-width: 2px !important;
 }

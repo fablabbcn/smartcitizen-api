@@ -5,7 +5,7 @@ import 'leaflet-defaulticon-compatibility';
 const DEFAULT_LATITUDE = 41.396767038690285;
 const DEFAULT_LONGITUDE = 2.1943382543588137;
 
-class MapLocationPicker {
+export class MapLocationPicker {
   constructor(element) {
     this.element = element
     this.latitudeInput = $("#" + element.dataset["latitudeInputId"]);

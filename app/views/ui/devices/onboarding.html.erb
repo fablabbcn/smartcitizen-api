@@ -1,0 +1,32 @@
+<%= render partial: "ui/users/header", locals: { user:  current_user } %>
+<%= render layout: "ui/shared/container" do %>
+  <%= render layout: "ui/shared/box", locals: { no_padding: true, class: "mb-5 onboarding" }  do %>
+    <div class="p-3">
+      <h2>Device Onboarding</h2>
+    </div>
+    <%= bootstrap_form_for :devices, url: onboarding_ui_devices_path do |form| %>
+      <div class="border-bottom border-2">
+        <div class="devices">
+          <% if @devices %>
+            <%= render partial: "ui/devices/onboarding_device", collection: @devices, locals: { form: form } %>
+          <% else %>
+            <%= render partial: "ui/devices/onboarding_device", locals: { form: form } %>
+          <% end %>
+        </div>
+        <template class="device-template">
+          <%= render partial: "ui/devices/onboarding_device", locals: { form: form } %>
+        </template>
+      </div>
+      <div class="row px-3 g-3">
+        <div class="col-6 col-md-3 offset-md-6 py-3 add-device-button">
+          <a class="btn btn-secondary w-100" href="#">
+            Add more
+          </a>
+        </div>
+        <div class="col-6 col-md-3 py-3">
+          <%= form.primary "Submit", class: "btn btn-primary w-100 justify-content-center" %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
