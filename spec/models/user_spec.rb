@@ -112,6 +112,31 @@ RSpec.describe User, :type => :model do
     end
   end
 
+  describe "ransack search" do
+    context "as an admin" do
+      it 'can be ransacked on the role_mask field if admin' do
+        create(:user, role_mask: 0)
+        create(:user, role_mask: 0)
+        create(:user, role_mask: 4)
+        expect(User.ransack({ role_mask_eq: 4 }, auth_object: :admin).result.count).to eq(1)
+        expect {
+          Device.ransack({device_token_cont: '123'})
+        }.to raise_error(ArgumentError)
+      end
+    end
+
+    context "as a regular user" do
+      it 'cannot be ransacked on the role_mask field if not admin' do
+        create(:user, role_mask: 0)
+        create(:user, role_mask: 0)
+        create(:user, role_mask: 4)
+        expect {
+          User.ransack({ role_mask_eq: 4 })
+        }.to raise_error(ArgumentError)
+      end
+    end
+  end
+
 
   describe "authenticate_with_legacy_support" do
 

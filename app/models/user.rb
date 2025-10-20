@@ -48,7 +48,7 @@ class User < ActiveRecord::Base
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    [ "city", "country_code", "id", "username", "uuid", "created_at", "updated_at"]
+    ["city", "country_code", "id", "username", "uuid", "created_at", "updated_at", ("role_mask" if auth_object == :admin)].compact
   end
 
   def self.ransackable_associations(auth_object = nil)
