@@ -7,7 +7,11 @@
     <%= bootstrap_form_for :devices, url: onboarding_ui_devices_path do |form| %>
       <div class="border-bottom border-2">
         <div class="devices">
-          <%= render partial: "ui/devices/onboarding_device" , locals: { form: form } %>
+          <% if @devices %>
+            <%= render partial: "ui/devices/onboarding_device", collection: @devices, locals: { form: form } %>
+          <% else %>
+            <%= render partial: "ui/devices/onboarding_device", locals: { form: form } %>
+          <% end %>
         </div>
         <template class="device-template">
           <%= render partial: "ui/devices/onboarding_device", locals: { form: form } %>

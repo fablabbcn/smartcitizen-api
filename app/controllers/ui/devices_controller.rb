@@ -128,8 +128,9 @@ module Ui
         redirect_to login_path
         return
       end
-      @device = create_device(device_params)
+      @device = new_device(device_params)
       if @device.valid?
+        @device.save
         flash[:success] = I18n.t(:new_device_success)
         redirect_to ui_device_path(@device.id)
       else
@@ -145,14 +146,15 @@ module Ui
         return
       end
       @devices = devices_params[:device].map do |attrs|
-        create_device(attrs)
+        new_device(attrs)
       end
       if @devices.all?(&:valid?)
+        @devices.each(&:save)
         flash[:success] = I18n.t(:new_device_success)
         redirect_to ui_user_path(current_user)
       else
         flash[:alert] = I18n.t(:new_device_failure)
-        render :new, status: :unprocessable_entity
+        render :onboarding, status: :unprocessable_entity
       end
 
     end
@@ -182,10 +184,9 @@ module Ui
 
     private
 
-    def create_device(attrs)
+    def new_device(attrs)
       device = Device.new(attrs)
       device.owner = current_user
-      device.save if device.valid?
       device
     end
 

@@ -1,4 +1,4 @@
-<%= form.fields_for :device, index: "" do |subform| %>
+<%= form.fields_for local_assigns[:device] || :device, index: "" do |subform| %>
   <div class="onboarding-device listing border-top g-0 z-0">
     <div class="px-3 py-2 row g-3">
       <div class="col-12 col-md-9">
@@ -27,7 +27,8 @@
     </div>
     <div class="px-3 py-2 row g-3">
       <div class="col-12 col-md-6 pt-3">
-
+        <%= subform.check_box :enable_forwarding %>
+        <%= subform.check_box :precise_location %>
       </div>
       <div class="col-12 col-md-6 pt-3">
         <%= subform.hidden_field :latitude, id: "device_latitude" %>
