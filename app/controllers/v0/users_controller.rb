@@ -10,7 +10,9 @@ module V0
 
     def index
       raise_ransack_errors_as_bad_request do
-        @q = User.includes(:devices, :profile_picture_attachment).ransack(params[:q])
+        @q = User
+          .includes(:devices, :profile_picture_attachment)
+          .ransack(params[:q], auth_object: (current_user&.is_admin? ? :admin : nil))
         @q.sorts = 'id asc' if @q.sorts.empty?
         @users = @q.result(distinct: true)
         @users = paginate(@users)
