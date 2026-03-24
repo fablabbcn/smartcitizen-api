@@ -20,6 +20,7 @@ import * as ActiveStorage from "@rails/activestorage";
 import "bootstrap";
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
+import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
 
 import setupApplication from "../application";
 

@@ -1,5 +1,6 @@
 import * as $ from "jquery";
 import { MapLocationPicker } from "./map_location_picker";
+import { setupTags } from "./tags.js";
 
 const TOKEN_TIMEOUT = 15 * 60;
 
@@ -9,16 +10,30 @@ class OnboardingDevice {
     this.getDeviceTokenButton = $(container).find(".get-device-token");
     this.deviceTokenTemplate = $(container).find(".device-token-template");
     this.deviceTokenField = $(container).find(".device-token-field");
+    this.optionalFields = $(container).find(".optional");
   }
 
   init() {
     this.initGetDeviceTokenButton();
+    this.initOptionalFields();
   }
 
   initGetDeviceTokenButton() {
     $(this.getDeviceTokenButton).on("click", ((event) => {
       event.preventDefault();
       this.getDeviceToken();
+    }).bind(this));
+  }
+
+  initOptionalFields() {
+    let toggle = this.optionalFields.find(".toggle");
+    $(toggle).on("click", ((event) => {
+      event.preventDefault();
+      this.optionalFields.find(".optional-fields").toggleClass("d-none");
+      let image = toggle.find("img");
+      let oldSrc = image.attr("src");
+      image.attr("src", image.data("alternateSrc"));
+      image.data("alternateSrc", oldSrc);
     }).bind(this));
   }
 
@@ -133,6 +148,7 @@ class Onboarding {
     picker.dataset["latitudeInputId"] = `device_latitude_${id}`;
     picker.dataset["longitudeInputId"] = `device_longitude_${id}`;
     new MapLocationPicker(picker);
+    setupTags(`#onboarding-device-${id} .tag-select`);
   }
 }
 

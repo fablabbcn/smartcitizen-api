@@ -65,3 +65,8 @@ en:
   upload_device_data_files_help: "(you can upload multiple files by holding down the shift key while selecting.)"
   upload_device_header: "Data upload"
   upload_device_submit: "Upload"
+  onboarding_device_submit: "Register devices"
+  onboarding_device_add: "Add another"
+  onboarding_device_additional_fields: "Additional fields"
+  onboarding_device_token_name: "Token"
+  onboarding_device_get_token: "Get device token"

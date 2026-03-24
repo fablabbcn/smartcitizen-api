@@ -114,11 +114,10 @@ module Ui
         redirect_to login_path
         return
       end
-      @title = I18n.t(:new_device_title)
+      @title = I18n.t(:onboarding_device_title)
       add_breadcrumbs(
         [I18n.t(:show_user_title, owner: owner_name), ui_user_path(current_user)],
-        [I18n.t(:register_device_title), register_ui_devices_path],
-        [I18n.t(:legacy_breadcrumb), new_ui_device_path]
+        [I18n.t(:onboarding_device_title), onboarding_ui_devices_path]
       )
     end
 
@@ -146,7 +145,7 @@ module Ui
         return
       end
       @devices = devices_params[:device].map do |attrs|
-        new_device(attrs)
+        new_device(attrs.compact_blank)
       end
       if @devices.all?(&:valid?)
         @devices.each(&:save)
@@ -199,7 +198,7 @@ module Ui
     def device_params
       params.require(:device).permit(
         *device_param_names
-      )
+      ).compact_blank
     end
 
     def device_param_names
