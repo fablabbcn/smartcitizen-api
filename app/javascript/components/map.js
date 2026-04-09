@@ -35,14 +35,18 @@ export function setupMaps() {
       ext: 'png'
     }).addTo(map);
     if(points.length > 0) {
+      var setBounds = false;
       points.forEach((point) => {
         if (point.lat && point.lng) {
+          setBounds = true;
           const marker = L.marker([point.lat, point.lng], { icon: icon });
           marker.addTo(map);
           marker.addTo(featureGroup);
         }
       });
-      map.fitBounds(featureGroup.getBounds(), { padding: L.point(32, 40), maxZoom: 16});
+      if(setBounds) {
+        map.fitBounds(featureGroup.getBounds(), { padding: L.point(32, 40), maxZoom: 16});
+      }
     }
   });
 }

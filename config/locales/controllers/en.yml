@@ -52,6 +52,7 @@ en:
     upload_device_title: "Data upload: %{name}"
     upload_device_forbidden: "You are not allowed to upload data for that kit!"
     upload_device_success: "Your data has been uploaded succesfully!"
+    onboarding_device_title: "Register multiple new devices"
     show_experiment_title: "%{name}"
     show_experiment_forbidden: "You are not allowed to view that experiment!"
     readings_experiment_title: "Experiment readings: %{name}"

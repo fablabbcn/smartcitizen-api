@@ -1,6 +1,7 @@
 h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
   letter-spacing: 0.0325rem;
+  text-decoration: none;
 }
 
 
@@ -28,6 +29,22 @@ body{
 
 body > .container {
   flex-grow: 1;
+}
+
+.bg-primary {
+  background-color: $yellow !important;
+}
+
+.bg-danger {
+  background-color: $red !important;
+}
+
+.bg-success {
+  background-color: $green !important;
+}
+
+code {
+  color: $black !important;
 }
 
 .border-medium {
@@ -259,6 +276,14 @@ input[type="file"] {
   }
 }
 
+.link-discreet {
+  color: $black !important;
+  text-decoration: none !important;
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
+
 .inline-list {
   margin: 0;
   padding: 0;
@@ -365,3 +390,7 @@ a.subtle-link {
   }
 }
 
+
+textarea {
+  resize: none;
+}

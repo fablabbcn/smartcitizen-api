@@ -1,0 +1,93 @@
+<%= form.fields_for local_assigns[:device] || :device, index: "" do |subform| %>
+  <div class="onboarding-device listing border-top g-0 z-0 mb-3 pt-3">
+    <div class="px-3 py-2 row g-3">
+      <div class="col-12 col-md-9">
+        <%= subform.text_field :name, class: "py-3" %>
+      </div>
+      <div class="col-12 col-md-3 pt-3">
+        <% token_errors = local_assigns[:device].try(:errors).try(:[], :device_token) %>
+        <%= subform.hidden_field :device_token, id: nil, class: "device-token-field" %>
+        <a class="btn btn-primary w-100 mt-3 py-3 get-device-token <%= token_errors && "is-invalid" %>" href="#">
+          <%= t(:onboarding_device_get_token) %>
+        </a>
+        <% if token_errors %>
+          <% token_errors.each do |error| %>
+            <div class="invalid-feedback">
+              <%= "#{t(:onboarding_device_token_name)} #{error}" %>
+            </div>
+          <% end %>
+        <% end %>
+        <template class="device-token-template">
+          <div class="row mt-3 gx-0 device-token-section bg-primary rounded-5 border border-2">
+            <div class="col-6">
+              <div class="text-start py-3 ps-4">
+                <%= t(:onboarding_device_token_name) %>: <code class="token fw-bold"></code>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="text-end py-3 pe-4">
+                ⏰ <span class="countdown"></span>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+    <div class="px-3 py-2 row g-3">
+      <div class="col-12 col-lg-6 d-flex flex-column">
+        <div class="d-flex flex-column flex-md-row">
+            <div class="pt-3">
+              <%= subform.check_box :is_private, label: t(:device_form_is_private_label), include_hidden: false %>
+            </div>
+            <div class="pt-3">
+              <%= subform.check_box :precise_location, label: t(:device_form_precise_location_label), include_hidden: false %>
+            </div>
+        </div>
+        <div class="pt-3 flex-grow-1">
+          <%= subform.text_area :description, class: "flex-grow-1", wrapper: { class: "d-flex flex-column h-100" } %>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6 pt-3">
+        <%= subform.hidden_field :latitude, id: "device_latitude" %>
+        <%= subform.hidden_field :longitude, id: "device_longitude" %>
+        <%= render partial: "ui/shared/map_location_picker", locals: { latitude_input_id: "device_latitude", longitude_input_id: "device_longitude" } %>
+      </div>
+    </div>
+    <div class="optional px-3 pt-3 ps-4 ms-1 mb-4">
+      <h2 class="mb-3"><a href="#" class="toggle link-discreet">
+        <%= t(:onboarding_device_additional_fields) %>
+        <%= image_tag("arrow_right.svg", class: "d-inline mh-100 mb-1 ms-2 align-middle", width: 24, height: 24, data: { "alternate-src": image_url("arrow_down.svg") }) %></a></h2>
+      <div class="optional-fields d-none">
+        <div class="mb-3">
+          <%= subform.select :exposure, options_for_select(Device::EXPOSURE_VALUES.map { |v| [v.capitalize, v]}, local_assigns[:device]&.exposure) %>
+        </div>
+        <div class="mb-5">
+          <h3 class="mb-0"><%= t(:device_form_tags_subhead) %></h3>
+          <p class="mb-4"> <%= t(:device_form_tags_blurb) %></p>
+          <%= subform.select :tag_ids, options_from_collection_for_select(Tag.all, :id, :name, { selected: local_assigns[:device]&.tag_ids }), { label: t(:device_form_tags_label)},  { multiple: true, class: "tag-select" } %>
+        </div>
+        <div class="mb-5">
+          <h3 class="mb-0"><%= t(:device_form_notifications_subhead) %></h3>
+          <p class="mb-4"> <%= t(:device_form_notifications_blurb) %></p>
+          <%= subform.check_box :notify_low_battery, label: t(:device_form_notify_low_battery_label), include_hidden: false %>
+          <%= subform.check_box :notify_stopped_publishing, label: t(:device_form_notify_stopped_publishing_label), include_hidden: false %>
+        </div>
+        <% if current_user.is_admin_or_researcher? %>
+          <div>
+            <h3 class="mb-4"><%= t(:device_form_researcher_options_subhead) %></h3>
+            <% if current_user.forward_device_readings? %>
+              <%= subform.check_box :enable_forwarding, label: t(:device_form_enable_forwarding_label), include_hidden: false %>
+              <%= subform.select :forwarding_destination_id, options_for_select(
+                ForwardingDestination.all.map { |fd| [fd.name, fd.id] },
+                local_assigns[:device]&.forwarding_destination_id
+              ), label: t(:device_form_forwarding_destination_label), include_blank: "Default" %>
+            <% end %>
+            <%= subform.fields_for :postprocessing, local_assigns[:device]&.postprocessing || Postprocessing.new do |fp| %>
+              <%= fp.text_field :hardware_url, label: t(:device_form_hardware_url_label), help: t(:device_form_postprocessing_blurb_html) %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -68,7 +68,7 @@ gem 'sinatra'
 #gem 'skylight'
 gem 'stamp'
 gem "treetop"
-gem 'versionist', github: 'bploetz/versionist'
+gem 'versionist'
 gem 'webrick'
 gem 'workflow'
 gem 'workflow-activerecord'

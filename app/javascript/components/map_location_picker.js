@@ -1,11 +1,12 @@
 import * as $ from "jquery";
 import L from 'leaflet';
 import 'leaflet-defaulticon-compatibility';
+import 'leaflet-control-geocoder';
 
 const DEFAULT_LATITUDE = 41.396767038690285;
 const DEFAULT_LONGITUDE = 2.1943382543588137;
 
-class MapLocationPicker {
+export class MapLocationPicker {
   constructor(element) {
     this.element = element
     this.latitudeInput = $("#" + element.dataset["latitudeInputId"]);
@@ -31,19 +32,21 @@ class MapLocationPicker {
       attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       ext: 'png'
     }).addTo(this.map);
-
+    this.geocoder = new L.Control.Geocoder({defaultMarkGeocode: false});
+    this.geocoder.addTo(this.map);
     if(this.getLatLng()) {
       this.createMarker();
     }
 
+    this.geocoder.on("markgeocode", function(e) {
+      const latLng = e.geocode.center;
+      this.setLatLng(latLng.lat, latLng.lng)
+    }.bind(this));
+
+
     this.map.on('click', function(e) {
-        const latLng= e.latlng;
-        this.setLatLng(latLng.lat, latLng.lng);
-        if(this.marker) {
-          this.updateMarkerPosition();
-        } else {
-          this.createMarker();
-        }
+      const latLng= e.latlng;
+      this.setLatLng(latLng.lat, latLng.lng);
     }.bind(this));
   }
 
@@ -66,6 +69,11 @@ class MapLocationPicker {
   setLatLng(lat, lng) {
     this.latitudeInput.val(lat);
     this.longitudeInput.val(lng);
+    if(this.marker) {
+      this.updateMarkerPosition();
+    } else {
+      this.createMarker();
+    }
   }
 
   createMarker() {
@@ -74,15 +82,14 @@ class MapLocationPicker {
     this.marker.on('dragend', function(event) {
       var position = event.target.getLatLng();
       this.setLatLng(position.lat, position.lng);
-      this.updateMarkerPosition();
     }.bind(this));
-    this.map.panTo(new L.LatLng(position.lat, position.lng));
+    this.map.flyTo(new L.LatLng(position.lat, position.lng), this.defaultZoom(),  { duration: 0.25 });
   }
 
   updateMarkerPosition() {
     const position = this.getLatLng();
     this.marker.setLatLng(new L.LatLng(position.lat, position.lng),{draggable:'true'});
-    this.map.panTo(new L.LatLng(position.lat, position.lng))
+    this.map.flyTo(new L.LatLng(position.lat, position.lng), this.defaultZoom(), { duration: 0.25 })
   }
 }
 
