@@ -106,6 +106,39 @@ module Ui
       redirect_to ui_user_path(current_user.username)
     end
 
+    def onboarding
+      unless current_user
+        flash[:alert] = I18n.t(:register_device_forbidden)
+        redirect_to login_path
+        return
+      end
+      @title = I18n.t(:onboarding_device_title)
+      add_breadcrumbs(
+        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(current_user)],
+        [I18n.t(:onboarding_device_title), onboarding_ui_devices_path]
+      )
+    end
+
+    def onboarding_create
+      unless current_user
+        flash[:alert] = I18n.t(:register_device_forbidden)
+        redirect_to login_path
+        return
+      end
+      @devices = devices_params[:device].map do |attrs|
+        device = Device.new(attrs)
+        device.owner = current_user
+      end
+      if @devices.all?(&:valid?)
+        @devices.each(&:save)
+        flash[:success] = I18n.t(:new_device_success)
+        redirect_to ui_user_path(current_user)
+      else
+        flash[:alert] = I18n.t(:new_device_failure)
+        render :onboarding, status: :unprocessable_entity
+      end
+    end
+
     private
 
     def find_experiment!
@@ -143,6 +176,34 @@ module Ui
       new_params[:ends_at] = parse_local_time(new_params[:ends_at])
       new_params
     end
+
+    def devices_params
+      params.require(:devices).permit(
+        device: device_param_names
+      )
+    end
+
+    def device_param_names
+      [
+        :name,
+        :description,
+        :exposure,
+        :latitude,
+        :longitude,
+        :is_private,
+        :precise_location,
+        :enable_forwarding,
+        :notify_low_battery,
+        :notify_stopped_publishing,
+        :hardware_version_override,
+        :mac_address,
+        :device_token,
+        :forwarding_destination_id,
+        { :tag_ids => [] },
+        { :postprocessing_attributes => :hardware_url },
+      ]
+    end
+
 
     def owner_name(capitalize=true)
       owner = @experiment&.owner || current_user

@@ -4,17 +4,17 @@
     <div class="p-3">
       <h2><%= t(:onboarding_device_title) %></h2>
     </div>
-    <%= bootstrap_form_for :devices, url: onboarding_ui_devices_path do |form| %>
+    <%= bootstrap_form_for :devices, url: onboarding_ui_experiments_path do |form| %>
       <div class="border-bottom border-2">
         <div class="devices">
           <% if @devices %>
-            <%= render partial: "ui/devices/onboarding_device", collection: @devices, locals: { form: form }, as: :device %>
+            <%= render partial: "ui/experiments/onboarding_device", collection: @devices, locals: { form: form }, as: :device %>
           <% else %>
-            <%= render partial: "ui/devices/onboarding_device", locals: { form: form } %>
+            <%= render partial: "ui/experiments/onboarding_device", locals: { form: form } %>
           <% end %>
         </div>
         <template class="device-template">
-          <%= render partial: "ui/devices/onboarding_device", locals: { form: form } %>
+          <%= render partial: "ui/experiments/onboarding_device", locals: { form: form } %>
         </template>
       </div>
       <div class="row px-3 g-3">

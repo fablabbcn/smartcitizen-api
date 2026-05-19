@@ -108,26 +108,14 @@ module Ui
       @device = Device.new(owner: current_user)
     end
 
-    def onboarding
-      unless current_user
-        flash[:alert] = I18n.t(:register_device_forbidden)
-        redirect_to login_path
-        return
-      end
-      @title = I18n.t(:onboarding_device_title)
-      add_breadcrumbs(
-        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(current_user)],
-        [I18n.t(:onboarding_device_title), onboarding_ui_devices_path]
-      )
-    end
-
     def create
       unless current_user
         flash[:alert] = I18n.t(:register_device_forbidden)
         redirect_to login_path
         return
       end
-      @device = new_device(device_params)
+      @device = Device.new(device_params)
+      @device.owner = current_user
       if @device.valid?
         @device.save
         flash[:success] = I18n.t(:new_device_success)
@@ -136,26 +124,6 @@ module Ui
         flash[:alert] = I18n.t(:new_device_failure)
         render :new, status: :unprocessable_entity
       end
-    end
-
-    def onboarding_create
-      unless current_user
-        flash[:alert] = I18n.t(:register_device_forbidden)
-        redirect_to login_path
-        return
-      end
-      @devices = devices_params[:device].map do |attrs|
-        new_device(attrs.compact_blank)
-      end
-      if @devices.all?(&:valid?)
-        @devices.each(&:save)
-        flash[:success] = I18n.t(:new_device_success)
-        redirect_to ui_user_path(current_user)
-      else
-        flash[:alert] = I18n.t(:new_device_failure)
-        render :onboarding, status: :unprocessable_entity
-      end
-
     end
 
     def upload
@@ -180,29 +148,10 @@ module Ui
 
     end
 
-
     private
-
-    def new_device(attrs)
-      device = Device.new(attrs)
-      device.owner = current_user
-      device
-    end
-
-    def devices_params
-      params.require(:devices).permit(
-        device: device_param_names
-      )
-    end
 
     def device_params
       params.require(:device).permit(
-        *device_param_names
-      ).compact_blank
-    end
-
-    def device_param_names
-      [
         :name,
         :description,
         :exposure,
@@ -219,7 +168,7 @@ module Ui
         :forwarding_destination_id,
         { :tag_ids => [] },
         { :postprocessing_attributes => :hardware_url },
-      ]
+      ).compact_blank
     end
 
     def find_device!
