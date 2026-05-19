@@ -160,11 +160,11 @@ code {
 }
 
 .form-control, .form-select {
-  border-radius: 2rem;
+  border-radius: 0.5rem;
   .input-group-lg & {
-    border-radius: 2rem;
+    border-radius: 0.5rem;
   }
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 0.75rem;
   border-width: 2px;
   &:focus {
     outline: $primary solid 3px;
@@ -173,14 +173,14 @@ code {
     box-shadow:inset 0px 0px 0px 1px $black
   }
   &.dropdown {
-    padding: 0.75rem 1.5rem 0.75rem 0.75rem;
+    padding: 0.75rem 0.75rem 0.75rem 0.75rem;
   }
 }
 
 .form-check {
   padding-left: 0;
   .form-check-input {
-    margin-left: 1rem;
+    margin-left: 0;
     border-radius: 0.33rem;
     float: none;
     margin-right: 0.5rem;
@@ -226,11 +226,11 @@ input[type="file"] {
 }
 
 .form-label {
-  margin-left: 1rem;
+  margin-left: 0.5rem;
 }
 
 .form-text {
-  margin-left: 1rem;
+  margin-left: 0.5rem;
 }
 
 .form-check-label {
