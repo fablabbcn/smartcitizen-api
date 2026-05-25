@@ -2,29 +2,101 @@
 <%= render layout: "ui/shared/container" do %>
   <%= render layout: "ui/shared/box", locals: { no_padding: true, class: "mb-5 onboarding" }  do %>
     <div class="p-3">
-      <h2><%= t(:onboarding_device_title) %></h2>
+      <h2 class="mb-0 mt-3"><%= t(:onboarding_experiment_title) %></h2>
     </div>
-    <%= bootstrap_form_for :devices, url: onboarding_ui_experiments_path do |form| %>
+    <%= bootstrap_form_for @experiment_onboarding, url: onboarding_ui_experiments_path do |form| %>
       <div class="border-bottom border-2">
-        <div class="devices">
-          <% if @devices %>
-            <%= render partial: "ui/experiments/onboarding_device", collection: @devices, locals: { form: form }, as: :device %>
-          <% else %>
-            <%= render partial: "ui/experiments/onboarding_device", locals: { form: form } %>
-          <% end %>
+        <div class="p-3 pb-0">
+          <p><%= t(:onboarding_experiment_intro_blurb_html) %></p>
+        </div>
+        <div class="p-3 mb-3">
+          <%= form.text_field :name, label: t(:onboarding_experiment_experiment_name_label) %>
+              <%= form.text_field :description, label: t(:onboarding_experiment_experiment_description_label) %>
+              <div class="row">
+                <div class="col-md-6">
+                  <%= form.text_field :starts_at, class: "flatpickr", label: t(:onboarding_experiment_experiment_starts_at_label) %>
+                </div>
+                <div class="col-md-6">
+                  <%= form.text_field :ends_at, class: "flatpickr", label: t(:onboarding_experiment_experiment_ends_at_label) %>
+                </div>
+              </div>
+            </div>
+        <div class="optional mb-3">
+          <h3 class="mb-3 mx-3"><a href="#" class="toggle link-discreet">
+              <%= t(:onboarding_experiment_additional_fields) %>
+              <%= image_tag("arrow_right.svg", class: "d-inline mh-100 mb-1 ms-2 align-middle", width: 24, height: 24, data: { "alternate-src": image_url("arrow_down.svg") }) %></a></h3>
+          <div class="optional-fields p-3 bg-optional border-top border-bottom d-none">
+
+            <p class="mb-3 mt-2">Use this section to set advanced settings for all the devices in your experiment. Later on you may customise the settings for each one individually.</p>
+            <div class="mb-2">
+              <h3 class="mb-3"><%= t(:onboarding_experiment_privacy_subhead) %></h3>
+              <div class="row">
+                <div class="col-md-6">
+                  <%= form.check_box :device_is_private, label: t(:onboarding_experiment_device_is_private_label), include_hidden: false %>
+                </div>
+                <div class="col-md-6">
+                  <%= form.check_box :device_precise_location, label: t(:onboarding_experiment_device_precise_location_label), include_hidden: false %>
+                </div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <h3 class="mb-0"><%= t(:onboarding_experiment_tags_subhead) %></h3>
+              <p class="mb-3"> <%= t(:onboarding_experiment_tags_blurb) %></p>
+              <%= form.select :device_tag_ids, options_from_collection_for_select(Tag.all, :id, :name, { selected: local_assigns[:device]&.tag_ids }), { label: t(:device_form_tags_label)},  { multiple: true, class: "tag-select" } %>
+            </div>
+            <div class="mb-2">
+              <h3 class="mb-0"><%= t(:onboarding_experiment_notifications_subhead) %></h3>
+              <p class="mb-3"> <%= t(:onboarding_experiment_notifications_blurb) %></p>
+              <div class="row">
+                <div class="col-md-6">
+                  <%= form.check_box :device_notify_low_battery, label: t(:device_form_notify_low_battery_label), include_hidden: false %>
+                </div>
+                <div class="col-md-6">
+                  <%= form.check_box :device_notify_stopped_publishing, label: t(:device_form_notify_stopped_publishing_label), include_hidden: false %>
+                </div>
+              </div>
+            </div>
+            <% if current_user.is_admin_or_researcher? %>
+              <div>
+                <h3 class="mb-3"><%= t(:device_form_researcher_options_subhead) %></h3>
+                <% if current_user.forward_device_readings? %>
+                  <%= form.check_box :device_enable_forwarding, label: t(:device_form_enable_forwarding_label), include_hidden: false %>
+                  <%= form.select :device_forwarding_destination_id, options_for_select(
+                    ForwardingDestination.all.map { |fd| [fd.name, fd.id] },
+                    local_assigns[:device]&.forwarding_destination_id
+                  ), label: t(:device_form_forwarding_destination_label), include_blank: "Default" %>
+              <% end %>
+              <%= form.fields_for :device_postprocessing_attributes, local_assigns[:device]&.postprocessing || Postprocessing.new do |fp| %>
+                <%= fp.text_field :hardware_url, label: t(:device_form_hardware_url_label), help: t(:device_form_postprocessing_blurb_html) %>
+              <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <h3 class="p-3"><%= t(:onboarding_experiment_devices_subhead) %></h3>
+        <div class="devices border-top">
+            <% @experiment_onboarding.devices.each_with_index do |device, index| %>
+              <%= form.fields_for :devices, device, index: index do |subform| %>
+                <%= render "ui/experiments/onboarding_device", subform: subform, device: device %>
+              <% end %>
+            <% end %>
         </div>
         <template class="device-template">
-          <%= render partial: "ui/experiments/onboarding_device", locals: { form: form } %>
-        </template>
+           <%= Device.new.then do |device| %>
+            <% form.fields_for(:devices, device, index: 'NEW_RECORD') do |subform| %>
+              <%= render "ui/experiments/onboarding_device", subform: subform, device: device %>
+            <% end %>
+          <% end %>
+      </template>
       </div>
       <div class="row px-3 g-3">
         <div class="col-6 col-md-3 offset-md-6 py-3 add-device-button">
           <a class="btn btn-secondary w-100" href="#">
-           <%= t(:onboarding_device_add) %>
+            <%= t(:onboarding_experiment_add) %>
           </a>
         </div>
         <div class="col-6 col-md-3 py-3">
-          <%= form.primary t(:onboarding_device_submit), class: "btn btn-primary w-100 justify-content-center" %>
+          <%= form.primary t(:onboarding_experiment_submit), class: "btn btn-primary w-100 justify-content-center" %>
         </div>
       </div>
     <% end %>

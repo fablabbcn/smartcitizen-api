@@ -10,30 +10,16 @@ class OnboardingDevice {
     this.getDeviceTokenButton = $(container).find(".get-device-token");
     this.deviceTokenTemplate = $(container).find(".device-token-template");
     this.deviceTokenField = $(container).find(".device-token-field");
-    this.optionalFields = $(container).find(".optional");
   }
 
   init() {
     this.initGetDeviceTokenButton();
-    this.initOptionalFields();
   }
 
   initGetDeviceTokenButton() {
     $(this.getDeviceTokenButton).on("click", ((event) => {
       event.preventDefault();
       this.getDeviceToken();
-    }).bind(this));
-  }
-
-  initOptionalFields() {
-    let toggle = this.optionalFields.find(".toggle");
-    $(toggle).on("click", ((event) => {
-      event.preventDefault();
-      this.optionalFields.find(".optional-fields").toggleClass("d-none");
-      let image = toggle.find("img");
-      let oldSrc = image.attr("src");
-      image.attr("src", image.data("alternateSrc"));
-      image.data("alternateSrc", oldSrc);
     }).bind(this));
   }
 
@@ -80,6 +66,7 @@ class OnboardingDevice {
           $(this.container).find(".device-token-section").replaceWith(this.getDeviceTokenButton);
           this.initGetDeviceTokenButton();
           window.clearInterval(timer);
+          this.setDeviceRegistered();
         } else if (countdown <= 30) {
           $(this.container).find(".device-token-section").removeClass("bg-primary").addClass("bg-danger")
         }
@@ -108,7 +95,8 @@ class OnboardingDevice {
 
   setDeviceRegistered() {
     $(this.container).find(".device-token-section").removeClass("bg-primary").removeClass("bg-danger").addClass("bg-success")
-    this.countdownElement.parent().text("✔️")
+    $(this.container).find(".progress-dots").addClass("step-3")
+    $(this.container).find(".countdown").remove()
     this.countdownElement = undefined;
   }
 }
@@ -118,9 +106,10 @@ class Onboarding {
     this.devicesContainer = $(container).find(".devices");
     this.deviceTemplate = $(container).find(".device-template");
     this.addButton = $(container).find(".add-device-button")
+    this.optionalFields = $(container).find(".optional");
   }
 
-  init() {
+  initDevices() {
     $(this.devicesContainer).find(".onboarding-device").each((ix, container) => {
       (new OnboardingDevice(container)).init();
     });
@@ -130,25 +119,48 @@ class Onboarding {
     }).bind(this));
   }
 
+  initOptionalFields() {
+    let toggle = this.optionalFields.find(".toggle");
+    $(toggle).on("click", ((event) => {
+      event.preventDefault();
+      this.optionalFields.find(".optional-fields").toggleClass("d-none");
+      this.optionalFields.toggleClass("mb-5");
+      let image = toggle.find("img");
+      let oldSrc = image.attr("src");
+      image.attr("src", image.data("alternateSrc"));
+      image.data("alternateSrc", oldSrc);
+    }).bind(this));
+  }
+
+  init() {
+    this.initDevices();
+    this.initOptionalFields();
+  }
+
   generateRandomId() {
     let size = 6;
     return [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
   }
 
   addNewDevice() {
-    const clone = $(this.deviceTemplate[0].content.cloneNode(true).firstElementChild);
+    const templateContent = this.deviceTemplate[0].innerHTML;
+    const index = Date.now()
+    const clone = $(templateContent.replaceAll("NEW_RECORD", index));
+    const lastDevice = $(".onboarding-device").last();
     let id = this.generateRandomId();
     clone.attr("id", `onboarding-device-${id}`);
-    clone.find("#device_latitude").attr("id", `device_latitude_${id}`)
-    clone.find("#device_longitude").attr("id", `device_longitude_${id}`)
     this.devicesContainer.append(clone);
     let elem = $(`#onboarding-device-${id}`);
+    elem.find(".exposure_input").val(lastDevice.find(".exposure_input").val());
+    elem.find(".geocoding_input").val(lastDevice.find(".geocoding_input").val());
+    elem.find(".latitude_input").val(lastDevice.find(".latitude_input").val());
+    elem.find(".longitude_input").val(lastDevice.find(".longitude_input").val());
     new OnboardingDevice(elem).init()
     let picker = elem.find(".map-location-picker")[0];
-    picker.dataset["latitudeInputId"] = `device_latitude_${id}`;
-    picker.dataset["longitudeInputId"] = `device_longitude_${id}`;
+    picker.dataset["containerSelector"] = `#onboarding-device-${id}`;
     new MapLocationPicker(picker);
     setupTags(`#onboarding-device-${id} .tag-select`);
+    elem.find(".name_input").trigger("focus");
   }
 }
 

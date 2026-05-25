@@ -43,6 +43,10 @@ body > .container {
   background-color: $green !important;
 }
 
+.bg-optional {
+  background-color: $grey-200 !important;
+}
+
 code {
   color: $black !important;
 }
@@ -245,7 +249,7 @@ input[type="file"] {
   margin-left: 1rem;
 }
 
-.danger {
+.danger, .text-red {
   color: $red;
 }
 
@@ -393,4 +397,12 @@ a.subtle-link {
 
 textarea {
   resize: none;
+}
+
+.focus-to-front:focus-within {
+  z-index: 10;
+}
+
+.no-hover-border:hover {
+  border: none !important;
 }

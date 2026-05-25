@@ -1,0 +1,69 @@
+<% onboarding_device_id = SecureRandom.hex(3) %>
+<div class="onboarding-device listing z-0 border-bottom" id="onboarding-device-<%= onboarding_device_id %>">
+  <div class="row gx-0 focus-to-front">
+    <div class="col-12 col-md-2">
+      <% token_errors = local_assigns[:device].try(:errors).try(:[], :device_token) %>
+      <%= subform.hidden_field :device_token, id: nil, class: "device-token-field" %>
+      <a class="btn btn-primary no-hover-border w-100 py-3 get-device-token rounded-0 h-100 d-flex align-items-center justify-content-center <%= token_errors && "is-invalid" %>" href="#">
+        <div>
+          <div><%= t(:onboarding_device_get_token) %></div>
+          <div class="progress-dots step-1 mt-2 d-flex gap-2 justify-content-center">
+            <span class="progress-dot dot-1"></span>
+            <span class="progress-dot dot-2"></span>
+            <span class="progress-dot dot-3"></span>
+          </div>
+        </div>
+      </a>
+      <% if token_errors %>
+        <% token_errors.each do |error| %>
+          <div class="invalid-feedback">
+            <%= "#{t(:onboarding_device_token_name)} #{error}" %>
+          </div>
+        <% end %>
+      <% end %>
+      <template class="device-token-template">
+        <div class="device-token-section bg-primary h-100 d-flex align-items-center justify-content-center">
+          <div class="text-center">
+            <div><%= t(:onboarding_device_token_name) %>: <code class="token fw-bold"></code></div>
+            <div class="progress-dots step-2 mt-2 d-flex gap-2 justify-content-center">
+              <span class="progress-dot dot-1"></span>
+              <span class="progress-dot dot-2"></span>
+              <span class="progress-dot dot-3"></span>
+            </div>
+            <div class="mt-2"><span class="countdown"></span></div>
+          </div>
+        </div>
+      </template>
+    </div>
+    <div class="col-12 col-md-4 d-flex flex-column focus-to-front">
+      <%= subform.text_field :name,
+        class: "py-3 border-0 flex-grow-1 rounded-0 h-100 name_input",
+        wrapper: { class: 'mb-0 d-flex flex-column flex-grow-1 position-relative bg-transparent border-transparent'},
+        label: { class: "ps-3 pt-2 mb-0 position-absolute z-1" } %>
+    </div>
+    <div class="col-12 col-md-2 d-flex flex-column focus-to-front">
+      <%= subform.select :exposure,
+        options_for_select(Device::EXPOSURE_VALUES.map { |v| [v.capitalize, v]}, local_assigns[:device]&.exposure),
+        {
+          label: { class: 'mb-0 ps-3 pt-2 position-absolute z-1' },
+          wrapper: { class: 'mb-0 d-flex flex-column position-relative bg-transparent flex-grow-1 border-transparent' }
+        },
+        { class: "rounded-0 border-0 flex-grow-1 exposure_input", }
+      %>
+    </div>
+    <div class="col-12 col-md-2 d-flex flex-column focus-to-front">
+      <div class="d-flex flex-column position-relative bg-transparent flex-grow-1 border-transparent">
+        <label class="mb-0 ps-3 pt-2 position-absolute z-1">Location</label>
+        <input type="text" class="form-control rounded-0 border-0 flex-grow-1 geocoding_input" name="geocoding_input" />
+      </div>
+    </div>
+    <div class="col-12 col-md-2">
+      <%= subform.hidden_field :latitude, class: "latitude_input" %>
+      <%= subform.hidden_field :longitude, class: "longitude_input" %>
+      <%= render partial: "ui/shared/map_location_picker", locals: {
+        container_selector: "#onboarding-device-#{onboarding_device_id}",
+        hide_zoom_control: true
+      } %>
+    </div>
+  </div>
+</div>

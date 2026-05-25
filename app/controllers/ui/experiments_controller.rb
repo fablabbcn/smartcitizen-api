@@ -112,11 +112,12 @@ module Ui
         redirect_to login_path
         return
       end
-      @title = I18n.t(:onboarding_device_title)
+      @title = I18n.t(:onboarding_experiment_title)
       add_breadcrumbs(
         [I18n.t(:show_user_title, owner: owner_name), ui_user_path(current_user)],
-        [I18n.t(:onboarding_device_title), onboarding_ui_devices_path]
+        [I18n.t(:onboarding_experiment_title), onboarding_ui_devices_path]
       )
+      @experiment_onboarding = ExperimentOnboarding.new(devices: {0 => {}}) # Show one blank device row by default
     end
 
     def onboarding_create
@@ -125,16 +126,13 @@ module Ui
         redirect_to login_path
         return
       end
-      @devices = devices_params[:device].map do |attrs|
-        device = Device.new(attrs)
-        device.owner = current_user
-      end
-      if @devices.all?(&:valid?)
-        @devices.each(&:save)
-        flash[:success] = I18n.t(:new_device_success)
-        redirect_to ui_user_path(current_user)
+      @experiment_onboarding = ExperimentOnboarding.new(onboarding_params)
+      if @experiment_onboarding.valid?
+        @experiment_onboarding.save
+        flash[:success] = I18n.t(:new_experiment_success)
+        redirect_to readings_ui_experiment_path(@experiment_onboarding.experiment)
       else
-        flash[:alert] = I18n.t(:new_device_failure)
+        flash[:alert] = I18n.t(:new_experiment_failure)
         render :onboarding, status: :unprocessable_entity
       end
     end
@@ -174,6 +172,36 @@ module Ui
       ).transform_values { |v| v.blank? ? nil : v }
       new_params[:starts_at] = parse_local_time(new_params[:starts_at])
       new_params[:ends_at] = parse_local_time(new_params[:ends_at])
+      new_params
+    end
+
+    def onboarding_params
+      new_params = params.require(:experiment_onboarding).permit(
+        :name,
+        :description,
+        :is_test,
+        :starts_at,
+        :ends_at,
+        :device_is_private,
+        :device_precise_location,
+        :device_notify_low_battery,
+        :device_notify_stopped_publishing,
+        :device_enable_forwarding,
+        :device_hardware_url,
+        :device_forwarding_destination_id,
+        { device_tag_ids: [] },
+        { device_postprocessing_attributes: [:hardware_url] },
+        { devices: [
+          :name,
+          :exposure,
+          :latitude,
+          :longitude,
+          :device_token,
+        ] }
+      ).to_h.deep_transform_values { |v| v.blank? ? nil : v }.symbolize_keys
+      new_params[:starts_at] = parse_local_time(new_params[:starts_at])
+      new_params[:ends_at] = parse_local_time(new_params[:ends_at])
+      new_params[:owner] = current_user
       new_params
     end
 

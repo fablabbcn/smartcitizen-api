@@ -1,1 +1,7 @@
-<div class="map-location-picker border border-medium rounded-2 z-2" data-latitude-input-id="<%= latitude_input_id %>" data-longitude-input-id="<%= longitude_input_id %>" data-marker-url="<%= asset_url("map-pin.svg") %>" data-marker-shadow-url="<%= asset_url("map-pin-shadow.png") %>"></div>
+<div
+  class="map-location-picker z-2 <%= local_assigns[:extra_classes] || "" %>"
+  data-container-selector="<%= container_selector %>"
+  data-hide-zoom-control="<%= local_assigns[:hide_zoom_control] || "" %>"
+  data-marker-url="<%= asset_url("map-pin.svg") %>"
+  data-marker-shadow-url="<%= asset_url("map-pin-shadow.png") %>">
+</div>
