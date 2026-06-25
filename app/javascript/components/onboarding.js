@@ -1,19 +1,23 @@
 import * as $ from "jquery";
+import * as bootstrap from "bootstrap";
 import { MapLocationPicker } from "./map_location_picker";
 import { setupTags } from "./tags.js";
 
 const TOKEN_TIMEOUT = 15 * 60;
 
 class OnboardingDevice {
-  constructor(container) {
+  constructor(container, onboarding) {
     this.container = container;
+    this.onboarding = onboarding;
     this.getDeviceTokenButton = $(container).find(".get-device-token");
+    this.closeButton = $(container).find(".btn-close");
     this.deviceTokenTemplate = $(container).find(".device-token-template");
     this.deviceTokenField = $(container).find(".device-token-field");
   }
 
   init() {
     this.initGetDeviceTokenButton();
+    this.initCloseButton();
   }
 
   initGetDeviceTokenButton() {
@@ -21,6 +25,18 @@ class OnboardingDevice {
       event.preventDefault();
       this.getDeviceToken();
     }).bind(this));
+  }
+
+  initCloseButton() {
+    $(this.closeButton).on("click", ((event) => {
+      event.preventDefault();
+      this.remove();
+    }).bind(this));
+  }
+
+  remove() {
+    this.container.remove();
+    this.onboarding.setSubmittable();
   }
 
   getDeviceToken() {
@@ -94,10 +110,12 @@ class OnboardingDevice {
   }
 
   setDeviceRegistered() {
-    $(this.container).find(".device-token-section").removeClass("bg-primary").removeClass("bg-danger").addClass("bg-success")
+    $(this.container).find(".device-token-section").removeClass("bg-primary").removeClass("bg-danger").addClass("bg-success").addClass("registered");
     $(this.container).find(".progress-dots").addClass("step-3")
     $(this.container).find(".countdown").remove()
     this.countdownElement = undefined;
+    this.onboarding.setSubmittable();
+    this.closeButton.addClass("d-none");
   }
 }
 
@@ -111,7 +129,7 @@ class Onboarding {
 
   initDevices() {
     $(this.devicesContainer).find(".onboarding-device").each((ix, container) => {
-      (new OnboardingDevice(container)).init();
+      (new OnboardingDevice(container, this)).init();
     });
     $(this.addButton).on("click", ((event) => {
       event.preventDefault();
@@ -155,12 +173,30 @@ class Onboarding {
     elem.find(".geocoding_input").val(lastDevice.find(".geocoding_input").val());
     elem.find(".latitude_input").val(lastDevice.find(".latitude_input").val());
     elem.find(".longitude_input").val(lastDevice.find(".longitude_input").val());
-    new OnboardingDevice(elem).init()
+    elem.find(".btn-close").removeClass("d-none");
+    new OnboardingDevice(elem, this).init()
     let picker = elem.find(".map-location-picker")[0];
     picker.dataset["containerSelector"] = `#onboarding-device-${id}`;
     new MapLocationPicker(picker);
     setupTags(`#onboarding-device-${id} .tag-select`);
     elem.find(".name_input").trigger("focus");
+    this.setSubmittable();
+  }
+
+  setSubmittable() {
+    const devices = $(".device-token-section");
+    const registeredDevices = $(".device-token-section.registered");
+    const wrapper = document.getElementById("onboarding-submit-wrapper")
+    const tooltip = bootstrap.Tooltip.getOrCreateInstance(wrapper);
+    const submit = document.getElementById("onboarding-submit");
+    if(registeredDevices.length >= devices.length) {
+      tooltip.disable();
+      submit.disabled = false;
+    } else {
+      tooltip.enable();
+      submit.disabled = true;
+    }
+
   }
 }
 
@@ -169,3 +205,5 @@ export function setupOnboarding() {
     (new Onboarding(container)).init();
   });
 }
+
+window.bootstrap = bootstrap

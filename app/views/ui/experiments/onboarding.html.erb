@@ -4,7 +4,7 @@
     <div class="p-3">
       <h2 class="mb-0 mt-3"><%= t(:onboarding_experiment_title) %></h2>
     </div>
-    <%= bootstrap_form_for @experiment_onboarding, url: onboarding_ui_experiments_path do |form| %>
+    <%= bootstrap_form_for @experiment_onboarding, url: onboarding_ui_experiments_path, html: { autocomplete: "off" } do |form| %>
       <div class="border-bottom border-2">
         <div class="p-3 pb-0">
           <p><%= t(:onboarding_experiment_intro_blurb_html) %></p>
@@ -65,10 +65,7 @@
                     ForwardingDestination.all.map { |fd| [fd.name, fd.id] },
                     local_assigns[:device]&.forwarding_destination_id
                   ), label: t(:device_form_forwarding_destination_label), include_blank: "Default" %>
-              <% end %>
-              <%= form.fields_for :device_postprocessing_attributes, local_assigns[:device]&.postprocessing || Postprocessing.new do |fp| %>
-                <%= fp.text_field :hardware_url, label: t(:device_form_hardware_url_label), help: t(:device_form_postprocessing_blurb_html) %>
-              <% end %>
+                <% end %>
               </div>
             <% end %>
           </div>
@@ -96,7 +93,9 @@
           </a>
         </div>
         <div class="col-6 col-md-3 py-3">
-          <%= form.primary t(:onboarding_experiment_submit), class: "btn btn-primary w-100 justify-content-center" %>
+          <div class="tooltip-wrapper" title="<%= t(:onboarding_experiment_submit_tooltip) %>" data-bs-toggle="tooltip" data-bs-placement="top" id="onboarding-submit-wrapper">
+            <%= form.primary t(:onboarding_experiment_submit), class: "btn btn-primary w-100 justify-content-center", disabled: "disabled", id: "onboarding-submit"  %>
+          </div>
         </div>
       </div>
     <% end %>

@@ -25,7 +25,7 @@ en:
   delete_experiment_name_label: "To confirm, type the experiment name below:"
   delete_experiment_submit: "I understand, delete the experiment"
   show_experiment_details_subheading: "Details"
-  onboarding_experiment_intro_blurb_html: "This form allows you to easily register multiple kits, and combine them into a single experiment in order to more easily monitor and analyse data across all your devices. You should <a href=\"#\">follow the instructions on the documentation site</a> to prepare your devices, and then you can register them as a batch."
+  onboarding_experiment_intro_blurb_html: "This form allows you to easily register multiple kits, and create a new experiment including all of them, in order to more easily monitor and analyse data across all your devices. <br />You should <a href=\"#\">follow the instructions on the documentation site</a> to prepare your devices, and then you can register them as a batch.<br/> <strong>This is a preview of some new functionality we're developing, and may have bugs. Let us know what you think using the \"feedback\" button at the bottom of the page.</strong>"
   onboarding_experiment_experiment_name_label: "Experiment name (required)"
   onboarding_experiment_experiment_description_label: "Experiment description "
   onboarding_experiment_experiment_starts_at_label: "Experiment starts at"
@@ -43,4 +43,7 @@ en:
   onboarding_experiment_additional_fields: "Kit shared settings"
   onboarding_experiment_token_name: "Token"
   onboarding_experiment_get_token: "Get device token"
+  onboarding_experiment_submit_tooltip: "Make sure all device tokens are registered first!"
+  onboarding_device_location_label: "Location"
+  onboarding_device_location_placeholder: "Search for a location"
 

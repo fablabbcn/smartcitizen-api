@@ -38,7 +38,7 @@ en:
   device_form_tags_subhead: "Tags"
   device_form_tags_blurb: "Kits can be grouped by tags. Choose from the available tags or submit a tag request on the Forum."
   device_form_tags_label: "Tags"
-  device_form_researcher_options_subhead: "Advanced options for researchers"
+  device_form_researcher_options_subhead: "Advanced options"
   device_form_postprocessing_blurb_html: "Follow the instructions <a href='https://docs.smartcitizen.me/Guides/data/Handling%20calibration%20data/' target='_blank'>here</a> to generate a valid JSON containing the postprocessing information for your kit. This is an advanced feature and it's not required for standard Smart Citizen Kits!"
   device_form_hardware_url_label: "Postprocessing hardware URL"
   edit_device_header: "Edit kit"

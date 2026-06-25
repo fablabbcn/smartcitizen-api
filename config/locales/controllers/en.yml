@@ -67,6 +67,6 @@ en:
     delete_experiment_forbidden: "You are not allowed to delete that experiment!"
     delete_experiment_success: "The experiment has been deleted!"
     delete_experiment_wrong_name: "That experiment name did not match! Please try again."
-    onboarding_experiment_title: "Register multiple new devices to an experiment"
+    onboarding_experiment_title: "Register multiple kits"
 
 

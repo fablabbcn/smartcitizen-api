@@ -4,7 +4,7 @@
     <div class="col-12 col-md-2">
       <% token_errors = local_assigns[:device].try(:errors).try(:[], :device_token) %>
       <%= subform.hidden_field :device_token, id: nil, class: "device-token-field" %>
-      <a class="btn btn-primary no-hover-border w-100 py-3 get-device-token rounded-0 h-100 d-flex align-items-center justify-content-center <%= token_errors && "is-invalid" %>" href="#">
+      <a class="btn btn-primary no-hover-border w-100 py-3 get-device-token device-token-section rounded-0 h-100 d-flex align-items-center justify-content-center <%= token_errors && "is-invalid" %>" href="#">
         <div>
           <div><%= t(:onboarding_device_get_token) %></div>
           <div class="progress-dots step-1 mt-2 d-flex gap-2 justify-content-center">
@@ -24,7 +24,7 @@
       <template class="device-token-template">
         <div class="device-token-section bg-primary h-100 d-flex align-items-center justify-content-center">
           <div class="text-center">
-            <div><%= t(:onboarding_device_token_name) %>: <code class="token fw-bold"></code></div>
+            <div><%= t(:onboarding_device_token_name) %>: <code class="token fw-bold fs-5"></code></div>
             <div class="progress-dots step-2 mt-2 d-flex gap-2 justify-content-center">
               <span class="progress-dot dot-1"></span>
               <span class="progress-dot dot-2"></span>
@@ -35,13 +35,13 @@
         </div>
       </template>
     </div>
-    <div class="col-12 col-md-4 d-flex flex-column focus-to-front">
+    <div class="col-12 col-md-4 d-flex flex-column focus-to-front border-end border-light-subtle">
       <%= subform.text_field :name,
         class: "py-3 border-0 flex-grow-1 rounded-0 h-100 name_input",
         wrapper: { class: 'mb-0 d-flex flex-column flex-grow-1 position-relative bg-transparent border-transparent'},
         label: { class: "ps-3 pt-2 mb-0 position-absolute z-1" } %>
     </div>
-    <div class="col-12 col-md-2 d-flex flex-column focus-to-front">
+    <div class="col-12 col-md-2 d-flex flex-column focus-to-front border-end border-light-subtle">
       <%= subform.select :exposure,
         options_for_select(Device::EXPOSURE_VALUES.map { |v| [v.capitalize, v]}, local_assigns[:device]&.exposure),
         {
@@ -51,11 +51,12 @@
         { class: "rounded-0 border-0 flex-grow-1 exposure_input", }
       %>
     </div>
-    <div class="col-12 col-md-2 d-flex flex-column focus-to-front">
+    <div class="col-12 col-md-2 d-flex flex-column focus-to-front position-relative border-end">
       <div class="d-flex flex-column position-relative bg-transparent flex-grow-1 border-transparent">
-        <label class="mb-0 ps-3 pt-2 position-absolute z-1">Location</label>
-        <input type="text" class="form-control rounded-0 border-0 flex-grow-1 geocoding_input" name="geocoding_input" />
+        <label class="mb-0 ps-3 pt-2 position-absolute z-1"><%= t(:onboarding_device_location_label) %></label>
+        <input type="text" class="form-control rounded-0 border-0 flex-grow-1 geocoding_input" name="geocoding_input" placeholder="<%= t(:onboarding_device_location_placeholder) %>" />
       </div>
+      <button type="button" aria-label="Close" class="btn-close position-absolute top-0 end-0 z-3 mt-1 pt-2 pe-3 d-none"></button>
     </div>
     <div class="col-12 col-md-2">
       <%= subform.hidden_field :latitude, class: "latitude_input" %>
