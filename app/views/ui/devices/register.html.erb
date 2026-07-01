@@ -1,7 +1,7 @@
 <%= render partial: "ui/users/header", locals: { user:  current_user } %>
 <%= render layout: "ui/shared/form_container" do %>
   <p><%= t(:register_device_blurb) %></p>
-  <div class="row">
+  <div class="row mt-5">
     <div class="col-12 col-md-6 col-lg-3 offset-lg-3 text-center">
       <h2><%= t(:register_device_v1_subheading) %></h2>
       <%= link_to new_ui_device_path, class: "subtle-link" do %>

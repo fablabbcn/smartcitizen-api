@@ -82,7 +82,6 @@ class OnboardingDevice {
           $(this.container).find(".device-token-section").replaceWith(this.getDeviceTokenButton);
           this.initGetDeviceTokenButton();
           window.clearInterval(timer);
-          this.setDeviceRegistered();
         } else if (countdown <= 30) {
           $(this.container).find(".device-token-section").removeClass("bg-primary").addClass("bg-danger")
         }
