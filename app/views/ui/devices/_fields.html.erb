@@ -19,12 +19,12 @@
   </div>
 <% end %>
 
-<div class="mb-5">
+<div class="mb-5" id="device-location-picker">
   <h2 class="mb-0" ><%= t(:device_form_location_subhead) %></h2>
   <p class="mb-4"> <%= t(:device_form_location_blurb) %></p>
-  <%= form.hidden_field :latitude %>
-  <%= form.hidden_field :longitude %>
-  <%= render partial: "ui/shared/map_location_picker", locals: { latitude_input_id: "device_latitude", longitude_input_id: "device_longitude"} %>
+  <%= form.hidden_field :latitude, class: "latitude_input" %>
+  <%= form.hidden_field :longitude, class: "longitude_input" %>
+  <%= render partial: "ui/shared/map_location_picker", locals: { container_selector: "#device-location-picker", extra_classes: "rounded-2 border-medium border"} %>
 </div>
 <div class="mb-5">
   <h2 class="mb-0"><%= t(:device_form_tags_subhead) %></h2>

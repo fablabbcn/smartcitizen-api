@@ -1,6 +1,8 @@
 services:
   app:
     restart: "no"
+    stdin_open: true
+    tty: true
   sidekiq:
     restart: "no"
   mqtt-task-main-1:

@@ -106,6 +106,37 @@ module Ui
       redirect_to ui_user_path(current_user.username)
     end
 
+    def onboarding
+      unless current_user
+        flash[:alert] = I18n.t(:register_device_forbidden)
+        redirect_to login_path
+        return
+      end
+      @title = I18n.t(:onboarding_experiment_title)
+      add_breadcrumbs(
+        [I18n.t(:show_user_title, owner: owner_name), ui_user_path(current_user)],
+        [I18n.t(:onboarding_experiment_title), onboarding_ui_devices_path]
+      )
+      @experiment_onboarding = ExperimentOnboarding.new(devices: {0 => {}}) # Show one blank device row by default
+    end
+
+    def onboarding_create
+      unless current_user
+        flash[:alert] = I18n.t(:register_device_forbidden)
+        redirect_to login_path
+        return
+      end
+      @experiment_onboarding = ExperimentOnboarding.new(onboarding_params)
+      if @experiment_onboarding.valid?
+        @experiment_onboarding.save
+        flash[:success] = I18n.t(:new_experiment_success)
+        redirect_to readings_ui_experiment_path(@experiment_onboarding.experiment)
+      else
+        flash[:alert] = I18n.t(:new_experiment_failure)
+        render :onboarding, status: :unprocessable_entity
+      end
+    end
+
     private
 
     def find_experiment!
@@ -143,6 +174,64 @@ module Ui
       new_params[:ends_at] = parse_local_time(new_params[:ends_at])
       new_params
     end
+
+    def onboarding_params
+      new_params = params.require(:experiment_onboarding).permit(
+        :name,
+        :description,
+        :is_test,
+        :starts_at,
+        :ends_at,
+        :device_is_private,
+        :device_precise_location,
+        :device_notify_low_battery,
+        :device_notify_stopped_publishing,
+        :device_enable_forwarding,
+        :device_hardware_url,
+        :device_forwarding_destination_id,
+        { device_tag_ids: [] },
+        { device_postprocessing_attributes: [:hardware_url] },
+        { devices: [
+          :name,
+          :exposure,
+          :latitude,
+          :longitude,
+          :device_token,
+        ] }
+      ).to_h.deep_transform_values { |v| v.blank? ? nil : v }.symbolize_keys
+      new_params[:starts_at] = parse_local_time(new_params[:starts_at])
+      new_params[:ends_at] = parse_local_time(new_params[:ends_at])
+      new_params[:owner] = current_user
+      new_params
+    end
+
+    def devices_params
+      params.require(:devices).permit(
+        device: device_param_names
+      )
+    end
+
+    def device_param_names
+      [
+        :name,
+        :description,
+        :exposure,
+        :latitude,
+        :longitude,
+        :is_private,
+        :precise_location,
+        :enable_forwarding,
+        :notify_low_battery,
+        :notify_stopped_publishing,
+        :hardware_version_override,
+        :mac_address,
+        :device_token,
+        :forwarding_destination_id,
+        { :tag_ids => [] },
+        { :postprocessing_attributes => :hardware_url },
+      ]
+    end
+
 
     def owner_name(capitalize=true)
       owner = @experiment&.owner || current_user

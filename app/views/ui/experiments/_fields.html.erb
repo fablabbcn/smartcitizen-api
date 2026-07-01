@@ -11,7 +11,7 @@
     <%= label_tag "device_search", t(:experiment_form_search_devices_label), class: "form-label" %>
     <%= text_field_tag :device_search, "", class: "form-control device-search", autocomplete: "off" %>
     <%= hidden_field_tag "experiment[device_ids][]", "" %>
-    <div class="mt-3 container-lg devices-list border border-medium rounded <%= "d-none" unless experiment.devices.any? %>">
+    <div class="mt-3 container-lg devices-list border border-medium rounded-2 <%= "d-none" unless experiment.devices.any? %>">
       <% experiment.devices.each do |device| %>
         <%= render partial: "ui/devices/select_list_item", locals: {
           value: device.id,

@@ -49,11 +49,11 @@ class Component < ActiveRecord::Base
   end
 
   def latest_value
-    self.device.data[self.sensor.id.to_s]
+    self.device.data ? self.device.data[self.sensor.id.to_s] : nil
   end
 
   def previous_value
-    self.device.old_data[self.sensor.id.to_s]
+    self.device.old_data ? self.device.old_data[self.sensor.id.to_s] : nil
   end
 
   def is_raw?

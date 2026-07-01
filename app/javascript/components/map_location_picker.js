@@ -1,15 +1,19 @@
 import * as $ from "jquery";
 import L from 'leaflet';
 import 'leaflet-defaulticon-compatibility';
+import 'leaflet-control-geocoder';
 
 const DEFAULT_LATITUDE = 41.396767038690285;
 const DEFAULT_LONGITUDE = 2.1943382543588137;
 
-class MapLocationPicker {
+export class MapLocationPicker {
   constructor(element) {
     this.element = element
-    this.latitudeInput = $("#" + element.dataset["latitudeInputId"]);
-    this.longitudeInput = $("#" + element.dataset["longitudeInputId"]);
+    this.container = $(element.dataset["containerSelector"]);
+    this.latitudeInput = this.container.find(".latitude_input");
+    this.longitudeInput = this.container.find(".longitude_input");
+    this.geocodingInput = this.container.find(".geocoding_input");
+    this.hideZoomControl = element.dataset["hideZoomControl"] == "true";
     const markerUrl = element.dataset["markerUrl"];
     const markerShadowUrl = element.dataset["markerShadowUrl"];
     this.icon = L.icon({
@@ -23,6 +27,7 @@ class MapLocationPicker {
     this.map = L.map(this.element, {
       center: this.defaultCenterLatLng(),
       zoom: this.defaultZoom(),
+      zoomControl: !this.hideZoomControl,
       attributionControl: false,
     });
     L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.{ext}', {
@@ -32,18 +37,45 @@ class MapLocationPicker {
       ext: 'png'
     }).addTo(this.map);
 
-    if(this.getLatLng()) {
-      this.createMarker();
+    if(this.geocodingInput.length > 0) {
+      const geocodeCallback = function() {
+          fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(this.geocodingInput.val())}&format=json&limit=1`, {
+            headers: { 'Accept': 'application/json' }
+          })
+          .then(r => r.json())
+          .then(results => {
+          if (!results.length) return;
+            const { lat, lon, display_name } = results[0];
+            const center = L.latLng(parseFloat(lat), parseFloat(lon));
+            this.setLatLng(center.lat, center.lng);
+          });
+      }.bind(this);
+      this.geocodingInput.on('keydown', function(e) {
+        if (e.key === 'Enter') {
+          geocodeCallback();
+          e.preventDefault();
+        }
+      });
+      this.geocodingInput.on('blur', function(e) {
+          geocodeCallback();
+      });
+    } else {
+      this.geocoder = new L.Control.Geocoder({defaultMarkGeocode: false});
+      this.geocoder.addTo(this.map);
+      if(this.getLatLng()) {
+        this.createMarker();
+      }
+
+      this.geocoder.on("markgeocode", function(e) {
+        const latLng = e.geocode.center;
+        this.setLatLng(latLng.lat, latLng.lng)
+      }.bind(this));
     }
 
+
     this.map.on('click', function(e) {
-        const latLng= e.latlng;
-        this.setLatLng(latLng.lat, latLng.lng);
-        if(this.marker) {
-          this.updateMarkerPosition();
-        } else {
-          this.createMarker();
-        }
+      const latLng= e.latlng;
+      this.setLatLng(latLng.lat, latLng.lng);
     }.bind(this));
   }
 
@@ -66,6 +98,11 @@ class MapLocationPicker {
   setLatLng(lat, lng) {
     this.latitudeInput.val(lat);
     this.longitudeInput.val(lng);
+    if(this.marker) {
+      this.updateMarkerPosition();
+    } else {
+      this.createMarker();
+    }
   }
 
   createMarker() {
@@ -74,15 +111,14 @@ class MapLocationPicker {
     this.marker.on('dragend', function(event) {
       var position = event.target.getLatLng();
       this.setLatLng(position.lat, position.lng);
-      this.updateMarkerPosition();
     }.bind(this));
-    this.map.panTo(new L.LatLng(position.lat, position.lng));
+    this.map.flyTo(new L.LatLng(position.lat, position.lng), this.defaultZoom(),  { duration: 0.25 });
   }
 
   updateMarkerPosition() {
     const position = this.getLatLng();
     this.marker.setLatLng(new L.LatLng(position.lat, position.lng),{draggable:'true'});
-    this.map.panTo(new L.LatLng(position.lat, position.lng))
+    this.map.flyTo(new L.LatLng(position.lat, position.lng), this.defaultZoom(), { duration: 0.25 })
   }
 }
 

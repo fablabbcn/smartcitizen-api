@@ -164,10 +164,11 @@ module Ui
         :notify_stopped_publishing,
         :hardware_version_override,
         :mac_address,
+        :device_token,
         :forwarding_destination_id,
         { :tag_ids => [] },
         { :postprocessing_attributes => :hardware_url },
-      )
+      ).compact_blank
     end
 
     def find_device!

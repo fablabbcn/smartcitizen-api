@@ -1,13 +1,4 @@
 GIT
-  remote: https://github.com/bploetz/versionist.git
-  revision: 80b09ce472c0661d3994eeede17b96feb636a17e
-  specs:
-    versionist (2.0.1)
-      activesupport (>= 3)
-      railties (>= 3)
-      yard (~> 0.9.20)
-
-GIT
   remote: https://github.com/presidentbeef/brakeman.git
   revision: 6af53c63feb909d19bab970aedb3b0c583073eb6
   specs:
@@ -567,6 +558,10 @@ GEM
     unicode-display_width (1.8.0)
     vcr (6.1.0)
     version_gem (1.1.2)
+    versionist (2.0.1)
+      activesupport (>= 3)
+      railties (>= 3)
+      yard (~> 0.9.20)
     webmock (3.18.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -681,7 +676,7 @@ DEPENDENCIES
   turbolinks
   uglifier
   vcr
-  versionist!
+  versionist
   webmock
   webpacker
   webrick

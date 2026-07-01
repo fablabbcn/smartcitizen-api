@@ -1,6 +1,7 @@
 h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
   letter-spacing: 0.0325rem;
+  text-decoration: none;
 }
 
 
@@ -26,8 +27,35 @@ body{
   color: $black;
 }
 
+.bg-primary {
+    ::selection {
+      background-color: $black !important;
+      color: $white !important;
+  }
+}
+
 body > .container {
   flex-grow: 1;
+}
+
+.bg-primary {
+  background-color: $yellow !important;
+}
+
+.bg-danger {
+  background-color: $red !important;
+}
+
+.bg-success {
+  background-color: $green !important;
+}
+
+.bg-optional {
+  background-color: $grey-200 !important;
+}
+
+code {
+  color: $black !important;
 }
 
 .border-medium {
@@ -143,11 +171,11 @@ body > .container {
 }
 
 .form-control, .form-select {
-  border-radius: 2rem;
+  border-radius: 0.5rem;
   .input-group-lg & {
-    border-radius: 2rem;
+    border-radius: 0.5rem;
   }
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 0.75rem;
   border-width: 2px;
   &:focus {
     outline: $primary solid 3px;
@@ -156,14 +184,14 @@ body > .container {
     box-shadow:inset 0px 0px 0px 1px $black
   }
   &.dropdown {
-    padding: 0.75rem 1.5rem 0.75rem 0.75rem;
+    padding: 0.75rem 0.75rem 0.75rem 0.75rem;
   }
 }
 
 .form-check {
   padding-left: 0;
   .form-check-input {
-    margin-left: 1rem;
+    margin-left: 0;
     border-radius: 0.33rem;
     float: none;
     margin-right: 0.5rem;
@@ -209,11 +237,11 @@ input[type="file"] {
 }
 
 .form-label {
-  margin-left: 1rem;
+  margin-left: 0.5rem;
 }
 
 .form-text {
-  margin-left: 1rem;
+  margin-left: 0.5rem;
 }
 
 .form-check-label {
@@ -228,7 +256,7 @@ input[type="file"] {
   margin-left: 1rem;
 }
 
-.danger {
+.danger, .text-red {
   color: $red;
 }
 
@@ -256,6 +284,14 @@ input[type="file"] {
   color: $white !important;
   &:hover, &:active, &:focus, &:focus-visible {
     color: $yellow !important;
+  }
+}
+
+.link-discreet {
+  color: $black !important;
+  text-decoration: none !important;
+  &:hover {
+    text-decoration: underline !important;
   }
 }
 
@@ -365,3 +401,15 @@ a.subtle-link {
   }
 }
 
+
+textarea {
+  resize: none;
+}
+
+.focus-to-front:focus-within {
+  z-index: 10;
+}
+
+.no-hover-border:hover {
+  border: none !important;
+}

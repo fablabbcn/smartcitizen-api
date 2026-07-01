@@ -1,0 +1,42 @@
+@keyframes blink {
+  0%, 100% { background-color: transparent; }
+  50%       { background-color: $black; }
+}
+
+.onboarding-device {
+  .progress-dot {
+    transition: border-color,background-color 0.15s ease-in-out;
+    border: $white 2px solid;
+    border-radius: 0.5rem;
+    height: 1rem;
+    &.dot-1 {
+      background-color: $white;
+    }
+    width: 1rem;
+  }
+  a:hover .progress-dot {
+    border-color: $black;
+  }
+
+  a:hover .progress-dot.dot-1 {
+    background-color: $black;
+  }
+
+  .step-2 {
+    .progress-dot {
+      border-color: $black;
+      &.dot-1 {
+        background-color: $black;
+      }
+      &.dot-2 {
+        animation: blink 2s ease-in-out infinite;
+      }
+    }
+
+  }
+  .step-3 .progress-dot {
+    background-color: $black !important;
+    animation: none !important;
+  }
+
+}

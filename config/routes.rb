@@ -46,6 +46,7 @@ Rails.application.routes.draw do
         get :register
         get :new
         post :create
+        get :onboarding, to: redirect("/ui/experiments/onboarding")
       end
     end
 
@@ -53,6 +54,10 @@ Rails.application.routes.draw do
       member do
         get :readings
         get :delete
+      end
+      collection do
+        get :onboarding
+        post :onboarding, to: "experiments#onboarding_create"
       end
     end
 

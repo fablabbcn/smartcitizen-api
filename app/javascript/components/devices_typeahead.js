@@ -20,7 +20,7 @@ class DevicesTypeahead {
       emptyMsg: this.searchInput.data("emptyMsg"),
       minLength: 3,
       debounceWaitMs: 200,
-      className: "shadow-lg",
+      className: "shadow-lg rounded-2",
       fetch: (search, update) => {
         $.ajax({
           url: `/v1/devices/?q[name_or_description_or_owner_username_i_cont]=${search}&per_page=7`,
@@ -42,8 +42,8 @@ class DevicesTypeahead {
            * corner of the search box, but also to add some lateral offset distance
            * wrt the device list below to make it less easy to confuse them. */
           const oneRem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-          container.style.left = parseFloat(container.style.left) + oneRem + "px";
-          container.style.width = parseFloat(container.style.width) - 2 * oneRem + "px";
+          container.style.left = parseFloat(container.style.left) + 0.5 * oneRem + "px";
+          container.style.width = parseFloat(container.style.width) - oneRem + "px";
       }
     });
   }
